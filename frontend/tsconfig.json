@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "useDefineForClassFields": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    // "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "lib": ["esnext", "dom"],
+  },
+  "include": ["*.ts", "src/**/*.ts", "*.vue", "src/**/*.vue", "src/env.d.ts", "src/main.ts"],
+  "exclude": ["./node_modules"]
+}

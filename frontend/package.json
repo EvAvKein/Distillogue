@@ -1,0 +1,24 @@
+{
+  "name": "distillogue",
+  "description": "Distillogue's Frontend",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "preview": "vite"
+  },
+  "author": "Eve Aviv Keinan",
+  "license": "ISC",
+  "dependencies": {
+    "pinia": "^2.0.10",
+    "vue": "^3.2.25",
+    "vue-router": "^4.0.12"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.10",
+    "@types/vue-router": "^2.0.0",
+    "@vitejs/plugin-vue": "^2.0.0",
+    "typescript": "^4.4.4",
+    "vite": "^2.7.2",
+    "vue-tsc": "^0.31.1"
+  }
+}
