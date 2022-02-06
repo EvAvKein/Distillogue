@@ -11,7 +11,7 @@ import uuid from "uuid";
 import {MongoClient} from "mongodb";
 const mongo = new MongoClient('mongodb://localhost');
 const database = mongo.db('distllogue');
-mongo.connect();
+await mongo.connect().catch(() => {console.log("Failed to connect to database :\\"); return});
 const users = database.collection('users');
 const posts = database.collection('posts');
 
@@ -26,13 +26,68 @@ posts.insertOne({ // for testing purposes while posting from frontend isnt a fea
   lastActiveUnix: timestamp.unix()
 });
 
-import schemas from "./schemas";
+import {fetchResponse, user} from "./devInterfaces.js";
+
+async function findUser(username:string) {
+  const foundUser = await users.findOne({"data.name": username}).catch((error) => {console.log(error)});
+  return foundUser;
+};
+
+app.post("/signUp", async (request, response) => {
+  const signUpInfo = request.body as {username:string};
+
+  if (signUpInfo.username.length < 3) {
+    response.json({error: {message: "Username must be 3+ characters!"}});
+    return;
+  };
+
+  const user = await findUser(signUpInfo.username);
+
+  if (user) {
+    response.json(<fetchResponse>{error: {message: "User already exists!"}});
+    return;
+  };
+
+  const newUser = <user>{
+    registered: true,
+    data: {
+      name: signUpInfo.username,
+      about: "",
+      settings: {},
+    },
+  };
+
+  await users.insertOne(newUser);
+  response.json(<fetchResponse>{
+    error: false,
+    data: newUser.data,
+  });
+});
+
+app.post("/signIn", async (request, response) => {
+  const signInInfo = request.body as {username:string};
+
+  const user = await findUser(signInInfo.username);
+
+  if (!user) {
+    response.json(<fetchResponse>{error: {message: "User doesn't exists"}});
+    return;
+  };
+
+  response.json(<fetchResponse>{
+    error: false,
+    data: user.data,
+  });
+});
 
 import sanitizeForRegex from "./helpers/sanitizeForRegex.js";
 app.post("/getPostSummaries", async (request, response) => {
   const regexFilter = new RegExp(sanitizeForRegex(request.body.filter), "i");
   const postSummaries = await posts.find({$or: [{title: regexFilter}, {body: regexFilter}]}).sort({lastActiveUnix: -1}).toArray();
-  response.json(postSummaries);
+  response.json(<fetchResponse>{
+    error: false,
+    data: postSummaries
+  });
 });
 
 const port = process.env.PORT || 3030;

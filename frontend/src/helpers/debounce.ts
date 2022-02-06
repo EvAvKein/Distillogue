@@ -1,5 +1,5 @@
 let timer:undefined|number;
-export default function(func:Function, delay:number) {
+export function debounce(func:Function, delay:number) {
   if (timer) {
     clearTimeout(timer);
   };

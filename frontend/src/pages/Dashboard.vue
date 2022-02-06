@@ -1,15 +1,14 @@
 <template>
   <main>
-    <h2>{{testVar}}</h2>
-    <labelledInput :inputId="'TWBtest'" :type="'textarea'" v-model="testVar"/>
+    <h2>Name: {{user.data.name}}</h2>
+    <h6>Registered: {{user.registered}}</h6>
+    <p>About: {{user.data.about}}</p>
   </main>
 </template>
 
 <script setup lang="ts">
-  import {ref} from 'vue';
-  import labelledInput from '../components/labelledInput.vue';
-
-  const testVar = ref("");
+  import {useUser} from "../stores/user";
+  const user = useUser();
 </script>
 
 <style scoped>

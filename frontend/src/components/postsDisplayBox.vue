@@ -14,7 +14,11 @@
   import postSummary from "./postSummary.vue";
 
   defineProps<{
-    postsArray:{title:string, body:string, lastActiveUnix:number}[]
+    postsArray:{
+      title:string,
+      body:string,
+      lastActiveUnix:number
+    }[],
   }>();
 </script>
 

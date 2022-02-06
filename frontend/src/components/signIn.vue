@@ -1,51 +1,40 @@
 <template>
-  <form @submit.prevent="requestSignIn">
+  <form @submit.prevent>
     <h3>Sign In</h3>
-    <inputField :type="'email'" v-model="email" class="input" :inputId="'loginEmailField'" />
-    <inputField :type="'password'" v-model="password" class="input" :inputId="'loginPasswordField'" />
-    <button @click="$emit('submit')">Next</button>
+    <inputField :label="'Username'" :type="'text'" v-model="username" class="input" :inputId="'loginUsernameField'"/>
+    <notification :text="signInMessage" :desirablityStyle="signInStatus"/>
+    <button @click="signInByInput">Sign In</button>
   </form>
 </template>
 
 <script setup lang="ts">
   import {ref} from "vue";
+  import {useRouter} from "vue-router";
+  import {signIn} from "../helpers/signIn";
   import inputField from "./labelledInput.vue";
-  const email = ref("");
-  const password = ref("");
-  // defineProps<{
+  import notification from "./notification.vue";
+  const router = useRouter();
+
+  const username = ref<string>("");
+
+  const signInMessage = ref<string|undefined>(undefined);
+  const signInStatus = ref<boolean|undefined>(undefined);
+
+  async function signInByInput() {
+    signInMessage.value = "Signing In...";
+    signInStatus.value = undefined;
     
-  // }>();
+    const response = await signIn(username.value);
 
-  // defineEmits({
+    if (response.error) {
+      signInMessage.value = response.error.message;
+      signInStatus.value = false;
+      return;
+    };
 
-  // });
-  function requestSignIn() {
-    console.log(email.value + ": " + password.value)
+    router.push({path: "/dashboard"});
   };
 </script>
 
 <style scoped>
-  form {
-    font-size: 1.5rem;
-    width: 12.5em;
-    text-align: center;
-    background-color: var(--lighterBackgroundColor);
-    padding: 1em 1.5em;
-    border-radius: 1em;
-  }
-
-  h3 {
-    font-size: 2em;
-    margin-block: 0;
-  }
-
-  form div ~ div {
-    margin-top: 0.3em;
-  }
-
-  button {
-    margin-top: 1em;
-    font-size: 1.25rem;
-    padding: 0.25em 0.75em;
-  }
 </style>

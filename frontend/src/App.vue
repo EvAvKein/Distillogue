@@ -7,8 +7,6 @@
 <script setup lang="ts">
 import noscriptWarn from "./components/noscript.vue";
 import layout from "./components/layout.vue";
-
-import useUser from "./pinia/user";
 </script>
 
 <style>

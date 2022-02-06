@@ -1,7 +1,7 @@
 import {createApp} from 'vue';
 import App from "./App.vue";
-import Router from './router';
 import {createPinia} from "pinia";
+import Router from './router';
 
 createApp(App)
   .use(createPinia())

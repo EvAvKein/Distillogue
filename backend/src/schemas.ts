@@ -19,6 +19,9 @@ const User = Joi.object({
   public: Joi.boolean(), // undecided about private profiles for now
   postIds: Joi.array()
     .items(Joi.string()),
+  settings: {
+    
+  },
 });
 
 const Log = Joi.object({
@@ -87,7 +90,7 @@ const Post = Joi.object({
 
 export default {
   User,
-  // Log,
+  Log,
   Reply,
   Post,
 };

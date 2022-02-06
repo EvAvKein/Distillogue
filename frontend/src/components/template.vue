@@ -3,11 +3,11 @@
 
 <script setup lang="ts">
   // import {ref} from "vue";
-  // defineProps<{
+  // const props = defineProps<{
     
   // }>();
 
-  // defineEmits({
+  // const emit = defineEmits({
 
   // });
 </script>
