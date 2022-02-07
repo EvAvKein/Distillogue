@@ -80,7 +80,7 @@ app.post("/signIn", async (request, response) => {
   });
 });
 
-import sanitizeForRegex from "./helpers/sanitizeForRegex.js";
+import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
 app.post("/getPostSummaries", async (request, response) => {
   const regexFilter = new RegExp(sanitizeForRegex(request.body.filter), "i");
   const postSummaries = await posts.find({$or: [{title: regexFilter}, {body: regexFilter}]}).sort({lastActiveUnix: -1}).toArray();
