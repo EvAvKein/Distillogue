@@ -28,7 +28,7 @@
     error: false|{
       message:string;
     };
-    data:undefined|object|any[];
+    data?:object|any[];
   };
   
   function fetchAndEmitPosts() {
