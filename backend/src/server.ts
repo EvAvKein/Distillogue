@@ -6,8 +6,8 @@ app.use(express.json());
 import helmetSecurity from "helmet";
 app.use(helmetSecurity());
 
-import uuid from "uuid";
 import {users, posts} from "./mongo.js";
+// import {newUserId} from "./helpers/generateIDs.js";
 
 const timestamp = {
   unix() {return Math.floor(Date.now() / 1000)},
