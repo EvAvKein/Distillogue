@@ -7,13 +7,7 @@ import helmetSecurity from "helmet";
 app.use(helmetSecurity());
 
 import uuid from "uuid";
-
-import {MongoClient} from "mongodb";
-const mongo = new MongoClient('mongodb://localhost');
-const database = mongo.db('distllogue');
-await mongo.connect().catch(() => {console.log("Failed to connect to database :\\"); return});
-const users = database.collection('users');
-const posts = database.collection('posts');
+import {users, posts} from "./mongo.js";
 
 const timestamp = {
   unix() {return Math.floor(Date.now() / 1000)},
@@ -28,11 +22,6 @@ posts.insertOne({ // for testing purposes while posting from frontend isnt a fea
 
 import {fetchResponse, user} from "./devInterfaces.js";
 
-async function findUser(username:string) {
-  const foundUser = await users.findOne({"data.name": username}).catch((error) => {console.log(error)});
-  return foundUser;
-};
-
 app.post("/signUp", async (request, response) => {
   const signUpInfo = request.body as {username:string};
 
@@ -41,7 +30,8 @@ app.post("/signUp", async (request, response) => {
     return;
   };
 
-  const user = await findUser(signUpInfo.username);
+  const user = await users.findOne({"data.name": signUpInfo.username})
+    .catch(() => {response.json(<fetchResponse>{error: {message: "Can't register user, database is unresponsive"}})});
 
   if (user) {
     response.json(<fetchResponse>{error: {message: "User already exists!"}});
@@ -67,7 +57,8 @@ app.post("/signUp", async (request, response) => {
 app.post("/signIn", async (request, response) => {
   const signInInfo = request.body as {username:string};
 
-  const user = await findUser(signInInfo.username);
+  const user = await users.findOne({"data.name": signInInfo.username})
+    .catch(() => {response.json(<fetchResponse>{error: {message: "Can't fetch user, database is unresponsive"}})});
 
   if (!user) {
     response.json(<fetchResponse>{error: {message: "User doesn't exists"}});
