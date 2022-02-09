@@ -59,14 +59,16 @@ img {pointer-events: none}
   background-color: var(--textSubColor);
 }
 
-button {
+button,
+.ofButtonStyling {
   cursor: pointer;
   border: none;
   color: var(--backgroundColor);
   background-color: var(--textColor);
   border-radius: 0.2em;
 }
-button:focus, button:hover {
+button:focus, button:hover
+.ofButtonStyling:focus, .ofButtonStyling:hover{
   background-color: var(--highlightColor);
   outline: none;
 }

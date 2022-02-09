@@ -5,9 +5,23 @@
         <router-link to="/">
           <img id="distillogo" src="../assets/placeholderLogo.svg"/>
         </router-link>
-        <router-link to="/browse">Browse</router-link>
-        <router-link v-if="user.registered" to="/dashboard">Dashboard</router-link>
-        <router-link v-if="!user.registered" to="/join">Join</router-link>
+        <router-link to="/browse"
+          class="ofButtonStyling"
+        >
+          Browse
+        </router-link>
+        <router-link v-if="user.registered"
+          to="/dashboard"
+          class="ofButtonStyling"
+        >
+          Dashboard
+        </router-link>
+        <router-link v-if="!user.registered"
+          to="/join"
+          class="ofButtonStyling"
+        >
+          Join
+        </router-link>
       </nav>
     </section>
     
@@ -52,13 +66,8 @@
   }
   nav img {height: 2.75rem}
   nav a:not(:first-child) {
-    background-color: var(--textColor);
-    color: var(--backgroundColor);
     padding: 0.5em;
     border-radius: 0.5em;
     text-decoration: none;
-  }
-  nav a:not(:first-child):hover {
-    background-color: var(--highlightColor);
   }
 </style>
