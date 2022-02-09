@@ -2,10 +2,13 @@
   <header>
     <section id="leftSection">
       <nav>
-        <router-link to="/">
+        <router-link
+          to="/"
+        >
           <img id="distillogo" src="../assets/placeholderLogo.svg"/>
         </router-link>
-        <router-link to="/browse"
+        <router-link
+          to="/browse"
           class="ofButtonStyling"
         >
           Browse
