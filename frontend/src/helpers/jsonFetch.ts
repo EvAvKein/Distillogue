@@ -11,7 +11,7 @@ export async function jsonFetch(fetchAddress:string, bodyObject:Object) {
     return responseObject as fetchResponse;
   }).catch(() => {
     return <fetchResponse>{
-      error: {message: "Failed to contact server."}
+      error: {message: "Failed to contact server"}
     };
   });
 };
