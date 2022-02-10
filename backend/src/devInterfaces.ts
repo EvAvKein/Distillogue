@@ -2,7 +2,7 @@ interface fetchResponse {
   error: false|{
     message:string;
   };
-  data?:object|any[];
+  data?:true|object|any[];
 };
 
 interface userData {
