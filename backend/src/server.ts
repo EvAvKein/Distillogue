@@ -7,7 +7,7 @@ import helmetSecurity from "helmet";
 app.use(helmetSecurity());
 
 import {users, posts} from "./mongo.js";
-// import {newUserId} from "./helpers/generateIDs.js";
+import {newUserId} from "./helpers/generateIDs.js";
 
 const timestamp = {
   unix() {return Math.floor(Date.now() / 1000)},
@@ -41,6 +41,7 @@ app.post("/signUp", async (request, response) => {
   const newUser = <user>{
     registered: true,
     data: {
+      id: await newUserId(),
       name: signUpInfo.username,
       about: "",
       settings: {},

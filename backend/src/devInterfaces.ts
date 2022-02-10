@@ -6,6 +6,7 @@ interface fetchResponse {
 };
 
 interface userData {
+  id:string,
   name:string,
   about?:string,
   settings?:object;
