@@ -26,6 +26,7 @@
     const user = useUser();
     user.registered = true;
     user.data = {
+      id: "0123456789",
       name: "EvAvKein",
       about: "Eve Aviv Keinan, the guy who's creating Distillogue",
     };
