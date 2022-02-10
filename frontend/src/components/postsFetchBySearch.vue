@@ -15,6 +15,7 @@
 <script setup lang="ts">
   import {ref, onMounted} from 'vue';
   import {jsonFetch} from "../helpers/jsonFetch";
+  import {fetchResponse} from '../../../backend/src/devInterfaces';
   import {debounce} from "../helpers/debounce"
   import labelledInput from "./labelledInput.vue";
 
@@ -23,13 +24,6 @@
 
   const searchValue = ref<string>("");
   const summariesDescription = ref<string>("");
-
-  interface fetchResponse {
-    error: false|{
-      message:string;
-    };
-    data?:object|any[];
-  };
   
   function fetchAndEmitPosts() {
     summariesDescription.value = "Fetching Posts...";
