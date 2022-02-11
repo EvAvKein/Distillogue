@@ -20,7 +20,7 @@ posts.insertOne({ // for testing purposes while posting from frontend isnt a fea
   lastActiveUnix: timestamp.unix()
 });
 
-import {fetchResponse, user} from "./devInterfaces.js";
+import {fetchResponse, user, editableUserData, arrOfEditableUserData} from "./devInterfaces.js";
 
 app.post("/signUp", async (request, response) => {
   const signUpInfo = request.body as {username:string};
@@ -70,6 +70,26 @@ app.post("/signIn", async (request, response) => {
     error: false,
     data: user.data,
   });
+});
+
+app.post("/editProfileInfo", async (request, response) => {
+  const editData = request.body as {userId:string, dataName:string, newValue:string};
+  
+  if (!arrOfEditableUserData.includes(editData.dataName as editableUserData)) {
+    response.json(<fetchResponse>{error: {message: "Invalid data insertion"}});
+    return;
+  };
+
+  const dataPropertyByString = "data." + editData.dataName;
+  await users.findOneAndUpdate(
+    {"data.id": editData.userId},
+    {$set: {[dataPropertyByString]: editData.newValue}}
+  ).catch(() => {
+    response.json(<fetchResponse>{error: {message: "Failed to update database"}});
+    return;
+  });
+
+  response.json(<fetchResponse>{error: false, data: true});
 });
 
 import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";

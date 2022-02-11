@@ -11,6 +11,8 @@ interface userData {
   about?:string,
   settings?:object;
 };
+type editableUserData = "name"|"about"|"settings";
+const arrOfEditableUserData = ["name", "about", "settings"] as editableUserData[];
 
 interface user {
   registered: boolean;
@@ -20,5 +22,7 @@ interface user {
 export {
   fetchResponse,
   user,
-  userData
+  userData,
+  editableUserData,
+  arrOfEditableUserData
 };
