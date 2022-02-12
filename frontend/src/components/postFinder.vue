@@ -20,7 +20,7 @@
   interface post {
     title:string,
     body:string,
-    lastActiveUnix:number
+    lastActiveUnix:number,
   };
 
   const posts = ref<post[]|undefined|false>(undefined);

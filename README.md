@@ -1,6 +1,6 @@
 # Distillogue
 
-A tool (and might be a forum) for conducting multi-faceted dialogue in a distilled format; Currently in very early development.
+A tool (and might be a forum) for conducting multi-faceted dialogue in a distilled format; currently in very early development.
 
 ---
 
@@ -18,7 +18,7 @@ A tool (and might be a forum) for conducting multi-faceted dialogue in a distill
 
 My motives for working on this project are:
 
-* Developing and refining this brainchild into a highly customizable tool (with common-use presets), built to guide and nurture productive conversations.
+* Developing and refining this brainchild into a highly customizable tool (with common-use presets); built to enable, guide, and nurture productive conversations.
 
 * Familiarizing myself with my tech stack of choice and being able to display that familiarity when applying for my first junior developer job.  
 The project's stack is currently MEVN + TypeScript, but I'm planning on migrating substantially from MongoDB to PostgreSQL way before the first production build.
@@ -30,7 +30,7 @@ The project's stack is currently MEVN + TypeScript, but I'm planning on migratin
 * Node.js
 * MongoDB
 * Vite ("`npm install -g vite@latest`")
-* Windows (at least for the `start mongo` command in the backend's `npm run serve` command)
+* Windows (at least for the `start mongo` command of the backend's `npm run serve` command)
 
 ---
 

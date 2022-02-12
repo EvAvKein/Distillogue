@@ -17,7 +17,7 @@ const timestamp = {
 posts.insertOne({ // for testing purposes while posting from frontend isnt a feature
   title: "Lorem ipsum dolor sit amet, new elit quaerendum consectetuer ius ut.",
   body: "Lorem ipsum dolor sit amet, new mentitum oportere ex mea, an possim appellantur qui. Nostro sententiae pro te, eirmod labores efficiendi ex sea. Id sit alii oportere, quis dicit inimicus nec no, elit putant in nam. Epicurei liberavisse at vel, malis invenire nec ut. In sea appareat iracundia, ut saperet civibus scripserit usu.\nUt quot discere nam, case vidisse pro ad. Ei sumo maluisset mea. No duo voluptua deserunt argumentum. Ad sit copiosae persequeris mediocritatem, temporibus vituperatoribus id pri.",
-  lastActiveUnix: timestamp.unix()
+  lastActiveUnix: timestamp.unix(),
 });
 
 import {fetchResponse, user, editableUserData, arrOfEditableUserData} from "./devInterfaces.js";
@@ -83,7 +83,7 @@ app.post("/editProfileInfo", async (request, response) => {
   const dataPropertyByString = "data." + editData.dataName;
   await users.findOneAndUpdate(
     {"data.id": editData.userId},
-    {$set: {[dataPropertyByString]: editData.newValue}}
+    {$set: {[dataPropertyByString]: editData.newValue}},
   ).catch(() => {
     response.json(<fetchResponse>{error: {message: "Failed to update database"}});
     return;
@@ -98,7 +98,7 @@ app.post("/getPostSummaries", async (request, response) => {
   const postSummaries = await posts.find({$or: [{title: regexFilter}, {body: regexFilter}]}).sort({lastActiveUnix: -1}).toArray();
   response.json(<fetchResponse>{
     error: false,
-    data: postSummaries
+    data: postSummaries,
   });
 });
 

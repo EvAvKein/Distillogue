@@ -5,8 +5,8 @@
 </template>
 
 <script setup lang="ts">
-import noscriptWarn from "./components/noscript.vue";
-import layout from "./components/layout.vue";
+  import noscriptWarn from "./components/noscript.vue";
+  import layout from "./components/layout.vue";
 </script>
 
 <style>
@@ -14,15 +14,16 @@ import layout from "./components/layout.vue";
   --textColor: #ffffff;
   --textSubColor: #b3b3b3;
   --backgroundColor: #020c14;
-  --lighterBackgroundColor: #031b25;
+  --backgroundSubColor: #031b25;
   --highlightColor: #ECB365;
 }
 
 /* .lightMode {
-  --textColor: #111111;
-  --textSubColor: #363636;
-  --backgroundColor: #d4d4d4;
-  --highlightColor: #f0cc2a;
+  --textColor: #000000;
+  --textSubColor: #000000;
+  --backgroundColor: #000000;
+  --backgroundSubColor: #000000;
+  --highlightColor: #000000;
 } */
 
 body {

@@ -1,8 +1,12 @@
 <template>
+
 </template>
 
 <script setup lang="ts">
-  // import {ref} from "vue";
+  // import {ref, computed} from "vue";
+  // import {useRouter} from "vue-router";
+  // import {useUser} from '../stores/user';
+
   // const props = defineProps<{
     
   // }>();
@@ -13,4 +17,5 @@
 </script>
 
 <style scoped>
+
 </style>

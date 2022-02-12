@@ -38,7 +38,7 @@
       summariesDescription.value = `${(fetchedPosts as object[]).length} result${(fetchedPosts as object[]).length == 1 ? "" : "s"}${searchValue.value ? ` for "${searchValue.value}"` : ""}`;
       
       emit('fetchedPosts', fetchedPosts);
-    })
+    });
   };
 
   onMounted(() => {

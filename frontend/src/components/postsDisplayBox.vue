@@ -1,13 +1,13 @@
 <template>
   <ul id="postsList">
-      <li v-for="(post, i) in postsArray" :key="post.title + i">
-        <postSummary :key="post.title + i"
-          :title="post.title"
-          :body="post.body"
-          :lastActiveUnix="post.lastActiveUnix"
-        />
-      </li>
-    </ul>
+    <li v-for="(post, i) in postsArray" :key="post.title + i">
+      <postSummary :key="post.title + i"
+        :title="post.title"
+        :body="post.body"
+        :lastActiveUnix="post.lastActiveUnix"
+      />
+    </li>
+  </ul>
 </template>
 
 <script setup lang="ts">
