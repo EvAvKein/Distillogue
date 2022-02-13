@@ -15,6 +15,9 @@ const routes = [
   {
     path: '/browse',
     component: browse,
+    meta: {
+      accountRequired: true,
+    },
   },
   {
     path: '/dashboard',

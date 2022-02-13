@@ -4,10 +4,11 @@
       <nav>
         <router-link
           to="/"
+          class="logo"
         >
           <img id="distillogo" src="../assets/placeholderLogo.svg"/>
         </router-link>
-        <router-link
+        <router-link v-if="user.registered"
           to="/browse"
           class="ofButtonStyling"
         >
@@ -19,18 +20,20 @@
         >
           Dashboard
         </router-link>
-        <router-link v-if="!user.registered"
+      </nav>
+    </section>
+    
+    <section id="rightSection">
+      <nav>
+        <button v-if="user.registered" @click="logOut">Logout</button>
+        <router-link v-else
           to="/join"
           class="ofButtonStyling"
         >
           Join
         </router-link>
       </nav>
-    </section>
-    
-    <section id="rightSection">
-      <button v-if="user.registered" @click="logOut">Logout</button>
-    </section>
+    </section>  
   </header>
 </template>
 
@@ -59,7 +62,7 @@
     justify-content: space-between;
   }
 
-  nav, #rightSection {
+  nav {
     height: 3rem;
     margin: 0.5rem;
     width: fit-content;
@@ -68,7 +71,7 @@
     gap: 0.5rem
   }
   nav img {height: 2.75rem}
-  nav a:not(:first-child) {
+  nav a:not(.logo) {
     padding: 0.5em;
     border-radius: 0.5em;
     text-decoration: none;
