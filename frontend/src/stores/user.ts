@@ -1,11 +1,8 @@
 import {defineStore} from 'pinia';
-import {user} from "../../../backend/src/devInterfaces";
+import {User} from "../../../backend/src/objects.js";
 
 export const useUser = defineStore('user', {
   state: () => {
-    return <user>{
-      registered: false,
-      data: {},
-    };
+    return {data: {}} as User;
   },
 });

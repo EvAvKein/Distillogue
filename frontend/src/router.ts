@@ -49,7 +49,7 @@ router.beforeEach((to, from, next) => {
   };
 
   const user = useUser();
-  if (!user.registered) {
+  if (!user.data.id) {
     next({path: '/join'});
     return;
   };

@@ -8,13 +8,13 @@
         >
           <img id="distillogo" src="../assets/placeholderLogo.svg"/>
         </router-link>
-        <router-link v-if="user.registered"
+        <router-link v-if="user.data.id"
           to="/browse"
           class="ofButtonStyling"
         >
           Browse
         </router-link>
-        <router-link v-if="user.registered"
+        <router-link v-if="user.data.id"
           to="/dashboard"
           class="ofButtonStyling"
         >
@@ -25,7 +25,7 @@
     
     <section id="rightSection">
       <nav>
-        <button v-if="user.registered" @click="logOut">Logout</button>
+        <button v-if="user.data.id" @click="logOut">Logout</button>
         <router-link v-else
           to="/join"
           class="ofButtonStyling"

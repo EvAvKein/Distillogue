@@ -14,18 +14,13 @@
 
 <script setup lang="ts">
   import {ref} from 'vue';
+  import {Post} from '../../../backend/src/objects';
   import postsBox from './postsDisplayBox.vue';
   import postsFetchBySearch from './postsFetchBySearch.vue';
 
-  interface post {
-    title:string,
-    body:string,
-    lastActiveUnix:number,
-  };
+  const posts = ref<Post[]|undefined|false>(undefined);
 
-  const posts = ref<post[]|undefined|false>(undefined);
-
-  function setPostsToResponse(response:post[]) {
+  function setPostsToResponse(response:Post[]) {
     posts.value = response;
   };
   

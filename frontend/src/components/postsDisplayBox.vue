@@ -11,14 +11,11 @@
 </template>
 
 <script setup lang="ts">
+  import {Post} from "../../../backend/src/objects";
   import postSummary from "./postSummary.vue";
 
   defineProps<{
-    postsArray:{
-      title:string,
-      body:string,
-      lastActiveUnix:number
-    }[],
+    postsArray:Post[],
   }>();
 </script>
 
