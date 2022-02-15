@@ -20,9 +20,17 @@ My motives for working on this project are:
 
 * Developing and refining this brainchild into a highly customizable tool (with common-use presets); built to enable, guide, and nurture productive conversations.
 
-* Familiarizing myself with my tech stack of choice and being able to display that familiarity when applying for my first junior developer job.  
-The project's stack is currently MEVN + TypeScript, but I'm planning on migrating substantially from MongoDB to PostgreSQL way before the first production build.
+* Familiarizing myself with my tech stack of choice and being able to display that familiarity when applying for my first junior job.  
 
+  Current stack:  
+    * Vue.js + TypeScript
+    * Node.js + TypeScript + Express.js  
+    * MongoDB  
+
+  Planned changes:
+    1. MongoDB -> PostgreSQL (TBD whether mostly or entirely)
+    2. Dockerizing
+    3. Node.js -> Go
 ---
 
 ## Dependencies
