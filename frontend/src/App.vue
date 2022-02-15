@@ -16,6 +16,7 @@
   --backgroundColor: #020c14;
   --backgroundSubColor: #031b25;
   --highlightColor: #ECB365;
+  --highlightSubColor: #c29454;
 }
 
 /* .lightMode {
@@ -24,6 +25,7 @@
   --backgroundColor: #000000;
   --backgroundSubColor: #000000;
   --highlightColor: #000000;
+  --highlightSubColor: #000000;
 } */
 
 body {
