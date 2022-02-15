@@ -27,7 +27,7 @@ My motives for working on this project are:
     * Node.js + TypeScript + Express.js  
     * MongoDB  
 
-  Planned changes:
+  Planned changes (ranked by priority & certainty):
     1. MongoDB -> PostgreSQL (TBD whether mostly or entirely)
     2. Dockerizing
     3. Node.js -> Go
