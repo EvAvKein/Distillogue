@@ -11,9 +11,9 @@
     
   // }>();
 
-  // const emit = defineEmits({
+  // const emit = defineEmits([
 
-  // });
+  // ]);
 </script>
 
 <style scoped>
