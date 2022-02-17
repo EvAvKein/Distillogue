@@ -69,6 +69,10 @@ button,
   color: var(--backgroundColor);
   background-color: var(--textColor);
   border-radius: 0.2em;
+  font-size: inherit;
+  text-decoration: none;
+  padding: 0.5em;
+  border-radius: 0.5em;
 }
 button:focus, button:hover
 .ofButtonStyling:focus, .ofButtonStyling:hover{

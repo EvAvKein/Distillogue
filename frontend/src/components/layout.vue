@@ -14,18 +14,24 @@
         >
           Browse
         </router-link>
-        <router-link v-if="user.data.id"
-          to="/dashboard"
-          class="ofButtonStyling"
-        >
-          Dashboard
-        </router-link>
       </nav>
     </section>
     
     <section id="rightSection">
       <nav>
-        <button v-if="user.data.id" @click="logOut">Logout</button>
+        <div v-if="user.data.id">
+          <router-link 
+            to="/dashboard"
+            class="ofButtonStyling"
+          >
+            Dashboard
+          </router-link>
+          <button @click="logOut"
+            class="ofButtonStyling"
+          >
+            Logout
+          </button>
+        </div>
         <router-link v-else
           to="/join"
           class="ofButtonStyling"
@@ -62,7 +68,7 @@
     justify-content: space-between;
   }
 
-  nav {
+  nav, nav > div {
     height: 3rem;
     margin: 0.5rem;
     width: fit-content;
@@ -71,9 +77,4 @@
     gap: 0.5rem
   }
   nav img {height: 2.75rem}
-  nav a:not(.logo) {
-    padding: 0.5em;
-    border-radius: 0.5em;
-    text-decoration: none;
-  }
 </style>
