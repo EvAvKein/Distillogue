@@ -1,4 +1,7 @@
 import {lookupInOptional} from "./helpers/lookupInOptional.js";
+import {newUserId} from "./helpers/generateIDs.js";
+import {unix as unixStamp} from "./helpers/timestamps.js"
+
 class FetchResponse {
   data:null|object|any[]|true;
   error?:{
@@ -13,7 +16,6 @@ class FetchResponse {
   };
 };
 
-import {newUserId} from "./helpers/generateIDs.js";
 class UserData {
   id:string;
   name:string;
@@ -41,14 +43,24 @@ class User {
 };
 
 class Post {
+  ownerId:string;
   title:string;
   body:string;
-  lastActiveUnix:number;
+  stats?: { // optional to allow clientside post request objects to use the class as TS type (because stats, e.g lastActiveUnix, shouldn't be sourced from client)
+    lastActiveUnix:number;
+  };
+  settings: {
+    isPublic:boolean;
+  };
 
-  constructor(title:Post["title"], body:Post["body"], lastActiveUnix:Post["lastActiveUnix"]){
+  constructor(ownerId:Post["ownerId"], title:Post["title"], body:Post["body"], settings:Post["settings"]){
+    this.ownerId = ownerId;
     this.title = title;
     this.body = body;
-    this.lastActiveUnix = lastActiveUnix;
+    this.stats = {
+      lastActiveUnix: unixStamp(),
+    };
+    this.settings = settings;
   };
 };
 

@@ -18,6 +18,8 @@
   import {jsonFetch} from "../helpers/jsonFetch";
   import {debounce} from "../helpers/debounce"
   import labelledInput from "./labelledInput.vue";
+  import {useUser} from '../stores/user';
+  const user = useUser();
 
   const props = defineProps<{fetchOnMount?:boolean}>();
   const emit = defineEmits(["fetchedPosts"]);
@@ -27,7 +29,7 @@
   
   function fetchAndEmitPosts() {
     summariesDescription.value = "Fetching Posts...";
-    jsonFetch("/getPostSummaries", {filter: searchValue.value})
+    jsonFetch("/getPostSummaries", {userId: user.data.id, filter: searchValue.value})
     .then((fetchResponse) => {
       if (fetchResponse.error) {
         summariesDescription.value = "Connection error: Failed to fetch posts :(";

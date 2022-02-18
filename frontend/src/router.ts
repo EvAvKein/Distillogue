@@ -3,6 +3,7 @@ import {useUser} from './stores/user';
 
 import home from './pages/Home.vue';
 import browse from './pages/Browse.vue';
+import post from './pages/Post.vue';
 import dashboard from './pages/Dashboard.vue';
 import join from './pages/join.vue';
 import notFound from "./pages/NotFound.vue";
@@ -15,6 +16,13 @@ const routes = [
   {
     path: '/browse',
     component: browse,
+    meta: {
+      accountRequired: true,
+    },
+  },
+  {
+    path: '/post',
+    component: post,
     meta: {
       accountRequired: true,
     },

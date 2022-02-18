@@ -4,7 +4,7 @@
       <postSummary :key="post.title + i"
         :title="post.title"
         :body="post.body"
-        :lastActiveUnix="post.lastActiveUnix"
+        :lastActiveUnix="post.stats!.lastActiveUnix"
       />
     </li>
   </ul>

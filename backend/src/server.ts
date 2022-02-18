@@ -1,27 +1,14 @@
 import express from "express";
+import helmetSecurity from "helmet";
+import {users, posts} from "./mongo.js";
+import * as timestamp from "./helpers/timestamps.js";
+import {FetchResponse, User, UserData, editableUserData, arrOfEditableUserData, Post} from "./objects.js";
+import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
+
 const app = express();
 app.use(express.static("../frontend/dist"));
 app.use(express.json());
-
-import helmetSecurity from "helmet";
 app.use(helmetSecurity());
-
-import {users, posts} from "./mongo.js";
-
-const timestamp = {
-  unix() {return Math.floor(Date.now() / 1000)},
-  iso() {return new Date().toISOString()},
-};
-
-posts.insertOne(new Post(
-  "Lorem ipsum dolor sit amet, constructor elit quaerendum consectetuer ius ut.",
-  "Lorem ipsum dolor sit amet, constructor mentitum oportere ex mea, an possim appellantur qui. Nostro sententiae pro te, eirmod labores efficiendi ex sea. Id sit alii oportere, quis dicit inimicus nec no, elit putant in nam. Epicurei liberavisse at vel, malis invenire nec ut. In sea appareat iracundia, ut saperet civibus scripserit usu.\nUt quot discere nam, case vidisse pro ad. Ei sumo maluisset mea. No duo voluptua deserunt argumentum. Ad sit copiosae persequeris mediocritatem, temporibus vituperatoribus id pri.",
-  timestamp.unix(),
-));
-
-
-
-import {FetchResponse, User, UserData, editableUserData, arrOfEditableUserData, Post} from "./objects.js";
 
 app.post("/signUp", async (request, response) => {
   const signUpInfo = request.body as {username:UserData["name"]};
@@ -80,10 +67,30 @@ app.post("/editProfileInfo", async (request, response) => {
   response.json(new FetchResponse(true));
 });
 
-import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
+app.post("/createPost", async (request, response) => {
+  const postData = request.body;
+  
+  posts.insertOne(new Post(
+    postData.ownerId,
+    postData.title,
+    postData.body,
+    postData.settings,
+  ));
+
+  response.json(new FetchResponse(true));
+});
+
 app.post("/getPostSummaries", async (request, response) => {
   const regexFilter = new RegExp(sanitizeForRegex(request.body.filter), "i");
-  const postSummaries = await posts.find({$or: [{title: regexFilter}, {body: regexFilter}]}).sort({lastActiveUnix: -1}).toArray();
+  const userId = request.body.userId;
+
+  const postSummaries = await posts.find({
+    $and: [
+      {$or: [{title: regexFilter}, {body: regexFilter}]},
+      {$or: [{'settings.isPublic': true}, {'ownerId': userId}]}
+    ]
+  }).sort({'stats.lastActiveUnix': -1}).toArray();
+
   response.json(new FetchResponse(postSummaries));
 });
 

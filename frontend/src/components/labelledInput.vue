@@ -55,6 +55,7 @@
   input, textarea {
     background-color: var(--backgroundColor);
     color: var(--textColor);
+    font-family: inherit;
     margin-top: 1.3em;
     box-sizing: border-box;
     padding-left: 0.2em;

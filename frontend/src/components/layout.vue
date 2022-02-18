@@ -14,6 +14,12 @@
         >
           Browse
         </router-link>
+        <router-link v-if="user.data.id"
+          to="/post"
+          class="ofButtonStyling"
+        >
+          Post
+        </router-link>
       </nav>
     </section>
     
