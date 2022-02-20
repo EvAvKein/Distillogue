@@ -1,5 +1,5 @@
 import {lookupInOptional} from "./helpers/lookupInOptional.js";
-import {newUserId} from "./helpers/generateIDs.js";
+import {newId} from "./helpers/generateIDs.js";
 import {unix as unixStamp} from "./helpers/timestamps.js"
 
 class FetchResponse {
@@ -23,7 +23,7 @@ class UserData {
   settings?:object;
 
   constructor(name:UserData["name"]) {
-    this.id = newUserId();
+    this.id = newId("user");
     this.name = name;
     this.about = "Hello, I haven't wrote my About yet!";
     this.settings;
@@ -42,32 +42,106 @@ class User {
   };
 };
 
-class Post {
-  ownerId:string;
-  title:string;
-  body:string;
-  stats?: { // optional to allow clientside post request objects to use the class as TS type (because stats, e.g lastActiveUnix, shouldn't be sourced from client)
-    lastActiveUnix:number;
-  };
-  settings: {
-    isPublic:boolean;
-  };
+class Log {
+  timeUnix:number;
+  userId:UserData["id"];
+  targetId:UserData["id"]|Node["id"];
+  category:"added"|"removed"|"edited";
+  extraData?:object|string|number;
 
-  constructor(ownerId:Post["ownerId"], title:Post["title"], body:Post["body"], settings:Post["settings"]){
-    this.ownerId = ownerId;
-    this.title = title;
-    this.body = body;
-    this.stats = {
-      lastActiveUnix: unixStamp(),
-    };
-    this.settings = settings;
+  constructor(timeUnix:Log["timeUnix"], userId:Log["userId"], targetId:Log["targetId"], category:Log["category"], extraData?:Log["extraData"]) {
+    this.timeUnix = timeUnix;
+    this.userId = userId;
+    this.targetId = targetId;
+    this.category = category;
+    this.extraData = extraData;
   };
 };
 
+class NodeConfig {
+  upvotes?:number;
+  downvotes?:number;
+};
+
+class NodeStats {
+  lastActiveUnix:number;
+  replyCount:number;
+  upvotes:NodeConfig["upvotes"];
+  downvotes:NodeConfig["downvotes"];
+
+  constructor(config?:NodeConfig) {
+    this.lastActiveUnix = unixStamp();
+    this.replyCount = 0;
+    this.upvotes = config?.upvotes;
+    this.downvotes = config?.downvotes;
+  };
+};
+
+class NodeCreationRequest {
+  parentId:string|null;
+  ownerIds:string[];
+  public:boolean;
+  title:string;
+  body:string;
+  config?:NodeConfig;
+
+  constructor(parentId:NodeCreationRequest["parentId"], ownerIds:NodeCreationRequest["ownerIds"], isPublic:NodeCreationRequest["public"], title:NodeCreationRequest["title"], body:NodeCreationRequest["body"], config?:NodeCreationRequest["config"]) {
+    this.parentId = parentId;
+    this.ownerIds = ownerIds;
+    this.public = isPublic;
+    this.title = title;
+    this.body = body;
+    this.config = config;
+  }
+};
+
+class Node extends NodeCreationRequest {
+  id:string;
+  past:{titles:Node["title"][], bodies:Node["body"][]};
+  locked:boolean;
+  replies:Node[];
+  stats:NodeStats;
+
+  constructor(parentId:Node["parentId"], ownerIds:Node["ownerIds"], isPublic:Node["public"], title:Node["title"], body:Node["body"], config?:NodeConfig) {
+    super(parentId, ownerIds, isPublic, title, body);
+    this.id = newId("node");
+    this.past = {titles:[], bodies: []};
+    this.locked = false;
+    this.replies = [];
+    this.stats = new NodeStats(config);
+  };
+
+  summarize() {
+    return new NodeSummary(this);
+  };
+};
+
+class NodeSummary {
+  id:Node["id"];
+  ownerIds:Node["ownerIds"];
+  public:Node["public"];
+  title:Node["title"];
+  locked:Node["locked"];
+  stats:NodeStats;
+
+  constructor(centralNode:Node){
+    this.id = centralNode.id;
+    this.ownerIds = centralNode.ownerIds;
+    this.public = centralNode.public;
+    this.title = centralNode.title;
+    this.locked = centralNode.locked;
+    this.stats = centralNode.stats;
+  };
+};
 
 export {
   FetchResponse,
   User,
   UserData, editableUserData, arrOfEditableUserData,
-  Post,
+  Log,
+  NodeConfig,
+  NodeStats,
+  NodeCreationRequest,
+  Node,
+  NodeSummary,
 };

@@ -20,7 +20,7 @@
       <div>
         Public:
         <input type="checkbox"
-          @change="(event) => {settings.isPublic = (event.currentTarget as HTMLInputElement).checked ? true : false}"
+          @change="(event) => {isPublic = (event.currentTarget as HTMLInputElement).checked ? true : false}"
         />
       </div>
     </section>
@@ -33,7 +33,7 @@
   import {ref} from "vue";
   import labelledInput from "./labelledInput.vue";
   import notification from "./notification.vue";
-  import {Post} from "../../../backend/src/objects";
+  import {Node, NodeConfig, NodeCreationRequest} from "../../../backend/src/objects";
   import {jsonFetch} from "../helpers/jsonFetch";
   import {useUser} from '../stores/user';
   import {useRouter} from "vue-router";
@@ -43,25 +43,19 @@
   // const props = defineProps<{
   // }>();
 
-  const postTitle = ref<string>("");
-  const postBody = ref<string>("");
-  const settings = ref({
-    isPublic: false,
+  const postTitle = ref<Node["title"]>("");
+  const postBody = ref<Node["body"]>("");
+  const isPublic = ref<NodeCreationRequest["public"]>(false);
+  const config = ref<NodeConfig>({
   });
  
-  // const emit = defineEmits({
   const notifText = ref<string>("");
   const notifDesirability = ref<boolean>(true);
-  // });
+  
   async function submit() {
     notifText.value = "";
 
-    const response = await jsonFetch("/createPost", {
-      ownerId: user.data.id,
-      title: postTitle.value,
-      body: postBody.value,
-      settings: settings.value,
-    } as Post);
+    const response = await jsonFetch("/createPost", new NodeCreationRequest(null, [user.data.id], isPublic.value, postTitle.value, postBody.value, config.value));
 
     if (response.error) {
       notifText.value = response.error.message;

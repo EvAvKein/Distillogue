@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
   import {ref, onMounted} from 'vue';
-  import {Post} from '../../../backend/src/objects';
+  import {NodeSummary} from '../../../backend/src/objects';
   import {jsonFetch} from "../helpers/jsonFetch";
   import {debounce} from "../helpers/debounce"
   import labelledInput from "./labelledInput.vue";
@@ -36,7 +36,7 @@
         return;
       };
 
-      const fetchedPosts = fetchResponse.data as Post[];
+      const fetchedPosts = fetchResponse.data as NodeSummary[];
       summariesDescription.value = `${fetchedPosts.length} result${fetchedPosts.length == 1 ? "" : "s"}${searchValue.value ? ` for "${searchValue.value}"` : ""}`;
       
       emit('fetchedPosts', fetchedPosts);

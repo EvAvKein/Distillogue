@@ -1,21 +1,19 @@
 <template>
   <ul id="postsList">
-    <li v-for="(post, i) in postsArray" :key="post.title + i">
-      <postSummary :key="post.title + i"
-        :title="post.title"
-        :body="post.body"
-        :lastActiveUnix="post.stats!.lastActiveUnix"
+    <li v-for="(summaryObject, i) in summariesArray" :key="summaryObject.id + i">
+      <postSummary :key="summaryObject.id + i"
+        :summary="summaryObject"
       />
     </li>
   </ul>
 </template>
 
 <script setup lang="ts">
-  import {Post} from "../../../backend/src/objects";
+  import {NodeSummary} from "../../../backend/src/objects";
   import postSummary from "./postSummary.vue";
 
   defineProps<{
-    postsArray:Post[],
+    summariesArray:NodeSummary[],
   }>();
 </script>
 

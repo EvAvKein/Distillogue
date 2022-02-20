@@ -2,13 +2,16 @@ import express from "express";
 import helmetSecurity from "helmet";
 import {users, posts} from "./mongo.js";
 import * as timestamp from "./helpers/timestamps.js";
-import {FetchResponse, User, UserData, editableUserData, arrOfEditableUserData, Post} from "./objects.js";
+import {FetchResponse, User, UserData, editableUserData, arrOfEditableUserData, Node, NodeConfig, NodeCreationRequest} from "./objects.js";
 import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
 
 const app = express();
 app.use(express.static("../frontend/dist"));
 app.use(express.json());
 app.use(helmetSecurity());
+
+posts.deleteMany({});
+users.deleteMany({});
 
 app.post("/signUp", async (request, response) => {
   const signUpInfo = request.body as {username:UserData["name"]};
@@ -68,13 +71,15 @@ app.post("/editProfileInfo", async (request, response) => {
 });
 
 app.post("/createPost", async (request, response) => {
-  const postData = request.body;
+  const postData = request.body as NodeCreationRequest;
   
-  posts.insertOne(new Post(
-    postData.ownerId,
+  posts.insertOne(new Node(
+    null,
+    postData.ownerIds,
+    postData.public,
     postData.title,
     postData.body,
-    postData.settings,
+    postData.config,
   ));
 
   response.json(new FetchResponse(true));
@@ -87,7 +92,7 @@ app.post("/getPostSummaries", async (request, response) => {
   const postSummaries = await posts.find({
     $and: [
       {$or: [{title: regexFilter}, {body: regexFilter}]},
-      {$or: [{'settings.isPublic': true}, {'ownerId': userId}]}
+      {$or: [{public: true}, {ownerIds: userId}]}
     ]
   }).sort({'stats.lastActiveUnix': -1}).toArray();
 

@@ -1,17 +1,17 @@
 <template>
   <section>
-    <h4>{{title}}</h4>
-    <h5><timestamp :pastUnix="lastActiveUnix"/></h5>
-    <p>{{body}}</p>
+    <h4>{{summary.title}}</h4>
+    <h5><timestamp :pastUnix="summary.stats.lastActiveUnix"/></h5>
+    <h6>Public: {{summary.public}}</h6>
+    <p>Replies: {{summary.stats.replyCount}}</p>
   </section>
 </template>
 
 <script setup lang="ts">
+  import {NodeSummary} from "../../../backend/src/objects";
   import timestamp from "./timestamp.vue";
   defineProps<{
-    title:string,
-    body:string,
-    lastActiveUnix:number
+    summary:NodeSummary;
   }>();
 </script>
 
