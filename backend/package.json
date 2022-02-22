@@ -8,7 +8,7 @@
     "serve": "npm run build && start mongo && node dist/server.js"
   },
   "author": "Eve Aviv Keinan",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.17.2",
     "helmet": "^5.0.1",

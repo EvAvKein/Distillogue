@@ -7,7 +7,7 @@
     "preview": "vite"
   },
   "author": "Eve Aviv Keinan",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "pinia": "^2.0.10",
     "vue": "^3.2.25",
