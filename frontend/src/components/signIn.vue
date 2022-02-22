@@ -32,7 +32,7 @@
       return;
     };
 
-    router.push({path: "/browse"});
+    router.push({name: "browse"});
   };
 </script>
 

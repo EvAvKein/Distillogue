@@ -3,19 +3,19 @@
     <section id="leftSection">
       <nav>
         <router-link
-          to="/"
+          :to="{name: 'home'}"
           class="logo"
         >
           <img id="distillogo" src="../assets/placeholderLogo.svg"/>
         </router-link>
         <router-link v-if="user.data.id"
-          to="/browse"
+          :to="{name: 'browse'}"
           class="ofButtonStyling"
         >
           Browse
         </router-link>
         <router-link v-if="user.data.id"
-          to="/post"
+          :to="{name: 'createPost'}"
           class="ofButtonStyling"
         >
           Post
@@ -27,7 +27,7 @@
       <nav>
         <div v-if="user.data.id">
           <router-link 
-            to="/dashboard"
+            :to="{name: 'dashboard'}"
             class="ofButtonStyling"
           >
             Dashboard
@@ -39,7 +39,7 @@
           </button>
         </div>
         <router-link v-else
-          to="/join"
+          :to="{name: 'join'}"
           class="ofButtonStyling"
         >
           Join
@@ -57,7 +57,7 @@
 
   function logOut() {
     user.$reset();
-    router.push({path: "/join"});
+    router.push({name: "join"});
   };
 </script>
 

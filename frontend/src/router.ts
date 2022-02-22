@@ -1,45 +1,50 @@
-import {createRouter, createWebHistory} from 'vue-router';
-import {useUser} from './stores/user';
+import {createRouter, createWebHistory} from "vue-router";
+import {useUser} from "./stores/user";
 
-import home from './pages/Home.vue';
-import browse from './pages/Browse.vue';
-import post from './pages/Post.vue';
-import dashboard from './pages/Dashboard.vue';
-import join from './pages/join.vue';
+import home from "./pages/Home.vue";
+import browse from "./pages/Browse.vue";
+import createPost from "./pages/CreatePost.vue";
+import dashboard from "./pages/Dashboard.vue";
+import join from "./pages/join.vue";
 import notFound from "./pages/NotFound.vue";
 
 const routes = [
   {
-    path: '/',
+    name: "home",
+    path: "/",
     component: home,
   },
   {
-    path: '/browse',
+    name: "browse",
+    path: "/browse",
     component: browse,
     meta: {
       accountRequired: true,
     },
   },
   {
-    path: '/post',
-    component: post,
+    name: "viewPost",
+    path: "/post/:postId",
+    component: createPost,
     meta: {
       accountRequired: true,
     },
   },
   {
-    path: '/dashboard',
+    name: "dashboard",
+    path: "/dashboard",
     component: dashboard,
     meta: {
       accountRequired: true,
     },
   },
   {
-    path: '/join',
+    name: "join",
+    path: "/join",
     component: join,
   },
   {
-    path: '/:pathMatch(.*)*',
+    path: "/:pathMatch(.*)*",
     component: notFound,
   },
 ];
@@ -58,7 +63,7 @@ router.beforeEach((to, from, next) => {
 
   const user = useUser();
   if (!user.data.id) {
-    next({path: '/join'});
+    next({path: "/join"});
     return;
   };
 
