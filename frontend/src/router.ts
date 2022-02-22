@@ -23,8 +23,8 @@ const routes = [
     },
   },
   {
-    name: "viewPost",
-    path: "/post/:postId",
+    name: "createPost",
+    path: "/post/create",
     component: createPost,
     meta: {
       accountRequired: true,
