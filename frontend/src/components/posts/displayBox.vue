@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-  import {Node} from '../../../backend/src/objects';
+  import {Node} from '../../../../backend/src/objects';
 
   defineProps<{
     centralNode:Node;

@@ -8,8 +8,8 @@
 </template>
 
 <script setup lang="ts">
-  import {NodeSummary} from "../../../backend/src/objects";
-  import timestamp from "./timestamp.vue";
+  import {NodeSummary} from "../../../../backend/src/objects";
+  import timestamp from "../timestamp.vue";
   defineProps<{
     summary:NodeSummary;
   }>();

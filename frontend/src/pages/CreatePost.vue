@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-  import createPost from '../components/createPost.vue';
+  import createPost from '../components/posts/create.vue';
 </script>
 
 <style scoped>

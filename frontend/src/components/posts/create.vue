@@ -31,11 +31,11 @@
 
 <script setup lang="ts">
   import {ref} from "vue";
-  import labelledInput from "./labelledInput.vue";
-  import notification from "./notification.vue";
-  import {Node, NodeConfig, NodeCreationRequest} from "../../../backend/src/objects";
-  import {jsonFetch} from "../helpers/jsonFetch";
-  import {useUser} from '../stores/user';
+  import labelledInput from "../labelledInput.vue";
+  import notification from "../notification.vue";
+  import {Node, NodeConfig, NodeCreationRequest} from "../../../../backend/src/objects";
+  import {jsonFetch} from "../../helpers/jsonFetch";
+  import {useUser} from '../../stores/user';
   import {useRouter} from "vue-router";
   const user = useUser();
   const router = useRouter();

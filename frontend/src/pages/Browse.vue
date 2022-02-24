@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-  import postsFinder from '../components/postFinder.vue';
+  import postsFinder from '../components/posts/summariesFinder.vue';
 </script>
 
 <style scoped>

@@ -10,9 +10,9 @@
 <script setup lang="ts">
   import {ref} from "vue";
   import {useRouter} from "vue-router";
-  import {signIn} from "../helpers/signIn";
-  import inputField from "./labelledInput.vue";
-  import notification from "./notification.vue";
+  import {signIn} from "../../helpers/signIn";
+  import inputField from "../labelledInput.vue";
+  import notification from "../notification.vue";
   const router = useRouter();
 
   const username = ref<string>("");
