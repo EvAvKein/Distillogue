@@ -99,6 +99,22 @@ app.post("/getPostSummaries", async (request, response) => {
   response.json(new FetchResponse(postSummaries));
 });
 
+app.post("/getPost", async (request, response) => {
+  const userId = request.body.userId;
+  const postId = request.body.postId;
+
+  const dbResponse = await posts.findOne({
+    $and: [
+      {id: postId},
+      {$or: [{public: true}, {ownerIds: userId}]}
+    ]
+});
+
+  const getResponse = dbResponse ? new FetchResponse(dbResponse) : new FetchResponse(null, "Post unavailable, it either:\n1. Doesn't exist\n2. Private and you're not authorized");
+
+  response.json(getResponse);
+});
+
 const port = process.env.PORT || 3030;
 app.listen(port, () => {
   console.log(`Server Online at port ${port}!

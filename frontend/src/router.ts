@@ -4,6 +4,7 @@ import {useUser} from "./stores/user";
 import home from "./pages/Home.vue";
 import browse from "./pages/Browse.vue";
 import createPost from "./pages/CreatePost.vue";
+import viewPost from "./pages/ViewPost.vue";
 import dashboard from "./pages/Dashboard.vue";
 import join from "./pages/join.vue";
 import notFound from "./pages/NotFound.vue";
@@ -26,6 +27,15 @@ const routes = [
     name: "createPost",
     path: "/post/create",
     component: createPost,
+    meta: {
+      accountRequired: true,
+    },
+  },
+  {
+    name: "viewPost",
+    path: "/post/:postId",
+    component: viewPost,
+    props: true,
     meta: {
       accountRequired: true,
     },
