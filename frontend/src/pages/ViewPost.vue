@@ -13,7 +13,7 @@
 <script setup lang="ts">
   import {ref} from 'vue';
   import notification from '../components/notification.vue';
-  import postDisplay from "../components/posts/postDisplay.vue"
+  import postDisplay from "../components/posts/displayBox.vue"
   import {Node} from '../../../backend/src/objects';
   import {jsonFetch} from "../helpers/jsonFetch";
   import {useUser} from "../stores/user";
@@ -31,7 +31,7 @@
     postId: props.postId,
   }).then((response) => {
     if (response.error) {
-      notif.value = {message: response.error.message, desirability: false}
+      notif.value = {message: response.error.message, desirability: undefined}
       return;
     };
     post.value = response.data as Node;

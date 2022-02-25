@@ -14,8 +14,8 @@
 <script setup lang="ts">
   import {ref} from "vue"
   import {UserData} from "../../../backend/src/objects"
-  import signIn from "../components/joining/signIn.vue";
-  import signUp from "../components/joining/signUp.vue";
+  import signIn from "../components/users/signIn.vue";
+  import signUp from "../components/users/signUp.vue";
 
   import {useUser} from "../stores/user";
   import {useRouter} from "vue-router";
