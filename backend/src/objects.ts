@@ -59,21 +59,21 @@ class Log {
 };
 
 class NodeConfig {
-  upvotes?:number;
-  downvotes?:number;
+  upvotes?:true;
+  downvotes?:true;
 };
 
 class NodeStats {
   lastActiveUnix:number;
   replyCount:number;
-  upvotes:NodeConfig["upvotes"];
-  downvotes:NodeConfig["downvotes"];
+  upvotes?:number;
+  downvotes?:number;
 
   constructor(config?:NodeConfig) {
     this.lastActiveUnix = unixStamp();
     this.replyCount = 0;
-    this.upvotes = config?.upvotes;
-    this.downvotes = config?.downvotes;
+    this.upvotes = config?.upvotes ? 0 : undefined;
+    this.downvotes = config?.downvotes ? 0 : undefined;
   };
 };
 
