@@ -16,7 +16,9 @@
   --backgroundColor: #020c14;
   --backgroundSubColor: #031b25;
   --highlightColor: #ECB365;
+  --filterToHighlightColor: brightness(0) saturate(100%) invert(90%) sepia(71%) saturate(5554%) hue-rotate(308deg) brightness(95%) contrast(94%); /* created via https://codepen.io/sosuke/pen/Pjoqqp */
   --highlightSubColor: #c29454;
+  --filterToHighlightSubColor: brightness(0) saturate(100%) invert(65%) sepia(16%) saturate(1265%) hue-rotate(355deg) brightness(92%) contrast(85%); /* created via https://codepen.io/sosuke/pen/Pjoqqp */
 }
 
 /* .lightMode {
