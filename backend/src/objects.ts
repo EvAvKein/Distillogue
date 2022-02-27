@@ -61,19 +61,20 @@ class Log {
 class NodeConfig {
   upvotes?:true;
   downvotes?:true;
+  anonVotes?:true;
 };
 
 class NodeStats {
   lastActiveUnix:number;
-  replyCount:number;
-  upvotes?:number;
-  downvotes?:number;
+  upvoters?:UserData["id"][];
+  downvoters?:UserData["id"][];
+  anonVoting:NodeConfig["anonVotes"];
 
   constructor(config?:NodeConfig) {
     this.lastActiveUnix = unixStamp();
-    this.replyCount = 0;
-    this.upvotes = config?.upvotes ? 0 : undefined;
-    this.downvotes = config?.downvotes ? 0 : undefined;
+    this.upvoters = config?.upvotes ? [] : undefined;
+    this.downvoters = config?.downvotes ? [] : undefined;
+    this.anonVoting = config?.anonVotes || undefined;
   };
 };
 
@@ -122,6 +123,7 @@ class NodeSummary {
   public:Node["public"];
   title:Node["title"];
   locked:Node["locked"];
+  replyCount:number;
   stats:NodeStats;
 
   constructor(centralNode:Node){
@@ -130,6 +132,7 @@ class NodeSummary {
     this.public = centralNode.public;
     this.title = centralNode.title;
     this.locked = centralNode.locked;
+    this.replyCount = centralNode.replies.length;
     this.stats = centralNode.stats;
   };
 };
