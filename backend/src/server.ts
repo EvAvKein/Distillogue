@@ -108,7 +108,7 @@ app.post("/getPost", async (request, response) => {
       {id: postId},
       {$or: [{public: true}, {ownerIds: userId}]}
     ]
-});
+  });
 
   const getResponse = dbResponse ? new FetchResponse(dbResponse) : new FetchResponse(null, "Post unavailable, it either:\n1. Doesn't exist\n2. Private and you're not authorized");
 
