@@ -115,6 +115,25 @@ app.post("/getPost", async (request, response) => {
   response.json(getResponse);
 });
 
+// app.post("/nodeVote", async (request, response) => {
+//   const data = request.body as {
+//     userId:string;
+//     postId:string;
+//     nodeId:string;
+//     voteUpOrDown:boolean;
+//   };
+
+//   const dbFilter = data.postId === data.nodeId ? {id: data.nodeId} : {"replies.$[].id": data.nodeId};
+//   const dbResponse = await posts.findOneAndUpdate(
+//     dbFilter,
+//     {}
+//   );
+
+//   const updateResponse = dbResponse ? new FetchResponse(dbResponse) : new FetchResponse(null, "Failed to update reply in ");
+
+//   response.json(updateResponse);
+// });
+
 const port = process.env.PORT || 3030;
 app.listen(port, () => {
   console.log(`Server Online at port ${port}!
