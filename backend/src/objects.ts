@@ -123,7 +123,6 @@ class NodeSummary {
   public:Node["public"];
   title:Node["title"];
   locked:Node["locked"];
-  replyCount:number;
   stats:NodeStats;
 
   constructor(centralNode:Node){
@@ -132,7 +131,6 @@ class NodeSummary {
     this.public = centralNode.public;
     this.title = centralNode.title;
     this.locked = centralNode.locked;
-    this.replyCount = centralNode.replies.length;
     this.stats = centralNode.stats;
   };
 };

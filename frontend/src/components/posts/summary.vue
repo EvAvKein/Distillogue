@@ -3,7 +3,6 @@
     <h4>{{summary.title}}</h4>
     <h5><timestamp :pastUnix="summary.stats.lastActiveUnix"/></h5>
     <h6>Public: {{summary.public}}</h6>
-    <p>Replies: {{summary.replyCount}}</p>
   </router-link>
 </template>
 
