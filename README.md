@@ -70,9 +70,13 @@ My motives for working on this project are:
 
 ## Contributing
 
-To contribute to the project, please open a new issue at the project's [GitHub repo](https://github.com/EvAvKein/Distillogue) with a summary of the contribution you have in mind.  
+This project is currently closed for contributions.  
 
-If I'm in favor of said contribution, I'll give you to go-ahead to submit a pull request.
+Contributions will open (and will be very welcome!) in future, once I feel the project is sufficiently fleshed-out.
+
+<!-- To contribute to the project, please open a new issue at the project's [GitHub repo](https://github.com/EvAvKein/Distillogue) with a summary of the contribution you have in mind.  
+
+If I'm in favor of said contribution, I'll give you to go-ahead to submit a pull request. -->
 
 ---
 
