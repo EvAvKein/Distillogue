@@ -5,7 +5,7 @@
 * Migrate from MongoDb to PostgreSQL
 * Dockerize
 * Testing (Cypress/Jest)
-* Proper registration/authentication (0Auth)
+* Proper registration/authentication (Auth0)
 * Accessibility
 * Security
 * Redesign front-end
