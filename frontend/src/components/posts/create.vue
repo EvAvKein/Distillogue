@@ -23,6 +23,16 @@
           @change="(event) => {isPublic = (event.currentTarget as HTMLInputElement).checked ? true : false}"
         />
       </div>
+      <div>
+        Upvotes:
+        <input type="checkbox"
+          @change="(event) => {config.upvotes = (event.currentTarget as HTMLInputElement).checked ? true : undefined}"
+        />
+        Downvotes:
+        <input type="checkbox"
+          @change="(event) => {config.downvotes = (event.currentTarget as HTMLInputElement).checked ? true : undefined}"
+        />
+      </div>
     </section>
     <notification :text="notifText" :desirablityStyle="notifDesirability"/>
     <button @click="submit">Post</button>
