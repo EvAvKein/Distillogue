@@ -6,7 +6,7 @@
           :to="{name: 'home'}"
           class="logo"
         >
-          <img id="distillogo" src="../assets/placeholderLogo.svg"/>
+          <img id="distillogo" src="../assets/logo.svg"/>
         </router-link>
         <router-link v-if="user.data.id"
           :to="{name: 'browse'}"
