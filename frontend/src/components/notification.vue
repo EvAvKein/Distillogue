@@ -1,15 +1,30 @@
 <template>
-  <p v-show="text" :class="'notification ' + styleClass">
-    {{text}}
+  <p v-show="notifText" :class="'notification ' + styleClass">
+    {{notifText}}
   </p>
 </template>
 
 <script setup lang="ts">
-  import {computed} from "vue";
+  import {ref, watch, computed} from "vue";
+  import {debounce} from "../helpers/debounce";
+
   const props = defineProps<{
     text?:string,
     desirablityStyle?:boolean,
+    customDuration?:number|null,
   }>();
+
+  const notifText = ref<string>(props.text || "");
+
+  watch(() => props.text, (newText) => {
+    notifText.value = newText || "";
+
+    if (props.customDuration !== null && notifText.value !== "") {
+      debounce(
+        () => {notifText.value = ""},
+        props.customDuration || 3000 + (notifText.value.length * 150)
+      )};
+  });
 
   const styleClass = computed(() => {
     if (props.desirablityStyle === true) {return "positive"};
