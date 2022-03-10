@@ -4,7 +4,7 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "build": "tsc && cd ../Frontend && tsc --noEmit && vite build",
+    "build": "tsc && cd ../Frontend && vite build",
     "serve": "npm run build && start mongo && node dist/server.js"
   },
   "author": "Eve Aviv Keinan",
