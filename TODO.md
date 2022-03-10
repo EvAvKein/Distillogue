@@ -5,6 +5,7 @@
 * Migrate from MongoDb to PostgreSQL
 * Fully migrate from TSC to Vite
 * Dockerize
+* Prettier
 * Testing (Cypress/Jest)
 * Proper registration/authentication (Auth0)
 * Accessibility
