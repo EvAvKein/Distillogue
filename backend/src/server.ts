@@ -4,6 +4,7 @@ import {users, posts} from "./mongo.js";
 import * as timestamp from "./helpers/timestamps.js";
 import {FetchResponse, User, UserData, editableUserData, arrOfEditableUserData, Node, NodeConfig, NodeCreationRequest} from "./objects.js";
 import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
+import path from "node:path";
 
 const app = express();
 app.use(express.static("../frontend/dist"));
@@ -133,6 +134,10 @@ app.post("/getPost", async (request, response) => {
 
 //   response.json(updateResponse);
 // });
+
+app.get('*', function(request, response) {
+  response.sendFile(path.join(process.cwd() + "/../frontend/dist/index.html"));
+});
 
 const port = process.env.PORT || 3030;
 app.listen(port, () => {
