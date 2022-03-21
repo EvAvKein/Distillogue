@@ -7,7 +7,10 @@
       <img src="../../assets/upArrow.svg">
     </button>
 
-    <span :title="title" :class="title.length > 0 ? 'hasDetails' : ''">
+    <span
+      :title="title"
+      :class="title.length > 0 ? 'hasDetails' : ''"
+    >
       {{totalVotes}}
     </span>
 
@@ -41,10 +44,7 @@
   });
   
   const title = computed(() => {
-    const upvotesTitle = upvoters.value.length > 0 ? "Upvotes: " + upvoters.value.length : null;
-    const downvotesTitle = downvoters.value.length > 0 ? "Downvotes: " + downvoters.value.length : null;
-    
-    return (upvotesTitle || "") + (upvotesTitle && downvotesTitle ? "\n" : "") + (downvotesTitle || "");
+    return props.downvoters && props.upvoters ? `Upvotes: ${upvoters.value.length}\nDownvotes: ${downvoters.value.length}` : "";
   });
 
   const currentVote = computed(() => {
