@@ -28,5 +28,5 @@
     padding: 0;
     background-color: transparent;
     border: none;
-  };
+  }
 </style>

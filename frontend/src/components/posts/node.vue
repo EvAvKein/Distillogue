@@ -54,11 +54,7 @@
   article.central {font-size: 1.1em}
   article * + * {margin-top: 1.5em}
 
-  h3, h4 {
-    margin: 0;
-  }
-
-  p {
-    white-space: pre-line;
-  }
+  h3, h4 {margin: 0}
+  
+  p {white-space: pre-line}
 </style>

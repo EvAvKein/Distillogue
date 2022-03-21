@@ -39,7 +39,7 @@
 </script>
 
 <style scoped>
-  * {font-size: inherit;}
+  * {font-size: inherit}
   div {position: relative}
 
   label {

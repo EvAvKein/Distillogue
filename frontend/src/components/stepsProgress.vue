@@ -35,5 +35,5 @@
   div.completed {
     opacity: 1;
     background-color: var(--textColor);
-  };
+  }
 </style>
