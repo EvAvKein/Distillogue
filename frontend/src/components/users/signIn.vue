@@ -3,7 +3,7 @@
     <h3>Sign In</h3>
     <inputField :label="'Username'" :type="'text'" v-model="username" class="input" :inputId="'loginUsernameField'"/>
     <notification :text="signInMessage" :desirablityStyle="signInStatus"/>
-    <button @click="signInByInput">Sign In</button>
+    <button @click="signInByInput">Continue</button>
   </form>
 </template>
 
@@ -37,4 +37,21 @@
 </script>
 
 <style scoped>
+  form {
+    font-size: 1.5rem;
+    width: 12.5em;
+    text-align: center;
+  }
+  form h3 {
+    font-size: 2em;
+    margin: 0;
+  }
+  form * + * {
+    margin-top: 0.3em;
+  }
+  button {
+    font-size: 1.25rem;
+    margin-block: 0.5em;
+    padding: 0.25em 0.75em;
+  }
 </style>

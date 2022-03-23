@@ -3,7 +3,7 @@
     <h3>Sign Up</h3>
     <inputField :label="'Username'" :type="'text'" v-model="username" class="input" :inputId="'loginUsernameField'"/>
     <notification v-show="signUpMessage" :text="signUpMessage" :desirablityStyle="signUpStatus"/>
-    <button @click="signUpByInput">Sign Up</button>
+    <button @click="signUpByInput">Continue <br> (testUser if empty)</button>
   </form>
 </template>
 
@@ -11,7 +11,7 @@
   import {ref} from "vue";
   import {useRouter} from "vue-router";
   import {signUp} from "../../helpers/signUp";
-  import inputField from '../labelledInput.vue';
+  import inputField from "../labelledInput.vue";
   import notification from "../notification.vue";
   const router = useRouter();
 
@@ -24,7 +24,7 @@
     signUpMessage.value = "Signing Up...";
     signUpStatus.value = undefined;
     
-    const response = await signUp(username.value);
+    const response = await signUp(username.value || "testUser");
 
     if (response.error) {
       signUpMessage.value = response.error.message;
@@ -37,4 +37,21 @@
 </script>
 
 <style scoped>
+  form {
+    font-size: 1.5rem;
+    width: 12.5em;
+    text-align: center;
+  }
+  form h3 {
+    font-size: 2em;
+    margin: 0;
+  }
+  form * + * {
+    margin-top: 0.3em;
+  }
+  button {
+    font-size: 1.25rem;
+    margin-block: 0.5em;
+    padding: 0.25em 0.75em;
+  }
 </style>
