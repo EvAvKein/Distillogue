@@ -10,13 +10,13 @@
         </router-link>
         <router-link v-if="user.data.id"
           :to="{name: 'browse'}"
-          class="ofButtonStyling"
+          class="globalStyle_textButton"
         >
           Browse
         </router-link>
         <router-link v-if="user.data.id"
           :to="{name: 'createPost'}"
-          class="ofButtonStyling"
+          class="globalStyle_textButton"
         >
           Post
         </router-link>
@@ -28,19 +28,19 @@
         <div v-if="user.data.id">
           <router-link 
             :to="{name: 'dashboard'}"
-            class="ofButtonStyling"
+            class="globalStyle_textButton"
           >
             Dashboard
           </router-link>
           <button @click="logOut"
-            class="ofButtonStyling"
+            class="globalStyle_textButton"
           >
             Logout
           </button>
         </div>
         <router-link v-else
           :to="{name: 'join'}"
-          class="ofButtonStyling"
+          class="globalStyle_textButton"
         >
           Join
         </router-link>

@@ -8,9 +8,18 @@
         {{props.title?.text}}
       </component>
       <div v-if="content.editable" class="buttonBox">
-        <button v-show="!editMode" @click="enterEditMode">✎</button>
-        <button v-show="editMode" @click="submitEdit">✔</button>
-        <button v-show="editMode" @click="exitEditMode">✘</button>
+        <button v-show="!editMode"
+          @click="enterEditMode"
+          class="globalStyle_textButton"
+        >✎</button>
+        <button v-show="editMode"
+          @click="submitEdit"
+          class="globalStyle_textButton"
+        >✔</button>
+        <button v-show="editMode"
+          @click="exitEditMode"
+          class="globalStyle_textButton"
+        >✘</button>
       </div>
       
     </div>

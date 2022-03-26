@@ -35,7 +35,9 @@
       </div>
     </section>
     <notification :text="notifText" :desirablityStyle="notifDesirability"/>
-    <button @click="submit">Post</button>
+    <button @click="submit"
+      class="globalStyle_textButton"
+    >Post</button>
   </form>
 </template>
 

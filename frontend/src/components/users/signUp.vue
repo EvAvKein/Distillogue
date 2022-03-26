@@ -3,7 +3,9 @@
     <h3>Sign Up</h3>
     <inputField :label="'Username'" :type="'text'" v-model="username" class="input" :inputId="'loginUsernameField'"/>
     <notification v-show="signUpMessage" :text="signUpMessage" :desirablityStyle="signUpStatus"/>
-    <button @click="signUpByInput">Continue <br> (testUser if empty)</button>
+    <button @click="signUpByInput"
+      class="globalStyle_textButton"
+    >Continue<br>(testUser if empty)</button>
   </form>
 </template>
 

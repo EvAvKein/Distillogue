@@ -68,10 +68,10 @@ img {pointer-events: none}
   background-color: var(--textSubColor);
 }
 
-button,
-.ofButtonStyling {
+.globalStyle_textButton {
   cursor: pointer;
   border: none;
+  outline: none;
   color: var(--backgroundColor);
   background-color: var(--textColor);
   border-radius: 0.2em;
@@ -80,9 +80,28 @@ button,
   padding: 0.5em;
   border-radius: 0.5em;
 }
-button:focus, button:hover
-.ofButtonStyling:focus, .ofButtonStyling:hover{
+.globalStyle_textButton:focus, .globalStyle_textButton:hover {
+  background-color: var(--highlightSubColor);
+}
+.globalStyle_textButton:active {
   background-color: var(--highlightColor);
+}
+
+.globalStyle_imageButton {
+  cursor: pointer;
+  border: none;
   outline: none;
+  background-color: transparent;
+  padding: 0;
+}
+.globalStyle_imageButton img {
+  height: inherit;
+  filter: var(--filterToTextColor);
+}
+.globalStyle_imageButton:focus img, .globalStyle_imageButton:hover {
+  filter: var(--filterToHighlightSubColor);
+}
+.globalStyle_imageButton:active img {
+  filter: var(--filterToHighlightColor);
 }
 </style>

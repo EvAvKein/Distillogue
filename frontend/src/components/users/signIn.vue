@@ -3,7 +3,9 @@
     <h3>Sign In</h3>
     <inputField :label="'Username'" :type="'text'" v-model="username" class="input" :inputId="'loginUsernameField'"/>
     <notification :text="signInMessage" :desirablityStyle="signInStatus"/>
-    <button @click="signInByInput">Continue</button>
+    <button @click="signInByInput"
+      class="globalStyle_textButton"
+    >Continue</button>
   </form>
 </template>
 

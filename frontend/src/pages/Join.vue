@@ -4,7 +4,9 @@
       <signUp v-show="registerMode"/>
       <signIn v-show="!registerMode"/>
     
-      <button id="joinModeToggler" @click="registerMode = !registerMode">
+      <button @click="registerMode = !registerMode"
+        class="globalStyle_textButton"
+      >
         <span v-show="registerMode">Sign In</span>
         <span v-show="!registerMode">Sign Up</span>
       </button>
@@ -28,7 +30,7 @@
     align-items: center;
   }
 
-  #joinModeToggler {
+  button {
     display: block;
     margin: 1em auto;
   }

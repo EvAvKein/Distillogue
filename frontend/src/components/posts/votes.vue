@@ -1,7 +1,7 @@
 <template>
   <section>
     <button v-if="props.upvoters"
-      :class="currentVote === true ? 'voted' : ''"
+      :class="'globalStyle_imageButton' + (currentVote === true ? ' voted' : '')"
       @click="toggleVote(true)"
     >
       <img src="../../assets/upArrow.svg">
@@ -15,7 +15,7 @@
     </span>
 
     <button v-if="props.downvoters"
-      :class="currentVote === false ? 'voted' : ''"
+      :class="'globalStyle_imageButton' + (currentVote === false ? ' voted' : '')"
       @click="toggleVote(false)"
     >
       <img src="../../assets/upArrow.svg" style="transform: rotate(180deg);">
@@ -99,13 +99,8 @@
 
   button {
     display: block;
-    background-color: transparent;
     margin: auto;
-    padding: 0;
     height: 1.25em;
-  }
-  button:hover, button:focus {
-    filter: var(--filterToHighlightSubColor)
   }
 
   .voted {
