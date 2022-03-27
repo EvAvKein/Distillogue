@@ -4,9 +4,9 @@
       <nav>
         <router-link
           :to="{name: 'home'}"
-          class="logo"
+          id="logoLink"
         >
-          <img id="distillogo" src="../assets/logo.svg"/>
+          <img src="../assets/logo.svg"/>
         </router-link>
         <router-link v-if="user.data.id"
           :to="{name: 'browse'}"
@@ -67,20 +67,28 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 4rem;
+    height: 4em;
     z-index: 900;
     background-color: var(--backgroundColor);
     display: flex;
     justify-content: space-between;
   }
 
+  #logoLink {height: 2.75em} /* without explictly declaring this, the button's height is annoying taller than its content for some unknown reason (at least on chrome 99) */ 
+  #logoLink:focus, #logoLink:hover {
+    outline: none;
+    border-radius: 10em;
+    box-shadow: 0em 0em 0.35em 0.35em var(--highlightSubColor);
+  }
+  #logoLink:active {box-shadow: 0em 0em 0.35em 0.35em var(--highlightColor);}
+  #logoLink img {height: 2.75em}
+
   nav, nav > div {
-    height: 3rem;
-    margin: 0.5rem;
+    height: 3em;
+    margin: 0.5em;
     width: fit-content;
     display: flex;
     align-items: center;
-    gap: 0.5rem
+    gap: 0.5em
   }
-  nav img {height: 2.75rem}
 </style>
