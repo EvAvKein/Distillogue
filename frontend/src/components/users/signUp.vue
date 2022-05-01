@@ -12,7 +12,7 @@
 <script setup lang="ts">
   import {ref} from "vue";
   import {useRouter} from "vue-router";
-  import {signUp} from "../../helpers/signUp";
+  import {userEntry} from "../../helpers/userEntry";
   import inputField from "../labelledInput.vue";
   import notification from "../notification.vue";
   const router = useRouter();
@@ -26,7 +26,7 @@
     signUpMessage.value = "Signing Up...";
     signUpStatus.value = undefined;
     
-    const response = await signUp(username.value || "testUser");
+    const response = await userEntry("signUp", username.value || "testUser");
 
     if (response.error) {
       signUpMessage.value = response.error.message;

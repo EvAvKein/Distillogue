@@ -1,12 +1,33 @@
 <template>
   <Teleport :to="'body'">
-    <div id="backdrop">
-      <dialog>
+    <div v-if="activeByTruthiness"
+      id="backdrop" 
+      @click="emitDeactivateIfClicked"
+    >
+      <dialog open>
         <slot></slot>
       </dialog> 
     </div>
   </Teleport>
 </template>
+
+<script setup lang="ts">
+  defineProps<{
+    activeByTruthiness:any;
+  }>();
+
+  const emit = defineEmits(["deactivate"]); // emitting a deactivation request, as opposed to deactivating within this component, allows the parent component to set the variable used for activeByTruthiness to whichever falsey is appropriate for its type
+
+  function emitDeactivateIfClicked(event:Event) {
+    if (event.target === event.currentTarget) {
+      emit("deactivate");
+    };
+  };
+</script>
+
+<style>
+  html {overflow: hidden}
+</style>
 
 <style scoped>
   #backdrop {
@@ -18,12 +39,13 @@
     width: 100%;
     background-color: #00000044;
     backdrop-filter: blur(1.75rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
+
   dialog {
-    display: block;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative;
     margin: 0;
     padding: 0;
     background-color: transparent;

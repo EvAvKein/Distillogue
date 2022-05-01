@@ -58,80 +58,104 @@ class Log {
   };
 };
 
-class NodeConfig {
-  upvotes?:true;
-  downvotes?:true;
-  anonVotes?:true;
+class PostConfig {
+  public?:true;
+  lastActive?:true;
+  votes?:{
+    up?:true,
+    down?:true,
+    anon?:true,
+  };
 };
 
 class NodeStats {
-  lastActiveUnix:number;
-  upvoters?:UserData["id"][];
-  downvoters?:UserData["id"][];
-  anonVoting:NodeConfig["anonVotes"];
+  lastActiveUnix?:number;
+  votes?:{
+    up?:UserData["id"][],
+    down?:UserData["id"][],
+    anon?:true,
+  };;
 
-  constructor(config?:NodeConfig) {
-    this.lastActiveUnix = unixStamp();
-    this.upvoters = config?.upvotes ? [] : undefined;
-    this.downvoters = config?.downvotes ? [] : undefined;
-    this.anonVoting = config?.anonVotes || undefined;
+  constructor(config?:PostConfig) {
+    this.lastActiveUnix = config?.lastActive ? unixStamp() : undefined;
+    this.votes = config?.votes ? {
+      up: config.votes.up ? [] as UserData["id"][] : undefined,
+      down: config.votes.down ? [] as UserData["id"][] : undefined,
+      anon: config.votes.anon,
+    } : undefined;
   };
 };
 
 class NodeCreationRequest {
-  parentId:string|null;
+  locationIds:{
+    postId:string,
+    parentId:string,
+  }|null;
   ownerIds:string[];
-  public:boolean;
   title:string;
   body:string;
-  config?:NodeConfig;
+  config?:PostConfig;
 
-  constructor(parentId:NodeCreationRequest["parentId"], ownerIds:NodeCreationRequest["ownerIds"], isPublic:NodeCreationRequest["public"], title:NodeCreationRequest["title"], body:NodeCreationRequest["body"], config?:NodeCreationRequest["config"]) {
-    this.parentId = parentId;
+  constructor(locationIds:NodeCreationRequest["locationIds"], ownerIds:NodeCreationRequest["ownerIds"], title:NodeCreationRequest["title"], body:NodeCreationRequest["body"], config?:NodeCreationRequest["config"]) {
+    this.locationIds = locationIds;
     this.ownerIds = ownerIds;
-    this.public = isPublic;
     this.title = title;
     this.body = body;
     this.config = config;
-  }
+  };
 };
 
 class Node extends NodeCreationRequest {
   id:string;
-  past:{titles:Node["title"][], bodies:Node["body"][]};
-  locked:boolean;
+  locked?:true;
   replies:Node[];
+  past?:{title:Node["title"], body:Node["body"]}[];
   stats:NodeStats;
-
-  constructor(parentId:Node["parentId"], ownerIds:Node["ownerIds"], isPublic:Node["public"], title:Node["title"], body:Node["body"], config?:NodeConfig) {
-    super(parentId, ownerIds, isPublic, title, body);
+  postConfig?:PostConfig;
+  
+  constructor(request:NodeCreationRequest) {
+    super(null, request.ownerIds, request.title, request.body);
     this.id = newId("node");
-    this.past = {titles:[], bodies: []};
-    this.locked = false;
     this.replies = [];
-    this.stats = new NodeStats(config);
-  };
-
-  summarize() {
-    return new NodeSummary(this);
+    this.stats = new NodeStats(request.config);
+    this.postConfig = request.locationIds ? undefined : request.config;
   };
 };
 
 class NodeSummary {
   id:Node["id"];
   ownerIds:Node["ownerIds"];
-  public:Node["public"];
   title:Node["title"];
+  public:PostConfig["public"];
   locked:Node["locked"];
   stats:NodeStats;
 
-  constructor(centralNode:Node){
-    this.id = centralNode.id;
-    this.ownerIds = centralNode.ownerIds;
-    this.public = centralNode.public;
-    this.title = centralNode.title;
-    this.locked = centralNode.locked;
-    this.stats = centralNode.stats;
+  constructor(node:Node){
+    this.id = node.id;
+    this.ownerIds = node.ownerIds;
+    this.title = node.title;
+    this.public = node.config?.public;
+    this.locked = node.locked;
+    this.stats = node.stats;
+  };
+};
+
+class NodeInteractionRequest {
+  userId:UserData["id"];
+  nodeIdPath:Node["id"][];
+  interactionType:"vote"|"reply";
+  interactionData:{
+    voteDirection:"up"|"down",
+    newVoteStatus:boolean,
+  }|{
+    nodeReplyRequest:NodeCreationRequest,
+  };
+
+  constructor(userId:NodeInteractionRequest["userId"], nodeIdPath:NodeInteractionRequest["nodeIdPath"], interactionType:NodeInteractionRequest["interactionType"], interactionData:NodeInteractionRequest["interactionData"]) {
+    this.userId = userId;
+    this.nodeIdPath = nodeIdPath;
+    this.interactionType = interactionType;
+    this.interactionData = interactionData;
   };
 };
 
@@ -140,9 +164,10 @@ export {
   User,
   UserData, editableUserData, arrOfEditableUserData,
   Log,
-  NodeConfig,
+  PostConfig,
   NodeStats,
   NodeCreationRequest,
   Node,
   NodeSummary,
+  NodeInteractionRequest,
 };

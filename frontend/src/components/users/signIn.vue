@@ -5,14 +5,14 @@
     <notification :text="signInMessage" :desirablityStyle="signInStatus"/>
     <button @click="signInByInput"
       class="globalStyle_textButton"
-    >Continue</button>
+    >Continue<br>(testUser if empty)</button>
   </form>
 </template>
 
 <script setup lang="ts">
   import {ref} from "vue";
   import {useRouter} from "vue-router";
-  import {signIn} from "../../helpers/signIn";
+  import {userEntry} from "../../helpers/userEntry";
   import inputField from "../labelledInput.vue";
   import notification from "../notification.vue";
   const router = useRouter();
@@ -26,7 +26,7 @@
     signInMessage.value = "Signing In...";
     signInStatus.value = undefined;
     
-    const response = await signIn(username.value);
+    const response = await userEntry("signIn", username.value || "testUser");
 
     if (response.error) {
       signInMessage.value = response.error.message;

@@ -132,7 +132,7 @@
   .titleBox {
     color: var(--backgroundColor);
     background-color: var(--textColor);
-    font-size: v-bind('(props.title?.emSize || 1.25) + "em"');
+    font-size: v-bind("(props.title?.emSize || 1.25) + 'em'");
     padding: 0.25em 0.5em;
     display: flex;
     justify-content: space-between;
@@ -151,13 +151,13 @@
     background-color: var(--backgroundColor);
     font-family: inherit;
     resize: vertical;
-    font-size: v-bind('(props.content?.emSize || 1) + "em"');
+    font-size: v-bind("(props.content?.emSize || 1) + 'em'");
     width: calc(100% - 1.1em); /* 1em should be the correct value considering the margins... but evidently, for whatever reason, it isnt */
     margin: 0.5em;
     border: 0;
     outline: none;
-    min-height: v-bind('content.editable?.minHeightInLines || 1.1 + "em"');
-    max-height: v-bind('content.editable?.maxHeightInLines || 25 + "em"');
+    min-height: v-bind("content.editable?.minHeightInLines || 1.1 + 'em'");
+    max-height: v-bind("content.editable?.maxHeightInLines || 25 + 'em'");
   }
 
   textarea::shadow div {

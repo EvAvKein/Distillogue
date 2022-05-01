@@ -2,9 +2,9 @@
   <section>
     <button v-if="props.upvoters"
       :class="'globalStyle_imageButton' + (currentVote === true ? ' voted' : '')"
-      @click="toggleVote(true)"
+      @click="toggleVote('up')"
     >
-      <img src="../../assets/upArrow.svg">
+      <img src="../../../../../assets/upArrow.svg">
     </button>
 
     <span
@@ -16,23 +16,24 @@
 
     <button v-if="props.downvoters"
       :class="'globalStyle_imageButton' + (currentVote === false ? ' voted' : '')"
-      @click="toggleVote(false)"
+      @click="toggleVote('down')"
     >
-      <img src="../../assets/upArrow.svg" style="transform: rotate(180deg);">
+      <img src="../../../../../assets/upArrow.svg" style="transform: rotate(180deg);">
     </button>
   </section>
 </template>
 
 <script setup lang="ts">
   import {ref, computed, inject} from "vue";
-  import {NodeStats} from "../../../../backend/src/objects";
-  import {jsonFetch} from "../../helpers/jsonFetch";
-  import {useUser} from '../../stores/user';
+  import {NodeInteractionRequest, NodeStats} from "../../../../../../../backend/src/objects";
+  import {lookupInOptional} from "../../../../../../../backend/src/helpers/lookupInOptional";
+  import {jsonFetch} from "../../../../../helpers/jsonFetch";
+  import {useUser} from "../../../../../stores/user";
   const user = useUser();
 
   const props = defineProps<{
-    upvoters?:NodeStats["upvoters"];
-    downvoters?:NodeStats["downvoters"];
+    upvoters?:lookupInOptional<NodeStats["votes"],"up">;
+    downvoters?:lookupInOptional<NodeStats["votes"],"down">;
   }>();
   const emit = defineEmits(["componentError"]);
 
@@ -52,10 +53,11 @@
     if (downvoters.value.includes(user.data.id)) return false;
     return null;
   });
-
-  function clientsideToggleVote(voteUpOrDown:boolean) {
-    const subjectArray = voteUpOrDown ? upvoters : downvoters;
-    const oppositeArray = voteUpOrDown ? downvoters : upvoters;
+  
+  type voteDirection = "up"|"down";
+  function clientsideToggleVote(voteDirection:voteDirection) {
+    const subjectArray = voteDirection === "up" ? upvoters : downvoters;
+    const oppositeArray = voteDirection === "up" ? downvoters : upvoters;
 
     if (subjectArray.value.includes(user.data.id)) {
       subjectArray.value.splice(subjectArray.value.indexOf(user.data.id), 1);
@@ -68,25 +70,13 @@
     };
   };
 
-  async function toggleVote(voteUpOrDown:boolean) {
+  async function toggleVote(voteDirection:voteDirection) {
     if (!user.data.id) {
       emit("componentError", "Must be logged in to vote");
       return;
     };
 
-    // const response = await jsonFetch("/nodeToggleVote", {
-    //   userId: user.data.id,
-    //   postId: inject("postId"),
-    //   nodeId: inject("nodeId"),
-    //   voteUpOrDown: voteUpOrDown,
-    // });
-
-    // if (response.error) {
-    //   emit("componentError", response.error.message);
-    //   return;
-    // };
-
-    clientsideToggleVote(voteUpOrDown);
+    clientsideToggleVote(voteDirection);
   };
 </script>
 

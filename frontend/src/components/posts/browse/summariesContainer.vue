@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-  import {NodeSummary} from "../../../../backend/src/objects";
+  import {NodeSummary} from "../../../../../backend/src/objects";
   import postSummary from "./summary.vue";
 
   defineProps<{

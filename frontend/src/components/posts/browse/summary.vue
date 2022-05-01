@@ -1,14 +1,14 @@
 <template>
   <router-link :to="{name: 'viewPost', params: {postId: summary.id}}">
     <h4>{{summary.title}}</h4>
-    <h5><timestamp :pastUnix="summary.stats.lastActiveUnix"/></h5>
+    <h5 v-if="summary.stats.lastActiveUnix"><timestamp :pastUnix="summary.stats.lastActiveUnix"/></h5>
     <h6>Public: {{summary.public}}</h6>
   </router-link>
 </template>
 
 <script setup lang="ts">
-  import {NodeSummary} from "../../../../backend/src/objects";
-  import timestamp from "../timestamp.vue";
+  import {NodeSummary} from "../../../../../backend/src/objects";
+  import timestamp from "../../timestamp.vue";
   defineProps<{
     summary:NodeSummary;
   }>();

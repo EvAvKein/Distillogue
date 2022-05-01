@@ -13,10 +13,10 @@
 </template>
 
 <script setup lang="ts">
-  import {ref} from 'vue';
-  import {NodeSummary} from '../../../../backend/src/objects';
-  import postsDisplayBox from './summariesDisplayBox.vue';
-  import postsFetchBySearch from './fetchBySearch.vue';
+  import {ref} from "vue";
+  import {NodeSummary} from "../../../../../backend/src/objects";
+  import postsDisplayBox from "./summariesContainer.vue";
+  import postsFetchBySearch from "./fetchBySearch.vue";
   const summaries = ref<NodeSummary[]|undefined|false>(undefined);
 
   function setPostsToResponse(response:NodeSummary[]) {

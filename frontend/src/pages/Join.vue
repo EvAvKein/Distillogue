@@ -3,7 +3,6 @@
     <section>
       <signUp v-show="registerMode"/>
       <signIn v-show="!registerMode"/>
-    
       <button @click="registerMode = !registerMode"
         class="globalStyle_textButton"
       >
@@ -29,7 +28,6 @@
     justify-content: center;
     align-items: center;
   }
-
   button {
     display: block;
     margin: 1em auto;

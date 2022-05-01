@@ -1,26 +1,22 @@
+import path from "node:path";
 import express from "express";
 import helmetSecurity from "helmet";
 import {users, posts} from "./mongo.js";
 import * as timestamp from "./helpers/timestamps.js";
-import {FetchResponse, User, UserData, editableUserData, arrOfEditableUserData, Node, NodeConfig, NodeCreationRequest} from "./objects.js";
+import {nodePathAsMongoLocators} from "./helpers/nodePathAsMongoLocators.js";
 import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
-import path from "node:path";
+import {FetchResponse, User, UserData, editableUserData, arrOfEditableUserData, NodeCreationRequest, Node, NodeInteractionRequest} from "./objects.js";
 
 const app = express();
 app.use(express.static("../frontend/dist"));
 app.use(express.json());
 app.use(helmetSecurity());
 
-posts.deleteMany({});
-users.deleteMany({});
+await posts.deleteMany({});
+await users.deleteMany({});
 
 app.post("/signUp", async (request, response) => {
   const signUpInfo = request.body as {username:UserData["name"]};
-
-  if (signUpInfo.username.length < 3) {
-    response.json(new FetchResponse(null, "Username must be 3+ characters!"));
-    return;
-  };
 
   const user = await users.findOne({"data.name": signUpInfo.username})
     .catch(() => {response.json(new FetchResponse(null, "Can't register user, database is unresponsive"))});
@@ -72,16 +68,9 @@ app.post("/editProfileInfo", async (request, response) => {
 });
 
 app.post("/createPost", async (request, response) => {
-  const postData = request.body as NodeCreationRequest;
-  
-  posts.insertOne(new Node(
-    null,
-    postData.ownerIds,
-    postData.public,
-    postData.title,
-    postData.body,
-    postData.config,
-  ));
+  const postRequest = request.body as NodeCreationRequest
+
+  posts.insertOne(new Node(postRequest));
 
   response.json(new FetchResponse(true));
 });
@@ -95,7 +84,7 @@ app.post("/getPostSummaries", async (request, response) => {
       {$or: [{title: regexFilter}, {body: regexFilter}]},
       {$or: [{public: true}, {ownerIds: userId}]}
     ]
-  }).sort({'stats.lastActiveUnix': -1}).toArray();
+  }).sort({"stats.lastActiveUnix": -1}).toArray();
 
   response.json(new FetchResponse(postSummaries));
 });
@@ -116,24 +105,31 @@ app.post("/getPost", async (request, response) => {
   response.json(getResponse);
 });
 
-// app.post("/nodeVote", async (request, response) => {
-//   const data = request.body as {
-//     userId:string;
-//     postId:string;
-//     nodeId:string;
-//     voteUpOrDown:boolean;
-//   };
+app.post("/nodeInteraction", async (request, response) => {
+  const data = request.body as NodeInteractionRequest;
+  const postId = data.nodeIdPath[0];
+  const mongoPath = nodePathAsMongoLocators(data.nodeIdPath);
+  
+  let dbResponse;
+  switch(data.interactionType) {
+    // case "vote": {
+    // };
+    case "reply": {
+      const newNode = new Node((data.interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest);
+      dbResponse = await posts.updateOne(
+        {"id": postId},
+        {$push: {[mongoPath.updatePath + "replies"]: newNode}},
+        {arrayFilters: mongoPath.arrayFiltersOption}
+      );
+      break;
+    };
+  };
+  if (dbResponse === undefined) {response.json(new FetchResponse(null, "Invalid interaction request"))};
 
-//   const dbFilter = data.postId === data.nodeId ? {id: data.nodeId} : {"replies.$[].id": data.nodeId};
-//   const dbResponse = await posts.findOneAndUpdate(
-//     dbFilter,
-//     {}
-//   );
+  const interactionResponse = dbResponse ? new FetchResponse(dbResponse) : new FetchResponse(null, data.interactionType + " failed");
 
-//   const updateResponse = dbResponse ? new FetchResponse(dbResponse) : new FetchResponse(null, "Failed to update reply in ");
-
-//   response.json(updateResponse);
-// });
+  response.json(interactionResponse);
+});
 
 app.get('*', function(request, response) {
   response.sendFile(path.join(process.cwd() + "/../frontend/dist/index.html"));

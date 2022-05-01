@@ -1,4 +1,4 @@
-import {FetchResponse} from "../../../backend/src/objects.js";
+import {FetchResponse} from "../../../backend/src/objects";
 
 export async function jsonFetch(fetchAddress:string, bodyObject:object) {
   return await fetch(fetchAddress, {

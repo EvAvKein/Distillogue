@@ -13,12 +13,12 @@
 </template>
 
 <script setup lang="ts">
-  import {ref, onMounted} from 'vue';
-  import {NodeSummary} from '../../../../backend/src/objects';
-  import {jsonFetch} from "../../helpers/jsonFetch";
-  import {debounce} from "../../helpers/debounce"
-  import labelledInput from "../labelledInput.vue";
-  import {useUser} from '../../stores/user';
+  import {ref, onMounted} from "vue";
+  import {NodeSummary} from "../../../../../backend/src/objects";
+  import {jsonFetch} from "../../../helpers/jsonFetch";
+  import {debounce} from "../../../helpers/debounce"
+  import labelledInput from "../../labelledInput.vue";
+  import {useUser} from "../../../stores/user";
   const user = useUser();
 
   const props = defineProps<{fetchOnMount?:boolean}>();
@@ -39,7 +39,7 @@
       const fetchedPosts = fetchResponse.data as NodeSummary[];
       summariesDescription.value = `${fetchedPosts.length} result${fetchedPosts.length == 1 ? "" : "s"}${searchValue.value ? ` for "${searchValue.value}"` : ""}`;
       
-      emit('fetchedPosts', fetchedPosts);
+      emit("fetchedPosts", fetchedPosts);
     });
   };
 
