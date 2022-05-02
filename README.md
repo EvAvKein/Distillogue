@@ -83,7 +83,7 @@ If I'm in favor of said contribution, I'll give you to go-ahead to submit a pull
 ## Maintainers
 
 Eve Aviv Keinan  
-Twitter: [@EvAvKein](https://twitter.com/evavkein)  
+Mastodon: [@EvAvKein@mstdn.social](https://mstdn.social/@EvAvKein)  
 GitHub: [github.com/evavkein](https://github.com/EvAvKein)  
 Email:  contact@evavkein.com
 
