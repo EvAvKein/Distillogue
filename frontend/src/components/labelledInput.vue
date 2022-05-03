@@ -32,6 +32,7 @@
     required?:boolean,
     minLength?:number,
     maxLength?:number,
+    minLineHeight?:number,
     error?:string,
   }>();
 
@@ -62,6 +63,7 @@
     width: 100%;
     border: none;
     border-left: 0.225em solid var(--textSubColor);
+    min-height: v-bind("(minLineHeight || 1) * 1.15 + 'em'");
   }
   textarea {resize: vertical}
 
