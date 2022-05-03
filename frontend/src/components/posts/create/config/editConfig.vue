@@ -82,8 +82,7 @@
   }
 
   details {
-    min-width: 15em;
-    max-width: 50%;
+    min-width: 10em;
     background-color: var(--backgroundSubColor);
     border-radius: 0.5em;
   }
@@ -101,7 +100,9 @@
 
   details > div {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
-    padding: 1em;
+    padding: 0.5em 1em 1em;
+    gap: 0.5em 1.25em;
   }
 </style>
