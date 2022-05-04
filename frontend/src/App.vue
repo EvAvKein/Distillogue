@@ -17,8 +17,8 @@
   --filterToTextSubColor: brightness(0) saturate(100%) invert(74%) sepia(0%) saturate(4%) hue-rotate(273deg) brightness(98%) contrast(91%); /* created via https://codepen.io/sosuke/pen/Pjoqqp */
   --backgroundColor: #020c14;
   --filterToBackgroundColor: brightness(0) saturate(100%) invert(4%) sepia(6%) saturate(6548%) hue-rotate(166deg) brightness(100%) contrast(101%); /* created via https://codepen.io/sosuke/pen/Pjoqqp */
-  --backgroundSubColor: #031b25;
-  --filterToBackgroundSubColor: brightness(0) saturate(100%) invert(8%) sepia(13%) saturate(5461%) hue-rotate(165deg) brightness(93%) contrast(98%); /* created via https://codepen.io/sosuke/pen/Pjoqqp */
+  --backgroundSubColor: #042b43;
+  --filterToBackgroundSubColor: invert(13%) sepia(71%) saturate(783%) hue-rotate(165deg) brightness(92%) contrast(101%); /* created via https://codepen.io/sosuke/pen/Pjoqqp */
   --highlightColor: #ECB365;
   --filterToHighlightColor: brightness(0) saturate(100%) invert(90%) sepia(71%) saturate(5554%) hue-rotate(308deg) brightness(95%) contrast(94%); /* created via https://codepen.io/sosuke/pen/Pjoqqp */
   --highlightSubColor: #c29454;
