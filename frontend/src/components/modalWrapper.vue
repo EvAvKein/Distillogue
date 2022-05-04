@@ -12,7 +12,9 @@
 </template>
 
 <script setup lang="ts">
-  defineProps<{
+  import {toRef, watch} from "vue";
+
+  const props = defineProps<{
     activeByTruthiness:any;
   }>();
 
@@ -23,11 +25,13 @@
       emit("deactivate");
     };
   };
-</script>
 
-<style>
-  html {overflow: hidden}
-</style>
+  const modalTruthiness = toRef(props, "activeByTruthiness");
+
+  watch(modalTruthiness, (newTruthiness) => {
+    document.querySelector("html")!.style.overflow = newTruthiness ? "hidden" : "auto";
+  });
+</script>
 
 <style scoped>
   #backdrop {
