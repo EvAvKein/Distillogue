@@ -78,24 +78,22 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    align-content: flex-start;
     gap: 0.75em;
   }
 
   details {
-    min-width: 10em;
+    height: fit-content;
+    width: fit-content;
     background-color: var(--backgroundSubColor);
     border-radius: 0.5em;
   }
-  details[open] {
-    flex-basis: 100%;
-    max-width: none;
-  }
+  details[open] {width: 100%}
 
   summary {
     font-size: 1.25em;
     cursor: pointer;
-    padding: 0.25em;
-    padding-left: 0.5em;
+    padding: 0.25em 0.5em;
   }
 
   details > div {

@@ -1,24 +1,30 @@
 <template>
   <form @submit.prevent>
-    <labelledInput
-      :label="'Title'"
-      :type="'text'"
-      :required="true"
-      :inputId="'postTitle'"
-      v-model="postTitle"
-    />
-    <labelledInput
-      :label="'Body'"
-      :type="'textarea'"
-      :required="true"
-      :inputId="'postBody'"
-      v-model="postBody"
-    />
-    <config v-model:config="postConfig"/>
-    <notification :text="notifText" :desirablityStyle="notifDesirability"/>
-    <button @click="submitPost"
-      class="globalStyle_textButton"
-    >Post</button>
+    <div id="content">
+      <labelledInput id="contentTitle"
+        :label="'Title'"
+        :type="'text'"
+        :required="true"
+        :inputId="'postTitle'"
+        v-model="postTitle"
+      />
+      <labelledInput
+        :label="'Body'"
+        :type="'textarea'"
+        :minLineHeight="10"
+        :required="true"
+        :inputId="'postBody'"
+        v-model="postBody"
+      />
+    </div>
+    <config id="config" v-model:config="postConfig"/>
+    <div id="confirmation">
+      <notification :text="notifText" :desirablityStyle="notifDesirability"/>
+      <button id="submitButton"
+        class="globalStyle_textButton"
+        @click="submitPost"
+      >Post</button>
+    </div>
   </form>
 </template>
 
@@ -66,8 +72,32 @@
 
 <style scoped>
   form {
-    width: clamp(15em, 90%, 35em);
+    width: clamp(20em, 90%, 50em);
     margin: auto;
     padding: 0;
+  }
+
+  #content {font-size: clamp(1.2em, 1.8vw, 1.5em)}
+  #contentTitle {font-size: 1.15em}
+
+  #submitButton {
+    margin-top: 0.5em;
+    width: 100%;
+  }
+
+  @media (min-width: 40rem) {
+    form {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: min-content 1fr;
+      gap: 0 0.5em;
+      grid-template-areas: 
+        "content config"
+        "confirmation config";
+    }
+
+    #content {grid-area: content}
+    #config {grid-area: config}
+    #confirmation {grid-area: confirmation}
   }
 </style>
