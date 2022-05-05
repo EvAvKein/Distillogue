@@ -88,7 +88,7 @@
   @media (min-width: 40rem) {
     form {
       display: grid;
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: 3fr 1fr;
       grid-template-rows: min-content 1fr;
       gap: 0 0.5em;
       grid-template-areas: 

@@ -103,4 +103,10 @@
     padding: 0.5em 1em 1em;
     gap: 0.5em 1.25em;
   }
+
+  @media (min-width: 40rem) {
+    section {display: block}
+    details {width: 100%}
+    details + details {margin-top: 0.5em}
+  }
 </style>
