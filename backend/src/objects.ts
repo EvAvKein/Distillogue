@@ -108,14 +108,14 @@ class Node extends NodeCreationRequest {
   replies:Node[];
   past?:{title:Node["title"], body:Node["body"]}[];
   stats:NodeStats;
-  postConfig?:PostConfig;
+  config?:PostConfig;
   
   constructor(request:NodeCreationRequest) {
     super(null, request.ownerIds, request.title, request.body);
     this.id = newId("node");
     this.replies = [];
     this.stats = new NodeStats(request.config);
-    this.postConfig = request.nodePath ? undefined : request.config;
+    this.config = request.nodePath ? undefined : request.config;
   };
 };
 
