@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
   import {ref} from "vue";
-  import {Node, NodeCreationRequest, NodeInteractionRequest} from "../../../../../../../backend/src/objects";
+  import {Node, NodeCreationRequest, NodeInteractionRequest, PostConfig} from "../../../../../../../backend/src/objects";
   import {jsonFetch} from "../../../../../helpers/jsonFetch";
   import {useUser} from "../../../../../stores/user";
   import labelledInput from "../../../../labelledInput.vue";
@@ -33,6 +33,7 @@
 
   const props = defineProps<{
     nodePath:Node["id"][]|null;
+    postConfig:Node["config"];
   }>();
 
   const notifText = ref<string>("");
@@ -64,7 +65,8 @@
           props.nodePath,
           [user.data.id],
           postTitle.value,
-          postBody.value
+          postBody.value,
+          props.postConfig,
         )}
       )
     );

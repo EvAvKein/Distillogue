@@ -6,7 +6,7 @@
   <modalWrapper :activeByTruthiness="replyPath"
     @deactivate="() => {replyPath = null}"
   >
-    <createReply :nodePath="replyPath"/>
+    <createReply :nodePath="replyPath" :postConfig="props.postObject.config"/>
   </modalWrapper>
 </template>
 
@@ -20,8 +20,6 @@
   const props = defineProps<{
     postObject:Node;
   }>();
-
-  provide("postObject", props.postObject);
 
   const replyPath = ref<Node["id"][]|null>(null);
   provide("replyPath", replyPath);
