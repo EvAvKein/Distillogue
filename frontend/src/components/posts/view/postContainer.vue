@@ -1,12 +1,12 @@
 <template>
   <section id="nodesContainer">
-    <node :node="postObject" :isCentral="true"/>
+    <node :node="postObject" :pathToNode="[]" :isCentral="true"/>
   </section>
   
-  <modalWrapper :activeByTruthiness="nodeInteractionId"
-    @deactivate="() => {nodeInteractionId = null}"
+  <modalWrapper :activeByTruthiness="replyPath"
+    @deactivate="() => {replyPath = null}"
   >
-    <createReply :parentNodeId="nodeInteractionId"/>
+    <createReply :nodePath="replyPath"/>
   </modalWrapper>
 </template>
 
@@ -23,6 +23,6 @@
 
   provide("postObject", props.postObject);
 
-  const nodeInteractionId = ref<Node["id"]|null>(null);
-  provide("nodeInteractionId", nodeInteractionId);
+  const replyPath = ref<Node["id"][]|null>(null);
+  provide("replyPath", replyPath);
 </script>

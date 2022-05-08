@@ -107,8 +107,8 @@ app.post("/getPost", async (request, response) => {
 
 app.post("/nodeInteraction", async (request, response) => {
   const data = request.body as NodeInteractionRequest;
-  const postId = data.nodeIdPath[0];
-  const mongoPath = nodePathAsMongoLocators(data.nodeIdPath);
+  const postId = data.nodePath[0];
+  const mongoPath = nodePathAsMongoLocators(data.nodePath);
   
   let dbResponse;
   switch(data.interactionType) {

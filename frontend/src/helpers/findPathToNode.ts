@@ -24,3 +24,5 @@ export async function findPathToNode(postObject:Node, targetNodeId:Node["id"]) {
 
   return ancestry;
 };
+
+// no longer in use because i figured it's probably better to have a slower load time than slower interaction time (and the requisite refactor put this out of use). keeping it here for the time being because it's still potentially useful code, will probably create an archive folder in future 

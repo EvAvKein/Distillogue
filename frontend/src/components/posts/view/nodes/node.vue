@@ -8,36 +8,37 @@
       </component>
       <p>{{node.body || typeof node.body}}</p>
       <section id="interactions">
-        <votes v-if="postConfig?.votes"
+        <votes v-if="node.stats?.votes"
+          :interactionPath="nodePath"
           :upvoters="node.stats.votes.up"
           :downvoters="node.stats.votes.down"
           @interactionError="(errorText:string) => {nodeError = errorText}"
         />
-        <reply :locked="undefined"/>
+        <reply :interactionPath="nodePath" :locked="undefined"/>
       </section>
       <notification :text="nodeError" :desirablity-style="false"/>
     </article>
     <node v-for="reply of node.replies"
       :node="reply"
+      :pathToNode="nodePath"
     />
   </section>
 </template>
 
 <script setup lang="ts">
-  import {provide, inject, ref, Ref} from "vue";
-  import {PostConfig, Node as NodeClass} from "../../../../../../backend/src/objects"; // importing without renaming it causes the vite to mix up this class (Node) with this component (node.vue, referenced in the template for recursion) and thus throw an error on runtime when trying to load a node with replies
+  import {ref} from "vue";
+  import {Node as NodeClass} from "../../../../../../backend/src/objects"; // importing without renaming it causes the vite to mix up this class (Node) with this component (node.vue, referenced in the template for recursion) and thus throw an error on runtime when trying to load a node with replies
   import votes from "./interactions/vote.vue";
   import reply from "./interactions/replyButton.vue";
   import notification from "../../../notification.vue";
 
   const props = defineProps<{
     node:NodeClass;
+    pathToNode:NodeClass["id"][];
     isCentral?:true;
   }>();
-
-  provide("nodeId", props.node.id);
-
-  const postConfig = inject<Ref<PostConfig>>("postConfig");
+  
+  const nodePath = [...props.pathToNode, props.node.id];
 
   const nodeError = ref<string>("");
 </script>

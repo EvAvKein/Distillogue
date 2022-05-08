@@ -15,11 +15,11 @@
   const user = useUser();
 
   const props = defineProps<{
+    interactionPath:Node["id"][]|null;
     locked:true|undefined;
   }>();
   const emit = defineEmits(["interactionError", "replyToNode"]);
-  const nodeId = inject("nodeId") as Node["id"];
-  const parentNodeId = inject("nodeInteractionId") as Ref<Node["id"]|null>;
+  const replyPath = inject("replyPath") as Ref<Node["id"][]|null>;
 
   function reply() {
     if (!user.data.id) {
@@ -32,7 +32,7 @@
       return;
     };
 
-    parentNodeId.value = nodeId;
+    replyPath.value = props.interactionPath;
   };
 </script>
 

@@ -23,29 +23,25 @@
 </template>
 
 <script setup lang="ts">
-  import {inject, ref, Ref} from "vue";
+  import {ref} from "vue";
   import {Node, NodeCreationRequest, NodeInteractionRequest} from "../../../../../../../backend/src/objects";
   import {jsonFetch} from "../../../../../helpers/jsonFetch";
-  import {findPathToNode} from "../../../../../helpers/findPathToNode";
   import {useUser} from "../../../../../stores/user";
   import labelledInput from "../../../../labelledInput.vue";
   import notification from "../../../../notification.vue";
   const user = useUser();
 
-  const postObject = inject("postObject") as Node;
-  const nodeId = inject("nodeInteractionId") as Ref<Node["id"]>;
+  const props = defineProps<{
+    nodePath:Node["id"][]|null;
+  }>();
 
   const notifText = ref<string>("");
   const notifDesirability = ref<boolean|undefined>(true);
   const pathingLoadingText = "Loading reply functionality, wait a few seconds";
 
-  let nodePath:undefined|Node["id"][];
-  findPathToNode(postObject, nodeId.value).then((path) => {
-    nodePath = path;
-    if (notifText.value === pathingLoadingText) {
-      notifText.value = "";
-    };
-  });
+  if (notifText.value === pathingLoadingText) {
+    notifText.value = "";
+  };
 
   const postTitle = ref<Node["title"]>("");
   const postBody = ref<Node["body"]>("");
@@ -53,7 +49,7 @@
   async function submitNode() {
     notifText.value = "";
 
-    if (!nodePath) {
+    if (!props.nodePath) {
       notifText.value = "Loading reply functionality, wait a few seconds";
       notifDesirability.value = undefined;
       return;
@@ -62,11 +58,10 @@
     const response = await jsonFetch("/nodeInteraction",
       new NodeInteractionRequest(
         user.data.id,
-        nodePath,
+        props.nodePath,
         "reply",
         {nodeReplyRequest: new NodeCreationRequest(
-          {postId: postObject.id,
-          parentId: nodeId.value},
+          props.nodePath,
           [user.data.id],
           postTitle.value,
           postBody.value

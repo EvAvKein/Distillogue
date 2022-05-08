@@ -87,17 +87,14 @@ class NodeStats {
 };
 
 class NodeCreationRequest {
-  locationIds:{
-    postId:string,
-    parentId:string,
-  }|null;
+  nodePath:Node["id"][]|null;
   ownerIds:string[];
   title:string;
   body:string;
   config?:PostConfig;
 
-  constructor(locationIds:NodeCreationRequest["locationIds"], ownerIds:NodeCreationRequest["ownerIds"], title:NodeCreationRequest["title"], body:NodeCreationRequest["body"], config?:NodeCreationRequest["config"]) {
-    this.locationIds = locationIds;
+  constructor(nodePath:NodeCreationRequest["nodePath"], ownerIds:NodeCreationRequest["ownerIds"], title:NodeCreationRequest["title"], body:NodeCreationRequest["body"], config?:NodeCreationRequest["config"]) {
+    this.nodePath = nodePath;
     this.ownerIds = ownerIds;
     this.title = title;
     this.body = body;
@@ -118,7 +115,7 @@ class Node extends NodeCreationRequest {
     this.id = newId("node");
     this.replies = [];
     this.stats = new NodeStats(request.config);
-    this.postConfig = request.locationIds ? undefined : request.config;
+    this.postConfig = request.nodePath ? undefined : request.config;
   };
 };
 
@@ -142,7 +139,7 @@ class NodeSummary {
 
 class NodeInteractionRequest {
   userId:UserData["id"];
-  nodeIdPath:Node["id"][];
+  nodePath:Node["id"][];
   interactionType:"vote"|"reply";
   interactionData:{
     voteDirection:"up"|"down",
@@ -151,9 +148,9 @@ class NodeInteractionRequest {
     nodeReplyRequest:NodeCreationRequest,
   };
 
-  constructor(userId:NodeInteractionRequest["userId"], nodeIdPath:NodeInteractionRequest["nodeIdPath"], interactionType:NodeInteractionRequest["interactionType"], interactionData:NodeInteractionRequest["interactionData"]) {
+  constructor(userId:NodeInteractionRequest["userId"], nodePath:NodeInteractionRequest["nodePath"], interactionType:NodeInteractionRequest["interactionType"], interactionData:NodeInteractionRequest["interactionData"]) {
     this.userId = userId;
-    this.nodeIdPath = nodeIdPath;
+    this.nodePath = nodePath;
     this.interactionType = interactionType;
     this.interactionData = interactionData;
   };
