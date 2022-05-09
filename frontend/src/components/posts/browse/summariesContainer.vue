@@ -1,5 +1,5 @@
 <template>
-  <ul id="postsList">
+  <ul id="summariesList">
     <li v-for="(summaryObject, i) in summariesArray" :key="summaryObject.id + i">
       <postSummary :key="summaryObject.id + i"
         :summary="summaryObject"
@@ -9,22 +9,22 @@
 </template>
 
 <script setup lang="ts">
-  import {NodeSummary} from "../../../../../backend/src/objects";
+  import {PostSummary} from "../../../../../backend/src/objects";
   import postSummary from "./summary.vue";
 
   defineProps<{
-    summariesArray:NodeSummary[],
+    summariesArray:PostSummary[],
   }>();
 </script>
 
 <style scoped>
-  #postsList {
-    margin: 0.5em;
+  #summariesList {
+    margin: 1em 0.25em 0.25em;
     padding: 0;
     list-style: none;
   }
 
-  #postsList li + li {
+  #summariesList li + li {
     border-top: 0.25em solid var(--textSubColor);
   }
 </style>

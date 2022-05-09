@@ -1,7 +1,7 @@
 <template>
   <div>
     <labelledInput id="postsSearch"
-      :inputId="'postsSearchInput'"
+      :inputId="'summariesSearchInput'"
       :type="'search'"
       v-model="searchValue"
       @input="debounce(fetchAndEmitPosts, 1000)"
@@ -14,38 +14,37 @@
 
 <script setup lang="ts">
   import {ref, onMounted} from "vue";
-  import {NodeSummary} from "../../../../../backend/src/objects";
+  import {PostSummary} from "../../../../../backend/src/objects";
   import {jsonFetch} from "../../../helpers/jsonFetch";
   import {debounce} from "../../../helpers/debounce"
   import labelledInput from "../../labelledInput.vue";
   import {useUser} from "../../../stores/user";
   const user = useUser();
 
-  const props = defineProps<{fetchOnMount?:boolean}>();
-  const emit = defineEmits(["fetchedPosts"]);
+  const props = defineProps<{fetchAllOnMount?:true}>();
+  const emit = defineEmits(["fetchedSummaries"]);
 
   const searchValue = ref<string>("");
   const summariesDescription = ref<string>("");
-  
-  function fetchAndEmitPosts() {
-    summariesDescription.value = "Fetching Posts...";
-    jsonFetch("/getPostSummaries", {userId: user.data.id, filter: searchValue.value})
-    .then((fetchResponse) => {
-      if (fetchResponse.error) {
-        summariesDescription.value = "Connection error: Failed to fetch posts :(";
-        return;
-      };
 
-      const fetchedPosts = fetchResponse.data as NodeSummary[];
-      summariesDescription.value = `${fetchedPosts.length} result${fetchedPosts.length == 1 ? "" : "s"}${searchValue.value ? ` for "${searchValue.value}"` : ""}`;
+  async function fetchAndEmitPosts() {
+    summariesDescription.value = "Fetching Posts...";
+
+    const fetchResponse = await jsonFetch("/getPostSummaries", {userId: user.data.id, filter: searchValue.value})
+    if (fetchResponse.error) {
+      summariesDescription.value = fetchResponse.error.message;
+      return;
+    };
+
+    const fetchedPosts = fetchResponse.data as PostSummary[];
+    summariesDescription.value = `${fetchedPosts.length} result${fetchedPosts.length > 1 ? "s" : ""}${searchValue.value ? ` for "${searchValue.value}"` : ""}`;
       
-      emit("fetchedPosts", fetchedPosts);
-    });
+    emit("fetchedSummaries", fetchedPosts);
   };
 
   onMounted(() => {
-    if (props.fetchOnMount) {
-      fetchAndEmitPosts()
+    if (props.fetchAllOnMount) {
+      fetchAndEmitPosts();
     };
   });
 </script>

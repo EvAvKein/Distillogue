@@ -5,7 +5,7 @@ import {users, posts} from "./mongo.js";
 import * as timestamp from "./helpers/timestamps.js";
 import {nodePathAsMongoLocators} from "./helpers/nodePathAsMongoLocators.js";
 import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
-import {FetchResponse, User, UserData, editableUserData, arrOfEditableUserData, NodeCreationRequest, Node, NodeInteractionRequest} from "./objects.js";
+import {FetchResponse, User, UserData, editableUserData, arrOfEditableUserData, NodeCreationRequest, Node, PostSummary, NodeInteractionRequest} from "./objects.js";
 
 const app = express();
 app.use(express.static("../frontend/dist"));
@@ -79,12 +79,16 @@ app.post("/getPostSummaries", async (request, response) => {
   const regexFilter = new RegExp(sanitizeForRegex(request.body.filter), "i");
   const userId = request.body.userId;
 
-  const postSummaries = await posts.find({
+  const fullPosts = await posts.find<Node>({
     $and: [
       {$or: [{title: regexFilter}, {body: regexFilter}]},
       {$or: [{public: true}, {ownerIds: userId}]}
     ]
   }).sort({"stats.lastActiveUnix": -1}).toArray();
+
+  const postSummaries = fullPosts.map((post) => {
+    return new PostSummary(post);
+  });
 
   response.json(new FetchResponse(postSummaries));
 });

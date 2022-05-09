@@ -123,19 +123,26 @@ class NodeSummary {
   id:Node["id"];
   ownerIds:Node["ownerIds"];
   title:Node["title"];
-  public:PostConfig["public"];
   locked:Node["locked"];
   stats:NodeStats;
 
-  constructor(node:Node){
+  constructor(node:Node) {
     this.id = node.id;
     this.ownerIds = node.ownerIds;
     this.title = node.title;
-    this.public = node.config?.public;
     this.locked = node.locked;
     this.stats = node.stats;
   };
 };
+
+class PostSummary extends NodeSummary {
+  public:PostConfig["public"];
+
+  constructor(post:Node) {
+    super(post);
+    this.public = post.config?.public;
+  }
+}
 
 class NodeInteractionRequest {
   userId:UserData["id"];
@@ -162,6 +169,7 @@ export {
   UserData, editableUserData, arrOfEditableUserData,
   Log,
   PostConfig,
+  PostSummary,
   NodeStats,
   NodeCreationRequest,
   Node,
