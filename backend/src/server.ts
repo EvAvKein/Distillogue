@@ -82,7 +82,7 @@ app.post("/getPostSummaries", async (request, response) => {
   const fullPosts = await posts.find<Node>({
     $and: [
       {$or: [{title: regexFilter}, {body: regexFilter}]},
-      {$or: [{public: true}, {ownerIds: userId}]}
+      {$or: [{"config.public": true}, {ownerIds: userId}]}
     ]
   }).sort({"stats.lastActiveUnix": -1}).toArray();
 
@@ -100,7 +100,7 @@ app.post("/getPost", async (request, response) => {
   const dbResponse = await posts.findOne({
     $and: [
       {id: postId},
-      {$or: [{public: true}, {ownerIds: userId}]}
+      {$or: [{"config.public": true}, {ownerIds: userId}]}
     ]
   });
 
