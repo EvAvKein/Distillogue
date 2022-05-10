@@ -3,46 +3,46 @@
     <details>
       <summary>Voting</summary>
       <div>
-        <div>
+        <label>
           Upvotes:
           <input type="checkbox"
             @change="(event) => {editConfig(event, 'votes', 'up')}"
           />
-        </div>
-        <div>
+        </label>
+        <label>
           Downvotes:
           <input type="checkbox"
             @change="(event) => {editConfig(event, 'votes', 'down')}"
           />
-        </div>
-        <div>
+        </label>
+        <label>
           Anonymous:
           <input type="checkbox"
             @change="(event) => {editConfig(event, 'votes', 'anon')}"
           />
-        </div>
+        </label>
       </div>
     </details>
     <details>
       <summary>Activity</summary>
       <div>
-        <div>
+        <label>
           Last Active:
           <input type="checkbox"
             @change="(event) => {editConfig(event, 'lastActive')}"
           />
-        </div>
+        </label>
       </div>
     </details>
     <details>
       <summary>Visibility</summary>
       <div>
-        <div>
+        <label>
           Public:
           <input type="checkbox"
             @change="(event) => {editConfig(event, 'public')}"
           />
-        </div>
+        </label>
       </div>
     </details>
   </section>
