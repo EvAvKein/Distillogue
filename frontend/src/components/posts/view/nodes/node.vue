@@ -10,8 +10,7 @@
       <section id="interactions">
         <votes v-if="node.stats?.votes"
           :interactionPath="nodePath"
-          :upvoters="node.stats.votes.up"
-          :downvoters="node.stats.votes.down"
+          :voters="node.stats.votes"
           @interactionError="(errorText:string) => {nodeError = errorText}"
         />
         <reply :interactionPath="nodePath" :locked="undefined"/>

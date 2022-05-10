@@ -1,8 +1,8 @@
 <template>
   <section>
-    <button v-if="props.upvoters"
-      :class="'globalStyle_imageButton' + (currentVote === true ? ' voted' : '')"
-      @click="toggleVote('up')"
+    <button v-if="voters?.up"
+      :class="'globalStyle_imageButton' + (currentVote === 'up' ? ' voted' : '')"
+      @click="vote('up', !upvoters?.includes(user.data.id))"
     >
       <img src="../../../../../assets/upArrow.svg">
     </button>
@@ -14,9 +14,9 @@
       {{totalVotes}}
     </span>
 
-    <button v-if="props.downvoters"
-      :class="'globalStyle_imageButton' + (currentVote === false ? ' voted' : '')"
-      @click="toggleVote('down')"
+    <button v-if="voters?.down"
+      :class="'globalStyle_imageButton' + (currentVote === 'down' ? ' voted' : '')"
+      @click="vote('down', !downvoters?.includes(user.data.id))"
     >
       <img src="../../../../../assets/upArrow.svg" style="transform: rotate(180deg);">
     </button>
@@ -24,59 +24,78 @@
 </template>
 
 <script setup lang="ts">
-  import {ref, computed, inject} from "vue";
-  import {NodeInteractionRequest, NodeStats} from "../../../../../../../backend/src/objects";
-  import {lookupInOptional} from "../../../../../../../backend/src/helpers/lookupInOptional";
+  import {ref, computed} from "vue";
+  import {Node, NodeInteractionRequest, NodeStats} from "../../../../../../../backend/src/objects";
   import {jsonFetch} from "../../../../../helpers/jsonFetch";
   import {useUser} from "../../../../../stores/user";
   const user = useUser();
 
   const props = defineProps<{
-    upvoters?:lookupInOptional<NodeStats["votes"],"up">;
-    downvoters?:lookupInOptional<NodeStats["votes"],"down">;
+    voters:NodeStats["votes"];
+    interactionPath:Node["id"][];
   }>();
-  const emit = defineEmits(["componentError"]);
+  const emit = defineEmits(["interactionError"]);
 
-  const upvoters = ref(props.upvoters || []);
-  const downvoters = ref(props.downvoters || []);
-
+  const upvoters = ref(props.voters?.up);
+  const downvoters = ref(props.voters?.down);
   const totalVotes = computed(() => {
-    return upvoters.value.length - downvoters.value.length;
+    return (upvoters.value?.length ?? 0) - (downvoters.value?.length ?? 0);
   });
   
   const title = computed(() => {
-    return props.downvoters && props.upvoters ? `Upvotes: ${upvoters.value.length}\nDownvotes: ${downvoters.value.length}` : "";
+    let titleVar = "";
+
+    const anyUpvotes = upvoters.value && upvoters.value.length > 0;
+    const anyDownvotes = downvoters.value && downvoters.value.length > 0;
+
+    if (anyUpvotes) {titleVar += `Upvotes: ${upvoters.value!.length}`};
+    if (anyUpvotes && anyDownvotes) {titleVar += "\n"};
+    if (anyDownvotes) {titleVar += `Downvotes: ${downvoters.value!.length}`};
+    return titleVar;
   });
 
-  const currentVote = computed(() => {
-    if (upvoters.value.includes(user.data.id)) return true;
-    if (downvoters.value.includes(user.data.id)) return false;
+  type voteDirection = "up"|"down";
+  const currentVote = computed<voteDirection|null>(() => {
+    if (upvoters.value && upvoters.value.includes(user.data.id)) return "up";
+    if (downvoters.value && downvoters.value.includes(user.data.id)) return "down";
     return null;
   });
-  
-  type voteDirection = "up"|"down";
-  function clientsideToggleVote(voteDirection:voteDirection) {
-    const subjectArray = voteDirection === "up" ? upvoters : downvoters;
-    const oppositeArray = voteDirection === "up" ? downvoters : upvoters;
 
-    if (subjectArray.value.includes(user.data.id)) {
-      subjectArray.value.splice(subjectArray.value.indexOf(user.data.id), 1);
+  async function vote(voteDirection:voteDirection, newVoteStatus:boolean) {
+    if (!user.data.id) {
+      emit("interactionError", "Must be logged in to vote");
       return;
     };
-    subjectArray.value.push(user.data.id);
 
-    if (oppositeArray.value.includes(user.data.id)) {
-      oppositeArray.value.splice(oppositeArray.value.indexOf(user.data.id), 1);
+    const response = await jsonFetch("/nodeInteraction", new NodeInteractionRequest(
+      user.data.id,
+      props.interactionPath,
+      "vote",
+      {voteDirection, newVoteStatus}
+    ));
+
+    if (response.error) {
+      emit("interactionError", response.error.message)
+      return;
     };
+      
+    adjustLocalVoteArrays(voteDirection, newVoteStatus);
   };
 
-  async function toggleVote(voteDirection:voteDirection) {
-    if (!user.data.id) {
-      emit("componentError", "Must be logged in to vote");
+  function adjustLocalVoteArrays(voteDirection:voteDirection, newVoteStatus:boolean) {
+    const array = voteDirection === "up"
+      ? {subject: upvoters, opposite: downvoters}
+      : {subject: downvoters, opposite: upvoters};
+
+    if (!newVoteStatus) {
+      array.subject.value!.splice(array.subject.value!.indexOf(user.data.id) , 1);
       return;
     };
 
-    clientsideToggleVote(voteDirection);
+    array.subject.value!.push(user.data.id);
+    if (array.opposite.value && array.opposite.value.includes(user.data.id)) {
+      array.opposite.value.splice(array.opposite.value.indexOf(user.data.id), 1);
+    };
   };
 </script>
 
@@ -95,6 +114,9 @@
 
   .voted {
     filter: var(--filterToHighlightColor)
+  }
+  .voted:hover {
+    filter: var(--filterToHighlightSubColor)
   }
 
   img {height: inherit}

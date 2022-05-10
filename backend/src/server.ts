@@ -116,8 +116,19 @@ app.post("/nodeInteraction", async (request, response) => {
   
   let dbResponse;
   switch(data.interactionType) {
-    // case "vote": {
-    // };
+    case "vote": {
+      const voteData = data.interactionData as {voteDirection:"up"|"down", newVoteStatus:boolean};
+      const subjectDirection = voteData.voteDirection;
+      const oppositeDirection = voteData.voteDirection === "up" ? "down" : "up";
+
+      dbResponse = await posts.findOneAndUpdate(
+        {"id": postId},
+        {[voteData.newVoteStatus ? "$addToSet" : "$pull"]: {[mongoPath.updatePath + "stats.votes." + subjectDirection]: data.userId},
+         [voteData.newVoteStatus ? "$pull" : "$addToSet"]: {[mongoPath.updatePath + "stats.votes." + oppositeDirection]: data.userId}},
+        {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"}
+      );
+      break;
+    };
     case "reply": {
       const newNode = new Node((data.interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest);
       dbResponse = await posts.updateOne(
