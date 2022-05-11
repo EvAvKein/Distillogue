@@ -4,7 +4,6 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "preview": "vite"
   },
   "author": "Eve Aviv Keinan",
   "license": "MIT",

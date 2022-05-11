@@ -60,12 +60,6 @@ My motives for working on this project are:
 2. `npm run serve`
 3. visit `localhost:3030` in browser
 
-### Preview
-(Host a frontend-only version. Hot Module Replacement available)
-1. `cd frontend` (from project's root folder) 
-2. `npm run preview`
-3. visit `localhost:3030` in browser  
-
 ---
 
 ## Contributing
