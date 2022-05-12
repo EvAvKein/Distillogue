@@ -80,8 +80,7 @@ class NodeStats {
     this.lastActiveUnix = config?.lastActive ? unixStamp() : undefined;
     this.votes = config?.votes ? {
       up: config.votes.up ? [] as UserData["id"][] : undefined,
-      down: config.votes.down ? [] as UserData["id"][] : undefined,
-      anon: config.votes.anon,
+      down: config.votes.down ? [] as UserData["id"][] : undefined
     } : undefined;
   };
 };

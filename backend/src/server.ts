@@ -4,8 +4,10 @@ import helmetSecurity from "helmet";
 import {users, posts} from "./mongo.js";
 import * as timestamp from "./helpers/timestamps.js";
 import {nodePathAsMongoLocators} from "./helpers/nodePathAsMongoLocators.js";
+import {updateDeepProperty} from "./helpers/updateDeepProperty.js";
+import {recursivelyModifyNode} from "./helpers/recursivelyModifyNode.js";
 import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
-import {FetchResponse, User, UserData, editableUserData, arrOfEditableUserData, NodeCreationRequest, Node, PostSummary, NodeInteractionRequest} from "./objects.js";
+import {FetchResponse, User, UserData, editableUserData, arrOfEditableUserData, NodeCreationRequest, Node, PostSummary, NodeInteractionRequest, NodeStats} from "./objects.js";
 
 const app = express();
 app.use(express.static("../frontend/dist"));
@@ -93,20 +95,37 @@ app.post("/getPostSummaries", async (request, response) => {
   response.json(new FetchResponse(postSummaries));
 });
 
-app.post("/getPost", async (request, response) => {
+app.post<Node|undefined>("/getPost", async (request, response) => {
   const userId = request.body.userId;
   const postId = request.body.postId;
 
-  const dbResponse = await posts.findOne({
+  const dbResponse = await posts.findOne<Node|null>({
     $and: [
       {id: postId},
       {$or: [{"config.public": true}, {ownerIds: userId}]}
     ]
   });
+  if (!dbResponse) {response.json(new FetchResponse(null, "Post unavailable; Either it doesn't exist, or it's private and you're not authorized"))};
 
-  const getResponse = dbResponse ? new FetchResponse(dbResponse) : new FetchResponse(null, "Post unavailable, it either:\n1. Doesn't exist\n2. Private and you're not authorized");
+  let post = dbResponse as Node;
 
-  response.json(getResponse);
+  if (post.config?.votes?.anon) {
+    const enabledVoteTypes = [] as ("up"|"down")[]; 
+    (["up", "down"] as ("up"|"down")[]).forEach((voteType) => {
+      if (post.config!.votes![voteType]) {enabledVoteTypes.push(voteType)};
+    });
+
+    enabledVoteTypes.forEach((voteTypeName) => {
+      post = recursivelyModifyNode(post, (node) => {
+        updateDeepProperty(node, "stats.votes." + voteTypeName, (votesArray:UserData["id"][]) => {
+          return votesArray.map((vote) => {return vote === userId ? userId : "redacted"})
+        });
+        return node;
+      });
+    });
+  };
+
+  response.json(new FetchResponse(post));
 });
 
 app.post("/nodeInteraction", async (request, response) => {
