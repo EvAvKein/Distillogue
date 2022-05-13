@@ -1,8 +1,8 @@
 <template>
   <Teleport :to="'body'">
-    <div v-if="activeByTruthiness"
+    <div v-show="activeByTruthiness"
       id="backdrop" 
-      @click="emitDeactivateIfClicked"
+      @mousedown="emitDeactivateIfClicked"
     >
       <dialog open>
         <slot></slot>
@@ -25,6 +25,12 @@
       emit("deactivate");
     };
   };
+
+  document.addEventListener("keydown", (event) => {
+    if (props.activeByTruthiness && ["Esc", "Escape"].includes(event.key)) {
+      emit("deactivate");
+    };
+  });
 
   const modalTruthiness = toRef(props, "activeByTruthiness");
 
