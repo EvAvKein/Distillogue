@@ -7,7 +7,7 @@ import {nodePathAsMongoLocators} from "./helpers/nodePathAsMongoLocators.js";
 import {updateDeepProperty} from "./helpers/updateDeepProperty.js";
 import {recursivelyModifyNode} from "./helpers/recursivelyModifyNode.js";
 import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
-import {FetchResponse, User, UserData, editableUserData, arrOfEditableUserData, NodeCreationRequest, Node, PostSummary, NodeInteractionRequest, NodeStats} from "./objects.js";
+import {FetchResponse, User, UserData, editableUserData, arrOfEditableUserData, NodeCreationRequest, Node, PostSummary, NodeInteractionRequest, NodeStats, NodeSummary} from "./objects.js";
 
 const app = express();
 app.use(express.static("../frontend/dist"));
@@ -70,7 +70,7 @@ app.post("/editProfileInfo", async (request, response) => {
 });
 
 app.post("/createPost", async (request, response) => {
-  const postRequest = request.body as NodeCreationRequest
+  const postRequest = request.body as NodeCreationRequest;
 
   posts.insertOne(new Node(postRequest));
 
@@ -79,7 +79,7 @@ app.post("/createPost", async (request, response) => {
 
 app.post("/getPostSummaries", async (request, response) => {
   const regexFilter = new RegExp(sanitizeForRegex(request.body.filter), "i");
-  const userId = request.body.userId;
+  const userId = request.body.userId as UserData["id"];
 
   const fullPosts = await posts.find<Node>({
     $and: [
@@ -95,9 +95,9 @@ app.post("/getPostSummaries", async (request, response) => {
   response.json(new FetchResponse(postSummaries));
 });
 
-app.post<Node|undefined>("/getPost", async (request, response) => {
-  const userId = request.body.userId;
-  const postId = request.body.postId;
+app.post("/getPost", async (request, response) => {
+  const userId = request.body.userId as UserData["id"];
+  const postId = request.body.postId as Node["id"];
 
   const dbResponse = await posts.findOne<Node|null>({
     $and: [
@@ -130,7 +130,7 @@ app.post<Node|undefined>("/getPost", async (request, response) => {
 
 app.post("/nodeInteraction", async (request, response) => {
   const data = request.body as NodeInteractionRequest;
-  const postId = data.nodePath[0];
+  const postId = data.nodePath[0] as Node["id"];
   const mongoPath = nodePathAsMongoLocators(data.nodePath);
   
   let dbResponse;
@@ -158,11 +158,9 @@ app.post("/nodeInteraction", async (request, response) => {
       break;
     };
   };
-  if (dbResponse === undefined) {response.json(new FetchResponse(null, "Invalid interaction request"))};
+  if (!dbResponse) {response.json(new FetchResponse(null, "Invalid interaction request"))};
 
-  const interactionResponse = dbResponse ? new FetchResponse(dbResponse) : new FetchResponse(null, data.interactionType + " failed");
-
-  response.json(interactionResponse);
+  response.json(new FetchResponse(true));
 });
 
 app.get('*', function(request, response) {
