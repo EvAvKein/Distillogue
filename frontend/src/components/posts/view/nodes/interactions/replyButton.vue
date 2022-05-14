@@ -43,7 +43,7 @@
     padding: 0;
   }
   button img {
-    height: 1.75em;
+    height: 2.25em;
   }
 
   button:hover, button:focus {

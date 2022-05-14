@@ -13,7 +13,7 @@
           :voters="node.stats.votes"
           @interactionError="(errorText:string) => {nodeError = errorText}"
         />
-        <reply :interactionPath="nodePath" :locked="undefined"/>
+        <reply id="replyButton" :interactionPath="nodePath" :locked="undefined"/>
       </section>
       <notification :text="nodeError" :desirablity-style="false"/>
     </article>
@@ -66,5 +66,9 @@
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 0.5em;
+  }
+
+  #replyButton {
+    margin: auto 0 0.25em auto;
   }
 </style>
