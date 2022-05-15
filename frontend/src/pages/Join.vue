@@ -1,35 +1,19 @@
 <template>
   <main>
-    <section>
-      <signUp v-show="registerMode"/>
-      <signIn v-show="!registerMode"/>
-      <button @click="registerMode = !registerMode"
-        class="globalStyle_textButton"
-      >
-        <span v-show="registerMode">Sign In</span>
-        <span v-show="!registerMode">Sign Up</span>
-      </button>
-    </section>
+    <signing/>
   </main>
 </template>
 
 <script setup lang="ts">
-  import {ref} from "vue"
-  import signIn from "../components/users/signIn.vue";
-  import signUp from "../components/users/signUp.vue";
-
-  const registerMode = ref<boolean>(true);
+  import signing from "../components/users/signing.vue";
 </script>
 
 <style scoped>
   main {
     height: calc(75vh - 4rem);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
-  button {
-    display: block;
-    margin: 1em auto;
   }
 </style>
