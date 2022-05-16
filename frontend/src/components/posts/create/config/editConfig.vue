@@ -1,24 +1,24 @@
 <template>
-  <section>
+  <section id="editConfig">
     <details>
       <summary>Voting</summary>
       <div>
         <label>
           Upvotes:
-          <input type="checkbox"
-            @change="(event) => {editConfig(event, 'votes', 'up')}"
+          <input type="checkbox" id="votes.up"
+            @change="(event) => {updateConfigByCheckbox(event, 'votes', 'up')}"
           />
         </label>
         <label>
           Downvotes:
-          <input type="checkbox"
-            @change="(event) => {editConfig(event, 'votes', 'down')}"
+          <input type="checkbox"  id="votes.down"
+            @change="(event) => {updateConfigByCheckbox(event, 'votes', 'down')}"
           />
         </label>
         <label>
           Anonymous:
-          <input type="checkbox"
-            @change="(event) => {editConfig(event, 'votes', 'anon')}"
+          <input type="checkbox" id="votes.anon"
+            @change="(event) => {updateConfigByCheckbox(event, 'votes', 'anon')}"
           />
         </label>
       </div>
@@ -28,8 +28,8 @@
       <div>
         <label>
           Last Active:
-          <input type="checkbox"
-            @change="(event) => {editConfig(event, 'lastActive')}"
+          <input type="checkbox" id="lastActive"
+            @change="(event) => {updateConfigByCheckbox(event, 'lastActive')}"
           />
         </label>
       </div>
@@ -39,38 +39,75 @@
       <div>
         <label>
           Public:
-          <input type="checkbox"
-            @change="(event) => {editConfig(event, 'public')}"
+          <input type="checkbox" id="public"
+            @change="(event) => {updateConfigByCheckbox(event, 'public')}"
           />
         </label>
       </div>
     </details>
   </section>
 </template>
+<!-- checkboxes and/or details should probably be turned into components. not high priority, just that there's a lot of code duplication in this template -->
 
 <script setup lang="ts">
+  import {watch, toRef} from "vue";
   import {PostConfig} from "../../../../../../backend/src/objects";
 
   const props = defineProps<{
     config:PostConfig;
+    presetOverride?:PostConfig;
   }>();
 
   const emit = defineEmits(["update:config"]);
-  function editConfig(event:Event, property:keyof PostConfig, subproperty?:"up"|"down"|"anon") { // for some reason typing subproperty as 'keyof PostConfig["votes"]' just ends up as undefined (and this project's lookupInOptional helper doesn't correct that)
-    const newValue = (event.currentTarget as HTMLInputElement).checked || undefined;
 
+  function editConfigProperty(newValue:true|undefined, property:keyof PostConfig, subproperty?:"up"|"down"|"anon") { // for some reason typing subproperty as 'keyof PostConfig["votes"]' just ends up as undefined (and this project's lookupInOptional helper doesn't correct that)
+    if (!subproperty) {
+      props.config[property] = newValue;
+      return;
+    };
+    
     if (subproperty && !props.config[property]) {
       props.config[property as "votes"] = {};
     };
 
-    if (subproperty) {
-      props.config[property as "votes"]![subproperty] = newValue;
-    } else {
-      props.config[property] = newValue;
-    };
+    props.config[property as "votes"]![subproperty] = newValue;
 
+    if (typeof props.config[property] === "object" && Object.keys(props.config[property] as object).length == 0) {
+      props.config[property] = undefined;
+    };
+  };
+
+  function checkboxEventToConfigValue(event:Event) {
+    return (event.currentTarget as HTMLInputElement).checked || undefined;
+  };
+    
+  function updateConfigByCheckbox(event:Event, property:keyof PostConfig, subproperty?:"up"|"down"|"anon") { // for some reason typing subproperty as 'keyof PostConfig["votes"]' just ends up as undefined (and this project's lookupInOptional helper doesn't correct that)
+    editConfigProperty(checkboxEventToConfigValue(event), property, subproperty);
     emit("update:config", props.config);
   };
+
+  function updateConfigByPreset(configPreset:PostConfig) {
+    document.querySelectorAll<HTMLInputElement>("#editConfig input").forEach((inputElement) => {
+      const configProperties = inputElement.id.split(".");
+      const property = configProperties[0] as keyof PostConfig;
+      const subProperty = configProperties[1] as "up"|"down"|"anon"|undefined;
+
+      if (subProperty) {
+        inputElement.checked = (configPreset[property as "votes"])?.[subProperty] || false;
+      } else {
+        inputElement.checked = (configPreset[property] as true|undefined) || false;
+      };
+    });
+
+    emit("update:config", configPreset);
+  };
+
+  const presetOverride = toRef(props, "presetOverride");
+  watch(presetOverride, () => {
+    if (presetOverride.value) {
+      updateConfigByPreset(presetOverride.value)
+    };
+  });
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent>
-    <div id="content">
+    <section id="content">
       <labelledInput id="contentTitle"
         :label="'Title'"
         :type="'text'"
@@ -16,15 +16,18 @@
         :inputId="'postBody'"
         v-model="postBody"
       />
-    </div>
-    <config id="config" v-model:config="postConfig"/>
-    <div id="confirmation">
+    </section>
+    <section id="config">
+      <configPresets v-model:chosenPreset="configOverridingPreset"/>
+      <editConfig v-model:config="postConfig" :presetOverride="configOverridingPreset"/>
+    </section>
+    <section id="confirmation">
       <notification :text="notifText" :desirablityStyle="notifDesirability"/>
       <button id="submitButton"
         class="globalStyle_textButton"
         @click="submitPost"
       >Post</button>
-    </div>
+    </section>
   </form>
 </template>
 
@@ -35,7 +38,8 @@
   import {useUser} from "../../../stores/user";
   import {useRouter} from "vue-router";
   import labelledInput from "../../labelledInput.vue";
-  import config from "./config/editConfig.vue";
+  import configPresets from "./config/configPresets.vue";
+  import editConfig from "./config/editConfig.vue";
   import notification from "../../notification.vue";
   const user = useUser();
   const router = useRouter();
@@ -43,6 +47,7 @@
   const postTitle = ref<Node["title"]>("");
   const postBody = ref<Node["body"]>("");
   const postConfig = ref<PostConfig>({});
+  const configOverridingPreset = ref<PostConfig|undefined>(undefined);
  
   const notifText = ref<string>("");
   const notifDesirability = ref<boolean>(true);
@@ -79,6 +84,10 @@
 
   #content {font-size: clamp(1.2em, 1.8vw, 1.5em)}
   #contentTitle {font-size: 1.15em}
+
+  #config > * + * {
+    margin-top: 0.5em;
+  }
 
   #submitButton {
     margin-top: 0.5em;
