@@ -52,6 +52,7 @@
 <script setup lang="ts">
   import {watch, toRef} from "vue";
   import {PostConfig} from "../../../../../../backend/src/objects";
+  import {propertiesByType} from "../../../../helpers/propertiesByType";
 
   const props = defineProps<{
     config:PostConfig;
@@ -60,7 +61,10 @@
 
   const emit = defineEmits(["update:config"]);
 
-  function editConfigProperty(newValue:true|undefined, property:keyof PostConfig, subproperty?:"up"|"down"|"anon") { // for some reason typing subproperty as 'keyof PostConfig["votes"]' just ends up as undefined (and this project's lookupInOptional helper doesn't correct that)
+  type keysOfObjectsInPostConfig = keyof NonNullable<propertiesByType<PostConfig, object>>;
+  type keysInObjectsOfPostConfig = keyof NonNullable<PostConfig[keysOfObjectsInPostConfig]>;
+
+  function editConfigProperty(newValue:true|undefined, property:keyof PostConfig, subproperty?:keysInObjectsOfPostConfig) {
     if (!subproperty) {
       props.config[property] = newValue;
       return;
@@ -70,7 +74,7 @@
       props.config[property as "votes"] = {};
     };
 
-    props.config[property as "votes"]![subproperty] = newValue;
+    props.config[property as keysOfObjectsInPostConfig]![subproperty] = newValue;
 
     if (typeof props.config[property] === "object" && Object.keys(props.config[property] as object).length == 0) {
       props.config[property] = undefined;
@@ -81,7 +85,7 @@
     return (event.currentTarget as HTMLInputElement).checked || undefined;
   };
     
-  function updateConfigByCheckbox(event:Event, property:keyof PostConfig, subproperty?:"up"|"down"|"anon") { // for some reason typing subproperty as 'keyof PostConfig["votes"]' just ends up as undefined (and this project's lookupInOptional helper doesn't correct that)
+  function updateConfigByCheckbox(event:Event, property:keyof PostConfig, subproperty?:keysInObjectsOfPostConfig) {
     editConfigProperty(checkboxEventToConfigValue(event), property, subproperty);
     emit("update:config", props.config);
   };
@@ -90,10 +94,10 @@
     document.querySelectorAll<HTMLInputElement>("#editConfig input").forEach((inputElement) => {
       const configProperties = inputElement.id.split(".");
       const property = configProperties[0] as keyof PostConfig;
-      const subProperty = configProperties[1] as "up"|"down"|"anon"|undefined;
+      const subProperty = configProperties[1] as keysInObjectsOfPostConfig|undefined;
 
       if (subProperty) {
-        inputElement.checked = (configPreset[property as "votes"])?.[subProperty] || false;
+        inputElement.checked = (configPreset[property as keysOfObjectsInPostConfig])?.[subProperty] || false;
       } else {
         inputElement.checked = (configPreset[property] as true|undefined) || false;
       };
