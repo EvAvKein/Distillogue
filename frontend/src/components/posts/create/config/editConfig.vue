@@ -1,7 +1,7 @@
 <template>
   <section id="editConfig">
     <details>
-      <summary>Exposure</summary> <!-- conflicted on this section's name. alternatives (including but not limited to): visibility, access -->
+      <summary>Access</summary> <!-- conflicted on this section's name. alternatives (including but not limited to): visibility, exposure -->
       <div>
         <label>
           Public:
