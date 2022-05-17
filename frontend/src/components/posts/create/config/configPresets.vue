@@ -16,9 +16,8 @@
   
 
   const configs = {
-    blank: {public: true},
+    blank: {},
     testEverything: {
-      public: true,
       lastActive: true,
       votes: {
         up: true,

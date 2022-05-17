@@ -1,6 +1,17 @@
 <template>
   <section id="editConfig">
     <details>
+      <summary>Exposure</summary> <!-- conflicted on this section's name. alternatives (including but not limited to): visibility, access -->
+      <div>
+        <label>
+          Public:
+          <input type="checkbox" id="public"
+            @change="(event) => {updateConfigByCheckbox(event, 'public')}"
+          />
+        </label>
+      </div>
+    </details>
+    <details>
       <summary>Voting</summary>
       <div>
         <label>
@@ -34,23 +45,12 @@
         </label>
       </div>
     </details>
-    <details>
-      <summary>Visibility</summary>
-      <div>
-        <label>
-          Public:
-          <input type="checkbox" id="public"
-            @change="(event) => {updateConfigByCheckbox(event, 'public')}"
-          />
-        </label>
-      </div>
-    </details>
   </section>
 </template>
 <!-- checkboxes and/or details should probably be turned into components. not high priority, just that there's a lot of code duplication in this template -->
 
 <script setup lang="ts">
-  import {watch, toRef} from "vue";
+  import {watch, toRef, onMounted} from "vue";
   import {PostConfig} from "../../../../../../backend/src/objects";
   import {propertiesByType} from "../../../../helpers/propertiesByType";
 
@@ -90,8 +90,15 @@
     emit("update:config", props.config);
   };
 
+  let inputsAffectedByPresets = [] as HTMLInputElement[];
+  onMounted(() => {
+    inputsAffectedByPresets = Array.from(document.querySelectorAll<HTMLInputElement>("#editConfig input")).filter((input) => {
+      return !["public"].includes(input.id);
+    });
+  });
+
   function updateConfigByPreset(configPreset:PostConfig) {
-    document.querySelectorAll<HTMLInputElement>("#editConfig input").forEach((inputElement) => {
+    inputsAffectedByPresets.forEach((inputElement) => {
       const configProperties = inputElement.id.split(".");
       const property = configProperties[0] as keyof PostConfig;
       const subProperty = configProperties[1] as keysInObjectsOfPostConfig|undefined;
