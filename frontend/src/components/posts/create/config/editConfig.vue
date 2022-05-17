@@ -6,7 +6,7 @@
         <label>
           Public:
           <input type="checkbox" id="public"
-            @change="(event) => {updateConfigByCheckbox(event, 'public')}"
+            @change="updateConfigByCheckbox"
           />
         </label>
       </div>
@@ -17,19 +17,19 @@
         <label>
           Upvotes:
           <input type="checkbox" id="votes.up"
-            @change="(event) => {updateConfigByCheckbox(event, 'votes', 'up')}"
+            @change="updateConfigByCheckbox"
           />
         </label>
         <label>
           Downvotes:
-          <input type="checkbox"  id="votes.down"
-            @change="(event) => {updateConfigByCheckbox(event, 'votes', 'down')}"
+          <input type="checkbox" id="votes.down"
+            @change="updateConfigByCheckbox"
           />
         </label>
         <label>
           Anonymous:
           <input type="checkbox" id="votes.anon"
-            @change="(event) => {updateConfigByCheckbox(event, 'votes', 'anon')}"
+            @change="updateConfigByCheckbox"
           />
         </label>
       </div>
@@ -40,7 +40,7 @@
         <label>
           Last Active:
           <input type="checkbox" id="lastActive"
-            @change="(event) => {updateConfigByCheckbox(event, 'lastActive')}"
+            @change="updateConfigByCheckbox"
           />
         </label>
       </div>
@@ -85,8 +85,12 @@
     return (event.currentTarget as HTMLInputElement).checked || undefined;
   };
     
-  function updateConfigByCheckbox(event:Event, property:keyof PostConfig, subproperty?:keysInObjectsOfPostConfig) {
-    editConfigProperty(checkboxEventToConfigValue(event), property, subproperty);
+  function updateConfigByCheckbox(event:Event) {
+    const configProperties = (event.target as HTMLInputElement).id.split(".");
+    const property = configProperties[0] as keyof PostConfig;
+    const subProperty = configProperties[1] as keysInObjectsOfPostConfig|undefined;
+
+    editConfigProperty(checkboxEventToConfigValue(event), property, subProperty);
     emit("update:config", props.config);
   };
 
