@@ -10,23 +10,21 @@ class FetchResponse {
 
   constructor(data:FetchResponse["data"], errorMessage?:lookupInOptional<FetchResponse["error"], "message">) {
     this.data = data;
-    this.error = errorMessage ? {
-      message: errorMessage,
-    } : undefined;
+    errorMessage ? this.error = {message: errorMessage} : delete this.error;
   };
 };
 
 class UserData {
   id:string;
   name:string;
-  about?:string;
+  about:string;
   settings?:object;
 
   constructor(name:UserData["name"]) {
     this.id = newId("user");
     this.name = name;
     this.about = "Hello, I haven't wrote my About yet!";
-    this.settings;
+    delete this.settings;
   };
 };
 
@@ -34,11 +32,12 @@ type editableUserData = "name"|"about"|"settings";
 const arrOfEditableUserData = ["name", "about", "settings"] as editableUserData[];
 
 class User {
-  banned?:true;
   data:UserData;
+  banned?:true;
 
   constructor(data:UserData){
     this.data = data;
+    delete this.banned;
   };
 };
 
@@ -54,7 +53,7 @@ class Log {
     this.userId = userId;
     this.targetId = targetId;
     this.category = category;
-    this.extraData = extraData;
+    extraData ? this.extraData = extraData : delete this.extraData;
   };
 };
 
@@ -77,44 +76,45 @@ class NodeStats {
   };;
 
   constructor(config?:PostConfig) {
-    this.lastActiveUnix = config?.lastActive ? unixStamp() : undefined;
-    this.votes = config?.votes ? {
+    config?.lastActive ? this.lastActiveUnix = unixStamp() : delete this.lastActiveUnix;
+    config?.votes ? this.votes = {
       up: config.votes.up ? [] as UserData["id"][] : undefined,
       down: config.votes.down ? [] as UserData["id"][] : undefined
-    } : undefined;
+    } : delete config?.votes;
   };
 };
 
 class NodeCreationRequest {
-  nodePath:Node["id"][]|null;
   ownerIds:string[];
   title:string;
   body:string;
   config?:PostConfig;
+  nodePath?:Node["id"][];
 
-  constructor(nodePath:NodeCreationRequest["nodePath"], ownerIds:NodeCreationRequest["ownerIds"], title:NodeCreationRequest["title"], body:NodeCreationRequest["body"], config?:NodeCreationRequest["config"]) {
-    this.nodePath = nodePath;
+  constructor(ownerIds:NodeCreationRequest["ownerIds"], title:NodeCreationRequest["title"], body:NodeCreationRequest["body"], config?:NodeCreationRequest["config"], nodePath?:NodeCreationRequest["nodePath"]) {
     this.ownerIds = ownerIds;
     this.title = title;
     this.body = body;
-    this.config = config;
+    config ? this.config = config : delete this.config;
+    nodePath ? this.nodePath = nodePath : delete this.nodePath;
   };
 };
 
 class Node extends NodeCreationRequest {
   id:string;
-  locked?:true;
   replies:Node[];
-  past?:{title:Node["title"], body:Node["body"]}[];
   stats:NodeStats;
-  config?:PostConfig;
+  locked?:true;
+  past?:{title:Node["title"], body:Node["body"]}[];
   
   constructor(request:NodeCreationRequest) {
-    super(null, request.ownerIds, request.title, request.body);
+    super(request.ownerIds, request.title, request.body, request.config);
     this.id = newId("node");
     this.replies = [];
     this.stats = new NodeStats(request.config);
-    this.config = request.nodePath ? undefined : request.config;
+    request.config ? this.config = request.config : delete this.config;
+    delete this.locked;
+    delete this.past;
   };
 };
 

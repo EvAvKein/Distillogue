@@ -57,7 +57,6 @@
 
     const response = await jsonFetch("/createPost",
       new NodeCreationRequest(
-        null,
         [user.data.id],
         postTitle.value,
         postBody.value,

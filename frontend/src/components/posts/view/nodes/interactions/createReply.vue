@@ -62,11 +62,11 @@
         props.nodePath,
         "reply",
         {nodeReplyRequest: new NodeCreationRequest(
-          props.nodePath,
           [user.data.id],
           postTitle.value,
           postBody.value,
           props.postConfig,
+          props.nodePath,
         )}
       )
     );
