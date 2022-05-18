@@ -45,7 +45,6 @@
         </label>
       </div>
     </details>
-    {{props.config}}
   </section>
 </template>
 <!-- checkboxes and/or details should probably be turned into components. not high priority, just that there's a lot of code duplication in this template -->
