@@ -3,10 +3,13 @@
     <node :node="postObject" :pathToNode="[]" :isCentral="true"/>
   </section>
   
-  <modalWrapper :activeByTruthiness="replyPath"
+  <modalWrapper :activeByTruthiness="replyPath" 
     @deactivate="() => {replyPath = null}"
   >
-    <createReply :nodePath="replyPath" :postConfig="props.postObject.config"/>
+    <createReply id="createReplyModal"
+      :nodePath="(replyPath as string[])"
+      :postConfig="props.postObject.config"
+    />
   </modalWrapper>
 </template>
 
@@ -24,3 +27,10 @@
   const replyPath = ref<Node["id"][]|null>(null);
   provide("replyPath", replyPath);
 </script>
+
+<style scoped>
+  #createReplyModal {
+    font-size: clamp(1em, 3vw, 1.5em);
+    width: clamp(20em, 70vw, 35em);
+  }
+</style>

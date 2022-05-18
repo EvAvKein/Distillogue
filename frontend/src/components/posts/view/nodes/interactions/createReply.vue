@@ -12,11 +12,11 @@
       :type="'textarea'"
       :required="true"
       :inputId="'postBody'"
+      :minLineHeight="5"
       v-model="postBody"
     />
     <notification :text="notifText" :desirablityStyle="notifDesirability"/>
     <button @click="submitNode"
-      :id="nodePath ? '' : 'replyButtonNotReady'"
       class="globalStyle_textButton"
     >Reply</button>
   </form>
@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
   import {ref} from "vue";
-  import {Node, NodeCreationRequest, NodeInteractionRequest, PostConfig} from "../../../../../../../backend/src/objects";
+  import {Node, NodeCreationRequest, NodeInteractionRequest} from "../../../../../../../backend/src/objects";
   import {jsonFetch} from "../../../../../helpers/jsonFetch";
   import {useUser} from "../../../../../stores/user";
   import labelledInput from "../../../../labelledInput.vue";
@@ -32,7 +32,7 @@
   const user = useUser();
 
   const props = defineProps<{
-    nodePath:Node["id"][]|null;
+    nodePath:Node["id"][];
     postConfig:Node["config"];
   }>();
 
@@ -49,12 +49,6 @@
 
   async function submitNode() {
     notifText.value = "";
-
-    if (!props.nodePath) {
-      notifText.value = "Loading reply functionality, wait a few seconds";
-      notifDesirability.value = undefined;
-      return;
-    };
     
     const response = await jsonFetch("/nodeInteraction",
       new NodeInteractionRequest(
@@ -87,11 +81,14 @@
     margin: auto;
     padding: 0;
     background-color: var(--backgroundSubColor);
-    padding: 1.5em;
+    padding: 0.75em 1.25em 1em;
     border-radius: 2em;
   }
 
-  #replyButtonNotReady {
-    filter: brightness(40%);
+  button {
+    display: block;
+    margin-left: auto;
+    margin-top: 0.25em;
+    font-size: 0.75em;
   }
 </style>

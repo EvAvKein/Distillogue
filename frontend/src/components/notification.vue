@@ -39,6 +39,7 @@
     text-align: center;
     font-size: 1em;
     padding: 0.3em;
+    color: var(--textColor);
     background-color: #797979;
     border-inline: 0.2em solid #505050;
     margin: 0.75em auto 0.75em;
