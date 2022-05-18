@@ -45,6 +45,7 @@
         </label>
       </div>
     </details>
+    {{props.config}}
   </section>
 </template>
 <!-- checkboxes and/or details should probably be turned into components. not high priority, just that there's a lot of code duplication in this template -->
@@ -66,7 +67,9 @@
 
   function editConfigProperty(newValue:true|undefined, property:keyof PostConfig, subproperty?:keysInObjectsOfPostConfig) {
     if (!subproperty) {
-      props.config[property] = newValue;
+      newValue
+        ? props.config[property] = newValue
+        : delete props.config[property];
       return;
     };
     
@@ -74,10 +77,12 @@
       props.config[property as "votes"] = {};
     };
 
-    props.config[property as keysOfObjectsInPostConfig]![subproperty] = newValue;
+    newValue
+      ? props.config[property as keysOfObjectsInPostConfig]![subproperty] = newValue
+      : delete props.config[property as keysOfObjectsInPostConfig]![subproperty];
 
     if (typeof props.config[property] === "object" && Object.keys(props.config[property] as object).length == 0) {
-      props.config[property] = undefined;
+      delete props.config[property];
     };
   };
 
