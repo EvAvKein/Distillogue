@@ -1,58 +1,34 @@
 <template>
   <section id="editConfig">
-    <details open>
-      <summary>Access</summary>
-      <div>
-        <label>
-          Public:
-          <input type="checkbox" id="public"
-            @change="updateConfigByCheckbox"
-          />
-        </label>
-      </div>
-    </details>
-    <details>
-      <summary>Voting</summary>
-      <div>
-        <label>
-          Upvotes:
-          <input type="checkbox" id="votes.up"
-            @change="updateConfigByCheckbox"
-          />
-        </label>
-        <label>
-          Downvotes:
-          <input type="checkbox" id="votes.down"
-            @change="updateConfigByCheckbox"
-          />
-        </label>
-        <label>
-          Anonymous:
-          <input type="checkbox" id="votes.anon"
-            @change="updateConfigByCheckbox"
-          />
-        </label>
-      </div>
-    </details>
-    <details>
-      <summary>Activity</summary>
-      <div>
-        <label>
-          Last Active:
-          <input type="checkbox" id="lastActive"
-            @change="updateConfigByCheckbox"
-          />
-        </label>
-      </div>
-    </details>
+    <category title="Access" :openByDefault="true">
+      <label>
+        Public: <input id="public" type="checkbox" @change="updateConfigByCheckbox">
+      </label>
+    </category>
+    <category title="Voting">
+      <label>
+        Upvotes: <input id="votes.up" type="checkbox" @change="updateConfigByCheckbox"/>
+      </label>
+      <label>
+        Downvotes: <input id="votes.down" type="checkbox" @change="updateConfigByCheckbox"/>
+      </label>
+      <label>
+        Anonymous: <input id="votes.anon" type="checkbox"  @change="updateConfigByCheckbox"/>
+      </label>
+    </category>
+    <category title="Activity">
+      <label>
+        Last Active: <input id="lastActive" type="checkbox" @change="updateConfigByCheckbox"/>
+      </label>
+    </category>
   </section>
 </template>
-<!-- checkboxes and/or details should probably be turned into components. not high priority, just that there's a lot of code duplication in this template -->
 
 <script setup lang="ts">
   import {watch, toRef, onMounted} from "vue";
   import {PostConfig} from "../../../../../../backend/src/objects";
   import {propertiesByType} from "../../../../helpers/propertiesByType";
+  import category from "./configCategory.vue";
 
   const props = defineProps<{
     config:PostConfig;
@@ -138,31 +114,9 @@
     gap: 0.75em;
   }
 
-  details {
-    height: fit-content;
-    width: fit-content;
-    background-color: var(--backgroundSubColor);
-    border-radius: 0.5em;
-  }
-  details[open] {width: 100%}
-
-  summary {
-    font-size: 1.25em;
-    cursor: pointer;
-    padding: 0.25em 0.5em;
-  }
-
-  details > div {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    padding: 0.5em 1em 1em;
-    gap: 0.5em 1.25em;
-  }
-
   @media (min-width: 40rem) {
     section {display: block}
-    details {width: 100%}
-    details + details {margin-top: 0.5em}
+    section > * {width: 100%}
+    section > * + * {margin-top: 0.5em}
   }
 </style>
