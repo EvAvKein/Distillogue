@@ -81,15 +81,17 @@ app.post("/getPostSummaries", async (request, response) => {
   const regexFilter = new RegExp(sanitizeForRegex(request.body.filter), "i");
   const userId = request.body.userId as UserData["id"];
 
-  const fullPosts = await posts.find<Node>({
+  const topNodesOfPosts = await posts.find<Omit<Node, "replies">>({
     $and: [
       {$or: [{title: regexFilter}, {body: regexFilter}]},
       {$or: [{"config.public": true}, {ownerIds: userId}]}
     ]
+  }, {
+    projection: {replies: false}
   }).sort({"stats.lastActiveUnix": -1}).toArray();
 
-  const postSummaries = fullPosts.map((post) => {
-    return new PostSummary(post);
+  const postSummaries = topNodesOfPosts.map((post) => {
+    return new PostSummary({...post, replies: []});
   });
 
   response.json(new FetchResponse(postSummaries));
