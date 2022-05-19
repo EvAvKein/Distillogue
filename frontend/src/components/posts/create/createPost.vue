@@ -76,7 +76,7 @@
 
 <style scoped>
   form {
-    width: clamp(20em, 90%, 50em);
+    width: clamp(20em, 90%, 70em);
     margin: auto;
     padding: 0;
   }
@@ -96,7 +96,7 @@
   @media (min-width: 40rem) {
     form {
       display: grid;
-      grid-template-columns: 3fr 1fr;
+      grid-template-columns: 4fr 1fr;
       grid-template-rows: min-content 1fr;
       gap: 0 0.5em;
       grid-template-areas: 
