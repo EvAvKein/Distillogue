@@ -10,7 +10,7 @@
   <button @click="() => {signingMode = signingMode === 'Up' ? 'In' : 'Up'}"
       class="globalStyle_textButton"
     >
-    Sign {{signingMode === "Up" ? "In" : "Up"}}
+    Switch to sign-{{signingMode === "Up" ? "in" : "up"}}
   </button>
 </template>
 
