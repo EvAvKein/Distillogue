@@ -140,8 +140,8 @@ class PostSummary extends NodeSummary {
   constructor(post:Node) {
     super(post);
     this.public = post.config?.public;
-  }
-}
+  };
+};
 
 class NodeInteractionRequest {
   userId:UserData["id"];
