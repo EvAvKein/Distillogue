@@ -8,6 +8,7 @@ import {updateDeepProperty} from "./helpers/updateDeepProperty.js";
 import {recursivelyModifyNode} from "./helpers/recursivelyModifyNode.js";
 import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
 import {FetchResponse, User, UserData, editableUserData, arrOfEditableUserData, NodeCreationRequest, Node, PostSummary, NodeInteractionRequest, NodeStats, NodeSummary} from "./objects.js";
+import { ModifyResult } from "mongodb";
 
 const app = express();
 app.use(express.static("../frontend/dist"));
@@ -88,7 +89,7 @@ app.post("/getPostSummaries", async (request, response) => {
     ]
   }, {
     projection: {replies: false}
-  }).sort({"stats.lastActiveUnix": -1}).toArray();
+  }).sort({"stats.lastInteracted": -1}).toArray();
 
   const postSummaries = topNodesOfPosts.map((post) => {
     return new PostSummary({...post, replies: []});
@@ -152,15 +153,23 @@ app.post("/nodeInteraction", async (request, response) => {
     };
     case "reply": {
       const newNode = new Node((data.interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest);
-      dbResponse = await posts.updateOne(
+      dbResponse = await posts.findOneAndUpdate(
         {"id": postId},
-        {$push: {[mongoPath.updatePath + "replies"]: newNode}},
-        {arrayFilters: mongoPath.arrayFiltersOption}
+        {[("$push" as "$project")]: {[mongoPath.updatePath + "replies"]: newNode}}, // forced type change because the former is perfectly valid and functional but mongo's type for this parameter fails to recognise it. this problem doesnt happen with the updateOne method, which supposedly uses the exact same parameter type
+        {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"}
       );
       break;
     };
   };
   if (!dbResponse) {response.json(new FetchResponse(null, "Invalid interaction request"))};
+
+  if ((dbResponse as unknown as {value:Node}).value.stats.lastInteracted) {
+    await posts.updateOne( // this would be best implemented as an extra modification of each interaction (to keep the interaction itself and this as a singular atomic update), but using conditionals to check if the property exists before updating requires using mongo's aggregation pipeline syntax which is (seemingly) frustratingly limited in assignment commands and is much more verbose & opaque. for the current stage of the project, i.e very early, there's no need to ruin my/the readability of mongo commands for atomic operations' sake
+      {"id": postId},
+      {$set: {[mongoPath.updatePath + "stats.lastInteracted"]: timestamp.unix()}},
+      {arrayFilters: mongoPath.arrayFiltersOption}
+    );
+  };
 
   response.json(new FetchResponse(true));
 });

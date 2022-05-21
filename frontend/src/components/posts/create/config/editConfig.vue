@@ -18,7 +18,7 @@
     </category>
     <category title="Activity">
       <label>
-        Last Active: <input id="lastActive" type="checkbox" @change="updateConfigByCheckbox"/>
+        Last Interacted: <input id="lastInteracted" type="checkbox" @change="updateConfigByCheckbox"/>
       </label>
     </category>
   </section>

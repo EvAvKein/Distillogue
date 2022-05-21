@@ -12,11 +12,11 @@
           src="../../../assets/locked.svg"
         />
       </div>
-      <div v-if="summary.stats.lastActiveUnix"
+      <div v-if="summary.stats.lastInteracted"
         class="timestampSection"
       > Active: <timestamp 
           class="timestamp"
-          :pastUnix="summary.stats.lastActiveUnix"
+          :pastUnix="summary.stats.lastInteracted"
         />
       </div>
     </router-link>
