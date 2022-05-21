@@ -35,7 +35,7 @@ My motives for working on this project are:
 ## Dependencies
 
 * Node.js
-* MongoDB
+* MongoDB [(Instructions for enabling "start" command on Windows 10)](https://stackoverflow.com/a/41507803)
 * Vite ("`npm install -g vite@latest`")
 * Windows (at least for the `start mongo` command of the backend's `npm run serve` command)
 
