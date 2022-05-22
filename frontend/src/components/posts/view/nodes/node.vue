@@ -52,7 +52,7 @@
   article#central {font-size: 1.1em}
   article * + * {margin-top: 1.5em}
 
-  h3, h4 {
+  h2, h3 {
     margin: 0;
   }
 
