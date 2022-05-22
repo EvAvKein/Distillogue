@@ -56,10 +56,20 @@
     text-align: center;
     cursor: pointer;
   }
+  button:hover, button:focus {
+    color: var(--highlightSubColor);
+    outline: none;
+  }
+  button:active {color: var(--highlightColor)}
   
   button img {
     display: block;
     height: 2.5em;
     margin: auto;
   }
+  button:hover img, button:focus img {
+    filter: var(--filterToHighlightSubColor);
+    outline: none;
+  }
+  button:active img {filter: var(--filterToHighlightColor)}
 </style>

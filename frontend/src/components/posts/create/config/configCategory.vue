@@ -28,6 +28,10 @@
     cursor: pointer;
     padding: 0.25em 0.5em;
   }
+  summary:hover, summary:focus {
+    color: var(--highlightColor);
+    outline: none;
+  }
 
   details > div {
     display: flex;
@@ -36,5 +40,4 @@
     padding: 0.5em 1em 1em;
     gap: 0.5em 1.25em;
   }
-  
 </style>

@@ -114,6 +114,8 @@
     gap: 0.75em;
   }
 
+  label {width: max-content}
+
   @media (min-width: 40rem) {
     section {display: block}
     section > * {width: 100%}
