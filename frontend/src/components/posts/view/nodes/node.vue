@@ -8,12 +8,15 @@
       </component>
       <p>{{node.body || typeof node.body}}</p>
       <section id="interactions">
-        <votes v-if="node.stats?.votes"
-          :interactionPath="nodePath"
-          :voters="node.stats.votes"
-          @interactionError="(errorText:string) => {nodeError = errorText}"
-        />
-        <reply id="replyButton" :interactionPath="nodePath" :locked="undefined"/>
+        <span v-if="node.stats.lastInteracted">Latest Interaction: <timestamp :pastUnix="node.stats.lastInteracted"/></span>
+        <div>
+          <votes v-if="node.stats.votes"
+            :interactionPath="nodePath"
+            :voters="node.stats.votes"
+            @interactionError="(errorText:string) => {nodeError = errorText}"
+          />
+          <reply id="replyButton" :interactionPath="nodePath" :locked="undefined"/>
+        </div>
       </section>
       <notification :text="nodeError" :desirablity-style="false"/>
     </article>
@@ -27,6 +30,7 @@
 <script setup lang="ts">
   import {ref} from "vue";
   import {Node as NodeClass} from "../../../../../../backend/src/objects"; // importing without renaming it causes the vite to mix up this class (Node) with this component (node.vue, referenced in the template for recursion) and thus throw an error on runtime when trying to load a node with replies
+  import timestamp from "../../../timestamp.vue";
   import votes from "./interactions/vote.vue";
   import reply from "./interactions/replyButton.vue";
   import notification from "../../../notification.vue";
@@ -50,7 +54,7 @@
     max-width: 45em;
   }
   article#central {font-size: 1.1em}
-  article * + * {margin-top: 1.5em}
+  article > * + * {margin-top: 1.5em}
 
   h2, h3 {
     margin: 0;
@@ -60,7 +64,14 @@
     white-space: pre-line;
   }
 
-  #interactions {
+  #interactions > span {
+    display: block;
+    font-size: .9em;
+    width: max-content;
+    margin-left: auto;
+  }
+
+  #interactions > div {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -69,6 +80,6 @@
   }
 
   #replyButton {
-    margin: auto 0 0.25em auto;
+    margin-top: 0.25em;
   }
 </style>
