@@ -1,12 +1,12 @@
 # Distillogue
 
-A tool (and might be a forum) for conducting multi-faceted dialogue in a distilled format; currently in very early development.
+A tool for conducting dialogue in the distilled format of your choice; currently in very early development.
 
 ---
 
 ## Table of Contents
-* [Background](#background)
-* [Dependencies](#dependencies)
+* [Motives](#motives)
+* [Tech Stack & Dependencies](#tech-stack--dependencies)
 * [Execution](#execution)
 * [Contributing](#contributing)
 * [Maintainers](#maintainers)
@@ -14,25 +14,32 @@ A tool (and might be a forum) for conducting multi-faceted dialogue in a distill
 
 ---
 
-## Background
+## Motives
 
-My motives for working on this project are:
+### My motives with this project ARE:
 
-* Developing and refining this brainchild into a highly customizable tool (with common-use presets); built to enable, guide, and nurture productive conversations.
+* Developing and refining this brainchild into a highly customizable tool (with general-purpose & custom presets); built to enable, guide, and nurture productive conversations
 
-* Familiarizing myself with my tech stack of choice and being able to display that familiarity when applying for my first junior job.  
+* Familiarizing myself with my tech stack of choice and being able to display that familiarity (e.g when applying for my first dev job)
 
-  Current stack:  
-    * Vue.js + TypeScript
-    * Node.js + TypeScript + Express.js  
-    * MongoDB  
+### My motives with this project ARE NOT:
 
-  Planned changes (ranked by priority & certainty):
-    1. MongoDB -> PostgreSQL (TBD whether mostly or entirely)
-    2. Dockerizing
+* Creating a new social media platform   
+...There's more than enough of those already, managing their social aspects and PR is a headache, etc. *If* this project takes off, I'd want it to be an invite-based social tool (e.g Zoom, Trello), or at most be social-media-adjacent (e.g Curious Cat, Linktree, etc). I want it to be topic-centric rather than user-centric
+
+* Advertising an idea to be bought or to attract investors  
+I want to make this thing to express my skills/ideals, and it would be neat if it ends up being useful to other people too. Work on this is finite, and I want to see it through without a bottomless profit motive spoiling it like it did many other things
+
 ---
 
-## Dependencies
+## Tech Stack & Dependencies
+
+### Stack
+  * Frontend: Vue.js + TypeScript
+  * Server: Node.js + Express.js + TypeScript
+  * Database: MongoDB
+
+### Dependencies
 
 * Node.js
 * MongoDB [(Instructions for enabling "start" command on Windows 10)](https://stackoverflow.com/a/41507803)
@@ -46,7 +53,7 @@ My motives for working on this project are:
 ### Prerequisites
 
 1. Install the dependencies mentioned above
-2. Clone project to your computer
+2. Clone the project to your computer via download/Git
 3. Run `npm install` on both "backend" and "frontend" folders
 
 ### Build
