@@ -52,13 +52,14 @@
     padding: 1em;
     border-radius: 1em;
     max-width: 45em;
+    margin: 1em auto 0;
   }
   article#central {font-size: 1.1em}
-  article > * + * {margin-top: 1.5em}
+  article > * + * {margin-top: 1.25em}
 
-  h2, h3 {
-    margin: 0;
-  }
+  h2, h3 {margin: 0}
+  h2 {font-size: 1.6em}
+  h3 {font-size: 1.5em}
 
   p {
     white-space: pre-line;
