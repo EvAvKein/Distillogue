@@ -25,7 +25,7 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 ### My motives with this project ARE NOT:
 
 * Creating a new social media platform   
-...There's more than enough of those already, managing their social aspects and PR is a headache, etc. *If* this project takes off, I'd want it to be an invite-based social tool (e.g Zoom, Trello), or at most be social-media-adjacent (e.g Curious Cat, Linktree, etc). I want it to be topic-centric rather than user-centric
+...There's more than enough of those already, managing their social aspects and PR is a headache, etc. *If* this project takes off, I'd want it to be an invite-based social tool (e.g Zoom, Trello, etc), or at most be social-media-adjacent (e.g Curious Cat, Linktree, etc). I want it to be topic-centric rather than user-centric
 
 * Advertising an idea to be bought or to attract investors  
 I want to make this thing to express my skills/ideals, and it would be neat if it ends up being useful to other people too. Work on this is finite, and I want to see it through without a bottomless profit motive spoiling it like it did many other things
