@@ -8,7 +8,6 @@ import {updateDeepProperty} from "./helpers/updateDeepProperty.js";
 import {recursivelyModifyNode} from "./helpers/recursivelyModifyNode.js";
 import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
 import {FetchResponse, User, UserData, editableUserData, arrOfEditableUserData, NodeCreationRequest, Node, PostSummary, NodeInteractionRequest, NodeStats, NodeSummary} from "./objects.js";
-import { ModifyResult } from "mongodb";
 
 const app = express();
 app.use(express.static("../frontend/dist"));
