@@ -2,7 +2,6 @@
 
 ### Tasks:
 * Various core & flagship features (specifics TBA)
-* Migrate from MongoDb to PostgreSQL
 * Fully migrate from TSC to Vite
 * Dockerize
 * Prettier
