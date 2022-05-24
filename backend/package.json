@@ -4,8 +4,9 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "build": "tsc && cd ../Frontend && vite build",
-    "serve": "npm run build && start mongo && node dist/server.js"
+    "build": "tsc && cd ../frontend && vite build",
+    "serve": "npm run build && start mongo && start node dist/server.js",
+    "test": "npm run serve && cd ../frontend && npm run cypress"
   },
   "author": "Eve Aviv Keinan",
   "license": "MIT",

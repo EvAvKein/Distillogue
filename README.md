@@ -38,6 +38,7 @@ I want to make this thing to express my skills/ideals, and it would be neat if i
   * Frontend: Vue.js + TypeScript
   * Server: Node.js + Express.js + TypeScript
   * Database: MongoDB
+  * Testing: Cypress
 
 ### Dependencies
 
@@ -66,6 +67,12 @@ I want to make this thing to express my skills/ideals, and it would be neat if i
 1. `cd backend` (from project's root folder) 
 2. `npm run serve`
 3. visit `localhost:3030` in browser
+
+### Test
+(Serve, then launch Cypress for tests)
+1. `cd backend` (from project's root folder) 
+2. `npm run test`
+3. visit the new Cypress tab
 
 ---
 
