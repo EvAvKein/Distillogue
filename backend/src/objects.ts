@@ -1,5 +1,5 @@
 import {lookupInOptional} from "./helpers/lookupInOptional.js";
-import {newId} from "./helpers/generateIDs.js";
+import {v4 as newId} from "uuid";
 import {unix as unixStamp} from "./helpers/timestamps.js"
 
 class FetchResponse {
@@ -21,7 +21,7 @@ class UserData {
   settings?:object;
 
   constructor(name:UserData["name"]) {
-    this.id = newId("user");
+    this.id = newId();
     this.name = name;
     this.about = "Hello, I haven't wrote my About yet!";
     delete this.settings;
@@ -109,7 +109,7 @@ class Node extends NodeCreationRequest {
   
   constructor(request:NodeCreationRequest) {
     super(request.ownerIds, request.title, request.body, request.config);
-    this.id = newId("node");
+    this.id = newId();
     this.replies = [];
     this.stats = new NodeStats(request.config);
     request.config ? this.config = request.config : delete this.config;
