@@ -1,7 +1,7 @@
 <template>
   <layout/>
-  <router-view/>
   <noscriptWarn/>
+  <router-view/>
 </template>
 
 <script setup lang="ts">
