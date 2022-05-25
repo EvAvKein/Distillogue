@@ -7,13 +7,7 @@ describe("Profile editing", () => {
 
   it("Sign up & enter Dashboard", () => {
     cy.visit("/");
-
-    cy.contains("Join").click();
-    cy.url().should("include", "/join");
-
-    cy.contains("Sign Up");
-    cy.contains("Username").type(username);
-    cy.contains("Continue").click();
+    cy.signOn(username);
 
     cy.contains("Dashboard").click();
     cy.url().should("include", "/dashboard");
@@ -51,11 +45,7 @@ describe("Profile editing", () => {
   });
 
   it("Relog and verify changes", () => {
-    cy.contains("Logout").click();
-    cy.contains("Sign Up");
-    cy.contains("Switch to sign-in").click();
-    cy.contains("Username").type(newUsername);
-    cy.contains("Continue").click();
+    cy.signOn(newUsername);
 
     cy.contains("Dashboard").click();
 
