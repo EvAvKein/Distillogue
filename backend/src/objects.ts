@@ -28,8 +28,8 @@ class UserData {
   };
 };
 
-type editableUserData = "name"|"about"|"settings";
-const arrOfEditableUserData = ["name", "about", "settings"] as editableUserData[];
+const arrOfEditableUserData = ["name", "about", "settings"] as const;
+type editableUserData = typeof arrOfEditableUserData[number];
 
 class User {
   data:UserData;
