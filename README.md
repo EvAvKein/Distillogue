@@ -43,9 +43,9 @@ I want to make this thing to express my skills/ideals, and it would be neat if i
 ### Dependencies
 
 * Node.js
-* MongoDB [(Instructions for enabling "start" command on Windows 10)](https://stackoverflow.com/a/41507803)
+* MongoDB [(Instructions for enabling "start" command with Mongo on Windows 10)](https://stackoverflow.com/a/41507803)
 * Vite ("`npm install -g vite@latest`")
-* Windows (at least for the `start mongo` command of the backend's `npm run serve` command)
+* Windows (at least for the `start` commands used in backend's `npm run serve`)
 
 ---
 
