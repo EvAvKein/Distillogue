@@ -36,13 +36,17 @@ app.post("/signUp", async (request, response) => {
 });
 
 app.post("/signIn", async (request, response) => {
-  const signInInfo = request.body as {username:UserData["name"]};
+  type usernameSignIn = {username:UserData["name"], autoSignInKey:never};
+  type autoSignIn = {autoSignInKey:UserData["autoSignInKey"], username:never};
+  const signInInfo = request.body as usernameSignIn|autoSignIn;
+  console.log(signInInfo)
 
-  const user = await users.findOne({"data.name": signInInfo.username})
+  const user = await users.findOne(signInInfo.autoSignInKey ? {"data.autoSignInKey": signInInfo.autoSignInKey}: {"data.name": signInInfo.username})
     .catch(() => {response.json(new FetchResponse(null, "Can't fetch user, database is unresponsive"))});
+  console.log(user)
 
   if (!user) {
-    response.json(new FetchResponse(null, "User doesn't exists!"));
+    response.json(new FetchResponse(null, "Invalid sign-in data"));
     return;
   };
 

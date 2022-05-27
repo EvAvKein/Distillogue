@@ -1,5 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 import {useUser} from "./stores/user";
+import {jsonFetch} from "./helpers/jsonFetch";
+import {UserData} from "../../backend/src/objects";
 
 import home from "./pages/Home.vue";
 import browse from "./pages/Browse.vue";
@@ -64,14 +66,21 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+  const user = useUser();
+  const autoSignInKey = localStorage.getItem("autoSignInKey");
+  if (autoSignInKey && !user.data.id) {
+    await jsonFetch("/signIn", {autoSignInKey: autoSignInKey}).then((response) => {
+      if (!response.error) {user.data = response.data as UserData};
+    });
+  };
+
   const accountRequired = to.matched.some(record => record.meta.accountRequired);
   if (!accountRequired) {
     next();
     return;
   };
 
-  const user = useUser();
   if (!user.data.id) {
     next({path: "/join"});
     return;
