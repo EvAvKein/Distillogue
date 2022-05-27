@@ -5,7 +5,7 @@
     <notification :text="signingMessage" :desirablityStyle="signingStatus"/>
     <button @click="signingByInput"
       class="globalStyle_textButton"
-    >Continue<br>(testUser if empty)</button>
+    >Continue</button>
   </form>
   <button @click="() => {signingMode = signingMode === 'Up' ? 'In' : 'Up'}"
       class="globalStyle_textButton"
@@ -36,7 +36,7 @@
     signingStatus.value = undefined;
     
     const response = await jsonFetch("/sign" + signingMode.value, {
-      username: username.value || "testUser"
+      username: username.value
     });
 
     if (response.error) {
