@@ -1,10 +1,10 @@
 <template>
   <section>
-    <button @click="emitConfigChange('blank')">
+    <button @click="emitConfigChange('blank')" type="button">
       <img src="../../../../assets/work-in-progress.svg">
       Wipe Config
     </button>
-    <button @click="emitConfigChange('testEverything')">
+    <button @click="emitConfigChange('testEverything')" type="button">
       <img src="../../../../assets/work-in-progress.svg">
       Test Everything
     </button>
