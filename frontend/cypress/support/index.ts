@@ -16,5 +16,13 @@
 // Import commands.js using ES2015 syntax:
 import './commands';
 
+beforeEach(() => {
+  cy.restoreLocalStorage();
+});
+
+afterEach(() => {
+  cy.saveLocalStorage();
+});
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

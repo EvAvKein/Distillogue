@@ -44,10 +44,8 @@ describe("Profile editing", () => {
     cy.get("@aboutEditor").find(".notification.positive");
   });
 
-  it("Relog and verify changes", () => {
-    cy.signOn(newUsername);
-
-    cy.contains("Dashboard").click();
+  it("Refresh to verify changes", () => {
+    cy.reload();
 
     cy.contains("Name").closest("section").find("input").should("have.value", newUsername);
     cy.contains("About").closest("section").find("textarea").should("have.value", newAbout);
