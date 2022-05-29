@@ -24,6 +24,7 @@
     <section id="confirmation">
       <notification :text="notifText" :desirablityStyle="notifDesirability"/>
       <button id="submitButton"
+        type="button"
         class="globalStyle_textButton"
         @click="submitPost"
       >Post</button>
