@@ -24,11 +24,12 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-import {randomAlphanumString} from "../helpers/randomAlphanumString"
+import {randomAlphanumString} from "../helpers/randomAlphanumString";
 
 let LOCAL_STORAGE_MEMORY = {};
 
 Cypress.Commands.addAll({
+  randomAlphanumString,
   signOn(name:string, randomSuffix?:true) {
     const username = name + (randomSuffix ? "_" + randomAlphanumString() : "");
 
@@ -44,6 +45,16 @@ Cypress.Commands.addAll({
         cy.contains("Continue").click();
       };
     });
+  },
+  submitPost(title:string, body:string, callbackAffectingConfig?:() => void) {
+    cy.visit("/post/create");
+
+    cy.get("form").contains("Title").type(title);
+    cy.get("form").contains("Body").type(body);
+
+    callbackAffectingConfig();
+    
+    cy.get("form button").contains("Post").click();
   },
   saveLocalStorage() {
     Object.keys(localStorage).forEach(key => {
