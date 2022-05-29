@@ -1,11 +1,11 @@
 <template>
-  <ul id="summariesList">
+  <ol id="summariesList">
     <li v-for="(summaryObject, i) in summariesArray" :key="summaryObject.id + i">
       <postSummary :key="summaryObject.id + i"
         :summary="summaryObject"
       />
     </li>
-  </ul>
+  </ol>
 </template>
 
 <script setup lang="ts">
