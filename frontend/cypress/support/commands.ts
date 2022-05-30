@@ -39,6 +39,7 @@ Cypress.Commands.addAll({
     cy.get("input").type(username);
     cy.contains("Continue").click();
 
+    cy.wait(500); // without this, when first running the test cypress sometimes doesn't wait long enough for the server to respond, causing the conditional below to be evaluated too early and miss its condition
     cy.get("body").then(($body) => {
       if ($body.get()[0].querySelector("form .notification.negative")) {
         cy.contains("Switch to sign-in").click();
