@@ -144,10 +144,22 @@ app.post("/nodeInteraction", async (request, response) => {
       const subjectDirection = voteData.voteDirection;
       const oppositeDirection = voteData.voteDirection === "up" ? "down" : "up";
 
+      const mongoUpdate = voteData.newVoteStatus
+        ? {
+            "$addToSet": {[mongoPath.updatePath + "stats.votes." + subjectDirection]: data.userId},
+            "$pull": {[mongoPath.updatePath + "stats.votes." + oppositeDirection]: data.userId}
+          }
+        : {
+            "$pull": {
+              [mongoPath.updatePath + "stats.votes." + subjectDirection]: data.userId,
+              [mongoPath.updatePath + "stats.votes." + oppositeDirection]: data.userId
+            }
+          }
+      ;
+
       dbResponse = await posts.findOneAndUpdate(
         {"id": postId},
-        {[voteData.newVoteStatus ? "$addToSet" : "$pull"]: {[mongoPath.updatePath + "stats.votes." + subjectDirection]: data.userId},
-         [voteData.newVoteStatus ? "$pull" : "$addToSet"]: {[mongoPath.updatePath + "stats.votes." + oppositeDirection]: data.userId}},
+        mongoUpdate,
         {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"}
       );
       break;
