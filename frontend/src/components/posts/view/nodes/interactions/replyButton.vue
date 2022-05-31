@@ -1,10 +1,11 @@
 <template>
   <button @click="reply"
+    :aria-label="locked ? 'Replies locked' : 'Reply'"
     class="globalStyle_imageButton"
   >
     <img v-if="locked" src="../../../../../assets/locked.svg">
       <!-- would've used a ternary src attribute if vite compiled it appropriately -->
-    <img v-else src="../../../../../assets/reply.svg"/> 
+    <img v-else aria-label="Reply" src="../../../../../assets/reply.svg"/> 
   </button>
 </template>
 

@@ -1,6 +1,7 @@
 <template>
   <section>
     <button v-if="voters?.up"
+      aria-label="Upvote"
       :class="'globalStyle_imageButton' + (currentVote === 'up' ? ' voted' : '')"
       @click="vote('up', !upvoters?.includes(user.data.id))"
     >
@@ -8,6 +9,7 @@
     </button>
 
     <span
+      aria-label="Votes status"
       :title="title"
       :class="title.length > 0 ? 'hasDetails' : ''"
     >
@@ -15,6 +17,7 @@
     </span>
 
     <button v-if="voters?.down"
+      aria-label="Downvote"
       :class="'globalStyle_imageButton' + (currentVote === 'down' ? ' voted' : '')"
       @click="vote('down', !downvoters?.includes(user.data.id))"
     >
