@@ -156,15 +156,15 @@ app.post("/nodeInteraction", async (request, response) => {
       const newNode = new Node((data.interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest);
       dbResponse = await posts.findOneAndUpdate(
         {"id": postId},
-        {[("$push" as "$project")]: {[mongoPath.updatePath + "replies"]: newNode}}, // forced type change because the former is perfectly valid and functional but mongo's type for this parameter fails to recognise it. this problem doesnt happen with the updateOne method, which supposedly uses the exact same parameter type
+        {"$push": {[mongoPath.updatePath + "replies"]: newNode}},
         {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"}
       );
       break;
     };
   };
-  if (!dbResponse) {response.json(new FetchResponse(null, "Invalid interaction request"))};
+  if (!dbResponse.value) {response.json(new FetchResponse(null, "Invalid interaction request"))};
 
-  if ((dbResponse as unknown as {value:Node}).value.stats.lastInteracted) {
+  if (dbResponse.value?.stats.lastInteracted) {
     await posts.updateOne( // this would be best implemented as an extra modification of each interaction (to keep the interaction itself and this as a singular atomic update), but using conditionals to check if the property exists before updating requires using mongo's aggregation pipeline syntax which is (seemingly) frustratingly limited in assignment commands and is much more verbose & opaque. for the current stage of the project, i.e very early, there's no need to ruin my/the readability of mongo commands for atomic operations' sake
       {"id": postId},
       {$set: {[mongoPath.updatePath + "stats.lastInteracted"]: timestamp.unix()}},
