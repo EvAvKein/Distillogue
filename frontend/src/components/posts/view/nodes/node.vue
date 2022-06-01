@@ -54,7 +54,11 @@
     max-width: 45em;
     margin: 1em auto 0;
   }
-  article#central {font-size: 1.1em}
+  article#central {
+    font-size: 1.1em;
+    margin-top: 0;
+  }
+  
   article > * + * {margin-top: 1.25em}
 
   h2, h3 {margin: 0}

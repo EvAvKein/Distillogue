@@ -29,6 +29,8 @@
 </script>
 
 <style scoped>
+  #nodesContainer {padding: 1em}
+
   #createReplyModal {
     font-size: clamp(1em, 3vw, 1.5em);
     width: clamp(20em, 70vw, 35em);
