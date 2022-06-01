@@ -82,5 +82,6 @@
 
   #replyButton {
     margin-top: 0.25em;
+    margin-left: auto;
   }
 </style>
