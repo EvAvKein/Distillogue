@@ -10,7 +10,7 @@
 
 <style scoped>
   main {
-    height: calc(75vh - 4rem);
+    height: calc(85vh - 4rem);
     display: flex;
     flex-direction: column;
     justify-content: center;

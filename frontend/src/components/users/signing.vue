@@ -1,17 +1,23 @@
 <template>
   <form @submit.prevent>
     <h3>Sign {{signingMode}}</h3>
-    <inputField :label="'Username'" :type="'text'" v-model="username" class="input" :inputId="'loginUsernameField'"/>
-    <notification :text="signingMessage" :desirablityStyle="signingStatus"/>
+    <inputField
+      :label="'Username'" :type="'text'" 
+      id="usernameInput" :inputId="'loginUsernameField'"
+      v-model="username"
+    />
+    <notification
+      :text="signingMessage"
+      :desirablityStyle="signingStatus"
+    />
     <button @click="signingByInput"
       class="globalStyle_textButton"
     >Continue</button>
   </form>
-  <button @click="() => {signingMode = signingMode === 'Up' ? 'In' : 'Up'}"
-      class="globalStyle_textButton"
-    >
-    Switch to sign-{{signingMode === "Up" ? "in" : "up"}}
-  </button>
+  <button id="signingSwitch"
+    class="globalStyle_textButton"
+    @click="() => {signingMode = signingMode === 'Up' ? 'In' : 'Up'}"
+  >Switch to sign-{{signingMode === "Up" ? "in" : "up"}}</button>
 </template>
 
 <script setup lang="ts">
@@ -62,17 +68,18 @@
     font-size: 2em;
     margin: 0;
   }
-  form * + * {
-    margin-top: 0.3em;
+  form #usernameInput {
+    margin-top: 0.2em;
   }
   form button {
-    font-size: 1.25rem;
-    margin-block: 0.5em;
+    font-size: 1.3rem;
+    margin: 0.5em 0 0;
     padding: 0.25em 0.75em;
   }
 
   form + button {
+    filter: brightness(0.75);
     display: block;
-    margin: 1em auto;
+    margin: 1.75em auto 0;
   }
 </style>
