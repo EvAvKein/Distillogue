@@ -9,6 +9,7 @@
     <notification
       :text="signingMessage"
       :desirablityStyle="signingStatus"
+      @expiration="() => {signingMessage = ''}"
     />
     <button @click="signingByInput"
       class="globalStyle_textButton"

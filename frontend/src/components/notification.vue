@@ -14,6 +14,8 @@
     customDuration?:number|null,
   }>();
 
+  const emit = defineEmits(["expiration"]); // optional, to prompt the containing component to reset the text passed to here; had a bug with a component (signing.vue) in which resetting the value didn't work properly for a bewildering apparent lack of reason, so had to resort to this 
+
   const notifText = ref<string>(props.text || "");
 
   watch(() => props.text, (newText) => {
@@ -21,7 +23,10 @@
 
     if (props.customDuration !== null && notifText.value !== "") {
       debounce(
-        () => {notifText.value = ""},
+        () => {
+          notifText.value = "";
+          emit("expiration");
+        },
         props.customDuration || 3000 + (notifText.value.length * 150)
       )};
   });
