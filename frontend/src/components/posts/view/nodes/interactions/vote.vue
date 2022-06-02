@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section aria-label="Vote interactions">
     <button v-if="voters?.up"
       aria-label="Upvote"
       :class="'globalStyle_imageButton' + (currentVote === 'up' ? ' voted' : '')"
