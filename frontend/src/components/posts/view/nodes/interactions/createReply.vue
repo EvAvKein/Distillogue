@@ -16,8 +16,10 @@
       v-model="postBody"
     />
     <notification :text="notifText" :desirablityStyle="notifDesirability"/>
-    <button @click="submitNode"
+    <button 
+      type="button"
       class="globalStyle_textButton"
+      @click="submitNode"
     >Reply</button>
   </form>
 </template>
