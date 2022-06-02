@@ -35,7 +35,7 @@
   const modalTruthiness = toRef(props, "activeByTruthiness");
 
   watch(modalTruthiness, (newTruthiness) => {
-    document.querySelector("html")!.style.overflow = newTruthiness ? "hidden" : "auto";
+    document.querySelector("body")!.style.overflow = newTruthiness ? "hidden" : "auto";
   });
 </script>
 
