@@ -51,7 +51,7 @@ Cypress.Commands.addAll({
     cy.visit("/post/create");
 
     cy.get("form").contains("Title").type(title);
-    cy.get("form").contains("Body").type(body);
+    cy.get("form").contains("Body").type(body, {delay: 5});
 
     callbackAffectingConfig();
     
