@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="nodeBranch">
     <article :id="isCentral ? 'central' : ''">
       <component v-if="node.title"
         :is="'h' + (isCentral ? 2 : 3)"
