@@ -8,7 +8,7 @@
       </component>
       <p>{{node.body || typeof node.body}}</p>
       <section id="interactions">
-        <span v-if="node.stats.lastInteracted">Latest Interaction: <timestamp :pastUnix="node.stats.lastInteracted"/></span>
+        <span v-if="node.stats.latestInteraction">Latest Interaction: <timestamp :pastUnix="node.stats.latestInteraction"/></span>
         <div>
           <votes v-if="node.stats.votes"
             :interactionPath="nodePath"

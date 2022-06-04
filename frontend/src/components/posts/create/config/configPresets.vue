@@ -18,7 +18,7 @@
   const configs = {
     blank: {},
     testEverything: {
-      lastInteracted: true,
+      latestInteraction: true,
       votes: {
         up: true,
         down: true,

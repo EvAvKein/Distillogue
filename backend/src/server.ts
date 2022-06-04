@@ -90,7 +90,7 @@ app.post("/getPostSummaries", async (request, response) => {
     ]
   }, {
     projection: {replies: false}
-  }).sort({"stats.lastInteracted": -1}).toArray();
+  }).sort({"stats.latestInteraction": -1}).toArray();
 
   const postSummaries = topNodesOfPosts.map((post) => {
     return new PostSummary({...post, replies: []});
@@ -176,10 +176,10 @@ app.post("/nodeInteraction", async (request, response) => {
   };
   if (!dbResponse.value) {response.json(new FetchResponse(null, "Invalid interaction request"))};
 
-  if (dbResponse.value?.stats.lastInteracted) {
+  if (dbResponse.value?.stats.latestInteraction) {
     await posts.updateOne( // this would be best implemented as an extra modification of each interaction (to keep the interaction itself and this as a singular atomic update), but using conditionals to check if the property exists before updating requires using mongo's aggregation pipeline syntax which is (seemingly) frustratingly limited in assignment commands and is much more verbose & opaque. for the current stage of the project, i.e very early, there's no need to ruin my/the readability of mongo commands for atomic operations' sake
       {"id": postId},
-      {$set: {[mongoPath.updatePath + "stats.lastInteracted"]: timestamp.unix()}},
+      {$set: {[mongoPath.updatePath + "stats.latestInteraction"]: timestamp.unix()}},
       {arrayFilters: mongoPath.arrayFiltersOption}
     );
   };

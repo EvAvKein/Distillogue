@@ -61,7 +61,7 @@ class Log {
 
 class PostConfig {
   public?:true;
-  lastInteracted?:true;
+  latestInteraction?:true;
   votes?:{
     up?:true,
     down?:true,
@@ -70,7 +70,7 @@ class PostConfig {
 };
 
 class NodeStats {
-  lastInteracted?:number;
+  latestInteraction?:number;
   votes?:{
     up?:UserData["id"][],
     down?:UserData["id"][],
@@ -78,7 +78,7 @@ class NodeStats {
   };;
 
   constructor(config?:PostConfig) {
-    config?.lastInteracted ? this.lastInteracted = unixStamp() : delete this.lastInteracted;
+    config?.latestInteraction ? this.latestInteraction = unixStamp() : delete this.latestInteraction;
     config?.votes ? this.votes = {
       up: config.votes.up ? [] as UserData["id"][] : undefined,
       down: config.votes.down ? [] as UserData["id"][] : undefined
