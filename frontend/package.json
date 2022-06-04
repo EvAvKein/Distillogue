@@ -4,7 +4,7 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "cypress": ".\\node_modules\\.bin\\cypress open"
+    "cypress": ".\\node_modules\\.bin\\cypress open --browser --e2e"
   },
   "author": "Eve Aviv Keinan",
   "license": "MIT",
