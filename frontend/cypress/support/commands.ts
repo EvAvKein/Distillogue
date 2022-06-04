@@ -57,6 +57,16 @@ Cypress.Commands.addAll({
     
     cy.get("form button").contains("Post").click();
   },
+  submitReply(nodeSelector:string, title:string, body:string) {
+    cy.get(nodeSelector).find('#interactions button[aria-label="Reply"]').click();
+
+    cy.get("#backdrop form").as("replyForm");
+    cy.get("@replyForm").contains("Title").type(title);
+    cy.get("@replyForm").contains("Body").type(body, {delay: 5});
+    cy.get("@replyForm").contains("Reply").click();
+
+    cy.wait(500); // otherwise the following instruction usually executes before the reply's page refresh
+  },
   saveLocalStorage() {
     Object.keys(localStorage).forEach(key => {
       LOCAL_STORAGE_MEMORY[key] = localStorage[key];

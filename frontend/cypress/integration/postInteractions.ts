@@ -22,6 +22,17 @@ describe("Post Interaction", () => {
     cy.url().should("include", "/browse");
   });
 
+  function validateNodeContents(nodeSelector:string, title:string, body:string) {
+    cy.get(nodeSelector).should("contain", title)
+      .should("contain", body)
+      .find("#interactions")
+      .as("nodeInteractions");
+
+    cy.get("@nodeInteractions").contains("Latest Interaction: Now");
+    cy.get("@nodeInteractions").find('[aria-label="Vote interactions"]');
+    cy.get("@nodeInteractions").find('button[aria-label="Reply"]');
+  };
+
   it("Switch to interaction account & open post", () => {
     cy.get("header").contains("Logout").click();
 
@@ -31,14 +42,7 @@ describe("Post Interaction", () => {
 
     cy.get("article").first().click();
 
-    cy.get("article#central").should("contain", postTitle)
-      .should("contain", postBody)
-      .find("#interactions")
-      .as("centralNodeInteractions");
-
-    cy.get("@centralNodeInteractions").contains("Latest Interaction: Now");
-    cy.get("@centralNodeInteractions").find('[aria-label="Vote interactions"]');
-    cy.get("@centralNodeInteractions").find('button[aria-label="Reply"]');
+    validateNodeContents("article#central", postTitle, postBody);
   });
 
   it("Test votes", () => {
@@ -70,29 +74,11 @@ describe("Post Interaction", () => {
   it("Test reply", () => {
     const replyTitle = "Title of Main Reply";
     const replyBody = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, faucibus turpis in eu menenatis tellus in metus vulputate eu. Purus sit amet volutpat consequat mauris nunc congue nisi. Facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum.\n\nEgestas purus viverra accumsan in nisl. Tortor pretium viverra suspendisse potenti nullam ac tortor vitae purus. Velit laoreet id donec ultrices tincidunt arcu non sodales. Arcu dictum varius duis at consectetur lorem donec massa sapien. In dictum non consectetur a erat nam at. Ut eu sem integer vitae justo eget magna.";
-
-    cy.get("#replyButton").click();
-
-    cy.get("body").should("have.css", "overflow", "hidden");
-    cy.get("body").get("#backdrop").should("have.css", "backdrop-filter");
     
-    cy.get("#backdrop form").as("replyForm");
-    cy.get("@replyForm").contains("Title").type(replyTitle);
-    cy.get("@replyForm").contains("Body").type(replyBody, {delay: 5});
-    cy.get("@replyForm").contains("Reply").click();
-
-    cy.wait(500); // otherwise the cy.get below executes before the reply's page refresh
+    cy.submitReply("#central", replyTitle, replyBody);
 
     cy.get("article#central").parent().find("section article").as("replyToCentral");
 
-    cy.get("@replyToCentral")
-      .should("contain", replyTitle)
-      .should("contain", replyBody)
-      .find("#interactions")
-      .as("replyInteractions");
-
-    cy.get("@replyInteractions").contains("Latest Interaction: Now");
-    cy.get("@replyInteractions").find('[aria-label="Vote interactions"]');
-    cy.get("@replyInteractions").find('button[aria-label="Reply"]');
+    validateNodeContents("@replyToCentral", replyTitle, replyBody);
   });
 });
