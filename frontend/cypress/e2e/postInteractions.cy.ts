@@ -83,4 +83,9 @@ describe("Post Interaction", () => {
 
     validateNodeContents("@replyToCentral", replyTitle, replyBody);
   });
+
+  // it("Test deep interactions (using replies)", () => { // testing a single interaction is sufficient, as this test is meant to validate the deep node paths' construction and translation across the app; assuming the deep path remains valid during a round trip, the above node interactions are functionally depth/path-agnostic
+    
+
+  // });
 });
