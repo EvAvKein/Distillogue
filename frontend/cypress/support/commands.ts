@@ -58,7 +58,7 @@ Cypress.Commands.addAll({
     cy.get("form button").contains("Post").click();
   },
   submitReply(nodeSelector:string, title:string, body:string) {
-    cy.get(nodeSelector).find('#interactions button[aria-label="Reply"]').click();
+    cy.get(nodeSelector).find('.interactions button[aria-label="Reply"]').click();
 
     cy.get("#backdrop form").as("replyForm");
     cy.get("@replyForm").contains("Title").type(title);

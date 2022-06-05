@@ -25,7 +25,7 @@ describe("Post Interaction", () => {
   function validateNodeContents(nodeSelector:string, title:string, body:string) {
     cy.get(nodeSelector).should("contain", title)
       .should("contain", body)
-      .find("#interactions")
+      .find(".interactions")
       .as("nodeInteractions");
 
     cy.get("@nodeInteractions").contains("Latest Interaction: Now");
@@ -42,7 +42,9 @@ describe("Post Interaction", () => {
 
     cy.get("article").first().click();
 
-    validateNodeContents("article#central", postTitle, postBody);
+    cy.url().should("include", "/browse");
+
+    validateNodeContents(".node#central", postTitle, postBody);
   });
 
   it("Test votes", () => {
@@ -77,7 +79,7 @@ describe("Post Interaction", () => {
     
     cy.submitReply("#central", replyTitle, replyBody);
 
-    cy.get("article#central").parent().find("section article").as("replyToCentral");
+    cy.get(".node#central").parent().find(".nodeBranch .node").as("replyToCentral");
 
     validateNodeContents("@replyToCentral", replyTitle, replyBody);
   });

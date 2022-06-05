@@ -1,13 +1,11 @@
 <template>
   <section class="nodeBranch">
-    <article :id="isCentral ? 'central' : ''">
-      <component v-if="node.title"
+    <section class="node" :id="isCentral ? 'central' : undefined">
+      <component 
         :is="'h' + (isCentral ? 2 : 3)"
-      >
-        {{node.title}}
-      </component>
+      >{{node.title}}</component>
       <p>{{node.body || typeof node.body}}</p>
-      <section id="interactions">
+      <section class="interactions">
         <span v-if="node.stats.latestInteraction">Latest Interaction: <timestamp :pastUnix="node.stats.latestInteraction"/></span>
         <div>
           <votes v-if="node.stats.votes"
@@ -19,7 +17,7 @@
         </div>
       </section>
       <notification :text="nodeError" :desirablity-style="false"/>
-    </article>
+    </section>
     <node v-for="reply of node.replies"
       :node="reply"
       :pathToNode="nodePath"
@@ -29,15 +27,15 @@
 
 <script setup lang="ts">
   import {ref} from "vue";
-  import {Node as NodeClass} from "../../../../../../backend/src/objects"; // importing without renaming it causes the vite to mix up this class (Node) with this component (node.vue, referenced in the template for recursion) and thus throw an error on runtime when trying to load a node with replies
+  import {Node as NodeObj} from "../../../../../../backend/src/objects"; // importing without renaming it causes the vite to mix up this class (Node) with this component (node.vue, referenced in the template for recursion) and thus throw an error on runtime when trying to load a node with replies
   import timestamp from "../../../timestamp.vue";
   import votes from "./interactions/vote.vue";
   import reply from "./interactions/replyButton.vue";
   import notification from "../../../notification.vue";
 
   const props = defineProps<{
-    node:NodeClass;
-    pathToNode:NodeClass["id"][];
+    node:NodeObj;
+    pathToNode:NodeObj["id"][];
     isCentral?:true;
   }>();
   
@@ -47,19 +45,19 @@
 </script>
 
 <style scoped>
-  article {
+  .node {
     background-color: var(--backgroundSubColor);
     padding: 1em;
     border-radius: 1em;
     max-width: 45em;
     margin: 1em auto 0;
   }
-  article#central {
+  .node#central {
     font-size: 1.1em;
     margin-top: 0;
   }
   
-  article > * + * {margin-top: 1.25em}
+  .node > * + * {margin-top: 1.25em}
 
   h2, h3 {margin: 0}
   h2 {font-size: 1.6em}
@@ -69,14 +67,14 @@
     white-space: pre-line;
   }
 
-  #interactions > span {
+  .interactions > span {
     display: block;
     font-size: .9em;
     width: max-content;
     margin-left: auto;
   }
 
-  #interactions > div {
+  .interactions > div {
     display: flex;
     align-items: center;
     justify-content: space-between;
