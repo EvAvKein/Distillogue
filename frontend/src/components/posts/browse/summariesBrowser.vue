@@ -5,7 +5,7 @@
       :fetchAllOnMount="true"
       @fetchedSummaries="(response:PostSummary[]) => {summariesArray = response}"
     />
-    <hr>
+    <hr class="inbetweener">
     <summariesContainer v-if="summariesArray"
       :summariesArray="summariesArray"
     />
@@ -18,8 +18,7 @@
   import {PostSummary} from "../../../../../backend/src/objects";
   import summariesContainer from "./summariesContainer.vue";
   import summariesSearch from "./summariesSearch.vue";
-  const summariesArray = ref<PostSummary[]|null|undefined>(undefined);
-  const summariesFilter = ref<string>("");
+  const summariesArray = ref<PostSummary[]|undefined>(undefined);
 </script>
 
 <style scoped>
@@ -31,5 +30,8 @@
 
   #summariesSearch {
     font-size: 1.5em;
+    margin-bottom: 0.25em;
   }
+
+  hr {margin: 0}
 </style>

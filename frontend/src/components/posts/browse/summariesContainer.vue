@@ -19,7 +19,7 @@
 
 <style scoped>
   #summariesList {
-    margin: 1em 0.25em 0.25em;
+    margin: 0 0.25em;
     padding: 0;
     list-style: none;
   }

@@ -1,7 +1,7 @@
 <template>
   <article>
     <router-link :to="{name: 'viewPost', params: {postId: summary.id}}">
-      <div class="topSummarySection">
+      <div class="topSection">
         <h4>{{summary.title}}</h4>
         <img v-if="summary.public"
           alt="Open lock icon"
@@ -14,7 +14,7 @@
       </div>
       <div v-if="summary.stats.latestInteraction"
         class="timestampSection"
-      > Active: <timestamp 
+      > Latest Direct Interaction: <timestamp 
           class="timestamp"
           :pastUnix="summary.stats.latestInteraction"
         />
@@ -33,13 +33,13 @@
 
 <style scoped>
   a {
-    display:block;
+    display: block;
     text-decoration: none;
     color: var(--textColor);
     padding: 1em 0.5em;
   }
 
-  .topSummarySection {
+  .topSection {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -53,9 +53,11 @@
   img {
     height: 1.5em;
     filter: var(--filterToTextColor);
+    margin-left: 0.4em;
   }
 
   .timestampSection {
-    margin-top: 1em;
+    margin-top: 0.45em;
+    font-size: 0.95em;
   }
 </style>

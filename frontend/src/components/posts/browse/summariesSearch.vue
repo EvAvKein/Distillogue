@@ -16,7 +16,7 @@
   import {ref, onMounted} from "vue";
   import {PostSummary} from "../../../../../backend/src/objects";
   import {jsonFetch} from "../../../helpers/jsonFetch";
-  import {debounce} from "../../../helpers/debounce"
+  import {debounce} from "../../../helpers/debounce";
   import labelledInput from "../../labelledInput.vue";
   import {useUser} from "../../../stores/user";
   const user = useUser();
