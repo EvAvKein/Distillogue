@@ -57,7 +57,7 @@
 
   function logOut() {
     user.$reset();
-    localStorage.removeItem("autoSignInKey");
+    localStorage.removeItem("authKey");
     router.push({name: "join"});
   };
 </script>

@@ -36,11 +36,11 @@ app.post("/signUp", async (request, response) => {
 });
 
 app.post("/signIn", async (request, response) => {
-  type usernameSignIn = {username:UserData["name"], autoSignInKey:never};
-  type autoSignIn = {autoSignInKey:UserData["autoSignInKey"], username:never};
+  type usernameSignIn = {username:UserData["name"], authKey:never};
+  type autoSignIn = {authKey:UserData["authKey"], username:never};
   const signInInfo = request.body as usernameSignIn|autoSignIn;
 
-  const user = await users.findOne(signInInfo.autoSignInKey ? {"data.autoSignInKey": signInInfo.autoSignInKey}: {"data.name": signInInfo.username})
+  const user = await users.findOne(signInInfo.authKey ? {"data.authKey": signInInfo.authKey}: {"data.name": signInInfo.username})
     .catch(() => {response.json(new FetchResponse(null, "Can't fetch user, database is unresponsive"))});
 
   if (!user) {

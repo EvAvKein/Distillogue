@@ -53,7 +53,7 @@
     };
 
     user.data = response.data as UserData;
-    localStorage.setItem("autoSignInKey", user.data.autoSignInKey);
+    localStorage.setItem("authKey", user.data.authKey);
 
     router.push({name: "browse"});
   };

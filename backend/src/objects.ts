@@ -16,14 +16,14 @@ class FetchResponse {
 
 class UserData {
   id:string;
-  autoSignInKey:string;
+  authKey:string;
   name:string;
   about:string;
   settings?:object;
 
   constructor(name:UserData["name"]) {
     this.id = newId();
-    this.autoSignInKey = newId();
+    this.authKey = newId();
     this.name = name;
     this.about = "Hello, I haven't wrote my About yet!";
     delete this.settings;

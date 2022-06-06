@@ -68,9 +68,9 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const user = useUser();
-  const autoSignInKey = localStorage.getItem("autoSignInKey");
-  if (autoSignInKey && !user.data.id) {
-    await jsonFetch("/signIn", {autoSignInKey: autoSignInKey}).then((response) => {
+  const authKey = localStorage.getItem("authKey");
+  if (authKey && !user.data.id) {
+    await jsonFetch("/signIn", {authKey: authKey}).then((response) => {
       if (!response.error) {user.data = response.data as UserData};
     });
   };
