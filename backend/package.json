@@ -2,7 +2,6 @@
   "name": "distillogue",
   "description": "Distillogue's Backend",
   "type": "module",
-  "main": "server.js",
   "scripts": {
     "build": "tsc && cd ../frontend && vite build",
     "serve": "npm run build && start mongo && start node dist/server.js",
