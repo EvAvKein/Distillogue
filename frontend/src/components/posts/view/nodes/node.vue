@@ -49,6 +49,7 @@
     background-color: var(--backgroundSubColor);
     padding: 1em;
     border-radius: 1em;
+    min-width: 15em;
     max-width: 45em;
     margin: 1em auto 0;
   }
@@ -83,7 +84,6 @@
   }
 
   #replyButton {
-    margin-top: 0.25em;
-    margin-left: auto;
+    margin: 0.5em 0.25em 0 auto;
   }
 </style>
