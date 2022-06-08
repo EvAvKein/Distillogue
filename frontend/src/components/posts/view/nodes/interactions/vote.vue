@@ -65,17 +65,19 @@
   });
 
   async function vote(voteDirection:voteDirection, newVoteStatus:boolean) {
-    if (!user.data.id) {
+    if (!user.data.authKey) {
       emit("interactionError", "Must be logged in to vote");
       return;
     };
 
-    const response = await jsonFetch("/nodeInteraction", new NodeInteractionRequest(
-      user.data.id,
-      props.interactionPath,
-      "vote",
-      {voteDirection, newVoteStatus}
-    ));
+    const response = await jsonFetch("PATCH", "/interaction",
+      new NodeInteractionRequest(
+        props.interactionPath,
+        "vote",
+        {voteDirection, newVoteStatus}
+      ),
+      user.data.authKey
+    );
 
     if (response.error) {
       emit("interactionError", response.error.message)

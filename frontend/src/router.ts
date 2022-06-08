@@ -35,7 +35,7 @@ const routes = [
   },
   {
     name: "viewPost",
-    path: "/post/:postId",
+    path: "/post/view/:postId",
     component: viewPost,
     props: true,
     meta: {
@@ -69,8 +69,9 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const user = useUser();
   const authKey = localStorage.getItem("authKey");
-  if (authKey && !user.data.id) {
-    await jsonFetch("/signIn", {authKey: authKey}).then((response) => {
+
+  if (authKey && !user.data.authKey) {
+    await jsonFetch("POST", "/user/me", null, authKey).then((response) => {
       if (!response.error) {user.data = response.data as UserData};
     });
   };

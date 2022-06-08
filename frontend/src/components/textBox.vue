@@ -92,11 +92,13 @@
 
     notification.value.text = "Submitting edit request...";
     notification.value.desirabilityStyle = undefined;
-    const editResponse = await jsonFetch(props.content.editable!.editAuthAddress, {
-      userId: user.data.id,
-      dataName: props.content.editable!.dataName,
-      newValue: currentContentText.value,
-    });
+    const editResponse = await jsonFetch("PATCH", props.content.editable!.editAuthAddress,
+      {
+        dataName: props.content.editable!.dataName,
+        newValue: currentContentText.value,
+      },
+      user.data.authKey
+    );
 
     if (editResponse.error) {
       notification.value.text = editResponse.error.message;

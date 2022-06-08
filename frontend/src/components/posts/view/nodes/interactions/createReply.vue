@@ -52,9 +52,8 @@
   async function submitNode() {
     notifText.value = "";
     
-    const response = await jsonFetch("/nodeInteraction",
+    const response = await jsonFetch("PATCH", "/interaction",
       new NodeInteractionRequest(
-        user.data.id,
         props.nodePath,
         "reply",
         {nodeReplyRequest: new NodeCreationRequest(
@@ -64,7 +63,8 @@
           props.postConfig,
           props.nodePath,
         )}
-      )
+      ),
+      user.data.authKey
     );
 
     if (response.error) {

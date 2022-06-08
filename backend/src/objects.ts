@@ -87,14 +87,14 @@ class NodeStats {
 };
 
 class NodeCreationRequest {
-  ownerIds:string[];
+  invitedOwnerIds:string[]|undefined;
   title:string;
   body:string;
   config?:PostConfig;
   nodePath?:Node["id"][];
 
-  constructor(ownerIds:NodeCreationRequest["ownerIds"], title:NodeCreationRequest["title"], body:NodeCreationRequest["body"], config?:NodeCreationRequest["config"], nodePath?:NodeCreationRequest["nodePath"]) {
-    this.ownerIds = ownerIds;
+  constructor(invitedOwnerIds:NodeCreationRequest["invitedOwnerIds"]|undefined, title:NodeCreationRequest["title"], body:NodeCreationRequest["body"], config?:NodeCreationRequest["config"], nodePath?:NodeCreationRequest["nodePath"]) {
+    this.invitedOwnerIds = invitedOwnerIds;
     this.title = title;
     this.body = body;
     config ? this.config = config : delete this.config;
@@ -103,18 +103,21 @@ class NodeCreationRequest {
 };
 
 class Node extends NodeCreationRequest {
+  ownerIds:UserData["id"][];
   id:string;
   replies:Node[];
   stats:NodeStats;
   locked?:true;
   past?:{title:Node["title"], body:Node["body"]}[];
   
-  constructor(request:NodeCreationRequest) {
-    super(request.ownerIds, request.title, request.body, request.config);
+  constructor(ownerId:UserData["id"], request:NodeCreationRequest) {
+    super(undefined, request.title, request.body, request.config);
+    this.ownerIds = [ownerId].concat(request.invitedOwnerIds || []);
     this.id = newId();
     this.replies = [];
     this.stats = new NodeStats(request.config);
     request.config ? this.config = request.config : delete this.config;
+    delete this.invitedOwnerIds;
     delete this.locked;
     delete this.past;
   };
@@ -146,7 +149,6 @@ class PostSummary extends NodeSummary {
 };
 
 class NodeInteractionRequest {
-  userId:UserData["id"];
   nodePath:Node["id"][];
   interactionType:"vote"|"reply";
   interactionData:{
@@ -156,8 +158,7 @@ class NodeInteractionRequest {
     nodeReplyRequest:NodeCreationRequest,
   };
 
-  constructor(userId:NodeInteractionRequest["userId"], nodePath:NodeInteractionRequest["nodePath"], interactionType:NodeInteractionRequest["interactionType"], interactionData:NodeInteractionRequest["interactionData"]) {
-    this.userId = userId;
+  constructor(nodePath:NodeInteractionRequest["nodePath"], interactionType:NodeInteractionRequest["interactionType"], interactionData:NodeInteractionRequest["interactionData"]) {
     this.nodePath = nodePath;
     this.interactionType = interactionType;
     this.interactionData = interactionData;

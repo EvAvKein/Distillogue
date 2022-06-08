@@ -42,9 +42,9 @@
     signingMessage.value = `Signing ${signingMode.value.toLowerCase()}...`;
     signingStatus.value = undefined;
     
-    const response = await jsonFetch("/sign" + signingMode.value, {
-      username: username.value
-    });
+    const response = await jsonFetch("POST", signingMode.value === "Up" ? "/user" : "/user/me",
+      {username: username.value}
+    );
 
     if (response.error) {
       signingMessage.value = response.error.message;

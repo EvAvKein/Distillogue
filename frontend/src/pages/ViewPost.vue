@@ -27,10 +27,8 @@
   const post = ref<Node|undefined>(undefined);
   const notif = ref<{message:string, desirability?:boolean}>({message: "Fetching post...", desirability: undefined});
 
-  jsonFetch("/getPost", {
-    userId: user.data.id,
-    postId: props.postId,
-  }).then((response) => {
+  jsonFetch("GET", "/post/" + props.postId, null, user.data.authKey)
+  .then((response) => {
     if (response.error) {
       notif.value = {message: response.error.message, desirability: false};
       return;

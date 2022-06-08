@@ -10,7 +10,7 @@
         text: user.data.name,
         singleLine: true,
         editable: {
-          editAuthAddress: '/editProfileInfo',
+          editAuthAddress: '/user/me',
           dataName: 'name',
         },
         emSize: 1.5
@@ -25,7 +25,7 @@
       :content="{
         text: user.data.about || '',
         editable: {
-          editAuthAddress: '/editProfileInfo',
+          editAuthAddress: '/user/me',
           dataName: 'about',
         },
         emSize: 1.5

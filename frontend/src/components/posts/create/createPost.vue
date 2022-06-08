@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
   import {ref} from "vue";
-  import {Node, PostConfig, NodeCreationRequest} from "../../../../../backend/src/objects";
+  import {Node, PostConfig, NodeCreationRequest, UserData} from "../../../../../backend/src/objects";
   import {jsonFetch} from "../../../helpers/jsonFetch";
   import {useUser} from "../../../stores/user";
   import {useRouter} from "vue-router";
@@ -45,6 +45,7 @@
   const user = useUser();
   const router = useRouter();
 
+  const invitedOwners = ref<UserData["id"][]>([]);
   const postTitle = ref<Node["title"]>("");
   const postBody = ref<Node["body"]>("");
   const postConfig = ref<PostConfig>({});
@@ -56,13 +57,14 @@
   async function submitPost() {
     notifText.value = "";
 
-    const response = await jsonFetch("/createPost",
+    const response = await jsonFetch("POST", "/post",
       new NodeCreationRequest(
-        [user.data.id],
+        invitedOwners.value,
         postTitle.value,
         postBody.value,
         postConfig.value,
-      )
+      ),
+      user.data.authKey
     );
 
     if (response.error) {

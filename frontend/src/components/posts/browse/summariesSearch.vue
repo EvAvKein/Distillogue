@@ -30,7 +30,7 @@
   async function fetchAndEmitPosts() {
     summariesDescription.value = "Fetching Posts...";
 
-    const fetchResponse = await jsonFetch("/getPostSummaries", {userId: user.data.id, filter: searchValue.value})
+    const fetchResponse = await jsonFetch("GET", "/posts/" + searchValue.value , null, user.data.authKey);
     if (fetchResponse.error) {
       summariesDescription.value = fetchResponse.error.message;
       return;

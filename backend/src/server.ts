@@ -3,6 +3,7 @@ import express from "express";
 import helmetSecurity from "helmet";
 import {users, posts} from "./mongo.js";
 import * as timestamp from "./helpers/timestamps.js";
+import {userIdByAuthHeader} from "./helpers/userIdByAuthHeader.js";
 import {nodePathAsMongoLocators} from "./helpers/nodePathAsMongoLocators.js";
 import {updateDeepProperty} from "./helpers/updateDeepProperty.js";
 import {recursivelyModifyNode} from "./helpers/recursivelyModifyNode.js";
@@ -17,7 +18,7 @@ app.use(helmetSecurity());
 await posts.deleteMany({});
 await users.deleteMany({});
 
-app.post("/signUp", async (request, response) => {
+app.post("/user", async (request, response) => {
   const signUpInfo = request.body as {username:UserData["name"]};
 
   const user = await users.findOne({"data.name": signUpInfo.username})
@@ -35,25 +36,24 @@ app.post("/signUp", async (request, response) => {
   response.json(new FetchResponse(newUserData));
 });
 
-app.post("/signIn", async (request, response) => {
-  type usernameSignIn = {username:UserData["name"], authKey:never};
-  type autoSignIn = {authKey:UserData["authKey"], username:never};
-  const signInInfo = request.body as usernameSignIn|autoSignIn;
+app.post("/user/me", async (request, response) => { // really irritates me that sign-ins are made as POST requests, change to SEARCH if/once browsers support it
+  const authKey = request.headers.authorization?.replace("Bearer ", "");
+  const username = request.body.username as UserData["name"];
 
-  const user = await users.findOne(signInInfo.authKey ? {"data.authKey": signInInfo.authKey}: {"data.name": signInInfo.username})
+  const user = await users.findOne(authKey ? {"data.authKey": authKey} : {"data.name": username})
     .catch(() => {response.json(new FetchResponse(null, "Can't fetch user, database is unresponsive"))});
 
   if (!user) {
-    response.json(new FetchResponse(null, "Invalid sign-in data"));
+    response.json(new FetchResponse(null, "User doesn't exist"));
     return;
   };
 
   response.json(new FetchResponse(user.data));
 });
 
-app.post("/editProfileInfo", async (request, response) => {
-  const editData = request.body as {userId:UserData["id"], dataName:editableUserData, newValue:string};
-  
+app.patch("/user/me", async (request, response) => {
+  const authKey = request.headers.authorization?.replace("Bearer ", "");
+  const editData = request.body as {dataName:editableUserData, newValue:string};
   if (!arrOfEditableUserData.includes(editData.dataName)) {
     response.json(new FetchResponse(null, "Invalid data insertion"));
     return;
@@ -61,7 +61,7 @@ app.post("/editProfileInfo", async (request, response) => {
 
   const dataPropertyByString = "data." + editData.dataName;
   await users.findOneAndUpdate(
-    {"data.id": editData.userId},
+    {"data.authKey": authKey},
     {$set: {[dataPropertyByString]: editData.newValue}},
   ).catch(() => {
     response.json(new FetchResponse(null, "Failed to update database"));
@@ -71,23 +71,17 @@ app.post("/editProfileInfo", async (request, response) => {
   response.json(new FetchResponse(true));
 });
 
-app.post("/createPost", async (request, response) => {
-  const postRequest = request.body as NodeCreationRequest;
-
-  posts.insertOne(new Node(postRequest));
-
-  response.json(new FetchResponse(true));
-});
-
-app.post("/getPostSummaries", async (request, response) => {
-  const regexFilter = new RegExp(sanitizeForRegex(request.body.filter), "i");
-  const userId = request.body.userId as UserData["id"];
+app.get("/posts/:searchValue?", async (request, response) => {
+  const regexFilter = new RegExp(sanitizeForRegex(request.params.searchValue || ""), "i");
+  const userId = await userIdByAuthHeader(request);
 
   const topNodesOfPosts = await posts.find<Omit<Node, "replies">>({
     $and: [
       {$or: [{title: regexFilter}, {body: regexFilter}]},
-      {$or: [{"config.public": true}, {ownerIds: userId}]}
-    ]
+      userId
+        ? {$or: [{"config.public": true}, {ownerIds: userId}]}
+        : {"config.public": true}
+    ],
   }, {
     projection: {replies: false}
   }).sort({"stats.latestInteraction": -1}).toArray();
@@ -99,15 +93,31 @@ app.post("/getPostSummaries", async (request, response) => {
   response.json(new FetchResponse(postSummaries));
 });
 
-app.post("/getPost", async (request, response) => {
-  const userId = request.body.userId as UserData["id"];
-  const postId = request.body.postId as Node["id"];
+app.post("/post", async (request, response) => {
+  const postRequest = request.body as NodeCreationRequest;
+
+  const userId = await userIdByAuthHeader(request);
+  if (!userId) {
+    response.json(new FetchResponse(null, "User authentication failed"));
+    return;
+  };
+
+  posts.insertOne(new Node(userId, postRequest));
+
+  response.json(new FetchResponse(true));
+});
+
+app.get("/post/:id", async (request, response) => {
+  const postId = request.params.id as Node["id"];
+  const userId = await userIdByAuthHeader(request);
 
   const dbResponse = await posts.findOne<Node|null>({
     $and: [
       {id: postId},
-      {$or: [{"config.public": true}, {ownerIds: userId}]}
-    ]
+      userId
+        ? {$or: [{"config.public": true}, {ownerIds: userId}]}
+        : {"config.public": true}
+    ],
   });
   if (!dbResponse) {response.json(new FetchResponse(null, "Post unavailable; Either it doesn't exist, or it's private and you're not authorized"))};
 
@@ -132,27 +142,33 @@ app.post("/getPost", async (request, response) => {
   response.json(new FetchResponse(post));
 });
 
-app.post("/nodeInteraction", async (request, response) => {
-  const data = request.body as NodeInteractionRequest;
-  const postId = data.nodePath[0] as Node["id"];
-  const mongoPath = nodePathAsMongoLocators(data.nodePath);
+app.patch("/interaction", async (request, response) => { // i'm not satisfied with this URI's unRESTfulness, but couldn't come up with an appropriate implementation. "/posts/:nodePath/interactions" results in extremely verbose URIs, "/posts/:postId/interactions" isn't really coherent when a nodePath is still needed, and "/interactions/:interactionType" doesn't help much and disjoints is from other equally-necessary data
+  const userId = await userIdByAuthHeader(request);
+  if (!userId) {
+    response.json(new FetchResponse(null, "User authentication failed"));
+    return;
+  };
+  
+  const {nodePath, interactionType, interactionData} = request.body as NodeInteractionRequest;
+  const postId = nodePath[0] as Node["id"];
+  const mongoPath = nodePathAsMongoLocators(nodePath);
   
   let dbResponse;
-  switch(data.interactionType) {
+  switch(interactionType) {
     case "vote": {
-      const voteData = data.interactionData as {voteDirection:"up"|"down", newVoteStatus:boolean};
+      const voteData = interactionData as {voteDirection:"up"|"down", newVoteStatus:boolean};
       const subjectDirection = voteData.voteDirection;
       const oppositeDirection = voteData.voteDirection === "up" ? "down" : "up";
 
       const mongoUpdate = voteData.newVoteStatus
         ? {
-            "$addToSet": {[mongoPath.updatePath + "stats.votes." + subjectDirection]: data.userId},
-            "$pull": {[mongoPath.updatePath + "stats.votes." + oppositeDirection]: data.userId}
+            "$addToSet": {[mongoPath.updatePath + "stats.votes." + subjectDirection]: userId},
+            "$pull": {[mongoPath.updatePath + "stats.votes." + oppositeDirection]: userId}
           }
         : {
             "$pull": {
-              [mongoPath.updatePath + "stats.votes." + subjectDirection]: data.userId,
-              [mongoPath.updatePath + "stats.votes." + oppositeDirection]: data.userId
+              [mongoPath.updatePath + "stats.votes." + subjectDirection]: userId,
+              [mongoPath.updatePath + "stats.votes." + oppositeDirection]: userId
             }
           }
       ;
@@ -165,7 +181,7 @@ app.post("/nodeInteraction", async (request, response) => {
       break;
     };
     case "reply": {
-      const newNode = new Node((data.interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest);
+      const newNode = new Node(userId, (interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest);
       dbResponse = await posts.findOneAndUpdate(
         {"id": postId},
         {"$push": {[mongoPath.updatePath + "replies"]: newNode}},
@@ -187,7 +203,7 @@ app.post("/nodeInteraction", async (request, response) => {
   response.json(new FetchResponse(true));
 });
 
-app.get('*', function(request, response) {
+app.get("*", function(request, response) {
   response.sendFile(path.join(process.cwd() + "/../frontend/dist/index.html"));
 });
 
