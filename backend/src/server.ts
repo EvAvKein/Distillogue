@@ -4,7 +4,8 @@ import helmetSecurity from "helmet";
 import {users, posts} from "./mongo.js";
 import * as timestamp from "./helpers/timestamps.js";
 import {userIdByAuthHeader} from "./helpers/userIdByAuthHeader.js";
-import {nodePathAsMongoLocators} from "./helpers/nodePathAsMongoLocators.js";
+import {nodePathAsMongoLocators} from "./helpers/mongo/nodePathAsMongoLocators.js";
+import {mongoPostsFilterByAccess} from "./helpers/mongo/mongoPostsFilterByAccess";
 import {updateDeepProperty} from "./helpers/updateDeepProperty.js";
 import {recursivelyModifyNode} from "./helpers/recursivelyModifyNode.js";
 import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
@@ -75,16 +76,13 @@ app.get("/posts/:searchValue?", async (request, response) => {
   const regexFilter = new RegExp(sanitizeForRegex(request.params.searchValue || ""), "i");
   const userId = await userIdByAuthHeader(request);
 
-  const topNodesOfPosts = await posts.find<Omit<Node, "replies">>({
-    $and: [
+  const topNodesOfPosts = await posts.find<Omit<Node, "replies">>(
+    mongoPostsFilterByAccess(
+      userId,
       {$or: [{title: regexFilter}, {body: regexFilter}]},
-      userId
-        ? {$or: [{"config.public": true}, {ownerIds: userId}]}
-        : {"config.public": true}
-    ],
-  }, {
-    projection: {replies: false}
-  }).sort({"stats.latestInteraction": -1}).toArray();
+    ), 
+    {projection: {replies: false}}
+  ).sort({"stats.latestInteraction": -1}).toArray();
 
   const postSummaries = topNodesOfPosts.map((post) => {
     return new PostSummary({...post, replies: []});
@@ -111,14 +109,9 @@ app.get("/post/:id", async (request, response) => {
   const postId = request.params.id as Node["id"];
   const userId = await userIdByAuthHeader(request);
 
-  const dbResponse = await posts.findOne<Node|null>({
-    $and: [
-      {id: postId},
-      userId
-        ? {$or: [{"config.public": true}, {ownerIds: userId}]}
-        : {"config.public": true}
-    ],
-  });
+  const dbResponse = await posts.findOne<Node|null>(
+    mongoPostsFilterByAccess(userId, {id: postId})
+  );
   if (!dbResponse) {response.json(new FetchResponse(null, "Post unavailable; Either it doesn't exist, or it's private and you're not authorized"))};
 
   let post = dbResponse as Node;
@@ -174,7 +167,7 @@ app.patch("/interaction", async (request, response) => { // i'm not satisfied wi
       ;
 
       dbResponse = await posts.findOneAndUpdate(
-        {"id": postId},
+        mongoPostsFilterByAccess(userId, {id: postId}),
         mongoUpdate,
         {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"}
       );
@@ -183,7 +176,7 @@ app.patch("/interaction", async (request, response) => { // i'm not satisfied wi
     case "reply": {
       const newNode = new Node(userId, (interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest);
       dbResponse = await posts.findOneAndUpdate(
-        {"id": postId},
+        mongoPostsFilterByAccess(userId, {id: postId}),
         {"$push": {[mongoPath.updatePath + "replies"]: newNode}},
         {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"}
       );
@@ -194,7 +187,7 @@ app.patch("/interaction", async (request, response) => { // i'm not satisfied wi
 
   if (dbResponse.value?.stats.latestInteraction) {
     await posts.updateOne( // this would be best implemented as an extra modification of each interaction (to keep the interaction itself and this as a singular atomic update), but using conditionals to check if the property exists before updating requires using mongo's aggregation pipeline syntax which is (seemingly) frustratingly limited in assignment commands and is much more verbose & opaque. for the current stage of the project, i.e very early, there's no need to ruin my/the readability of mongo commands for atomic operations' sake
-      {"id": postId},
+      mongoPostsFilterByAccess(userId, {id: postId}),
       {$set: {[mongoPath.updatePath + "stats.latestInteraction"]: timestamp.unix()}},
       {arrayFilters: mongoPath.arrayFiltersOption}
     );
