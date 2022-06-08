@@ -7,7 +7,7 @@
 * Prettier
 * Proper registration/authentication (Auth0)
 * Accessibility
-* Security
+* Security / Data validation
 * Redesign front-end
   * Reevaluate UI style & color palette
   * Replace placeholder SVGs
