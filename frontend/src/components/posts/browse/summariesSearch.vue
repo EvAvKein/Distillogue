@@ -37,7 +37,7 @@
     };
 
     const fetchedPosts = fetchResponse.data as PostSummary[];
-    summariesDescription.value = `${fetchedPosts.length} result${fetchedPosts.length > 1 ? "s" : ""}${searchValue.value ? ` for "${searchValue.value}"` : ""}`;
+    summariesDescription.value = `${fetchedPosts.length} result${fetchedPosts.length !== 1 ? "s" : ""}${searchValue.value ? ` for "${searchValue.value}"` : ""}`;
       
     emit("fetchedSummaries", fetchedPosts);
   };
