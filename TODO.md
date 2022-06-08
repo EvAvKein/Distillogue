@@ -11,6 +11,3 @@
 * Redesign front-end
   * Reevaluate UI style & color palette
   * Replace placeholder SVGs
-* Restructure server API
-  * Appropriate HTTP methods
-  * Look into RESTful implementations
