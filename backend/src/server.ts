@@ -5,7 +5,7 @@ import {users, posts} from "./mongo.js";
 import * as timestamp from "./helpers/timestamps.js";
 import {userIdByAuthHeader} from "./helpers/userIdByAuthHeader.js";
 import {nodePathAsMongoLocators} from "./helpers/mongo/nodePathAsMongoLocators.js";
-import {mongoPostsFilterByAccess} from "./helpers/mongo/mongoPostsFilterByAccess";
+import {mongoPostsFilterByAccess} from "./helpers/mongo/mongoPostsFilterByAccess.js";
 import {updateDeepProperty} from "./helpers/updateDeepProperty.js";
 import {recursivelyModifyNode} from "./helpers/recursivelyModifyNode.js";
 import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
