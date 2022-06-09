@@ -100,7 +100,21 @@ app.post("/post", async (request, response) => {
     return;
   };
 
-  posts.insertOne(new Node(userId, postRequest));
+  const dbResponse = await posts.updateOne(
+    {
+      ownerIds: [userId].concat(postRequest.invitedOwnerIds || []),
+      title: postRequest.title,
+      body: postRequest.body,
+      config: postRequest.config
+    },
+    {$setOnInsert: new Node(userId, postRequest)},
+    {upsert: true}
+  );
+
+  if (dbResponse.matchedCount >= 1) {
+    response.json(new FetchResponse(null, "Duplicate post attempt: This was already posted successfully!")); // this technically makes the request non-idempotent for the user, but (at least when testing on localhost, might need to reevaluate upon hosting) any duplicate request comes back late enough that a site user is redirected away from the page that would display the error before that error gets to display; thus this non-idempotence only affects people who attempt to post through the API directly, mostly likely programmatically, and should be savvy enough to avoid this issue and/or understand it
+    return;
+  };
 
   response.json(new FetchResponse(true));
 });
