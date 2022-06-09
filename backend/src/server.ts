@@ -175,6 +175,8 @@ app.patch("/interaction", async (request, response) => { // i'm not satisfied wi
     };
     case "reply": {
       const newNode = new Node(userId, (interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest);
+      delete newNode.config;
+
       dbResponse = await posts.findOneAndUpdate(
         mongoPostsFilterByAccess(userId, {id: postId}),
         {"$push": {[mongoPath.updatePath + "replies"]: newNode}},
