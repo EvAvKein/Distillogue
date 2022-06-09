@@ -27,10 +27,12 @@
     <input v-if="content.singleLine" 
       type="text"
       :readonly="!editMode"
+      :tabindex="editMode ? 0 : -1"
       v-model="currentContentText"
     />
     <textarea v-else-if="content.editable"
       :readonly="!editMode"
+      :tabindex="editMode ? 0 : -1"
       v-model="currentContentText"
     >
     </textarea>
