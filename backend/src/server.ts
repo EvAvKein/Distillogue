@@ -145,6 +145,12 @@ app.patch("/interaction", async (request, response) => { // i'm not satisfied wi
   const {nodePath, interactionType, interactionData} = request.body as NodeInteractionRequest;
   const postId = nodePath[0] as Node["id"];
   const mongoPath = nodePathAsMongoLocators(nodePath);
+
+  const subjectPost = await posts.findOne(mongoPostsFilterByAccess(userId, {id: postId})); // this (and the interaction validations that it enables) would be best implemented as a condition on each interaction (to reduce the number of DB calls) with follow-up code to read the modify result and output any relevant error. see the comment below at latestInteraction updates for explanation on why DB conditionals are currently avoided
+  if (!subjectPost) {
+    response.json(new FetchResponse(null, "Post unavailable; Either it doesn't exist, or it's private and you're not authorized"));
+    return;
+  };
   
   let dbResponse;
   switch(interactionType) {
@@ -152,6 +158,11 @@ app.patch("/interaction", async (request, response) => { // i'm not satisfied wi
       const voteData = interactionData as {voteDirection:"up"|"down", newVoteStatus:boolean};
       const subjectDirection = voteData.voteDirection;
       const oppositeDirection = voteData.voteDirection === "up" ? "down" : "up";
+
+      if (!subjectPost.config?.votes?.[subjectDirection]) {
+        response.json(new FetchResponse(null, "Vote interaction unavailable for this node"));
+        return;
+      };
 
       const mongoUpdate = voteData.newVoteStatus
         ? {
@@ -167,18 +178,23 @@ app.patch("/interaction", async (request, response) => { // i'm not satisfied wi
       ;
 
       dbResponse = await posts.findOneAndUpdate(
-        mongoPostsFilterByAccess(userId, {id: postId}),
+        {id: postId},
         mongoUpdate,
         {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"}
       );
       break;
     };
     case "reply": {
+      if (subjectPost.locked) {
+        response.json(new FetchResponse(null, "Replies are locked for this node"));
+        return;
+      };
+
       const newNode = new Node(userId, (interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest);
       delete newNode.config;
 
       dbResponse = await posts.findOneAndUpdate(
-        mongoPostsFilterByAccess(userId, {id: postId}),
+        {id: postId},
         {"$push": {[mongoPath.updatePath + "replies"]: newNode}},
         {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"}
       );
