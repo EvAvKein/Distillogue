@@ -79,10 +79,9 @@ class NodeStats {
 
   constructor(config?:PostConfig) {
     config?.latestInteraction ? this.latestInteraction = unixStamp() : delete this.latestInteraction;
-    config?.votes ? this.votes = {
-      up: config.votes.up ? [] as UserData["id"][] : undefined,
-      down: config.votes.down ? [] as UserData["id"][] : undefined
-    } : delete config?.votes;
+    config?.votes ? this.votes = {} : delete config?.votes;
+      config?.votes?.up ? this.votes!.up = [] : delete this.votes?.up;
+      config?.votes?.down ? this.votes!.down = [] : delete this.votes?.down;
   };
 };
 
