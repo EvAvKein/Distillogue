@@ -16,7 +16,7 @@
         Anonymous: <input id="votes.anon" type="checkbox"  @change="updateConfigByCheckbox"/>
       </label>
     </category>
-    <category title="Activity">
+    <category title="Timestamps">
       <label>
         Latest Interaction: <input id="timestamps.latestInteraction" type="checkbox" @change="updateConfigByCheckbox"/>
       </label>
