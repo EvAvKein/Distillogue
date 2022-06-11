@@ -18,14 +18,16 @@
   const configs = {
     blank: {},
     testEverything: {
-      latestInteraction: true,
+      timestamps: {
+        latestInteraction: true,
+      },
       votes: {
         up: true,
         down: true,
         anon: true,
       },
     },
-  };
+  } as const;
 
   type configsObject = typeof configs;
 

@@ -4,9 +4,9 @@
       <component 
         :is="'h' + (isCentral ? 2 : 3)"
       >{{node.title}}</component>
-      <p>{{node.body || typeof node.body}}</p>
+      <p>{{node.body}}</p>
       <section class="interactions">
-        <span v-if="node.stats.latestInteraction">Latest Interaction: <timestamp :pastUnix="node.stats.latestInteraction"/></span>
+        <span v-if="node.stats.timestamps?.latestInteraction">Latest Interaction: <timestamp :pastUnix="node.stats.timestamps.latestInteraction"/></span>
         <div>
           <votes v-if="node.stats.votes"
             :interactionPath="nodePath"

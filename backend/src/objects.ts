@@ -1,11 +1,11 @@
 import {lookupInOptional} from "./helpers/lookupInOptional.js";
 import {v4 as newId} from "uuid";
-import {unix as unixStamp} from "./helpers/timestamps.js"
+import {unix as unixStamp} from "./helpers/timestamps.js";
 
 class FetchResponse {
   data:null|object|any[]|true;
   error?:{
-    message:string;
+    message:string,
   };
 
   constructor(data:FetchResponse["data"], errorMessage?:lookupInOptional<FetchResponse["error"], "message">) {
@@ -61,7 +61,9 @@ class Log {
 
 class PostConfig {
   public?:true;
-  latestInteraction?:true;
+  timestamps?: {
+    latestInteraction?:true,
+  };
   votes?:{
     up?:true,
     down?:true,
@@ -70,18 +72,21 @@ class PostConfig {
 };
 
 class NodeStats {
-  latestInteraction?:number;
+  timestamps?: {
+    latestInteraction?:number,
+  };
   votes?:{
     up?:UserData["id"][],
     down?:UserData["id"][],
     anon?:true,
-  };;
+  };
 
-  constructor(config?:PostConfig) {
-    config?.latestInteraction ? this.latestInteraction = unixStamp() : delete this.latestInteraction;
-    config?.votes ? this.votes = {} : delete config?.votes;
-      config?.votes?.up ? this.votes!.up = [] : delete this.votes?.up;
-      config?.votes?.down ? this.votes!.down = [] : delete this.votes?.down;
+  constructor(config:PostConfig) {
+    config.timestamps ? this.timestamps = {} : delete this.timestamps;
+      config.timestamps?.latestInteraction ? this.timestamps!.latestInteraction = unixStamp() : delete this.timestamps?.latestInteraction;
+    config.votes ? this.votes = {} : delete this.votes;
+      config.votes?.up ? this.votes!.up = [] : delete this.votes?.up;
+      config.votes?.down ? this.votes!.down = [] : delete this.votes?.down;
   };
 };
 
@@ -114,7 +119,7 @@ class Node extends NodeCreationRequest {
     this.ownerIds = [ownerId].concat(request.invitedOwnerIds || []);
     this.id = newId();
     this.replies = [];
-    this.stats = new NodeStats(request.config);
+    this.stats = new NodeStats(request.config || {});
     request.config ? this.config = request.config : delete this.config;
     delete this.invitedOwnerIds;
     delete this.locked;

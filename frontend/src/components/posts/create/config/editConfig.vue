@@ -18,7 +18,7 @@
     </category>
     <category title="Activity">
       <label>
-        Latest Interaction: <input id="latestInteraction" type="checkbox" @change="updateConfigByCheckbox"/>
+        Latest Interaction: <input id="timestamps.latestInteraction" type="checkbox" @change="updateConfigByCheckbox"/>
       </label>
     </category>
   </section>
@@ -37,8 +37,17 @@
 
   const emit = defineEmits(["update:config"]);
 
-  type keysOfObjectsInPostConfig = keyof NonNullable<propertiesByType<PostConfig, object>>;
-  type keysInObjectsOfPostConfig = keyof NonNullable<PostConfig[keysOfObjectsInPostConfig]>;
+  type keysFromAllObjects<T> = T extends object ? keyof T : never;
+
+  type keysOfObjectsInPostConfig = keyof propertiesByType<PostConfig, object>;
+  type keysInObjectsOfPostConfig = keysFromAllObjects<PostConfig[keysOfObjectsInPostConfig]>;
+
+  type configProperty = "votes"; 
+    // i tried and failed to create a generic which either:
+      // 1. dynamically narrows the subproperty param's union to only the keys that fit whichever object PostConfig[property] is attempting to resolve to
+      // 2. dynamically narrows the property param's union to whichever key refers to the object that includes the subproperty key being passed
+    // i'm not even sure these kinds of behaviors are possible, i might be thinking about this way too imperatively
+  type configSubproperty = "up";
 
   function editConfigProperty(newValue:true|undefined, property:keyof PostConfig, subproperty?:keysInObjectsOfPostConfig) {
     if (!subproperty) {
@@ -49,12 +58,12 @@
     };
     
     if (subproperty && !props.config[property]) {
-      props.config[property as "votes"] = {};
+      props.config[property as keysOfObjectsInPostConfig] = {};
     };
 
     newValue
-      ? props.config[property as keysOfObjectsInPostConfig]![subproperty] = newValue
-      : delete props.config[property as keysOfObjectsInPostConfig]![subproperty];
+      ? props.config[property as configProperty]![subproperty as configSubproperty] = newValue
+      : delete props.config[property as configProperty]![subproperty as configSubproperty];
 
     if (typeof props.config[property] === "object" && Object.keys(props.config[property] as object).length == 0) {
       delete props.config[property];
@@ -88,7 +97,7 @@
       const subProperty = configProperties[1] as keysInObjectsOfPostConfig|undefined;
 
       if (subProperty) {
-        inputElement.checked = (configPreset[property as keysOfObjectsInPostConfig])?.[subProperty] || false;
+        inputElement.checked = (configPreset[property as configProperty])?.[subProperty as configSubproperty] || false;
       } else {
         inputElement.checked = (configPreset[property] as true|undefined) || false;
       };
