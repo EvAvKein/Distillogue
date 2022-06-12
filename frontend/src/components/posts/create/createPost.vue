@@ -108,10 +108,7 @@
     }
 
     #content {grid-area: content}
-    #config {
-      grid-area: config;
-      min-width: 10em;
-    }
+    #config {grid-area: config}
     #confirmation {grid-area: confirmation}
   }
 </style>
