@@ -1,7 +1,7 @@
 <template>
   <article>
     <router-link :to="{name: 'viewPost', params: {postId: summary.id}}">
-      <div class="topSection">
+      <section class="topSection">
         <h4>{{summary.title}}</h4>
         <img v-if="summary.public"
           alt="Open lock icon"
@@ -11,21 +11,19 @@
           alt="Closed lock icon"
           src="../../../assets/locked.svg"
         />
-      </div>
-      <div v-if="summary.stats.timestamps?.latestInteraction"
+      </section>
+      <timestamps v-if="summary.stats.timestamps"
+        :timestamps="summary.stats.timestamps"
+        :inPostSummary="true"
         class="timestampSection"
-      > Latest Direct Interaction: <timestamp 
-          class="timestamp"
-          :pastUnix="summary.stats.timestamps.latestInteraction"
-        />
-      </div>
+      />
     </router-link>
   </article>
 </template>
 
 <script setup lang="ts">
   import {PostSummary} from "../../../../../backend/src/objects";
-  import timestamp from "../../timestamp.vue";
+  import timestamps from "../nodeTimestamps.vue";
   defineProps<{
     summary:PostSummary;
   }>();
@@ -37,6 +35,7 @@
     text-decoration: none;
     color: var(--textColor);
     padding: 1em 0.5em;
+    min-width: 15em;
   }
 
   .topSection {

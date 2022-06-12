@@ -6,14 +6,20 @@
       >{{node.title}}</component>
       <p>{{node.body}}</p>
       <section class="interactions">
-        <span v-if="node.stats.timestamps?.latestInteraction">Latest Interaction: <timestamp :pastUnix="node.stats.timestamps.latestInteraction"/></span>
+        <timestamps v-if="node.stats.timestamps" 
+          :timestamps="node.stats.timestamps"
+          class="timestamps"
+        />
         <div>
           <votes v-if="node.stats.votes"
             :interactionPath="nodePath"
             :voters="node.stats.votes"
             @interactionError="(errorText:string) => {nodeError = errorText}"
           />
-          <reply id="replyButton" :interactionPath="nodePath" :locked="undefined"/>
+          <reply :locked="node.locked"
+            :interactionPath="nodePath"
+            class="replyButton" 
+          />
         </div>
       </section>
       <notification :text="nodeError" :desirablity-style="false"/>
@@ -27,8 +33,8 @@
 
 <script setup lang="ts">
   import {ref} from "vue";
-  import {Node as NodeObj} from "../../../../../../backend/src/objects"; // importing without renaming it causes the vite to mix up this class (Node) with this component (node.vue, referenced in the template for recursion) and thus throw an error on runtime when trying to load a node with replies
-  import timestamp from "../../../timestamp.vue";
+  import {Node as NodeObj} from "../../../../../../backend/src/objects"; // importing without renaming it causes vite to mix up this class (Node) with this component (node.vue, referenced in the template for recursion) and thus throw an error on runtime when trying to load a node with replies
+  import timestamps from "../../nodeTimestamps.vue";
   import votes from "./interactions/vote.vue";
   import reply from "./interactions/replyButton.vue";
   import notification from "../../../notification.vue";
@@ -68,11 +74,9 @@
     white-space: pre-line;
   }
 
-  .interactions > span {
-    display: block;
-    font-size: .9em;
-    width: max-content;
-    margin-left: auto;
+  .timestamps {
+    font-size: 0.9em;
+    margin-bottom: 0.25em;
   }
 
   .interactions > div {
@@ -83,7 +87,7 @@
     gap: 0.5em;
   }
 
-  #replyButton {
+  .replyButton {
     margin: 0.5em 0.25em 0 auto;
   }
 </style>

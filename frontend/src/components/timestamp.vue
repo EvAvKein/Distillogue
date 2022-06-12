@@ -31,3 +31,7 @@
 
   const stampText = props.pastUnix !== undefined ? timestamp(props.pastUnix) : "error: add pastUnix timestamp prop";
 </script>
+
+<style scoped>
+  span {white-space: nowrap}
+</style>

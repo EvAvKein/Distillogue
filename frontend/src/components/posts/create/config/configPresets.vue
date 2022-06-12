@@ -19,7 +19,8 @@
     blank: {},
     testEverything: {
       timestamps: {
-        latestInteraction: true,
+        posted: true,
+        latestInteracted: true,
       },
       votes: {
         up: true,

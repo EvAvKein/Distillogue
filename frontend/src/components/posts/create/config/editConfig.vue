@@ -18,7 +18,10 @@
     </category>
     <category title="Timestamps">
       <label>
-        Latest Interaction: <input id="timestamps.latestInteraction" type="checkbox" @change="updateConfigByCheckbox"/>
+        Posted: <input id="timestamps.posted" type="checkbox" @change="updateConfigByCheckbox"/>
+      </label>
+      <label>
+        Latest Interacted: <input id="timestamps.latestInteracted" type="checkbox" @change="updateConfigByCheckbox"/>
       </label>
     </category>
   </section>

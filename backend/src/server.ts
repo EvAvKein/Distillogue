@@ -82,7 +82,7 @@ app.get("/posts/:searchValue?", async (request, response) => {
       {$or: [{title: regexFilter}, {body: regexFilter}]},
     ), 
     {projection: {replies: false}}
-  ).sort({"stats.latestInteraction": -1}).toArray();
+  ).sort({"stats.latestInteracted": -1}).toArray();
 
   const postSummaries = topNodesOfPosts.map((post) => {
     return new PostSummary({...post, replies: []});
@@ -160,7 +160,7 @@ app.patch("/interaction", async (request, response) => { // i'm not satisfied wi
   const postId = nodePath[0] as Node["id"];
   const mongoPath = nodePathAsMongoLocators(nodePath);
 
-  const subjectPost = await posts.findOne(mongoPostsFilterByAccess(userId, {id: postId})); // this (and the interaction validations that it enables) would be best implemented as a condition on each interaction (to reduce the number of DB calls) with follow-up code to read the modify result and output any relevant error. see the comment below at latestInteraction updates for explanation on why DB conditionals are currently avoided
+  const subjectPost = await posts.findOne(mongoPostsFilterByAccess(userId, {id: postId})); // this (and the interaction validations that it enables) would be best implemented as a condition on each interaction (to reduce the number of DB calls) with follow-up code to read the modify result and output any relevant error. see the comment below at latestInteracted updates for explanation on why DB conditionals are currently avoided
   if (!subjectPost) {
     response.json(new FetchResponse(null, "Post unavailable; Either it doesn't exist, or it's private and you're not authorized"));
     return;
@@ -217,10 +217,10 @@ app.patch("/interaction", async (request, response) => { // i'm not satisfied wi
   };
   if (!dbResponse.value) {response.json(new FetchResponse(null, "Invalid interaction request"))};
 
-  if (dbResponse.value?.stats.timestamps?.latestInteraction) {
+  if (subjectPost?.config!.timestamps?.latestInteracted) {
     await posts.updateOne( // this would be best implemented as an extra modification of each interaction (to keep the interaction itself and this as a singular atomic update), but using conditionals to check if the property exists before updating requires using mongo's aggregation pipeline syntax which is (seemingly) frustratingly limited in assignment commands and is much more verbose & opaque. for the current stage of the project, i.e very early, there's no need to ruin my/the readability of mongo commands for atomic operations' sake
       mongoPostsFilterByAccess(userId, {id: postId}),
-      {$set: {[mongoPath.updatePath + "stats.timestamps.latestInteraction"]: timestamp.unix()}},
+      {$set: {[mongoPath.updatePath + "stats.timestamps.latestInteracted"]: timestamp.unix()}},
       {arrayFilters: mongoPath.arrayFiltersOption}
     );
   };
