@@ -4,7 +4,7 @@ export async function jsonFetch(method:"GET"|"POST"|"PATCH", address:string, bod
   const authHeader = authKey ? {Authorization: "Bearer " + authKey} : null;
   const requestBody = body ? {body: JSON.stringify(body)} : null;
 
-  return await fetch(address, {
+  return await fetch("/api" + address, {
     headers: new Headers({
       "Content-Type": "application/json",
       ...authHeader // typescript doesn't like conditionally assigning the value here 

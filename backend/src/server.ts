@@ -19,7 +19,7 @@ app.use(helmetSecurity());
 await posts.deleteMany({});
 await users.deleteMany({});
 
-app.post("/user", async (request, response) => {
+app.post("/api/user", async (request, response) => {
   const signUpInfo = request.body as {username:UserData["name"]};
 
   const user = await users.findOne({"data.name": signUpInfo.username})
@@ -37,7 +37,7 @@ app.post("/user", async (request, response) => {
   response.json(new FetchResponse(newUserData));
 });
 
-app.post("/user/me", async (request, response) => { // really irritates me that sign-ins are made as POST requests, change to SEARCH if/once browsers support it
+app.post("/api/user/me", async (request, response) => { // really irritates me that sign-ins are made as POST requests, change to SEARCH if/once browsers support it
   const authKey = request.headers.authorization?.replace("Bearer ", "");
   const username = request.body.username as UserData["name"];
 
@@ -52,7 +52,7 @@ app.post("/user/me", async (request, response) => { // really irritates me that 
   response.json(new FetchResponse(user.data));
 });
 
-app.patch("/user/me", async (request, response) => {
+app.patch("/api/user/me", async (request, response) => {
   const authKey = request.headers.authorization?.replace("Bearer ", "");
   const editData = request.body as {dataName:editableUserData, newValue:string};
   if (!arrOfEditableUserData.includes(editData.dataName)) {
@@ -72,7 +72,7 @@ app.patch("/user/me", async (request, response) => {
   response.json(new FetchResponse(true));
 });
 
-app.get("/posts/:searchValue?", async (request, response) => {
+app.get("/api/posts/:searchValue?", async (request, response) => {
   const regexFilter = new RegExp(sanitizeForRegex(request.params.searchValue || ""), "i");
   const userId = await userIdByAuthHeader(request);
 
@@ -91,7 +91,7 @@ app.get("/posts/:searchValue?", async (request, response) => {
   response.json(new FetchResponse(postSummaries));
 });
 
-app.post("/post", async (request, response) => {
+app.post("/api/post", async (request, response) => {
   const postRequest = request.body as NodeCreationRequest;
 
   const userId = await userIdByAuthHeader(request);
@@ -119,7 +119,7 @@ app.post("/post", async (request, response) => {
   response.json(new FetchResponse(true));
 });
 
-app.get("/post/:id", async (request, response) => {
+app.get("/api/post/:id", async (request, response) => {
   const postId = request.params.id as Node["id"];
   const userId = await userIdByAuthHeader(request);
 
@@ -149,7 +149,7 @@ app.get("/post/:id", async (request, response) => {
   response.json(new FetchResponse(post));
 });
 
-app.patch("/interaction", async (request, response) => { // i'm not satisfied with this URI's unRESTfulness, but couldn't come up with an appropriate implementation. "/posts/:nodePath/interactions" results in extremely verbose URIs, "/posts/:postId/interactions" isn't really coherent when a nodePath is still needed, and "/interactions/:interactionType" doesn't help much and disjoints is from other equally-necessary data
+app.patch("/api/interaction", async (request, response) => { // i'm not satisfied with this URI's unRESTfulness, but couldn't come up with an appropriate implementation. "/posts/:nodePath/interactions" results in extremely verbose URIs, "/posts/:postId/interactions" isn't really coherent when a nodePath is still needed, and "/interactions/:interactionType" doesn't help much and disjoints is from other equally-necessary data
   const userId = await userIdByAuthHeader(request);
   if (!userId) {
     response.json(new FetchResponse(null, "User authentication failed"));
