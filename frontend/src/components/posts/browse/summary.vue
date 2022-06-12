@@ -4,12 +4,8 @@
       <section class="topSection">
         <h4>{{summary.title}}</h4>
         <img v-if="summary.public"
-          alt="Open lock icon"
-          src="../../../assets/unlocked.svg"
-        />
-        <img v-else
-          alt="Closed lock icon"
-          src="../../../assets/locked.svg"
+          alt="Megaphone icon"
+          src="../../../assets/megaphone.svg"
         />
       </section>
       <timestamps v-if="summary.stats.timestamps"
