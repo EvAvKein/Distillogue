@@ -56,6 +56,10 @@ Cypress.Commands.addAll({
     callbackAffectingConfig();
     
     cy.get("form button").contains("Post").click();
+
+    cy.wait(500);
+
+    cy.url().should("include", "/browse");
   },
   submitReply(nodeSelector:string, title:string, body:string) {
     cy.get(nodeSelector).find('.interactions button[aria-label="Reply"]').click();

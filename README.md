@@ -70,6 +70,7 @@ I want to make this thing to express my skills/ideals, and it would be neat if i
 
 ### Test
 (Serve, then launch Cypress for tests)
+0. If you don't have Google Chrome installed, remove the "--browser chrome" flag in the frontend package.json's cypress script
 1. `cd backend` (from project's root folder) 
 2. `npm run test`
 3. visit the new Cypress tab

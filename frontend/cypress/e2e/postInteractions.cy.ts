@@ -18,17 +18,15 @@ describe("Post Interaction", () => {
         cy.get('form #config input[type="checkbox"]').should("be.checked"); // this doesn't actually work, uncomment the above line which checks the "public" checkbox for evidence. i tried changing this assert in multiple ways but nothing worked
       }
     );
-
-    cy.url().should("include", "/browse");
   });
 
-  function validateNodeContents(nodeSelector:string, title:string, body:string) {
+  function validateNewNodeContents(nodeSelector:string, title:string, body:string) {
     cy.get(nodeSelector).should("contain", title)
       .should("contain", body)
       .find(".interactions")
       .as("nodeInteractions");
 
-    cy.get("@nodeInteractions").contains("Latest Interaction: Now");
+    cy.get("@nodeInteractions").contains("Posted: Now");
     cy.get("@nodeInteractions").find('[aria-label="Vote interactions"]');
     cy.get("@nodeInteractions").find('button[aria-label="Reply"]');
   };
@@ -42,9 +40,9 @@ describe("Post Interaction", () => {
 
     cy.get("article").first().click();
 
-    cy.url().should("include", "/browse");
+    cy.url().should("include", "/post");
 
-    validateNodeContents(".node#central", postTitle, postBody);
+    validateNewNodeContents(".node#central", postTitle, postBody);
   });
 
   it("Test votes", () => {
@@ -79,9 +77,11 @@ describe("Post Interaction", () => {
     
     cy.submitReply("#central", replyTitle, replyBody);
 
+    cy.get(".node#central").contains("Latest Interacted: Now");
+
     cy.get(".node#central").parent().find(".nodeBranch .node").as("replyToCentral");
 
-    validateNodeContents("@replyToCentral", replyTitle, replyBody);
+    validateNewNodeContents("@replyToCentral", replyTitle, replyBody);
   });
 
   // it("Test deep interactions (using replies)", () => { // testing a single interaction is sufficient, as this test is meant to validate the deep node paths' construction and translation across the app; assuming the deep path remains valid during a round trip, the above node interactions are functionally depth/path-agnostic
