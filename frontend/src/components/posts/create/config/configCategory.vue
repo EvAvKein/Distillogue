@@ -18,6 +18,7 @@
   details {
     height: fit-content;
     width: fit-content;
+    white-space: nowrap;
     background-color: var(--backgroundSubColor);
     border-radius: 0.5em;
   }
