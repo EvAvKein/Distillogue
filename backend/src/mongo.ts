@@ -1,4 +1,4 @@
-import {Node, User} from "./objects";
+import {Node, User} from "../../shared/objects";
 import {MongoClient, Collection} from "mongodb";
 const mongo = new MongoClient("mongodb://localhost");
 await mongo.connect().catch(() => {console.log("Failed to connect to database :\\")});

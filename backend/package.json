@@ -2,7 +2,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "host": "start mongo && start node dist/server.js"
+    "host": "start mongo && start node dist/backend/src/server.js"
   },
   "dependencies": {
     "express": "^4.17.2",

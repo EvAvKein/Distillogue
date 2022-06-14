@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
   import {watch, toRef, onMounted} from "vue";
-  import {PostConfig} from "../../../../../../backend/src/objects";
+  import {PostConfig} from "../../../../../../shared/objects";
   import {propertiesByType} from "../../../../helpers/propertiesByType";
   import category from "./configCategory.vue";
 

@@ -1,17 +1,16 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "useDefineForClassFields": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "rootDir": "./src",
+    "rootDirs": ["./", "../shared"],
     "outDir": "./dist",
     "strict": true,
     // "sourceMap": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "lib": ["esnext", "dom"],
+    "lib": ["esnext"],
   },
-  "include": ["*.ts", "src/**/*.ts"],
+  "include": ["*.ts", "src/**/*.ts", "../shared/**/*.ts"],
   "exclude": ["./node_modules"]
 }

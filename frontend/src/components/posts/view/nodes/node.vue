@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
   import {ref} from "vue";
-  import {Node as NodeObj} from "../../../../../../backend/src/objects"; // importing without renaming it causes vite to mix up this class (Node) with this component (node.vue, referenced in the template for recursion) and thus throw an error on runtime when trying to load a node with replies
+  import {Node as NodeObj} from "../../../../../../shared/objects"; // importing without renaming it causes vite to mix up this class (Node) with this component (node.vue, referenced in the template for recursion) and thus throw an error on runtime when trying to load a node with replies
   import timestamps from "../../nodeTimestamps.vue";
   import votes from "./interactions/vote.vue";
   import reply from "./interactions/replyButton.vue";

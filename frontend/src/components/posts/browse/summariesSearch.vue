@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
   import {ref, onMounted} from "vue";
-  import {PostSummary} from "../../../../../backend/src/objects";
+  import {PostSummary} from "../../../../../shared/objects";
   import {jsonFetch} from "../../../helpers/jsonFetch";
   import {debounce} from "../../../helpers/debounce";
   import labelledInput from "../../labelledInput.vue";

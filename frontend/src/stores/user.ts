@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {User} from "../../../backend/src/objects";
+import {User} from "../../../shared/objects";
 
 export const useUser = defineStore("user", {
   state: () => {

@@ -1,8 +1,8 @@
 import {users} from "../mongo.js";
-import {UserData} from "../objects.js";
+import {UserData} from "../../../shared/objects";
 import {Request} from "express";
 
-export async function userIdByAuthHeader(ApiRequest:Request) { //key:UserData["id"]
+export async function userIdByAuthHeader(ApiRequest:Request) {
   const authKey = ApiRequest.headers.authorization?.replace("Bearer ", "");
 
   if (!authKey) return null;

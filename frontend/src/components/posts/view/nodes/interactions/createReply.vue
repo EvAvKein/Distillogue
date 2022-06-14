@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
   import {ref} from "vue";
-  import {Node, NodeCreationRequest, NodeInteractionRequest} from "../../../../../../../backend/src/objects";
+  import {Node, NodeCreationRequest, NodeInteractionRequest} from "../../../../../../../shared/objects";
   import {jsonFetch} from "../../../../../helpers/jsonFetch";
   import {useUser} from "../../../../../stores/user";
   import labelledInput from "../../../../labelledInput.vue";

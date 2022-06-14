@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
   import {ref, provide} from "vue";
-  import {Node} from "../../../../../backend/src/objects";
+  import {Node} from "../../../../../shared/objects";
   import node from "./nodes/node.vue";
   import modalWrapper from "../../modalWrapper.vue";
   import createReply from "./nodes/interactions/createReply.vue";

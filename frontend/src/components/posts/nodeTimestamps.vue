@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-  import {NodeStats} from "../../../../backend/src/objects";
+  import {NodeStats} from "../../../../shared/objects";
   import timestamp from "../timestamp.vue";
 
   defineProps<{

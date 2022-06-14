@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-  import {PostConfig} from '../../../../../../backend/src/objects';
+  import {PostConfig} from '../../../../../../shared/objects';
   
 
   const configs = {

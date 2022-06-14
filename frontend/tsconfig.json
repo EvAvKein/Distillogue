@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "useDefineForClassFields": true,
     "module": "esnext",
     "moduleResolution": "node",
+    "rootDirs": ["./", "./shared"],
+    "outDir": "./dist",
     "strict": true,
     // "sourceMap": true,
     "jsx": "preserve",
@@ -11,6 +12,6 @@
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
   },
-  "include": ["*.ts", "src/**/*.ts", "*.vue", "src/**/*.vue", "src/env.d.ts", "src/main.ts"],
+  "include": ["*.ts", "src/**/*.ts", "src/**/*.vue", "src/env.d.ts", "src/main.ts"],
   "exclude": ["./node_modules"]
 }

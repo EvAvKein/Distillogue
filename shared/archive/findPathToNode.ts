@@ -1,4 +1,4 @@
-import {Node} from "../../../backend/src/objects";
+import {Node} from "../objects";
 
 export async function findPathToNode(postObject:Node, targetNodeId:Node["id"]) {
   let ancestry = [] as Node["id"][];
@@ -25,4 +25,4 @@ export async function findPathToNode(postObject:Node, targetNodeId:Node["id"]) {
   return ancestry;
 };
 
-// no longer in use because i figured it's probably better to have a slower load time than slower interaction time (and the requisite refactor put this out of use). keeping it here for the time being because it's still potentially useful code, will probably create an archive folder in future 
+// no longer in use because i figured it's probably better to have a slower load time than slower interaction time (and the requisite refactor put this out of use). keeping it for the time being because it's still potentially useful code 

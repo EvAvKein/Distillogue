@@ -2,14 +2,14 @@ import path from "node:path";
 import express from "express";
 import helmetSecurity from "helmet";
 import {users, posts} from "./mongo.js";
-import * as timestamp from "./helpers/timestamps.js";
+import * as timestamp from "../../shared/helpers/timestamps.js";
 import {userIdByAuthHeader} from "./helpers/userIdByAuthHeader.js";
 import {nodePathAsMongoLocators} from "./helpers/mongo/nodePathAsMongoLocators.js";
 import {mongoPostsFilterByAccess} from "./helpers/mongo/mongoPostsFilterByAccess.js";
 import {updateDeepProperty} from "./helpers/updateDeepProperty.js";
 import {recursivelyModifyNode} from "./helpers/recursivelyModifyNode.js";
 import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
-import {FetchResponse, User, UserData, editableUserData, arrOfEditableUserData, NodeCreationRequest, Node, PostSummary, NodeInteractionRequest, NodeStats, NodeSummary} from "./objects.js";
+import {FetchResponse, User, UserData, editableUserData, arrOfEditableUserData, NodeCreationRequest, Node, PostSummary, NodeInteractionRequest} from "../../shared/objects.js";
 
 const app = express();
 app.use(express.static("../frontend/dist"));

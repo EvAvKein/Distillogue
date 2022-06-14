@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
   import {ref} from "vue";
-  import {Node, PostConfig, NodeCreationRequest, UserData} from "../../../../../backend/src/objects";
+  import {Node, PostConfig, NodeCreationRequest, UserData} from "../../../../../shared/objects";
   import {jsonFetch} from "../../../helpers/jsonFetch";
   import {useUser} from "../../../stores/user";
   import {useRouter} from "vue-router";

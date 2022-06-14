@@ -1,4 +1,4 @@
-import {Node, UserData} from "../../objects";
+import {Node, UserData} from "../../../../shared/objects";
 import {Filter} from "mongodb";
 
 export function mongoPostsFilterByAccess(userId:UserData["id"]|null|undefined, mongoFilterObject?:Filter<Node>) {
