@@ -2,7 +2,7 @@
 
 ### Tasks:
 * Various core & flagship features (specifics TBA)
-* Fully migrate from TSC to Vite
+* Switch backend build tool from TSC to Vite
 * Dockerize
 * Prettier
 * Proper registration/authentication (Auth0)

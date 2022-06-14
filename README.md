@@ -45,7 +45,10 @@ I want to make this thing to express my skills/ideals, and it would be neat if i
 * Node.js
 * MongoDB [(Instructions for enabling "start" command with Mongo on Windows 10)](https://stackoverflow.com/a/41507803)
 * Vite ("`npm install -g vite@latest`")
-* Windows (at least for the `start` commands used in backend's `npm run serve`)
+
+#### CLI-induced dependencies
+* Windows, `start` command in backend's `npm run host`: If not using Windows, replace with your OS's equivalent for execution in new window
+* Google Chrome, `--browser chrome` flag in frontend's `npm run cypress`: Solely added for my personal ease of use. If you don't have/use Chrome, you can safely remove it or replace `chrome` with your browser of choice as per the Cypress docs for this flag.
 
 ---
 
@@ -55,25 +58,14 @@ I want to make this thing to express my skills/ideals, and it would be neat if i
 
 1. Install the dependencies mentioned above
 2. Clone the project to your computer via download/Git
-3. Run `npm install` on both "backend" and "frontend" folders
+3. Run `npm run install`
 
-### Build
-1. `cd backend` (from project's root folder) 
-2. `npm run build`
-3. visit `localhost:3030` in browser
+### Commands
+1. `npm run build`: Construct files for frontend & backend  
+2. `npm run host`: Launch server (and database) on localhost:3030
+3. `npm run cypress`: Launch Cypress for end-to-end testing
 
-### Serve
-(Build, then launch server & database)
-1. `cd backend` (from project's root folder) 
-2. `npm run serve`
-3. visit `localhost:3030` in browser
-
-### Test
-(Serve, then launch Cypress for tests)
-0. If you don't have Google Chrome installed, remove the "--browser chrome" flag in the frontend package.json's cypress script
-1. `cd backend` (from project's root folder) 
-2. `npm run test`
-3. visit the new Cypress tab
+(There's also `npm run serve` which executes 1 & 2, and `npm run test` which executes all 3)
 
 ---
 

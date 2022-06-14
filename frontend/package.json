@@ -1,12 +1,9 @@
 {
-  "name": "distillogue",
-  "description": "Distillogue's Frontend",
   "type": "module",
   "scripts": {
+    "build": "vite build",
     "cypress": ".\\node_modules\\.bin\\cypress open --e2e --browser chrome"
   },
-  "author": "Eve Aviv Keinan",
-  "license": "MIT",
   "dependencies": {
     "pinia": "^2.0.10",
     "vue": "^3.2.25",

@@ -1,14 +1,9 @@
 {
-  "name": "distillogue",
-  "description": "Distillogue's Backend",
   "type": "module",
   "scripts": {
-    "build": "tsc && cd ../frontend && vite build",
-    "serve": "npm run build && start mongo && start node dist/server.js",
-    "test": "npm run serve && cd ../frontend && npm run cypress"
+    "build": "tsc",
+    "host": "start mongo && start node dist/server.js"
   },
-  "author": "Eve Aviv Keinan",
-  "license": "MIT",
   "dependencies": {
     "express": "^4.17.2",
     "helmet": "^5.0.1",

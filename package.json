@@ -1,0 +1,22 @@
+{
+  "name": "distillogue",
+  "description": "A tool for conducting dialogue in the distilled format of your choice; currently in very early development.",
+  "author": "Eve Aviv Keinan",
+  "license": "MIT",
+  "scripts": {
+    "install": "cd backend && npm install && cd ../frontend && npm install",
+    "build": "cd backend && npm run build && cd ../frontend && npm run build",
+    "host": "cd backend && npm run host",
+    "serve": "npm run build && npm run host",
+    "cypress": "cd frontend && npm run cypress",
+    "test": "npm run serve && npm run cypress"
+  },
+  "homepage": "https://github.com/EvAvKein/Distillogue#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EvAvKein/Distillogue.git"
+  },
+  "bugs": {
+    "url": "https://github.com/EvAvKein/Distillogue/issues"
+  }
+}
