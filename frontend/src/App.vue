@@ -48,6 +48,8 @@ body {
 
 img {pointer-events: none}
 
+button {border: none}
+
 ::-webkit-scrollbar {
   width: 1rem;
   height: 1rem;
