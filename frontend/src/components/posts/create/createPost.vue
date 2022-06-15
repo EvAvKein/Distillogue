@@ -11,15 +11,26 @@
       <labelledInput
         :label="'Body'"
         :type="'textarea'"
-        :minLineHeight="10"
+        :minLineHeight="15"
         :required="true"
         :inputId="'postBody'"
         v-model="postBody"
       />
     </section>
-    <section id="config">
-      <configPresets v-model:chosenPreset="configOverridingPreset"/>
-      <editConfig v-model:config="postConfig" :presetOverride="configOverridingPreset"/>
+    <section id="configDrawer" :class="configDrawerOpen ? 'open' : ''">
+      <button id="drawerToggler"
+        type="button"
+        @click="() => {configDrawerOpen = !configDrawerOpen}"
+      >
+        <img src="../../../assets/fileConfig.svg" alt="File with cogwheel"/>
+      </button>
+      <section id="config" :inert="!configDrawerOpen">
+        <configPresets v-model:chosenPreset="configOverridingPreset"/>
+        <editConfig v-model:config="postConfig" 
+          :presetOverride="configOverridingPreset"
+          id="editConfig"
+        />
+      </section>
     </section>
     <section id="confirmation">
       <notification :text="notifText" :desirablityStyle="notifDesirability"/>
@@ -44,6 +55,8 @@
   import notification from "../../notification.vue";
   const user = useUser();
   const router = useRouter();
+
+  const configDrawerOpen = ref<boolean>(false);
 
   const invitedOwners = ref<UserData["id"][]>([]);
   const postTitle = ref<Node["title"]>("");
@@ -79,36 +92,111 @@
 
 <style scoped>
   form {
-    width: clamp(20em, 90%, 70em);
-    margin: auto;
-    padding: 0;
+    position: relative;
+    width: min(100%, 70em);
+    overflow: hidden;
+    display: grid;
+    gap: 0 0.5em;
+    grid-template-columns: calc(100% - 3em) 0;
+    grid-template-areas: 
+      "content config"
+      "confirmation confirmation";
   }
 
-  #content {font-size: clamp(1.2em, 1.8vw, 1.5em)}
+  #content {font-size: clamp(1.25em, 2.25vw, 1.5em)}
   #contentTitle {font-size: 1.15em}
 
-  #config > * + * {
-    margin-top: 0.5em;
+  #configDrawer {
+    position: absolute;
+    height: 100%;
+    border-radius: 1em 0 0 1em;
+    width: max-content;
+    right: -17.5em;
+    transition: right .5s;
+  }
+  #configDrawer.open {right: -2.5em}
+
+  #config {
+    display: inline-block;
+    box-sizing: border-box;
+    scrollbar-gutter: stable;
+    height: 100%;
+    padding: 0.5em;
+    padding-right: 0.25em;
+    border-width: 0.25em 0;
+    border-style: solid;
+    border-color: var(--textColor);
+    overflow: auto;
+    background-color: var(--backgroundColor);
+  }
+  #config > * + * {margin-top: 0.5em}
+
+  #drawerToggler {
+    background-color: var(--textColor);
+    height: inherit;
+    width: 3.25em;
+    padding: 0;
+    margin-right: 0;
+    border-radius: 1em 0 0 1em;
+    vertical-align: top;
+  }
+  #drawerToggler img { 
+    width: 2.75em;
+    filter: var(--filterToBackgroundColor);
+  }
+  
+  #drawerToggler:hover, #drawerToggler:focus {
+    cursor: pointer;
+    outline: none;
+    background-color: var(--highlightSubColor)
+  }
+  #drawerToggler:hover img, #drawerToggler:focus img {
+    background-color: var(--filterToHighlightSubColor)
+  }
+  #drawerToggler:hover + #config, #drawerToggler:focus + #config {
+    border-color: var(--highlightSubColor)
+  }
+  #drawerToggler:active {
+    background-color: var(--highlightColor)
+  }
+  #drawerToggler:active img {
+    background-color: var(--filterToHighlightColor)
+  }
+  #drawerToggler:active + #config {
+    border-color: var(--highlightColor)
   }
 
   #submitButton {
-    margin-top: 0.5em;
-    width: 100%;
+    display: block;
+    margin: 0.5em auto 0;
+    width: calc(100% - 2em);
   }
 
+  #content {grid-area: content}
+  #configDrawer {grid-area: config}
+  #confirmation {grid-area: confirmation}
+
   @media (min-width: 40rem) {
+    #configDrawer {position: initial}
+    #drawerToggler {display: none}
+    #config {
+      display: block;
+      height: initial;
+      margin-top: 0.5em;
+      padding: 0;
+      border: none;
+      border-radius: 0;
+    }
+    
     form {
+      overflow: initial;
+      margin: auto;
+      width: clamp(33em, 90%, 70em);
       display: grid;
       grid-template-columns: 4fr 1fr;
-      grid-template-rows: min-content 1fr;
-      gap: 0 0.5em;
       grid-template-areas: 
         "content config"
         "confirmation config";
     }
-
-    #content {grid-area: content}
-    #config {grid-area: config}
-    #confirmation {grid-area: confirmation}
   }
 </style>

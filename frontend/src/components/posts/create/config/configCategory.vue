@@ -36,8 +36,8 @@
 
   details > div {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
     padding: 0.5em 1em 1em;
     gap: 0.5em 1.25em;
   }

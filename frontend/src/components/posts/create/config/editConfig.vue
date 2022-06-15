@@ -1,11 +1,11 @@
 <template>
   <section id="editConfig">
-    <category title="Access" :openByDefault="true">
+    <category title="Access" class="category" :openByDefault="true">
       <label>
         Public: <input id="public" type="checkbox" @change="updateConfigByCheckbox">
       </label>
     </category>
-    <category title="Voting">
+    <category title="Voting" class="category">
       <label>
         Upvotes: <input id="votes.up" type="checkbox" @change="updateConfigByCheckbox"/>
       </label>
@@ -16,7 +16,7 @@
         Anonymous: <input id="votes.anon" type="checkbox"  @change="updateConfigByCheckbox"/>
       </label>
     </category>
-    <category title="Timestamps">
+    <category title="Timestamps" class="category">
       <label>
         Posted: <input id="timestamps.posted" type="checkbox" @change="updateConfigByCheckbox"/>
       </label>
@@ -118,19 +118,12 @@
 </script>
 
 <style scoped>
-  section {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    align-content: flex-start;
-    gap: 0.75em;
-  }
-
   label {width: max-content}
 
-  @media (min-width: 40rem) {
-    section {display: block}
-    section > * {width: 100%}
-    section > * + * {margin-top: 0.5em}
+  section {display: block}
+  .category {
+    width: min(100%, 15em);
+    margin: auto;
   }
+  .category + .category {margin-top: 0.5em}
 </style>
