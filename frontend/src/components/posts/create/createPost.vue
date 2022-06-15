@@ -63,7 +63,7 @@
   function toggleConfigInertValidatorByScreenWidth() {
     const fontSize = Number(window.getComputedStyle(body).fontSize.replace("px", ""));
 
-    body.clientWidth < (fontSize * 40)
+    body.clientWidth < (fontSize * 45)
       ? configDrawerExists.value = true
       : configDrawerExists.value = false
   };
@@ -189,7 +189,7 @@
   #configDrawer {grid-area: config}
   #confirmation {grid-area: confirmation}
 
-  @media (min-width: 40rem) {
+  @media (min-width: 45rem) {
     #configDrawer {position: initial}
     #drawerToggler {display: none}
     #config {
@@ -199,12 +199,13 @@
       padding: 0;
       border: none;
       border-radius: 0;
+      scrollbar-gutter: auto;
     }
     
     form {
       overflow: initial;
       margin: auto;
-      width: clamp(33em, 90%, 70em);
+      width: min(95%, 70em);
       display: grid;
       grid-template-columns: 4fr 1fr;
       grid-template-areas: 
