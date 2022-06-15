@@ -24,7 +24,7 @@
       >
         <img src="../../../assets/fileConfig.svg" alt="File with cogwheel"/>
       </button>
-      <section id="config" :inert="!configDrawerOpen">
+      <section id="config" :inert="configDrawerExists && !configDrawerOpen">
         <configPresets v-model:chosenPreset="configOverridingPreset"/>
         <editConfig v-model:config="postConfig" 
           :presetOverride="configOverridingPreset"
@@ -56,7 +56,20 @@
   const user = useUser();
   const router = useRouter();
 
+  const configDrawerExists = ref<boolean|undefined>();
   const configDrawerOpen = ref<boolean>(false);
+
+  const body = document.getElementsByTagName("body")[0];
+  function toggleConfigInertValidatorByScreenWidth() {
+    const fontSize = Number(window.getComputedStyle(body).fontSize.replace("px", ""));
+
+    body.clientWidth < (fontSize * 40)
+      ? configDrawerExists.value = true
+      : configDrawerExists.value = false
+  };
+  
+  toggleConfigInertValidatorByScreenWidth();
+  window.addEventListener("resize", toggleConfigInertValidatorByScreenWidth);
 
   const invitedOwners = ref<UserData["id"][]>([]);
   const postTitle = ref<Node["title"]>("");
