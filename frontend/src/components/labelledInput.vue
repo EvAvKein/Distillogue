@@ -1,6 +1,7 @@
 <template>
   <div>
     <textarea v-if="type === 'textarea'"
+      :value="modelValue ?? ''"
       :id="inputId"
       :minLength="minLength"
       :maxlength="maxLength"
@@ -10,6 +11,7 @@
     ></textarea> 
     <input v-else
       :type="type"
+      :value="modelValue ?? ''"
       :id="inputId"
       :minLength="minLength"
       :maxLength="maxLength"
