@@ -12,6 +12,7 @@
       @expiration="() => {signingMessage = ''}"
     />
     <button @click="signingByInput"
+      type="button"
       class="globalStyle_textButton"
     >Continue</button>
   </form>
