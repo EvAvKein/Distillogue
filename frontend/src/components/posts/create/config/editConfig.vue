@@ -91,6 +91,8 @@
     inputsAffectedByPresets = Array.from(document.querySelectorAll<HTMLInputElement>("#editConfig input")).filter((input) => {
       return !["public"].includes(input.id);
     });
+
+    updateConfigByPreset(props.config);
   });
 
   function updateConfigByPreset(configPreset:PostConfig) {
