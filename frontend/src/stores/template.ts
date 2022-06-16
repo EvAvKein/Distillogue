@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 
-export const template = defineStore("user", {
+export const useTemplate = defineStore("template", {
   state: () => {
     return {
       
