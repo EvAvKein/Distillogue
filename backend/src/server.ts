@@ -54,16 +54,22 @@ app.post("/api/user/me", async (request, response) => { // really irritates me t
 
 app.patch("/api/user/me", async (request, response) => {
   const authKey = request.headers.authorization?.replace("Bearer ", "");
-  const editData = request.body as {dataName:editableUserData, newValue:string};
-  if (!arrOfEditableUserData.includes(editData.dataName)) {
+  const editRequests = request.body as {dataName:editableUserData, newValue:string}[];
+  
+  if (!editRequests.every((request) => arrOfEditableUserData.includes(request.dataName))) {
     response.json(new FetchResponse(null, "Invalid data insertion"));
     return;
   };
 
-  const dataPropertyByString = "data." + editData.dataName;
+  const mongoUpdateObject = {} as {[key:string]: any}; // a bare minimum type, because idk how to actually type the key as `data.${editableUserData}`, and i'm not sure it's even possible to type the value as the value of whichever editableUserData property is being passed
+
+  editRequests.forEach((request) => {
+    mongoUpdateObject["data." + request.dataName] = request.newValue;
+  });
+
   await users.findOneAndUpdate(
     {"data.authKey": authKey},
-    {$set: {[dataPropertyByString]: editData.newValue}},
+    {$set: mongoUpdateObject},
   ).catch(() => {
     response.json(new FetchResponse(null, "Failed to update database"));
     return;

@@ -95,10 +95,10 @@
     notification.value.text = "Submitting edit request...";
     notification.value.desirabilityStyle = undefined;
     const editResponse = await jsonFetch("PATCH", props.content.editable!.editAuthAddress,
-      {
+      [{
         dataName: props.content.editable!.dataName,
         newValue: currentContentText.value,
-      },
+      }],
       user.data.authKey
     );
 
