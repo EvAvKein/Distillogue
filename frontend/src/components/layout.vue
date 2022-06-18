@@ -99,6 +99,7 @@
     width: fit-content;
     display: flex;
     align-items: center;
+    gap: 0.5em;
   }
 
   .globalStyle_textButton {font-size: 0.9em}
