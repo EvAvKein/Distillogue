@@ -32,11 +32,11 @@ class UserData {
 
 const arrOfEditableUserData = ["name", "about", "settings"] as const;
 type editableUserData = typeof arrOfEditableUserData[number];
-class userPatchRequest {
+class UserPatchRequest {
   dataName:editableUserData;
   newValue:any;
 
-  constructor(dataName:userPatchRequest["dataName"], newValue:userPatchRequest["newValue"]) {
+  constructor(dataName:UserPatchRequest["dataName"], newValue:UserPatchRequest["newValue"]) {
     this.dataName = dataName;
     this.newValue = newValue;
   };
@@ -185,7 +185,7 @@ export {
   FetchResponse,
   User,
   UserData,
-  editableUserData, arrOfEditableUserData, userPatchRequest,
+  editableUserData, arrOfEditableUserData, UserPatchRequest,
   Log,
   PostConfig,
   PostSummary,

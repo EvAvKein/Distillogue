@@ -9,7 +9,7 @@ import {mongoPostsFilterByAccess} from "./helpers/mongo/mongoPostsFilterByAccess
 import {updateDeepProperty} from "./helpers/updateDeepProperty.js";
 import {recursivelyModifyNode} from "./helpers/recursivelyModifyNode.js";
 import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
-import {FetchResponse, User, UserData, userPatchRequest, arrOfEditableUserData, NodeCreationRequest, Node, PostSummary, NodeInteractionRequest} from "../../shared/objects.js";
+import {FetchResponse, User, UserData, UserPatchRequest, arrOfEditableUserData, NodeCreationRequest, Node, PostSummary, NodeInteractionRequest} from "../../shared/objects.js";
 
 const app = express();
 app.use(express.static("../frontend/dist"));
@@ -54,7 +54,7 @@ app.post("/api/user/me", async (request, response) => { // really irritates me t
 
 app.patch("/api/user/me", async (request, response) => {
   const authKey = request.headers.authorization?.replace("Bearer ", "");
-  const editRequests = request.body as userPatchRequest[];
+  const editRequests = request.body as UserPatchRequest[];
   
   if (!editRequests.every((request) => arrOfEditableUserData.includes(request.dataName))) {
     response.json(new FetchResponse(null, "Invalid data insertion"));
