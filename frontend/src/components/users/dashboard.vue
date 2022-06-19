@@ -92,6 +92,7 @@
     font-size: clamp(1.1em, 2.25vw, 1.5em);
     grid-template-columns: 1fr 3.5fr;
     grid-template-areas: "sidebar page";
+    gap: 0.75em;
   }
 
   #dashboardSidebar {
