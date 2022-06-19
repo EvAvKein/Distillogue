@@ -1,18 +1,17 @@
 <template>
   <main>
-    <profileEditor id="profileEditor"/>
+    <dashboard/>
   </main>
 </template>
 
 <script setup lang="ts">
-  import profileEditor from '../components/users/profileEditor.vue';
+  import dashboard from "../components/users/dashboard.vue";
 </script>
 
 <style scoped>
-  main {padding: 1em}
-
-  #profileEditor {
+  main {
     margin: 0 auto;
-    max-width: 50em;
+    padding: 1em;
+    max-width: 70rem;
   }
 </style>

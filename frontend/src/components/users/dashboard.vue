@@ -1,0 +1,147 @@
+<template>
+  <section id="dashboardContainer">
+    <section id="dashboardSidebar">
+      <button v-show="changes.length > 0"
+        id="dashboardSubmit"
+        class="globalStyle_textButton"
+        @click="submitAllChanges"
+      >
+        <img src="../../assets/save.svg"/>
+        <span>Save ({{changes.length}})</span>
+      </button>
+      <nav aria-label="Dashboard page navigation">
+        <button @click="currentPage = 'profile'">
+          <img src="../../assets/userWithoutPfp.svg"/>
+          <span>Profile</span>
+        </button>
+      </nav>
+    </section>
+    <section id="dashboardPage">
+      <notification :text="submitNotif.text" :desirablityStyle="submitNotif.style"/>
+      <profileEditor v-show="currentPage === 'profile'"
+        @newState="updateChangesByNewState"
+      />
+    </section>
+  </section>
+</template>
+
+<script setup lang="ts">
+  import {ref, reactive} from "vue";
+  import {useUser} from "../../stores/user";
+  import {jsonFetch} from "../../helpers/jsonFetch";
+  import {UserPatchRequest} from "../../../../shared/objects";
+  import notification from "../notification.vue";
+  import profileEditor from "./dashboardSections/profileEditor.vue";
+  const user = useUser();
+
+  type pageName = "profile";
+  const currentPage = ref<pageName>("profile");
+
+  const changes = ref<UserPatchRequest[]>([]);
+  const submitNotif = reactive({text: "", style: undefined as boolean|undefined});
+
+  function updateChangesByNewState(newStates:UserPatchRequest[]) {
+    newStates.forEach((state) => {
+      const newValue = state.newValue;
+      const existingChangeIndex = changes.value.findIndex((change) => {return change.dataName === state.dataName});
+
+      const prevChangeExists = existingChangeIndex === -1 ? false : true;
+      const inputMatchesUserData = state.newValue === user.data[state.dataName];
+
+      if (!prevChangeExists && inputMatchesUserData) {
+        return;
+      };
+
+      if (!prevChangeExists) {
+        changes.value.push(state);
+        return;
+      };
+
+      inputMatchesUserData
+        ? changes.value.splice(existingChangeIndex, 1)
+        : changes.value[existingChangeIndex].newValue = newValue
+    });
+  };
+
+  async function submitAllChanges() {
+    submitNotif.text = "Submitting changes...";
+    submitNotif.style = undefined;
+
+    const changesResponse = await jsonFetch("PATCH", "/user/me",
+      changes.value,
+      user.data.authKey
+    );
+
+    if (changesResponse.error) {
+      submitNotif.text = changesResponse.error.message;
+      submitNotif.style = false;
+    };
+
+    submitNotif.text = "Changes saved!";
+    submitNotif.style = true;
+    changes.value.forEach((change) => {
+      (user.data[change.dataName] as any) = change.newValue; // considering the circumstances, i dont think coercing an "any" here is actually harmful
+    });
+    changes.value = [];
+  };
+</script>
+
+<style scoped>
+  #dashboardContainer {
+    display: grid;
+    font-size: clamp(1.1em, 2.25vw, 1.5em);
+    grid-template-columns: 1fr 3.5fr;
+    grid-template-areas: "sidebar page";
+  }
+
+  #dashboardSidebar {
+    grid-area: sidebar;
+    height: 100%;
+    white-space: nowrap;
+  }
+
+  #dashboardSidebar button {
+    width: 100%;
+    font-size: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0.4em;
+  }
+
+  #dashboardSubmit img {filter: var(--filterToBackgroundColor)}
+  #dashboardSubmit + nav {margin-top: 0.25em}
+  
+  img {
+    height: 1.2em;
+    vertical-align: bottom;
+  }
+  img + span {
+    display: none;
+    margin-left: 0.25em;
+  }
+  
+
+  nav button {
+    display: block;
+    color: var(--textColor);
+    background-color: transparent;
+  }
+  nav button:focus, nav button:hover {
+    color: var(--highlightSubColor);
+  }
+  nav button:focus img, nav button:hover img {
+    filter: var(--filterToHighlightSubColor);
+  }
+  nav button:active {
+    color: var(--highlightColor);
+  }
+  nav button:active img {
+    filter: var(--filterToHighlightColor);
+  }
+
+  #dashboardPage {grid-area: page}
+
+  @media (min-width: 30em) {
+    img + span {display: inline}
+  }
+</style>
