@@ -47,9 +47,9 @@
 
 <script setup lang="ts">
   import {ref} from "vue";
-  import {useUser} from "../stores/user";
-  import {jsonFetch} from "../helpers/jsonFetch";
-  import editNotification from "./notification.vue";
+  import {useUser} from "../../stores/user";
+  import {jsonFetch} from "../../helpers/jsonFetch";
+  import editNotification from "../notification.vue";
   const user = useUser();
 
   const props = defineProps<{
