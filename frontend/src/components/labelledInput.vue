@@ -20,7 +20,7 @@
       @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     >
     <label :for="inputId">{{label || type}}</label>
-    <notification :text="error" :desirablityStyle="false"/>
+    <notification v-if="error" :text="error" :desirablityStyle="false"/>
   </div>
 </template>
 
