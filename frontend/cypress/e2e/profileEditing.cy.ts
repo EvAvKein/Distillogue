@@ -1,9 +1,6 @@
 describe("Profile editing", () => {
-  const username = "profileEditing";
-
-  const editIcon = "✎";
-  const confirmIcon = "✔";
-  const cancelIcon = "✘";
+  let username = "profileEditing";
+  let about = "Hello, I haven't wrote my About yet!";
 
   it("Sign up & enter Dashboard", () => {
     cy.visit("/");
@@ -11,43 +8,68 @@ describe("Profile editing", () => {
 
     cy.contains("Dashboard").click();
     cy.url().should("include", "/dashboard");
+    
+    cy.get("#dashboardSubmit").should("not.be.visible");
+    validateProfileData();
   });
+
+  function validateProfileData() {
+    cy.contains("Name").parent().find("input").should("have.value", username);
+    cy.contains("About").parent().find("textarea").should("have.value", about);
+  };
   
-  it("Start name editing & cancel", () => {
-    cy.contains("Name").closest("section").as("nameEditor");
+  it("Edit and refresh to cancel", () => {
+    validateProfileData();
 
-    cy.get("@nameEditor").contains(editIcon).click();
-    cy.get("@nameEditor").find("input").clear().type("ki23rgd7u32qtgri32grt9i");
-    cy.contains("Name").closest("section").contains(cancelIcon).click();
-    cy.get("@nameEditor").find("input").should("have.value", username);
-  })
+    cy.contains("Name").parent().find("input").clear().type("Temporary change!");
+    cy.contains("Save (1)");
 
-  const newUsername = "nameChangedByCypress";
-  it("Submit name change", () => {
-    cy.contains("Name").closest("section").as("nameEditor");
-
-    cy.get("@nameEditor").contains(editIcon).click();
-    cy.get("@nameEditor").find("input").clear().type(newUsername);
-    cy.get("@nameEditor").contains(confirmIcon).click();
-    cy.get("@nameEditor").find("input").should("have.value", newUsername);
-    cy.get("@nameEditor").find(".notification.positive");
-  });
-  
-  const newAbout = "This 'About' was added by Cypress!";
-  it('Submit "About" change', () => {
-    cy.contains("About").closest("section").as("aboutEditor");
-
-    cy.get("@aboutEditor").contains(editIcon).click();
-    cy.get("@aboutEditor").find("textarea").clear().type(newAbout);
-    cy.get("@aboutEditor").contains(confirmIcon).click();
-    cy.get("@aboutEditor").find("textarea").should("have.value", newAbout);
-    cy.get("@aboutEditor").find(".notification.positive");
-  });
-
-  it("Refresh to verify changes", () => {
     cy.reload();
+    validateProfileData();
+    cy.get("#dashboardSubmit").should("not.be.visible");
+  });
 
-    cy.contains("Name").closest("section").find("input").should("have.value", newUsername);
-    cy.contains("About").closest("section").find("textarea").should("have.value", newAbout);
+  it("Edit and undo to cancel", () => {
+    validateProfileData();
+
+    cy.contains("Name").parent().find("input").type("ExtraText");
+    cy.contains("Save (1)");
+
+    cy.contains("Name").parent().find("input").clear().type(username);
+    cy.get("#dashboardSubmit").should("not.be.visible");
+  });
+
+  it("Edit and save single (Name)", () => {
+    validateProfileData();
+
+    username = "NameChangedByCypress!";
+    cy.contains("Name").parent().find("input").clear().type(username);
+    cy.contains("Save (1)").click();
+
+    cy.wait(250);
+
+    cy.contains("Name").parent().find("input").should("have.value", username);
+    cy.get("#dashboardSubmit").should("not.be.visible");
+    cy.get(".notification.positive").should("have.text", "Changes saved!");
+
+    cy.reload();
+    validateProfileData();
+  });
+
+  it("Edit and save multiple (Name & About)", () => {
+    username = "NameChangedAgainByCypress!";
+    cy.contains("Name").parent().find("input").clear().type(username);
+    about = "This about was changed by Cypress!";
+    cy.contains("About").parent().find("textarea").clear().type(about);
+    cy.contains("Save (2)").click();
+
+    cy.wait(250);
+
+    validateProfileData();
+    cy.get("#dashboardSubmit").should("not.be.visible");
+    cy.get(".notification.positive").should("have.text", "Changes saved!");
+
+    cy.reload();
+    validateProfileData();
   });
 });
