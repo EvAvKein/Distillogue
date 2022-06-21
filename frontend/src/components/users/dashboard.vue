@@ -7,7 +7,7 @@
         @click="submitAllChanges"
       >
         <img src="../../assets/save.svg"/>
-        <span>Save ({{changes.length}})</span>
+        <span>Save</span>
       </button>
       <nav aria-label="Dashboard page navigation">
         <button @click="currentPage = 'profile'">

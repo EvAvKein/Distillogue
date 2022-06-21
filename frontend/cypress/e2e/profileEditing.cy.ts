@@ -22,7 +22,7 @@ describe("Profile editing", () => {
     validateProfileData();
 
     cy.contains("Name").parent().find("input").clear().type("Temporary change!");
-    cy.contains("Save (1)");
+    cy.get("#dashboardSubmit").should("be.visible");
 
     cy.reload();
     validateProfileData();
@@ -33,7 +33,7 @@ describe("Profile editing", () => {
     validateProfileData();
 
     cy.contains("Name").parent().find("input").type("ExtraText");
-    cy.contains("Save (1)");
+    cy.get("#dashboardSubmit").should("be.visible");
 
     cy.contains("Name").parent().find("input").clear().type(username);
     cy.get("#dashboardSubmit").should("not.be.visible");
@@ -44,7 +44,7 @@ describe("Profile editing", () => {
 
     username = "NameChangedByCypress!";
     cy.contains("Name").parent().find("input").clear().type(username);
-    cy.contains("Save (1)").click();
+    cy.get("#dashboardSubmit").click();
 
     cy.wait(250);
 
@@ -61,7 +61,7 @@ describe("Profile editing", () => {
     cy.contains("Name").parent().find("input").clear().type(username);
     about = "This about was changed by Cypress!";
     cy.contains("About").parent().find("textarea").clear().type(about);
-    cy.contains("Save (2)").click();
+    cy.get("#dashboardSubmit").click();
 
     cy.wait(250);
 
