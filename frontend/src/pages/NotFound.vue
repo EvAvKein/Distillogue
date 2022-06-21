@@ -14,7 +14,6 @@
   }
 
   a {
-    cursor: pointer;
     border: none;
     color: var(--backgroundColor);
     text-decoration: none;

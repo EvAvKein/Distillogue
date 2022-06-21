@@ -50,6 +50,8 @@ img {pointer-events: none}
 
 button {border: none}
 
+button, a, summary {cursor: pointer}
+
 ::-webkit-scrollbar {
   width: 1rem;
   height: 1rem;

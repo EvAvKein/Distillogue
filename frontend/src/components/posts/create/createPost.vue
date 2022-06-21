@@ -159,7 +159,6 @@
   }
   
   #drawerToggler:hover, #drawerToggler:focus {
-    cursor: pointer;
     outline: none;
     background-color: var(--highlightSubColor)
   }

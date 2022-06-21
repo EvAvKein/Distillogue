@@ -105,7 +105,6 @@
     width: 100%;
     font-size: inherit;
     font-weight: bold;
-    cursor: pointer;
     padding: 0.4em;
   }
 

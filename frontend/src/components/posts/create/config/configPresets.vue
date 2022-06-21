@@ -57,7 +57,6 @@
     border-radius: 1em;
     padding: 0.5em 0.75em;
     text-align: center;
-    cursor: pointer;
   }
   button:hover, button:focus {
     color: var(--highlightSubColor);

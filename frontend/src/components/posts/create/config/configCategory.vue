@@ -26,7 +26,6 @@
 
   summary {
     font-size: 1.25em;
-    cursor: pointer;
     padding: 0.25em 0.5em;
   }
   summary:hover, summary:focus {
