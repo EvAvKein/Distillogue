@@ -42,11 +42,13 @@
 
   function updateChangesByNewState(newStates:UserPatchRequest[]) {
     newStates.forEach((state) => {
-      const newValue = state.newValue;
       const existingChangeIndex = changes.value.findIndex((change) => {return change.dataName === state.dataName});
 
       const prevChangeExists = existingChangeIndex === -1 ? false : true;
-      const inputMatchesUserData = state.newValue === user.data[state.dataName];
+      const inputMatchesUserData = typeof state.newValue === "object" && state.newValue !== null
+        ? JSON.stringify(state.newValue) === JSON.stringify(user.data[state.dataName]) // flawed (as it depends on the contents of both to be in the same sequence), but it's *good enough* as of the current stage of dev (june 2022)
+        : state.newValue === user.data[state.dataName]
+      ;
 
       if (!prevChangeExists && inputMatchesUserData) {
         return;
@@ -59,7 +61,7 @@
 
       inputMatchesUserData
         ? changes.value.splice(existingChangeIndex, 1)
-        : changes.value[existingChangeIndex].newValue = newValue
+        : changes.value[existingChangeIndex].newValue = state.newValue
     });
   };
 
