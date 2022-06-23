@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-  import {ref, reactive} from "vue";
+  import {ref, reactive, toRaw} from "vue";
   import {useUser} from "../../stores/user";
   import {jsonFetch} from "../../helpers/jsonFetch";
   import {UserPatchRequest} from "../../../../shared/objects";
@@ -82,7 +82,9 @@
     submitNotif.text = "Changes saved!";
     submitNotif.style = true;
     changes.value.forEach((change) => {
-      (user.data[change.dataName] as any) = change.newValue; // considering the circumstances, i dont think coercing an "any" here is actually harmful
+      (user.data[change.dataName] as any) = structuredClone(toRaw(change)).newValue;
+        // considering the circumstances, i dont think coercing an "any" here is actually harmful
+        // without deep-cloning (which this function cant do with proxies, hence toRaw), user data can get assigned by reference and thus any further attempts at editing aren't saveable (since this component filters them out for a lack of mismatch)
     });
     changes.value = [];
   };
