@@ -39,12 +39,7 @@
   }>();
 
   const notifText = ref<string>("");
-  const notifDesirability = ref<boolean|undefined>(true);
-  const pathingLoadingText = "Loading reply functionality, wait a few seconds";
-
-  if (notifText.value === pathingLoadingText) {
-    notifText.value = "";
-  };
+  const notifDesirability = ref<boolean|undefined>(undefined);
 
   const postTitle = ref<Node["title"]>("");
   const postBody = ref<Node["body"]>("");
