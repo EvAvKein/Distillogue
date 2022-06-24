@@ -26,7 +26,7 @@
     };
   };
 
-  function deactivateIfActive(event:Event) {
+  function deactivateIfActive(event:KeyboardEvent) {
     if (props.activeByTruthiness && ["Esc", "Escape"].includes(event.key)) {
       emit("deactivate");
     };
