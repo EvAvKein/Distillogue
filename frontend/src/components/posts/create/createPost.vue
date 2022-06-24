@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-  import {ref} from "vue";
+  import {ref, onUnmounted} from "vue";
   import {Node, PostConfig, NodeCreationRequest, UserData} from "../../../../../shared/objects";
   import {jsonFetch} from "../../../helpers/jsonFetch";
   import {useUser} from "../../../stores/user";
@@ -70,6 +70,7 @@
   
   toggleConfigInertValidatorByScreenWidth();
   window.addEventListener("resize", toggleConfigInertValidatorByScreenWidth);
+  onUnmounted(() => {window.removeEventListener("resize", toggleConfigInertValidatorByScreenWidth)})
 
   const invitedOwners = ref<UserData["id"][]>([]);
   const postTitle = ref<Node["title"]>("");

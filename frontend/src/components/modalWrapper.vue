@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-  import {toRef, watch} from "vue";
+  import {toRef, watch, onUnmounted} from "vue";
 
   const props = defineProps<{
     activeByTruthiness:any;
@@ -26,11 +26,14 @@
     };
   };
 
-  document.addEventListener("keydown", (event) => {
+  function deactivateIfActive(event:Event) {
     if (props.activeByTruthiness && ["Esc", "Escape"].includes(event.key)) {
       emit("deactivate");
     };
-  });
+  };
+
+  document.addEventListener("keydown", deactivateIfActive);
+  onUnmounted(() => {document.removeEventListener("keydown", deactivateIfActive)});
 
   const modalTruthiness = toRef(props, "activeByTruthiness");
 
