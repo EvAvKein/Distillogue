@@ -76,7 +76,6 @@
   form {
     width: clamp(15em, 90%, 35em);
     margin: auto;
-    padding: 0;
     background-color: var(--backgroundSubColor);
     padding: 0.75em 1.25em 1em;
     border-radius: 2em;
