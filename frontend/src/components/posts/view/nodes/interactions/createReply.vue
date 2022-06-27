@@ -5,15 +5,15 @@
       :type="'text'"
       :required="true"
       :inputId="'postTitle'"
-      v-model="postTitle"
+      v-model="replyTitle"
     />
     <labelledInput
       :label="'Body'"
       :type="'textarea'"
       :required="true"
-      :inputId="'postBody'"
+      :inputId="'replyBody'"
       :minLineHeight="5"
-      v-model="postBody"
+      v-model="replyBody"
     />
     <notification :text="notifText" :desirablityStyle="notifDesirability"/>
     <button 
@@ -41,8 +41,8 @@
   const notifText = ref<string>("");
   const notifDesirability = ref<boolean|undefined>(undefined);
 
-  const postTitle = ref<Node["title"]>("");
-  const postBody = ref<Node["body"]>("");
+  const replyTitle = ref<Node["title"]>("");
+  const replyBody = ref<Node["body"]>("");
 
   async function submitNode() {
     notifText.value = "";
@@ -53,8 +53,8 @@
         "reply",
         {nodeReplyRequest: new NodeCreationRequest(
           [user.data.id],
-          postTitle.value,
-          postBody.value,
+          replyTitle.value,
+          replyBody.value,
           props.postConfig,
           props.nodePath,
         )}
