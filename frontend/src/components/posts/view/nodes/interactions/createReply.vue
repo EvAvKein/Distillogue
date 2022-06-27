@@ -4,7 +4,7 @@
       :label="'Title'"
       :type="'text'"
       :required="true"
-      :inputId="'postTitle'"
+      :inputId="'replyTitle'"
       v-model="replyTitle"
     />
     <labelledInput
