@@ -1,6 +1,11 @@
 <template>
   <form @submit.prevent>
     <section id="content">
+      <!-- checking drafts is truthy to prevent console error when logging out while createPost is mounted -->
+      <draftsSelection v-if="user.data.drafts && user.data.drafts.length > 0"
+        id="draftsSelection"
+        @draftSelected="draftSelected"
+      />
       <labelledInput id="contentTitle"
         :label="'Title'"
         :type="'text'"
@@ -34,11 +39,16 @@
     </section>
     <section id="confirmation">
       <notification :text="notifText" :desirablityStyle="notifDesirability"/>
+      <draftSaveButton
+        :sourceTitle="postTitle"
+        :sourceBody="postBody"
+        @error="(text) => {notifText = text; notifDesirability = false}"
+      />
       <button id="submitButton"
         type="button"
         class="globalStyle_textButton"
         @click="submitPost"
-      >Post</button>
+      >Post{{typeof currentDraftIndex === "number" ? ` (& Delete Draft ${currentDraftIndex + 1})` : ""}}</button>
     </section>
   </form>
 </template>
@@ -50,6 +60,8 @@
   import {useUser} from "../../../stores/user";
   import {useRouter} from "vue-router";
   import labelledInput from "../../labelledInput.vue";
+  import draftSaveButton from "../draftSaveButton.vue";
+  import draftsSelection from "../draftSelectionCollapsible.vue";
   import configPresets from "./config/configPresets.vue";
   import editConfig from "./config/editConfig.vue";
   import notification from "../../notification.vue";
@@ -81,14 +93,29 @@
   const notifText = ref<string>("");
   const notifDesirability = ref<boolean>(true);
 
+  const currentDraftIndex = ref<number|undefined>();
+
+  function draftSelected(data:{draft:UserData["drafts"][number], index:number}|null) {
+    if (!data) {
+      currentDraftIndex.value = undefined;
+      return;
+    };
+
+    postTitle.value = data.draft.title;
+    postBody.value = data.draft.body;
+    currentDraftIndex.value = data.index;
+  };
+
   async function submitPost() {
     notifText.value = "";
+    const newDraftsState = user.data.drafts.filter((draft, index) => index !== currentDraftIndex.value);
 
     const response = await jsonFetch("POST", "/post",
       new NodeCreationRequest(
         invitedOwners.value,
         postTitle.value,
         postBody.value,
+        newDraftsState,
         postConfig.value,
       ),
       user.data.authKey
@@ -99,6 +126,8 @@
       notifDesirability.value = false;
       return;
     };
+
+    user.data.drafts = newDraftsState;
 
     router.push("/browse"); // should redirect to created post instead, change to that once post URLs are properly implemented
   };
@@ -118,6 +147,7 @@
   }
 
   #content {font-size: clamp(1.25em, 2.25vw, 1.5em)}
+  #draftsSelection {background-color: var(--backgroundSubColor)}
   #contentTitle {font-size: 1.15em}
 
   #configDrawer {
@@ -179,15 +209,16 @@
     border-color: var(--highlightColor)
   }
 
-  #submitButton {
-    display: block;
-    margin: 0.5em auto 0;
-    width: calc(100% - 2em);
-  }
-
   #content {grid-area: content}
   #configDrawer {grid-area: config}
-  #confirmation {grid-area: confirmation}
+  #confirmation {
+    grid-area: confirmation;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.5em;
+  }
+
+  #submitButton {flex-grow: 1}
 
   @media (min-width: 45rem) {
     #configDrawer {position: initial}

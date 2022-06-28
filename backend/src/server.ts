@@ -122,6 +122,13 @@ app.post("/api/post", async (request, response) => {
     return;
   };
 
+  if (postRequest.newDraftsState) {
+    await users.findOneAndUpdate(
+      {"data.id": userId},
+      {$set: {"data.drafts": postRequest.newDraftsState}},
+    );
+  };
+
   response.json(new FetchResponse(true));
 });
 
@@ -218,6 +225,13 @@ app.patch("/api/interaction", async (request, response) => { // i'm not satisfie
         {"$push": {[mongoPath.updatePath + "replies"]: newNode}},
         {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"}
       );
+
+      if ((interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest.newDraftsState) {
+        await users.findOneAndUpdate(
+          {"data.id": userId},
+          {$set: {"data.drafts": (interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest.newDraftsState}},
+        );
+      };
       break;
     };
   };

@@ -1,5 +1,9 @@
 <template>
   <form @submit.prevent>
+    <draftsSelection v-if="user.data.drafts.length > 0"
+      id="draftsSelection"
+      @draftSelected="draftSelected"
+    />
     <labelledInput
       :label="'Title'"
       :type="'text'"
@@ -15,22 +19,34 @@
       :minLineHeight="5"
       v-model="replyBody"
     />
-    <notification :text="notifText" :desirablityStyle="notifDesirability"/>
-    <button 
-      type="button"
-      class="globalStyle_textButton"
-      @click="submitNode"
-    >Reply</button>
+    <notification
+      :text="notifText"
+      :desirablityStyle="notifDesirability"
+    />
+    <div id="confirmation">
+      <draftSaveButton
+        :sourceTitle="replyTitle"
+        :sourceBody="replyBody"
+        @error="(text) => {notifText = text; notifDesirability = false}"
+      />
+      <button id="reply"
+        type="button"
+        class="globalStyle_textButton"
+        @click="submitNode"
+      >Reply{{typeof currentDraftIndex === "number" ? ` (& Delete Draft ${currentDraftIndex + 1})` : ""}}</button>
+    </div>
   </form>
 </template>
 
 <script setup lang="ts">
   import {ref} from "vue";
-  import {Node, NodeCreationRequest, NodeInteractionRequest} from "../../../../../../../shared/objects";
+  import {Node, NodeCreationRequest, NodeInteractionRequest, UserData} from "../../../../../../../shared/objects";
   import {jsonFetch} from "../../../../../helpers/jsonFetch";
   import {useUser} from "../../../../../stores/user";
   import labelledInput from "../../../../labelledInput.vue";
   import notification from "../../../../notification.vue";
+  import draftSaveButton from "../../../draftSaveButton.vue";
+  import draftsSelection from "../../../draftSelectionCollapsible.vue";
   const user = useUser();
 
   const props = defineProps<{
@@ -43,9 +59,22 @@
 
   const replyTitle = ref<Node["title"]>("");
   const replyBody = ref<Node["body"]>("");
+  const currentDraftIndex = ref<number|undefined>();
+
+  function draftSelected(data:{draft:UserData["drafts"][number], index:number}|null) {
+    if (!data) {
+      currentDraftIndex.value = undefined;
+      return;
+    };
+
+    replyTitle.value = data.draft.title;
+    replyBody.value = data.draft.body;
+    currentDraftIndex.value = data.index;
+  };
 
   async function submitNode() {
     notifText.value = "";
+    const newDraftsState = user.data.drafts.filter((draft, index) => index !== currentDraftIndex.value);
     
     const response = await jsonFetch("PATCH", "/interaction",
       new NodeInteractionRequest(
@@ -55,6 +84,7 @@
           [user.data.id],
           replyTitle.value,
           replyBody.value,
+          newDraftsState,
           props.postConfig,
           props.nodePath,
         )}
@@ -81,10 +111,16 @@
     border-radius: 2em;
   }
 
-  button {
-    display: block;
-    margin-left: auto;
-    margin-top: 0.25em;
-    font-size: 0.75em;
+  #draftsSelection {
+    background-color: var(--backgroundColor);
+    margin-bottom: 0.25em;
   }
+
+  #confirmation {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.5em;
+  }
+
+  button#reply {flex-grow: 1}
 </style>

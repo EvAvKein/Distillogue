@@ -14,6 +14,10 @@
           <img src="../../assets/userWithoutPfp.svg"/>
           <span>Profile</span>
         </button>
+        <button @click="currentPage = 'drafts'">
+          <img src="../../assets/drafts.svg"/>
+          <span>Drafts</span>
+        </button>
       </nav>
     </section>
     <section id="dashboardPage">
@@ -21,21 +25,25 @@
       <profileEditor v-show="currentPage === 'profile'"
         @newState="updateChangesByNewState"
       />
+      <draftsEditor v-show="currentPage === 'drafts'"
+        @newState="updateChangesByNewState"
+      />
     </section>
   </section>
 </template>
 
 <script setup lang="ts">
-  import {ref, reactive, toRaw} from "vue";
+  import {ref, reactive} from "vue";
   import {useUser} from "../../stores/user";
   import {jsonFetch} from "../../helpers/jsonFetch";
   import {UserPatchRequest} from "../../../../shared/objects";
   import {deepCloneFromReactive} from "../../helpers/deepCloneFromReactive";
   import notification from "../notification.vue";
   import profileEditor from "./dashboardSections/profileEditor.vue";
+  import draftsEditor from "./dashboardSections/draftsEditor.vue";
   const user = useUser();
 
-  type pageName = "profile";
+  type pageName = "profile"|"drafts";
   const currentPage = ref<pageName>("profile");
 
   const changes = ref<UserPatchRequest[]>([]);

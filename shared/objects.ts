@@ -19,6 +19,7 @@ class UserData {
   authKey:string;
   name:string;
   about:string;
+  drafts:{title:Node["title"], body:Node["body"], lastEdited:number}[];
   settings?:object;
 
   constructor(name:UserData["name"]) {
@@ -26,11 +27,12 @@ class UserData {
     this.authKey = newId();
     this.name = name;
     this.about = "Hello, I haven't wrote my About yet!";
+    this.drafts = [];
     delete this.settings;
   };
 };
 
-const arrOfEditableUserData = ["name", "about", "settings"] as const;
+const arrOfEditableUserData = ["name", "about", "drafts", "settings"] as const;
 type editableUserData = typeof arrOfEditableUserData[number];
 class UserPatchRequest {
   dataName:editableUserData;
@@ -106,13 +108,15 @@ class NodeCreationRequest {
   invitedOwnerIds:string[]|undefined;
   title:string;
   body:string;
+  newDraftsState?:UserData["drafts"]; // turns out pulling from an array by index has been rejected as a mongodb native feature (and the workaround has bad readability), so i'm just opting to override the drafts value instead. see: https://jira.mongodb.org/browse/SERVER-1014
   config?:PostConfig;
   nodePath?:Node["id"][];
 
-  constructor(invitedOwnerIds:NodeCreationRequest["invitedOwnerIds"]|undefined, title:NodeCreationRequest["title"], body:NodeCreationRequest["body"], config?:NodeCreationRequest["config"], nodePath?:NodeCreationRequest["nodePath"]) {
+  constructor(invitedOwnerIds:NodeCreationRequest["invitedOwnerIds"]|undefined, title:NodeCreationRequest["title"], body:NodeCreationRequest["body"], newDraftsState?:NodeCreationRequest["newDraftsState"], config?:NodeCreationRequest["config"], nodePath?:NodeCreationRequest["nodePath"]) {
     this.invitedOwnerIds = invitedOwnerIds;
     this.title = title;
     this.body = body;
+    newDraftsState ? this.newDraftsState = newDraftsState : delete this.newDraftsState;
     config ? this.config = config : delete this.config;
     nodePath ? this.nodePath = nodePath : delete this.nodePath;
   };
@@ -127,7 +131,7 @@ class Node extends NodeCreationRequest {
   past?:{title:Node["title"], body:Node["body"]}[];
   
   constructor(ownerId:UserData["id"], request:NodeCreationRequest) {
-    super(undefined, request.title, request.body, request.config);
+    super(undefined, request.title, request.body, undefined, request.config);
     this.ownerIds = [ownerId].concat(request.invitedOwnerIds || []);
     this.id = newId();
     this.replies = [];
