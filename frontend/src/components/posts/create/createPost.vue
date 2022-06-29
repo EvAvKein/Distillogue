@@ -136,10 +136,11 @@
 <style scoped>
   form {
     position: relative;
-    width: min(100%, 70em);
+    width: min(calc(100% - 1em), 70em);
+    padding: 0 0.5em 0.5em;
     overflow: hidden;
     display: grid;
-    gap: 0 0.5em;
+    gap: 0.5em;
     grid-template-columns: calc(100% - 3em) 0;
     grid-template-areas: 
       "content config"
@@ -155,10 +156,10 @@
     height: 100%;
     border-radius: 1em 0 0 1em;
     width: max-content;
-    right: -17.5em;
+    right: -18em;
     transition: right .5s;
   }
-  #configDrawer.open {right: -2.5em}
+  #configDrawer.open {right: -3em}
 
   #config {
     display: inline-block;
@@ -216,6 +217,7 @@
     display: flex;
     flex-wrap: nowrap;
     gap: 0.5em;
+    height: min-content;
   }
 
   #submitButton {flex-grow: 1}
@@ -226,7 +228,6 @@
     #config {
       display: block;
       height: initial;
-      margin-top: 0.5em;
       padding: 0;
       border: none;
       border-radius: 0;
@@ -239,6 +240,7 @@
       width: min(95%, 70em);
       display: grid;
       grid-template-columns: 4fr 1fr;
+      grid-template-rows: min-content 1fr;
       grid-template-areas: 
         "content config"
         "confirmation config";
