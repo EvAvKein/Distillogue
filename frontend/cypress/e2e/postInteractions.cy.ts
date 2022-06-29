@@ -11,7 +11,7 @@ describe("Post Interaction", () => {
       postTitle,
       postBody,
       () => {
-        cy.get("button").contains("Test Everything").click();
+        cy.get("button").contains("Everything").click();
         cy.get("form #config").contains("Access").parent().contains("Public").click();
         
         cy.get('form #config details:not([open]) summary').click({multiple: true});
