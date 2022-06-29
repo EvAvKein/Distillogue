@@ -17,12 +17,11 @@
 <style scoped>
   details {
     height: fit-content;
-    width: fit-content;
+    width: 100%;
     white-space: nowrap;
     background-color: var(--backgroundSubColor);
     border-radius: 0.5em;
   }
-  details[open] {width: 100%}
 
   summary {
     font-size: 1.25em;

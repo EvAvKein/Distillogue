@@ -156,17 +156,18 @@
     height: 100%;
     border-radius: 1em 0 0 1em;
     width: max-content;
-    right: -18em;
+    right: -20em;
     transition: right .5s;
   }
   #configDrawer.open {right: -3em}
 
   #config {
     display: inline-block;
+    height: 100%;
+    width: 17em;
+    padding: 0.5em;
     box-sizing: border-box;
     scrollbar-gutter: stable;
-    height: 100%;
-    padding: 0.5em;
     padding-right: 0.25em;
     border-width: 0.25em 0;
     border-style: solid;

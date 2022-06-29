@@ -123,9 +123,5 @@
   label {width: max-content}
 
   section {display: block}
-  .category {
-    width: min(100%, 15em);
-    margin: auto;
-  }
   .category + .category {margin-top: 0.5em}
 </style>
