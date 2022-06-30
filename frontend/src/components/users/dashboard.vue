@@ -139,6 +139,7 @@
   }
   nav button:focus, nav button:hover {
     color: var(--highlightSubColor);
+    outline: none;
   }
   nav button:focus img, nav button:hover img {
     filter: var(--filterToHighlightSubColor);
