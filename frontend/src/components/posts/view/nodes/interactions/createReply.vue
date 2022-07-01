@@ -33,7 +33,7 @@
         type="button"
         class="globalStyle_textButton"
         @click="submitNode"
-      >Reply{{typeof currentDraftIndex === "number" ? ` (& Delete Draft ${currentDraftIndex + 1})` : ""}}</button>
+      >Reply{{typeof currentDraftIndex === "number" ? ` (& delete draft ${currentDraftIndex + 1})` : ""}}</button>
     </div>
   </form>
 </template>

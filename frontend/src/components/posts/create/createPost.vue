@@ -48,7 +48,7 @@
         type="button"
         class="globalStyle_textButton"
         @click="submitPost"
-      >Post{{typeof currentDraftIndex === "number" ? ` (& Delete Draft ${currentDraftIndex + 1})` : ""}}</button>
+      >Post{{typeof currentDraftIndex === "number" ? ` (& delete draft ${currentDraftIndex + 1})` : ""}}</button>
     </section>
   </form>
 </template>

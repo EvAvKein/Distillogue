@@ -5,7 +5,7 @@
         type="button"
         class="globalStyle_textButton"
         @click="unselectDraft"
-      >Preserve Chosen Draft</button>
+      >Preserve chosen draft</button>
       <draftsSelection @draftSelected="selectDraft"/>
     </section>
   </details>

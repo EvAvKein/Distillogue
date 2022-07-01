@@ -85,7 +85,7 @@ describe("Drafts editing", () => {
   });
 
   function createAndValidateDraft(title:string, body:string) {
-    cy.contains("button", "New Draft").click();
+    cy.contains("button", "New draft").click();
     cy.contains("button", "[No Title]").should("contain.text", "Edited: Now");
     cy.contains("button", "Delete");
     cy.contains("button", "Save");
@@ -135,7 +135,7 @@ describe("Drafts editing", () => {
   it("Create drafts to capacity", () => {
     createAndValidateDraft("Second " + title, "Second " + body);
     createAndValidateDraft("Third " + title, "Third " + body);
-    cy.should("not.contain.text", "New Draft");
+    cy.should("not.contain.text", "New draft");
     cy.get(".notification").should("contain.text", "Drafts at capacity, consider triage");
   });
 

@@ -8,7 +8,7 @@
         id="newDraft"
         class="globalStyle_textButton"
         @click="createNewDraft"
-      ><p>New Draft</p></button>
+      ><p>New draft</p></button>
       <notification v-else
         :text="'Drafts at capacity, consider triage'"
         :desirablityStyle="undefined"
