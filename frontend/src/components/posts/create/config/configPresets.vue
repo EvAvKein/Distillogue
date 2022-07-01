@@ -8,7 +8,7 @@
     </button>
     <button @click="emitConfigChange('everything')" type="button">
       <img src="../../../../assets/defaultConfig.svg">
-      <span>Everything!</span>
+      <span>Everything</span>
     </button>
   </section>
 </template>
