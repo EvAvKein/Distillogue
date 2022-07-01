@@ -4,7 +4,7 @@
       id="draftsSelection"
       @draftSelected="draftSelected"
     />
-    <labelledInput
+    <labelledInput id="title"
       :label="'Title'"
       :type="'text'"
       :required="true"
@@ -116,7 +116,10 @@
     margin-bottom: 0.25em;
   }
 
+  #title {font-size: 1.1em}
+
   #confirmation {
+    font-size: 0.8em;
     display: flex;
     flex-wrap: nowrap;
     gap: 0.5em;
