@@ -54,12 +54,12 @@
     backdrop-filter: blur(1.75rem);
     display: flex;
     justify-content: center;
-    align-items: center;
+    overflow: auto;
   }
 
   dialog {
     position: relative;
-    margin: 0;
+    margin: auto;
     padding: 0;
     background-color: transparent;
     border: none;
