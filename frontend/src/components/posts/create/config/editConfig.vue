@@ -5,6 +5,14 @@
         Public: <input id="public" type="checkbox" @change="updateConfigByCheckbox">
       </label>
     </category>
+    <category title="Timestamps" class="category">
+      <label>
+        Posted: <input id="timestamps.posted" type="checkbox" @change="updateConfigByCheckbox"/>
+      </label>
+      <label>
+        Latest Interacted: <input id="timestamps.latestInteracted" type="checkbox" @change="updateConfigByCheckbox"/>
+      </label>
+    </category>
     <category title="Voting" class="category">
       <label>
         Upvotes: <input id="votes.up" type="checkbox" @change="updateConfigByCheckbox"/>
@@ -14,14 +22,6 @@
       </label>
       <label>
         Anonymous: <input id="votes.anon" type="checkbox"  @change="updateConfigByCheckbox"/>
-      </label>
-    </category>
-    <category title="Timestamps" class="category">
-      <label>
-        Posted: <input id="timestamps.posted" type="checkbox" @change="updateConfigByCheckbox"/>
-      </label>
-      <label>
-        Latest Interacted: <input id="timestamps.latestInteracted" type="checkbox" @change="updateConfigByCheckbox"/>
       </label>
     </category>
   </section>
