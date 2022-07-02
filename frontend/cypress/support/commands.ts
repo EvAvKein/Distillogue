@@ -50,15 +50,12 @@ Cypress.Commands.addAll({
   submitPost(title:string, body:string, callbackAffectingConfig?:() => void) {
     cy.visit("/post/create");
 
-    cy.get("form").contains("Title").type(title);
-    cy.get("form").contains("Body").type(body, {delay: 5});
-
-    callbackAffectingConfig();
+    cy.get("form").contains("label", "Title").click().focused().type(title);
+    cy.get("form").contains("label", "Body").click().focused().type(body, {delay: 5});
+    if (callbackAffectingConfig) {callbackAffectingConfig()};
     
-    cy.get("form button").contains("Post").click();
-
-    cy.wait(500);
-
+    cy.get("form").contains("button", "Post").click();
+    cy.wait(250);
     cy.url().should("include", "/browse");
   },
   submitReply(nodeSelector:string, title:string, body:string) {
