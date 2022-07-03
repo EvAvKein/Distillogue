@@ -46,6 +46,7 @@ Cypress.Commands.addAll({
         cy.contains("Continue").click();
       };
     });
+    cy.url().should("include", "/browse");
   },
   submitPost(title:string, body:string, callbackAffectingConfig?:() => void) {
     cy.visit("/post/create");
@@ -57,6 +58,7 @@ Cypress.Commands.addAll({
     cy.get("form").contains("button", "Post").click();
     cy.wait(250);
     cy.url().should("include", "/browse");
+    cy.get("main").contains("li", title);
   },
   submitReply(nodeSelector:string, title:string, body:string) {
     cy.get(nodeSelector).find('.interactions button[aria-label="Reply"]').click();
