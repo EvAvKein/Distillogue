@@ -1,12 +1,14 @@
-describe("Post Interaction", () => {
-  const postTitle = "Title of Test Post";
-  const postBody = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nibh sit amet commodo nulla facilisi nullam vehicula. Mauris vitae ultricies leo integer malesuada nunc. Libero id faucibus nisl tincidunt eget nullam non.\n\nIpsum a arcu cursus vitae congue mauris rhoncus. Sed turpis tincidunt id aliquet risus feugiat in ante. Nam aliquam sem et tortor consequat id porta. Nibh venenatis cras sed felis eget. Sed tempus urna et pharetra pharetra massa massa ultricies.";
-
-  it("Sign on & create post (config checkbox assertions broken, see code comment)", () => {
+const postTitle = "Title of Test Post " + Math.random();
+const postBody = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mauris vitae ultricies leo integer malesuada nunc.\n\nIpsum a arcu cursus vitae congue mauris rhoncus. Sed turpis tincidunt id aliquet risus feugiat in ante. Sed tempus urna et pharetra pharetra massa massa ultricies. "  + Math.random();
+let postUrl = "";
+describe("Create access & interactions test posts", () => {
+  
+  it("Sign up & nav to posting page", () => {
+    cy.visit("/");
     cy.signOn("postCreator");
+  });
 
-    cy.get("header").contains("Post").click();
-
+  it("Create interactions-testings & access-testing posts", () => {
     cy.submitPost(
       postTitle,
       postBody,
@@ -18,74 +20,133 @@ describe("Post Interaction", () => {
         cy.get('form #config input[type="checkbox"]').should("be.checked"); // this doesn't actually work, uncomment the above line which checks the "public" checkbox for evidence. i tried changing this assert in multiple ways but nothing worked
       }
     );
+
+    cy.submitPost(
+      "[NON-PUBLIC] " + postTitle,
+      "[NON-PUBLIC] " + postBody,
+      () => {
+        cy.get("button").contains("Everything").click();
+
+        cy.get('form #config details:not([open]) summary').click({multiple: true});
+        cy.get('form #config input[type="checkbox"]').should("be.checked");
+      }
+    );
   });
 
-  function validateNewNodeContents(nodeSelector:string, title:string, body:string) {
-    cy.get(nodeSelector).should("contain", title)
-      .should("contain", body)
-      .find(".interactions")
-      .as("nodeInteractions");
+  it("Enter access-testing post & copy URL", () => {
+    cy.url().should("include", "/browse");
+    cy.get("ol").contains("li", "[NON-PUBLIC] " + postTitle).click();
+    cy.wait(250);
+    cy.url().then((url) => {postUrl = url});
+  });
+});
 
-    cy.get("@nodeInteractions").contains("Posted: Now");
-    cy.get("@nodeInteractions").find('[aria-label="Vote interactions"]');
-    cy.get("@nodeInteractions").find('button[aria-label="Reply"]');
+describe("Access", () => {
+  it("Create account", () => {
+    cy.signOn("accessTester");
+  });
+
+  it("Fail to find inaccessible post through browsing", () => {
+    cy.get("header").contains("a", "Browse").click();
+    cy.wait(250);
+    cy.get("ol").should("not.contain.text", "[NON-PUBLIC] " + postTitle);
+  });
+
+  it("Fail to visit inaccessible post with a URL", () => {
+    cy.visit(postUrl);
+    cy.wait(250);
+    cy.get("main").find(".notification.negative");
+    cy.get("main")
+      .should("not.contain.text", "[NON-PUBLIC] " + postTitle)
+      .should("not.contain.text", "[NON-PUBLIC] " + postBody);
+  });
+});
+
+describe("Setup for interactions (switch user & open post)", () => {
+  it("Switch account", () => {
+    cy.get("header").contains("Logout").click();
+    cy.signOn("interactor");
+  });
+
+  it("Open test post", () => {
+    cy.get("main").contains("article", postTitle).click();
+    cy.url().should("include", "/post");
+  });
+});
+
+describe("Replies & deep interaction", () => { // testing deep-interactions with a single interaction is sufficient, as this test is meant to validate the deep-node paths' construction and translation in their round trips across the app; individual node interactions are functionally depth/path-agnostic (exceptions, e.g branch-locking, will/should test for depths/paths within their sections)
+  function nodeSelectorByChildPath(pathByChildNumbs:number[]) {
+    let nodeSelector = "#nodesContainer > .nodeBranch";
+    for (const childNumb of pathByChildNumbs) {
+      nodeSelector += ` > .nodeBranch:nth-child(${childNumb + 1})`; // +1 because for the node itself
+    };
+    nodeSelector += " > .node";
+    return nodeSelector;
+  };
+  function replyAndValidateNode(pathToRepliedByChildNumbs:number[], replyTitle:string, replyBody:string) {
+    const repliedSelector = nodeSelectorByChildPath(pathToRepliedByChildNumbs);
+  
+    cy.submitReply(repliedSelector, replyTitle, replyBody);
+  
+    cy.get(repliedSelector).parent().find(".nodeBranch")
+      .contains("h3", replyTitle)
+      .parent().contains("p", replyBody);
   };
 
-  it("Switch to interaction account & open post", () => {
-    cy.get("header").contains("Logout").click();
-
-    cy.signOn("interactor");
-
-    cy.url().should("include", "/browse");
-
-    cy.get("article").first().click();
-
-    cy.url().should("include", "/post");
-
-    validateNewNodeContents(".node#central", postTitle, postBody);
+  it("Reply to central node", () => {
+    replyAndValidateNode([], "1st Reply to Central", "filler text");
   });
 
-  it("Test votes", () => {
-    const upvoteSelector = 'button[aria-label="Upvote"]';
-    const voteNumbSelector = 'span[aria-label="Votes status"]';
-    const downvoteSelector = 'button[aria-label="Downvote"]';
-    function validateVoteInterface(userVote:"up"|"down"|"none", voteCount:number) { // could've removed the voteCount parameter and instead let it be based on the userVote, but this separation supports testing with multiple voters (which doesnt seem necessary but i might in future switch to)
-      cy.get(upvoteSelector).should(userVote === "up" ? "have.class" : "not.have.class", "voted");
-      cy.get(voteNumbSelector).should("have.text", voteCount);
-      cy.get(downvoteSelector).should(userVote === "down" ? "have.class" : "not.have.class", "voted");
-    };
+  it("Another reply to central node", () => {
+    replyAndValidateNode([], "2nd Reply to Central", "filler text");
+  });
 
+  it("Reply to reply", () => {
+    replyAndValidateNode([1], "1st Reply to 1st Replyto Central", "filler text");
+  });
+
+  it("Reply to reply to reply", () => {
+    replyAndValidateNode([1, 1], "1st Reply to 1st Reply to 1st Reply to central", "filler text");
+  });
+
+  it("Another reply to reply", () => {
+    replyAndValidateNode([2], "1st Reply to 2nd Reply to Central", "filler text");
+  });
+});
+
+describe("Timestamps (TODO)", () => {});
+
+describe("Voting", () => {
+  const upvoteSelector = 'button[aria-label="Upvote"]';
+  const voteNumbSelector = 'span[aria-label="Votes status"]';
+  const downvoteSelector = 'button[aria-label="Downvote"]';
+  function validateVoteInterface(userVote:"up"|"down"|"none", voteCount:number) { // could've removed the voteCount parameter and instead let it be based on the userVote, but this separation supports testing with multiple voters (which doesnt currently seem necessary but i might in future switch to)
+    cy.get(upvoteSelector).first().should(userVote === "up" ? "have.class" : "not.have.class", "voted");
+    cy.get(voteNumbSelector).first().should("have.text", voteCount);
+    cy.get(downvoteSelector).first().should(userVote === "down" ? "have.class" : "not.have.class", "voted");
+  };
+
+  it("Validate initial state", () => {
     validateVoteInterface("none", 0);
-    cy.get(upvoteSelector).click();
+  });
+
+  it("Vote (up)", () => {
+    cy.get(upvoteSelector).first().click();
     cy.reload();
     validateVoteInterface("up", 1);
+  });
 
-    cy.get(downvoteSelector).click();
+  it("Override with opposite vote (down)", () => {
+    cy.get(downvoteSelector).first().click();
     validateVoteInterface("down", -1);
     cy.reload();
     validateVoteInterface("down", -1);
+  });
 
-    cy.get(downvoteSelector).click();
+  it("Cancel vote (down", () => {
+    cy.get(downvoteSelector).first().click();
     validateVoteInterface("none", 0);
     cy.reload();
     validateVoteInterface("none", 0);
   });
-
-  it("Test reply", () => {
-    const replyTitle = "Title of Main Reply";
-    const replyBody = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, faucibus turpis in eu menenatis tellus in metus vulputate eu. Purus sit amet volutpat consequat mauris nunc congue nisi. Facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum.\n\nEgestas purus viverra accumsan in nisl. Tortor pretium viverra suspendisse potenti nullam ac tortor vitae purus. Velit laoreet id donec ultrices tincidunt arcu non sodales. Arcu dictum varius duis at consectetur lorem donec massa sapien. In dictum non consectetur a erat nam at. Ut eu sem integer vitae justo eget magna.";
-    
-    cy.submitReply("#central", replyTitle, replyBody);
-
-    cy.get(".node#central").contains("Latest Interacted: Now");
-
-    cy.get(".node#central").parent().find(".nodeBranch .node").as("replyToCentral");
-
-    validateNewNodeContents("@replyToCentral", replyTitle, replyBody);
-  });
-
-  // it("Test deep interactions (using replies)", () => { // testing a single interaction is sufficient, as this test is meant to validate the deep node paths' construction and translation across the app; assuming the deep path remains valid during a round trip, the above node interactions are functionally depth/path-agnostic
-    
-
-  // });
 });
