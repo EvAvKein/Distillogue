@@ -139,10 +139,12 @@ app.get("/api/post/:id", async (request, response) => {
   const dbResponse = await posts.findOne<Node|null>(
     mongoPostsFilterByAccess(userId, {id: postId})
   );
-  if (!dbResponse) {response.json(new FetchResponse(null, "Post unavailable; Either it doesn't exist, or it's private and you're not authorized"))};
+  if (!dbResponse) {
+    response.json(new FetchResponse(null, "Post unavailable; Either it doesn't exist, or it's private and you're not authorized"));
+    return;
+  };
 
-  let post = dbResponse as Node;
-
+  let post = dbResponse;
   if (post.config?.votes?.anon) {
     const enabledVoteTypes = [] as ("up"|"down")[]; 
     (["up", "down"] as ("up"|"down")[]).forEach((voteType) => {
@@ -235,7 +237,10 @@ app.patch("/api/interaction", async (request, response) => { // i'm not satisfie
       break;
     };
   };
-  if (!dbResponse.value) {response.json(new FetchResponse(null, "Invalid interaction request"))};
+  if (!dbResponse.value) {
+    response.json(new FetchResponse(null, "Invalid interaction request"));
+    return;
+  };
 
   if (subjectPost?.config!.timestamps?.latestInteracted) {
     await posts.updateOne( // this would be best implemented as an extra modification of each interaction (to keep the interaction itself and this as a singular atomic update), but using conditionals to check if the property exists before updating requires using mongo's aggregation pipeline syntax which is (seemingly) frustratingly limited in assignment commands and is much more verbose & opaque. for the current stage of the project, i.e very early, there's no need to ruin my/the readability of mongo commands for atomic operations' sake
