@@ -32,17 +32,21 @@
       <section id="config" :inert="configDrawerExists && !configDrawerOpen">
         <configPresets v-model:chosenPreset="configOverridingPreset"/>
         <editConfig v-model:config="postConfig" 
-          :presetOverride="configOverridingPreset"
+          :presetOverride="configOverridingPreset?.config"
           id="editConfig"
+        />
+        <draftOrPresetSaveButton
+          :type="'preset'"
+          :data="{name: '', config: postConfig}"
         />
       </section>
     </section>
     <section id="confirmation">
       <notification :text="notifText" :desirablityStyle="notifDesirability"/>
-      <draftSaveButton
-        :sourceTitle="postTitle"
-        :sourceBody="postBody"
-        @error="(text) => {notifText = text; notifDesirability = false}"
+      <draftOrPresetSaveButton
+        :type="'draft'"
+        :data="{title: postTitle, body: postBody}"
+        @error="(text:string) => {notifText = text; notifDesirability = false}"
       />
       <button id="submitButton"
         type="button"
@@ -60,7 +64,7 @@
   import {useUser} from "../../../stores/user";
   import {useRouter} from "vue-router";
   import labelledInput from "../../labelledInput.vue";
-  import draftSaveButton from "../draftSaveButton.vue";
+  import draftOrPresetSaveButton from "../draftOrPresetSaveButton.vue";
   import draftsSelection from "../draftSelectionCollapsible.vue";
   import configPresets from "./config/configPresets.vue";
   import editConfig from "./config/editConfig.vue";
@@ -88,7 +92,7 @@
   const postTitle = ref<Node["title"]>("");
   const postBody = ref<Node["body"]>("");
   const postConfig = ref<PostConfig>({});
-  const configOverridingPreset = ref<PostConfig|undefined>(undefined);
+  const configOverridingPreset = ref<UserData["configPresets"][number]|undefined>(undefined);
  
   const notifText = ref<string>("");
   const notifDesirability = ref<boolean>(true);

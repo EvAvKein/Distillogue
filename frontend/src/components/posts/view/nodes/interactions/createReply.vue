@@ -25,9 +25,9 @@
     />
     <div id="confirmation">
       <draftSaveButton
-        :sourceTitle="replyTitle"
-        :sourceBody="replyBody"
-        @error="(text) => {notifText = text; notifDesirability = false}"
+        :type="'draft'"
+        :data="{title: replyTitle, body: replyBody}"
+        @error="(text:string) => {notifText = text; notifDesirability = false}"
       />
       <button id="reply"
         type="button"
@@ -45,7 +45,7 @@
   import {useUser} from "../../../../../stores/user";
   import labelledInput from "../../../../labelledInput.vue";
   import notification from "../../../../notification.vue";
-  import draftSaveButton from "../../../draftSaveButton.vue";
+  import draftSaveButton from "../../../draftOrPresetSaveButton.vue";
   import draftsSelection from "../../../draftSelectionCollapsible.vue";
   const user = useUser();
 

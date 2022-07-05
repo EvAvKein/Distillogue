@@ -20,6 +20,7 @@ class UserData {
   name:string;
   about:string;
   drafts:{title:Node["title"], body:Node["body"], lastEdited:number}[];
+  configPresets:{name:string, config:PostConfig}[]
   settings?:object;
 
   constructor(name:UserData["name"]) {
@@ -28,11 +29,12 @@ class UserData {
     this.name = name;
     this.about = "Hello, I haven't wrote my About yet!";
     this.drafts = [];
+    this.configPresets = [];
     delete this.settings;
   };
 };
 
-const arrOfEditableUserData = ["name", "about", "drafts", "settings"] as const;
+const arrOfEditableUserData = ["name", "about", "drafts", "configPresets", "settings"] as const;
 type editableUserData = typeof arrOfEditableUserData[number];
 class UserPatchRequest {
   dataName:editableUserData;

@@ -22,6 +22,10 @@
           <img src="../../assets/drafts.svg"/>
           <span>Drafts</span>
         </button>
+        <button @click="currentPage = 'presets'">
+          <img src="../../assets/configPresets.svg"/>
+          <span>Presets</span>
+        </button>
       </nav>
     </section>
     <section id="dashboardPage">
@@ -30,6 +34,9 @@
         @newState="updateChangesByNewState"
       />
       <draftsEditor v-show="currentPage === 'drafts'"
+        @newState="updateChangesByNewState"
+      />
+      <presetsEditor v-show="currentPage === 'presets'"
         @newState="updateChangesByNewState"
       />
     </section>
@@ -45,9 +52,10 @@
   import notification from "../notification.vue";
   import profileEditor from "./dashboardSections/profileEditor.vue";
   import draftsEditor from "./dashboardSections/draftsEditor.vue";
+  import presetsEditor from "./dashboardSections/configPresetsEditor.vue";
   const user = useUser();
 
-  type pageName = "profile"|"drafts";
+  type pageName = "profile"|"drafts"|"presets";
   const currentPage = ref<pageName>("profile");
 
   const changes = ref<UserPatchRequest[]>([]);

@@ -1,47 +1,57 @@
 <template>
   <section>
-    <button id="reset"
-      @click="emitConfigChange('blank')" type="button"
+    <button v-for="preset in defaultPresets.concat(user.data.configPresets)"
+      @click="emitConfigChange(preset)"
+      type="button"
     >
-      <img src="../../../../assets/reset.svg">
-      <span>Reset Selection</span>
-    </button>
-    <button @click="emitConfigChange('everything')" type="button">
-      <img src="../../../../assets/defaultConfig.svg">
-      <span>Everything</span>
+      <img v-if="defaultPresetNames.includes(preset.name)"
+        src="../../../../assets/defaultConfig.svg"
+      />
+        <!-- vite can't handle ternary src, at least currently (2.7.2) -->
+      <img v-else
+        src="../../../../assets/customConfig.svg"
+      />
+      <span>{{preset.name || "[No Title, Edit in Dashboard]"}}</span>
     </button>
   </section>
 </template>
 
 <script setup lang="ts">
-  import {PostConfig} from '../../../../../../shared/objects';
-  
-
-  const configs = {
-    blank: {},
-    everything: {
-      timestamps: {
-        posted: true,
-        latestInteracted: true,
-      },
-      votes: {
-        up: true,
-        down: true,
-        anon: true,
-      },
-    },
-  } as const;
-
-  type configsObject = typeof configs;
+  import {UserData} from "../../../../../../shared/objects";
+  import {useUser} from "../../../../stores/user";
+  const user = useUser();
 
   const props = defineProps<{
-    chosenPreset?:PostConfig;
+    chosenPreset?:UserData["configPresets"][number];
   }>();
 
   const emit = defineEmits(["update:chosenPreset"]);
 
-  function emitConfigChange(configName:keyof configsObject) {
-    emit("update:chosenPreset", configs[configName]);
+  const defaultPresets = [
+    {
+      name: "Reset Selection",
+      config: {}
+    },
+    {
+      name: "Everything",
+      config: {
+        timestamps: {
+          posted: true,
+          latestInteracted: true,
+        },
+        votes: {
+          up: true,
+          down: true,
+          anon: true,
+        },
+      },
+    }
+  ] as UserData["configPresets"];
+
+  const defaultPresetNames = defaultPresets.map((preset) => {return preset.name});
+
+  function emitConfigChange(configPreset:UserData["configPresets"][number]) {
+    emit("update:chosenPreset", configPreset);
   };
 </script>
 

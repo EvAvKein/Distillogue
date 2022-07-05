@@ -91,7 +91,7 @@
 </script>
 
 <style scoped>
-  #draftsPicker + * {margin-top: 1em}
+  #draftsPicker {margin-bottom: 0.5em}
 
   #newDraft {
     font-size: 0.9em;
