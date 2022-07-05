@@ -1,7 +1,7 @@
 <template>
   <button @click="reply"
     :aria-label="locked ? 'Replies locked' : 'Reply'"
-    class="globalStyle_imageButton"
+    class="core_contentButton"
   >
     <img v-if="locked" src="../../../../../assets/locked.svg">
       <!-- would've used a ternary src attribute if vite compiled it appropriately -->
@@ -44,10 +44,6 @@
     padding: 0;
   }
   button img {
-    height: 2.25em;
-  }
-
-  button:hover, button:focus {
-    filter: var(--filterToHighlightSubColor)
+    height: 1.8em;
   }
 </style>

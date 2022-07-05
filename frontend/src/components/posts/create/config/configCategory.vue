@@ -28,8 +28,11 @@
     padding: 0.25em 0.5em;
   }
   summary:hover, summary:focus {
-    color: var(--highlightColor);
+    color: var(--highlightSubColor);
     outline: none;
+  }
+  summary:active {
+    color: var(--highlightColor);
   }
 
   details > div {

@@ -46,7 +46,7 @@
       />
       <button id="submitButton"
         type="button"
-        class="globalStyle_textButton"
+        class="core_backgroundButton"
         @click="submitPost"
       >Post{{typeof currentDraftIndex === "number" ? ` (& delete draft ${currentDraftIndex + 1})` : ""}}</button>
     </section>

@@ -3,7 +3,7 @@
     <section id="draftsModal">
       <button v-if="typeof latestDraftIndex === 'number'"
         type="button"
-        class="globalStyle_textButton"
+        class="core_backgroundButton"
         @click="unselectDraft"
       >Preserve chosen draft</button>
       <draftsSelection @draftSelected="selectDraft"/>

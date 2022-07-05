@@ -10,15 +10,15 @@
       <div v-if="content.editable" class="buttonBox">
         <button v-show="!editMode"
           @click="enterEditMode"
-          class="globalStyle_textButton"
+          class="core_backgroundButton"
         >✎</button>
         <button v-show="editMode"
           @click="submitEdit"
-          class="globalStyle_textButton"
+          class="core_backgroundButton"
         >✔</button>
         <button v-show="editMode"
           @click="exitEditMode"
-          class="globalStyle_textButton"
+          class="core_backgroundButton"
         >✘</button>
       </div>
       

@@ -2,7 +2,7 @@
   <section aria-label="Vote interactions">
     <button v-if="voters?.up"
       aria-label="Upvote"
-      :class="'globalStyle_imageButton' + (currentVote === 'up' ? ' voted' : '')"
+      :class="'core_contentButton' + (currentVote === 'up' ? ' voted' : '')"
       @click="vote('up', !upvoters?.includes(user.data.id))"
     >
       <img src="../../../../../assets/upArrow.svg">
@@ -18,7 +18,7 @@
 
     <button v-if="voters?.down"
       aria-label="Downvote"
-      :class="'globalStyle_imageButton' + (currentVote === 'down' ? ' voted' : '')"
+      :class="'core_contentButton' + (currentVote === 'down' ? ' voted' : '')"
       @click="vote('down', !downvoters?.includes(user.data.id))"
     >
       <img src="../../../../../assets/upArrow.svg" style="transform: rotate(180deg);">
@@ -106,7 +106,7 @@
 
 <style scoped>
   section {
-    font-size: 1.25em;
+    font-size: 1.15em;
     width: max-content;
     text-align: center;
   }
@@ -114,7 +114,7 @@
   button {
     display: block;
     margin: auto;
-    height: 1.25em;
+    height: 1em;
   }
 
   .voted {

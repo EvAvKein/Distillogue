@@ -6,7 +6,7 @@
     />
       <button v-if="draftsState.length < maxDrafts"
         id="newDraft"
-        class="globalStyle_textButton"
+        class="core_backgroundButton"
         @click="createNewDraft"
       ><p>New draft</p></button>
       <notification v-else
@@ -32,7 +32,7 @@
         v-model="currentDraft.body"
       />
       <button id="draftDelete"
-        class="globalStyle_imageButton"
+        class="core_contentButton"
         @click="deleteCurrentDraft"
       >
         <img src="../../../assets/trash.svg"/>
@@ -103,15 +103,11 @@
   #newDraft p {margin: 0}
 
   #draftDelete {
+    display: block;
+    margin: auto;
     font-size: inherit;
-    width: 100%;
   }
   #draftDelete img {height: 1.75em}
-  #draftDelete span {
-    color: var(--textColor);
-    vertical-align: super;
-  }
-  #draftDelete:focus span {color: var(--highlightSubColor)}
-  #draftDelete:active img {filter: var(--filterToHighlightColor)}
-  #draftDelete:active span {color: var(--highlightColor)}
+  #draftDelete span {vertical-align: super}
+  #draftDelete:not(:hover, :focus, :active) span {color: var(--textColor)}
 </style>

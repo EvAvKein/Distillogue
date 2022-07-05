@@ -1,7 +1,7 @@
 <template>
   <button @click="saveDraft"
     type="button"
-    class="globalStyle_textButton"
+    class="core_backgroundButton"
     :disabled="draftsAtCapacity ? true : false"
   >
     {{draftsAtCapacity ? "Drafts at capacity" : "Save draft"}}

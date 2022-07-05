@@ -13,11 +13,11 @@
     />
     <button @click="signingByInput"
       type="button"
-      class="globalStyle_textButton"
+      class="core_backgroundButton"
     >Continue</button>
   </form>
   <button id="signingSwitch"
-    class="globalStyle_textButton"
+    class="core_backgroundButton"
     @click="() => {signingMode = signingMode === 'Up' ? 'In' : 'Up'}"
   >Switch to sign-{{signingMode === "Up" ? "in" : "up"}}</button>
 </template>

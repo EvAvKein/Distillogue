@@ -3,18 +3,22 @@
     <section id="dashboardSidebar">
       <button v-show="changes.length > 0"
         id="dashboardSubmit"
-        class="globalStyle_textButton"
+        class="core_backgroundButton"
         @click="submitAllChanges"
       >
         <img src="../../assets/save.svg"/>
         <span>Save</span>
       </button>
       <nav aria-label="Dashboard page navigation">
-        <button @click="currentPage = 'profile'">
+        <button @click="currentPage = 'profile'"
+          class="core_contentButton"
+        >
           <img src="../../assets/userWithoutPfp.svg"/>
           <span>Profile</span>
         </button>
-        <button @click="currentPage = 'drafts'">
+        <button @click="currentPage = 'drafts'"
+          class="core_contentButton"
+        >
           <img src="../../assets/drafts.svg"/>
           <span>Drafts</span>
         </button>
@@ -136,19 +140,6 @@
     display: block;
     color: var(--textColor);
     background-color: transparent;
-  }
-  nav button:focus, nav button:hover {
-    color: var(--highlightSubColor);
-    outline: none;
-  }
-  nav button:focus img, nav button:hover img {
-    filter: var(--filterToHighlightSubColor);
-  }
-  nav button:active {
-    color: var(--highlightColor);
-  }
-  nav button:active img {
-    filter: var(--filterToHighlightColor);
   }
 
   #dashboardPage {grid-area: page}

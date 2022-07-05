@@ -48,9 +48,13 @@ body {
 
 img {pointer-events: none}
 
-button {border: none}
+button {font-size: inherit}
 
-button, a, summary {cursor: pointer}
+button, a, summary {
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
 
 ::-webkit-scrollbar {
   width: 1rem;
@@ -72,40 +76,39 @@ button, a, summary {cursor: pointer}
   background-color: var(--textSubColor);
 }
 
-.globalStyle_textButton {
-  cursor: pointer;
-  border: none;
-  outline: none;
+.core_backgroundButton {
   color: var(--backgroundColor);
   background-color: var(--textColor);
   border-radius: 0.2em;
-  font-size: inherit;
   text-decoration: none;
   padding: 0.5em;
   border-radius: 0.5em;
 }
-.globalStyle_textButton:focus, .globalStyle_textButton:hover {
+.core_backgroundButton:focus, .core_backgroundButton:hover {
   background-color: var(--highlightSubColor);
 }
-.globalStyle_textButton:active {
+.core_backgroundButton:active {
   background-color: var(--highlightColor);
 }
 
-.globalStyle_imageButton {
-  cursor: pointer;
-  border: none;
-  outline: none;
+.core_contentButton {
   background-color: transparent;
   padding: 0;
 }
-.globalStyle_imageButton img {
+.core_contentButton img {
   height: inherit;
   filter: var(--filterToTextColor);
 }
-.globalStyle_imageButton:focus img, .globalStyle_imageButton:hover {
+.core_contentButton:focus, .core_contentButton:hover {
+  color: var(--highlightSubColor);
+}
+.core_contentButton:active {
+  color: var(--highlightColor);
+}
+.core_contentButton:focus img, .core_contentButton:hover img {
   filter: var(--filterToHighlightSubColor);
 }
-.globalStyle_imageButton:active img {
+.core_contentButton:active img {
   filter: var(--filterToHighlightColor);
 }
 </style>

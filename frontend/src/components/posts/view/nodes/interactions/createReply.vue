@@ -31,7 +31,7 @@
       />
       <button id="reply"
         type="button"
-        class="globalStyle_textButton"
+        class="core_backgroundButton"
         @click="submitNode"
       >Reply{{typeof currentDraftIndex === "number" ? ` (& delete draft ${currentDraftIndex + 1})` : ""}}</button>
     </div>

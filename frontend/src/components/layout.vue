@@ -5,14 +5,14 @@
         <div v-if="user.data.id">
           <router-link v-if="user.data.id"
             :to="{name: 'browse'}"
-            class="globalStyle_textButton"
+            class="core_backgroundButton"
           >
             <img src="../assets/browse.svg"/>
             <span>Browse</span>
           </router-link>
           <router-link
             :to="{name: 'createPost'}"
-            class="globalStyle_textButton"
+            class="core_backgroundButton"
           >
             <img src="../assets/post.svg"/>
             <span>Post</span>
@@ -33,13 +33,13 @@
         <div v-if="user.data.id">
           <router-link 
             :to="{name: 'dashboard'}"
-            class="globalStyle_textButton"
+            class="core_backgroundButton"
           >
             <img src="../assets/dashboard.svg"/>
             <span>Dashboard</span>
           </router-link>
           <button @click="logOut"
-            class="globalStyle_textButton"
+            class="core_backgroundButton"
           >
             <img src="../assets/leave.svg"/>
             <span>Logout</span>
@@ -47,7 +47,7 @@
         </div>
         <router-link v-else
           :to="{name: 'join'}"
-          class="globalStyle_textButton"
+          class="core_backgroundButton"
         >
           <img src="../assets/userWithoutPfp.svg"/>
           <span>Join</span>
@@ -102,7 +102,7 @@
     gap: 0.5em;
   }
 
-  .globalStyle_textButton {font-size: 0.9em}
+  .core_backgroundButton {font-size: 0.9em}
 
   img:not(#logoLink img) {
     height: 1.25em;
