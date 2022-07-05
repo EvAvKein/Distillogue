@@ -109,5 +109,4 @@
   }
   #draftDelete img {height: 1.75em}
   #draftDelete span {vertical-align: super}
-  #draftDelete:not(:hover, :focus, :active) span {color: var(--textColor)}
 </style>

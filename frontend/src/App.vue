@@ -92,6 +92,7 @@ button, a, summary {
 }
 
 .core_contentButton {
+  color: inherit;
   background-color: transparent;
   padding: 0;
 }
