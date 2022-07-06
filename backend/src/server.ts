@@ -257,7 +257,7 @@ app.get("*", function(request, response) {
   response.sendFile(path.join(process.cwd() + "/../frontend/dist/index.html"));
 });
 
-const port = process.env.PORT || 3030;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server Online at port ${port}!
   Date: ${timestamp.iso()}`);

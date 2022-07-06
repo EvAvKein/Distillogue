@@ -62,7 +62,7 @@ I want to make this thing to express my skills/ideals, and it would be neat if i
 
 ### Commands
 1. `npm run build`: Construct files for frontend & backend  
-2. `npm run host`: Launch server (and database) on localhost:3030
+2. `npm run host`: Launch server (and database) on localhost:3000
 3. `npm run cypress`: Launch Cypress for end-to-end testing
 
 (There's also `npm run serve` which executes 1 & 2, and `npm run test` which executes all 3)
