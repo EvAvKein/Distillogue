@@ -8,7 +8,7 @@
     "build": "cd backend && npm run build && cd ../frontend && npm run build",
     "host": "cd backend && npm run host",
     "serve": "npm run build && npm run host",
-    "cypress": "cd frontend && npm run cypress",
+    "cypress": "cd testing && npm run cypress",
     "test": "npm run serve && npm run cypress"
   },
   "homepage": "https://github.com/EvAvKein/Distillogue#readme",
