@@ -20,7 +20,7 @@ class UserData {
   name:string;
   about:string;
   drafts:{title:Node["title"], body:Node["body"], lastEdited:number}[];
-  configPresets:{name:string, config:PostConfig}[]
+  configPresets:{name:string, config:Omit<PostConfig, "access">}[]
   settings?:object;
 
   constructor(name:UserData["name"]) {

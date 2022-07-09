@@ -32,6 +32,7 @@
         v-model:config="currentPreset.config"
         @update:config="(newValue) => {updateCurrentPreset('config', newValue)}"
         :presetOverride="currentPreset.config"
+        :hideUnsavables="true"
       />
       <button id="presetDelete"
         class="core_contentButton"

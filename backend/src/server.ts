@@ -9,7 +9,7 @@ import {mongoPostsFilterByAccess} from "./helpers/mongo/mongoPostsFilterByAccess
 import {updateDeepProperty} from "./helpers/updateDeepProperty.js";
 import {recursivelyModifyNode} from "./helpers/recursivelyModifyNode.js";
 import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
-import {FetchResponse, User, UserData, UserPatchRequest, arrOfEditableUserData, NodeCreationRequest, Node, PostSummary, NodeInteractionRequest} from "../../shared/objects.js";
+import {FetchResponse, User, UserData, UserPatchRequest, arrOfEditableUserData, NodeCreationRequest, Node, PostSummary, NodeInteractionRequest, PostConfig} from "../../shared/objects.js";
 
 const app = express();
 app.use(express.static("../frontend/dist"));
@@ -60,6 +60,10 @@ app.patch("/api/user/me", async (request, response) => {
     if (!arrOfEditableUserData.includes(request.dataName)) {
       response.json(new FetchResponse(null, "Invalid data insertion"));
       return;
+    };
+
+    if (request.dataName === "configPresets" && (request.newValue as PostConfig).access) {
+      delete request.newValue.access;
     };
   };
 

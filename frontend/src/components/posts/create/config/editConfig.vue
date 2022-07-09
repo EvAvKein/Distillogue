@@ -1,6 +1,6 @@
 <template>
   <section id="editConfig">
-    <category title="Access" class="category" :openByDefault="true">
+    <category v-if="!hideUnsavables" title="Access" class="category" :openByDefault="true">
       <label>
         Public: <input id="access.public" type="checkbox" @change="updateConfigByCheckbox">
       </label>
@@ -36,6 +36,7 @@
   const props = defineProps<{
     config:PostConfig;
     presetOverride?:PostConfig;
+    hideUnsavables?:true;
   }>();
 
   const emit = defineEmits(["update:config"]);
