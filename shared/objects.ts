@@ -73,7 +73,9 @@ class Log {
 };
 
 class PostConfig {
-  public?:true;
+  access?: {
+    public?:true;
+  };
   timestamps?: {
     posted?:true,
     latestInteracted?:true,
@@ -162,11 +164,11 @@ class NodeSummary {
 };
 
 class PostSummary extends NodeSummary {
-  public:PostConfig["public"];
+  access:PostConfig["access"];
 
   constructor(post:Node) {
     super(post);
-    this.public = post.config?.public;
+    post.config?.access ? this.access = post.config?.access : delete this.access;
   };
 };
 

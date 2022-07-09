@@ -2,7 +2,7 @@
   <section id="editConfig">
     <category title="Access" class="category" :openByDefault="true">
       <label>
-        Public: <input id="public" type="checkbox" @change="updateConfigByCheckbox">
+        Public: <input id="access.public" type="checkbox" @change="updateConfigByCheckbox">
       </label>
     </category>
     <category title="Timestamps" class="category">
@@ -52,14 +52,7 @@
     // i'm not even sure these kinds of behaviors are possible, i might be thinking about this way too imperatively
   type configSubproperty = "up";
 
-  function editConfigProperty(newValue:true|undefined, property:keyof PostConfig, subproperty?:keysInObjectsOfPostConfig) {
-    if (!subproperty) {
-      newValue
-        ? props.config[property] = newValue
-        : delete props.config[property];
-      return;
-    };
-    
+  function editConfigProperty(property:keyof PostConfig, subproperty:keysInObjectsOfPostConfig, newValue:true|undefined) {    
     if (subproperty && !props.config[property]) {
       props.config[property as keysOfObjectsInPostConfig] = {};
     };
@@ -80,16 +73,21 @@
   function updateConfigByCheckbox(event:Event) {
     const configProperties = (event.target as HTMLInputElement).id.split(".");
     const property = configProperties[0] as keyof PostConfig;
-    const subProperty = configProperties[1] as keysInObjectsOfPostConfig|undefined;
+    const subProperty = configProperties[1] as keysInObjectsOfPostConfig;
 
-    editConfigProperty(checkboxEventToConfigValue(event), property, subProperty);
+    editConfigProperty(property, subProperty, checkboxEventToConfigValue(event));
     emit("update:config", props.config);
   };
 
   let inputsAffectedByPresets = [] as HTMLInputElement[];
   onMounted(() => {
-    inputsAffectedByPresets = Array.from(document.querySelectorAll<HTMLInputElement>("#editConfig input")).filter((input) => {
-      return !["public"].includes(input.id);
+    const presetDetailsElements = Array.from(document.querySelectorAll<HTMLDetailsElement>("#editConfig details"))
+      .filter((detailsElement) => {
+        return detailsElement.querySelector("summary")!.innerText === "Access" ? false : detailsElement;
+      });
+    presetDetailsElements.forEach((category) => {
+      const inputsInCategory = Array.from(category.querySelectorAll<HTMLInputElement>("input"));
+      inputsAffectedByPresets =  inputsAffectedByPresets.concat(inputsInCategory);
     });
 
     updateConfigByPreset(props.config);

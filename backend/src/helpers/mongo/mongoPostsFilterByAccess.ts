@@ -5,7 +5,7 @@ export function mongoPostsFilterByAccess(userId:UserData["id"]|null|undefined, m
   return {$and: [
     mongoFilterObject ?? {},
     userId
-      ? {$or: [{"config.public": true}, {ownerIds: userId}]}
-      : {"config.public": true}
+      ? {$or: [{"config.access.public": true}, {ownerIds: userId}]}
+      : {"config.access.public": true}
   ]};
 };
