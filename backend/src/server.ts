@@ -55,10 +55,12 @@ app.post("/api/user/me", async (request, response) => { // really irritates me t
 app.patch("/api/user/me", async (request, response) => {
   const authKey = request.headers.authorization?.replace("Bearer ", "");
   const editRequests = request.body as UserPatchRequest[];
-  
-  if (!editRequests.every((request) => arrOfEditableUserData.includes(request.dataName))) {
-    response.json(new FetchResponse(null, "Invalid data insertion"));
-    return;
+
+  for (let request of editRequests) {
+    if (!arrOfEditableUserData.includes(request.dataName)) {
+      response.json(new FetchResponse(null, "Invalid data insertion"));
+      return;
+    };
   };
 
   const mongoUpdateObject = {} as {[key:string]: any}; // a bare minimum type, because idk how to actually type the key as `data.${editableUserData}`, and i'm not sure it's even possible to type the value as the value of whichever editableUserData property is being passed
