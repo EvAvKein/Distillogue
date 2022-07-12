@@ -8,7 +8,7 @@ import browse from "./pages/Browse.vue";
 import createPost from "./pages/CreatePost.vue";
 import viewPost from "./pages/ViewPost.vue";
 import dashboard from "./pages/Dashboard.vue";
-import join from "./pages/join.vue";
+import join from "./pages/Join.vue";
 import notFound from "./pages/NotFound.vue";
 
 const routes = [
