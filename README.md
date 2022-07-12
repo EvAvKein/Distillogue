@@ -47,12 +47,9 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 ### Dependencies
 
 * Node.js
-* MongoDB [(Instructions for enabling "start" command with Mongo on Windows 10)](https://stackoverflow.com/a/41507803)
-* Vite ("`npm install -g vite@latest`")
-
-#### CLI-induced dependencies
-* Windows, `start` command in backend's `npm run host`: If not using Windows, replace with your OS's equivalent for execution in new window
-* Google Chrome, `--browser chrome` flag in frontend's `npm run cypress`: Solely added for my personal ease of use. If you don't have/use Chrome, you can safely remove it or replace `chrome` with your browser of choice as per the Cypress docs for this flag.
+* MongoDB [(Instructions for enabling "mongo" command on Windows 10)](https://stackoverflow.com/a/41507803)
+* Windows, for `start` command in backend's `npm run host`: If not using Windows, replace with your OS's equivalent for execution in new window
+* Google Chrome, for `--browser chrome` flag in frontend's `npm run cypress`: Solely added for my personal ease of use. If you don't have/use Chrome, you can safely remove it or replace `chrome` with your browser of choice as per the Cypress docs for this flag.
 
 ---
 
@@ -60,15 +57,13 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 
 ### Prerequisites
 
-1. Install the dependencies mentioned above
-2. Clone the project to your computer via download/Git
-3. Run `npm run install`
+1. Install the dependencies above & clone this project via download/Git
+2. Run `npm run install`
 
 ### Commands
 1. `npm run build`: Construct files for frontend & backend  
 2. `npm run host`: Launch server (and database) on localhost:3000
 3. `npm run cypress`: Launch Cypress for end-to-end testing
-
 (There's also `npm run serve` which executes 1 & 2, and `npm run test` which executes all 3)
 
 ---
@@ -79,18 +74,14 @@ This project is currently closed for contributions.
 
 Contributions will open (and will be very welcome!) in future, once I feel the project is sufficiently fleshed-out.
 
-<!-- To contribute to the project, please open a new issue at the project's [GitHub repo](https://github.com/EvAvKein/Distillogue) with a summary of the contribution you have in mind.  
-
-If I'm in favor of said contribution, I'll give you to go-ahead to submit a pull request. -->
-
 ---
 
 ## Maintainers
 
 Eve Aviv Keinan  
-Mastodon: [@EvAvKein@mstdn.social](https://mstdn.social/@EvAvKein)  
+Mastodon: [mstdn.social/@evavkein](https://mstdn.social/@EvAvKein)  
 GitHub: [github.com/evavkein](https://github.com/EvAvKein)  
-Email:  contact@evavkein.com
+Email:  evavkein@gmail.com
 
 ---
 
