@@ -18,17 +18,21 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 
 ### My motives with this project ARE:
 
-* Developing and refining this brainchild into a highly customizable tool (with general-purpose & custom presets); built to enable, guide, and nurture productive conversations
+* Developing and refining it into a highly customizable tool (with general-purpose & custom presets) for productive conversations
 
-* Familiarizing myself with my tech stack of choice and being able to display that familiarity (e.g when applying for my first dev job)
+* Familiarizing myself with my professional tech-stack of choice and displaying that familiarity (e.g when applying for my first dev job)
 
 ### My motives with this project ARE NOT:
 
-* Creating a new social media platform   
-...There's more than enough of those already, managing their social aspects and PR is a headache, etc. *If* this project takes off, I'd want it to be an invite-based social tool (e.g Zoom, Trello, etc), or at most be social-media-adjacent (e.g Curious Cat, Linktree, etc). I want it to be topic-centric rather than user-centric
+* Creating the next big social-media space:  
 
-* Advertising an idea to be bought or to attract investors  
-I want to make this thing to express my skills/ideals, and it would be neat if it ends up being useful to other people too. Work on this is finite, and I want to see it through without a bottomless profit motive spoiling it like it did many other things
+  * Plainly put, I'm creating a thing I'd like and I've yet to see. There might be some audience for it, but I haven't done market research and I'm not desperate to find people for which to compromise/mold it (especially this early in development)   
+
+  * I'm deliberately avoiding making yet another social feed: This will first and foremost be an invite-based subject-centric tool, and if any public posting/feed remains by 1.0 it'd be very specialized/particular (TBA, I have a few ideas)   
+
+* Advertising an idea/brand to be bought or to attract investors:   
+
+  * Work on this project is finite (and will likely become irregular and it becomes complete), the profit motive isn't, and I care about this project enough to avoid any chance it gets spoiled/coerced
 
 ---
 
