@@ -49,7 +49,6 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 * Node.js
 * MongoDB [(Instructions for enabling "mongo" command on Windows 10)](https://stackoverflow.com/a/41507803)
 * Windows, for `start` command in backend's `npm run host`: If not using Windows, replace with your OS's equivalent for execution in new window
-* Google Chrome, for `--browser chrome` flag in frontend's `npm run cypress`: Solely added for my personal ease of use. If you don't have/use Chrome, you can safely remove it or replace `chrome` with your browser of choice as per the Cypress docs for this flag.
 
 ---
 

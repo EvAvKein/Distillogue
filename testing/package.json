@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "cypress": ".\\node_modules\\.bin\\cypress open --e2e --browser chrome"
+    "cypress": ".\\node_modules\\.bin\\cypress open --e2e"
   },
   "devDependencies": {
     "cypress": "^10.3.0",
