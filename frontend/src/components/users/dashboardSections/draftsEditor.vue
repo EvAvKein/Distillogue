@@ -1,6 +1,6 @@
 <template>
   <section>
-    <draftsSelection id="draftsPicker"
+    <draftsSelection v-if="draftsState.length" id="draftsPicker"
       :editingModeDraftsState="draftsState"
       @draftSelected="selectDraft"
     />
