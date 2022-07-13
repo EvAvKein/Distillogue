@@ -6,10 +6,12 @@
   "scripts": {
     "install": "cd shared && npm install && cd ../backend && npm install && cd ../frontend && npm install",
     "build": "cd backend && npm run build && cd ../frontend && npm run build",
-    "host": "cd backend && npm run host",
+    "host": "cd backend && start npm run host",
     "serve": "npm run build && npm run host",
     "cypress": "cd testing && npm run cypress",
-    "test": "npm run serve && npm run cypress"
+    "test": "npm run serve && npm run cypress",
+
+    "dockerTest": "docker-compose -f docker-compose.dev.yaml up"
   },
   "homepage": "https://github.com/EvAvKein/Distillogue#readme",
   "repository": {

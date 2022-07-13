@@ -1,0 +1,23 @@
+FROM node:16
+
+# INSTALL
+WORKDIR /shared
+COPY /shared/package*.json /shared
+RUN npm install
+
+WORKDIR /backend
+COPY /backend/package*.json /backend
+RUN npm install
+
+# BUILD
+WORKDIR /shared
+COPY /shared /shared
+
+WORKDIR /backend
+COPY /backend /backend
+RUN npm run build
+
+# HOST
+EXPOSE 3000
+ENV DOCKERIZED=TRUE
+CMD ["npm", "run", "server"]

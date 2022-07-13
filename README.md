@@ -43,23 +43,39 @@ A tool for conducting dialogue in the distilled format of your choice; currently
   * Server: Node.js + Express.js + TypeScript
   * Database: MongoDB
   * Testing: Cypress
+  * Packaging: Docker
 
 ### Dependencies
-
+* Docker  
+-- OR --
 * Node.js
 * MongoDB [(Instructions for enabling "mongo" command on Windows 10)](https://stackoverflow.com/a/41507803)
-* Windows, for `start` command in backend's `npm run host`: If not using Windows, replace with your OS's equivalent for execution in new window
+* Windows, for `start` in some of the `npm run` commands: If not using Windows, replace with your OS's equivalent for execution in new window
 
 ---
 
 ## Execution
 
 ### Prerequisites
+#### With Docker
+1. Install & open Docker    
 
-1. Install the dependencies above & clone this project via download/Git
+#### Without Docker
+1. Install the above dependencies (excluding Docker of course) & clone this project via download/Git
 2. Run `npm run install`
 
 ### Commands
+#### With Docker
+1. `docker-compose up`: Build & host project on localhost:3000   
+
+To run tests, i.e Cypress, you'll need to:
+  * Install Node.js
+  * Run `npm install` in the "testing" folder
+  * Run `npm run cypress`    
+  
+...Because running tests, i.e Cypress, in interactive mode (which in my opinion is worth much more than console) is a whole mess that seems to require another dependency and then some more setup. Wasn't worth it for me to try implementing (but if I'm wrong about the extra dependency and it's actually possible with dockerfile/docker-compose and a command, then a pull request would be genuinely appreciated).
+
+#### Without Docker
 1. `npm run build`: Construct files for frontend & backend  
 2. `npm run host`: Launch server (and database) on localhost:3000
 3. `npm run cypress`: Launch Cypress for end-to-end testing

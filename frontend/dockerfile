@@ -1,0 +1,18 @@
+FROM node:16
+
+# INSTALL
+WORKDIR /shared
+COPY /shared/package*.json ./
+RUN npm install
+
+WORKDIR /frontend
+COPY /frontend/package*.json ./
+RUN npm install
+
+# BUILD
+WORKDIR /shared
+COPY ./shared ./
+
+WORKDIR /frontend
+COPY ./frontend ./
+RUN npm run build
