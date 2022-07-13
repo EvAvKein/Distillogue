@@ -11,7 +11,7 @@
         id="newPreset"
         class="core_backgroundButton"
         @click="createNewPreset"
-      ><p>New Preset</p></button>
+      ><p>New preset</p></button>
       <notification v-else
         :text="'Presets at capacity, consider triage'"
         :desirablityStyle="undefined"
