@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:16-alpine as setup
 
 # INSTALL
 WORKDIR /shared
@@ -16,6 +16,13 @@ COPY /shared /shared
 WORKDIR /backend
 COPY /backend /backend
 RUN npm run build
+
+# CLEAN
+FROM node:16-alpine
+WORKDIR /backend
+COPY --from=setup /backend/package.json ./
+RUN npm install --omit=dev
+COPY --from=setup /backend/dist ./dist
 
 # HOST
 EXPOSE 3000

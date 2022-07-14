@@ -1,18 +1,22 @@
-FROM node:16
+FROM node:16-alpine as setup
 
 # INSTALL
 WORKDIR /shared
 COPY /shared/package*.json ./
 RUN npm install
 
-WORKDIR /frontend
+WORKDIR /frontendSetup
 COPY /frontend/package*.json ./
 RUN npm install
 
 # BUILD
 WORKDIR /shared
-COPY ./shared ./
+COPY /shared ./
 
-WORKDIR /frontend
-COPY ./frontend ./
+WORKDIR /frontendSetup
+COPY /frontend ./
 RUN npm run build
+
+# CLEAN
+FROM node:16-alpine
+COPY --from=setup /frontendSetup/dist /frontend/dist
