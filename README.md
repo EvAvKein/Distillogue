@@ -96,7 +96,7 @@ Contributions will open (and will be very welcome!) in future, once I feel the p
 Eve Aviv Keinan  
 Mastodon: [mstdn.social/@evavkein](https://mstdn.social/@EvAvKein)  
 GitHub: [github.com/evavkein](https://github.com/EvAvKein)  
-Email:  evavkein@gmail.com
+Email:  contact@evavkein.com
 
 ---
 
