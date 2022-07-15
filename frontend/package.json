@@ -1,7 +1,8 @@
 {
   "type": "module",
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "buildDev": "vite build --watch"
   },
   "dependencies": {
     "pinia": "^2.0.10",

@@ -5,9 +5,16 @@
   "license": "MIT",
   "scripts": {
     "install": "cd shared && npm install && cd ../backend && npm install && cd ../frontend && npm install",
+
     "build": "cd backend && npm run build && cd ../frontend && npm run build",
+    "buildDev": "cd backend && start npm run buildDev && cd ../frontend && start npm run buildDev",
+
     "host": "cd backend && start npm run host",
+    "hostDev": "cd backend && start npm run hostDev",
+
     "serve": "npm run build && npm run host",
+    "serveDev": "npm run buildDev && npm run hostDev",
+    
     "cypress": "cd testing && npm run cypress",
     "test": "npm run serve && npm run cypress"
   },

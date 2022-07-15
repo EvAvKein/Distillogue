@@ -51,6 +51,7 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 * Node.js
 * MongoDB [(Instructions for enabling "mongo" command on Windows 10)](https://stackoverflow.com/a/41507803)
 * Windows, for `start` in some of the `npm run` commands: If not using Windows, replace with your OS's equivalent for execution in new window
+* Nodemon (`npm install -g nodemon`), for `npm run serverDev` in backend and dependent commands: Restarts the server whenever server code changes. If you'd rather avoid the dependency, replace `nodemon` with `node` in the backend's `package.json`.
 
 ---
 
@@ -79,7 +80,10 @@ To run tests, i.e Cypress, you'll need to:
 1. `npm run build`: Construct files for frontend & backend  
 2. `npm run host`: Launch server (and database) on localhost:3000
 3. `npm run cypress`: Launch Cypress for end-to-end testing
+
 (There's also `npm run serve` which executes 1 & 2, and `npm run test` which executes all 3)
+
+* With `build`, `host`, and `serve`, you for append (no space) `Dev` for modes that watch for file changes and live-reload (frontend changes require refreshing)
 
 ---
 
