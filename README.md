@@ -89,9 +89,10 @@ To run tests, i.e Cypress, you'll need to:
 
 ## Contributing
 
-This project is currently closed for contributions.  
+Contributions are currently only open towards issues opened by me.
+To contribute towards solving these issues, feel free to submit a pull request! If you have any questions you'd like to ask beforehand, you're welcome to do so in a comment to that issue.
 
-Contributions will open (and will be very welcome!) in future, once I feel the project is sufficiently fleshed-out.
+Other contributions will open (and will be very welcome!) in future, once I feel the project is sufficiently fleshed-out.
 
 ---
 
