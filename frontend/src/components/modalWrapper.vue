@@ -37,8 +37,16 @@
 
   const modalTruthiness = toRef(props, "activeByTruthiness");
 
+  const header = document.querySelector("header")!;
+  const main = document.querySelector("main")!;
+
   watch(modalTruthiness, (newTruthiness) => {
-    document.querySelector("body")!.style.overflow = newTruthiness ? "hidden" : "auto";
+    main.style.overflow = newTruthiness ? "hidden" : "auto";
+
+    [header, main].forEach((element) => {
+      (element as HTMLElement & {inert:boolean|undefined|null}) // TODO: once typescript (and vue-typescript dependencies, if those are relevant) supports "inert", remove this intersection
+        .inert = Boolean(props.activeByTruthiness) || null;
+    });
   });
 </script>
 
