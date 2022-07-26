@@ -60,8 +60,19 @@ Cypress.Commands.addAll({
     cy.url().should("include", "/browse");
     cy.get("main").contains("li", title);
   },
-  submitReply(nodeSelector:string, title:string, body:string) {
-    cy.get(nodeSelector).find('.interactions button[aria-label="Reply"]').click();
+  expandNodePathAndAliasFinal(repliedNodeByTitlesPath:string[]) {
+    cy.get("h2").parent().as("node");
+    repliedNodeByTitlesPath.slice(1).forEach((title) => { // this requires the central node's title despite ignoring it entirely, but requesting the entire path is more readable (in variable names) and familiar (to node paths in the project itself)
+      cy.get("@node").parent()
+        .find(".replies")
+        .contains("h3", title).click().parent().parent()
+        .as("node");
+    });
+  },
+  submitReply(repliedNodeByTitlesPath:string[], title:string, body:string) {
+    cy.expandNodePathAndAliasFinal(repliedNodeByTitlesPath);
+
+    cy.get("@node").find('.interactions button[aria-label="Reply"]').click();
 
     cy.get("#backdrop form").as("replyForm");
     cy.get("@replyForm").contains("Title").type(title);

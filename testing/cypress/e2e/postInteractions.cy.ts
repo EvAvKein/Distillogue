@@ -75,43 +75,65 @@ describe("Setup for interactions (switch user & open post)", () => {
 });
 
 describe("Replies & deep interaction", () => { // testing deep-interactions with a single interaction is sufficient, as this test is meant to validate the deep-node paths' construction and translation in their round trips across the app; individual node interactions are functionally depth/path-agnostic (exceptions, e.g branch-locking, will/should test for depths/paths within their sections)
-  function nodeSelectorByChildPath(pathByChildNumbs:number[]) {
-    let nodeSelector = "#nodesContainer > .nodeBranch";
-    for (const childNumb of pathByChildNumbs) {
-      nodeSelector += ` > .nodeBranch:nth-child(${childNumb + 1})`; // +1 because for the node itself
-    };
-    nodeSelector += " > .node";
-    return nodeSelector;
-  };
-  function replyAndValidateNode(pathToRepliedByChildNumbs:number[], replyTitle:string, replyBody:string) {
-    const repliedSelector = nodeSelectorByChildPath(pathToRepliedByChildNumbs);
-  
-    cy.submitReply(repliedSelector, replyTitle, replyBody);
-  
-    cy.get(repliedSelector).parent().find(".nodeBranch")
+  function replyAndValidateNode(repliedNodeByTitlesPath:string[], replyTitle:string, replyBody:string) {
+    cy.submitReply(repliedNodeByTitlesPath, replyTitle, replyBody);
+
+    cy.expandNodePathAndAliasFinal(repliedNodeByTitlesPath);
+
+    cy.get("@node").parent().find(".replies")
       .contains("h3", replyTitle)
-      .parent().contains("p", replyBody);
+      .parent().parent().contains("p", replyBody)
+    ;
+
+    cy.reload();
+    cy.wait(500);
   };
 
   it("Reply to central node", () => {
-    replyAndValidateNode([], "1st Reply to Central", "filler text");
+    replyAndValidateNode(
+      [postTitle],
+      "1st Reply to Central",
+      "filler text"
+    );
   });
-
   it("Another reply to central node", () => {
-    replyAndValidateNode([], "2nd Reply to Central", "filler text");
+    replyAndValidateNode(
+      [postTitle],
+      "2nd Reply to Central",
+      "filler text"
+    );
   });
-
   it("Reply to reply", () => {
-    replyAndValidateNode([1], "1st Reply to 1st Replyto Central", "filler text");
+    replyAndValidateNode(
+      [postTitle, "1st Reply to Central"],
+      "1st Reply to 1st Reply to Central",
+      "filler text"
+    );
   });
-
   it("Reply to reply to reply", () => {
-    replyAndValidateNode([1, 1], "1st Reply to 1st Reply to 1st Reply to central", "filler text");
+    replyAndValidateNode(
+      [postTitle, "1st Reply to Central", "1st Reply to 1st Reply to Central"],
+      "1st Reply to 1st Reply to 1st Reply to central",
+      "filler text"
+    );
+  });
+  it("Another reply to reply", () => {
+    replyAndValidateNode(
+      [postTitle, "2nd Reply to Central"],
+      "1st Reply to 2nd Reply to Central",
+      "filler text"
+    );
   });
 
-  it("Another reply to reply", () => {
-    replyAndValidateNode([2], "1st Reply to 2nd Reply to Central", "filler text");
-  });
+  /*--SEQUENCE-VISUAL-AID--
+
+  POST
+  |\          
+  | 1-3-4
+  |\ 
+  | 2-5
+  
+  -----------------------*/
 });
 
 describe("Timestamps (TODO)", () => {});

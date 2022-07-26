@@ -1,33 +1,42 @@
 <template>
   <section class="nodeBranch">
-    <section class="node" :id="isCentral ? 'central' : undefined">
-      <component 
-        :is="'h' + (isCentral ? 2 : 3)"
-      >{{node.title}}</component>
-      <p>{{node.body}}</p>
-      <section class="interactions">
-        <timestamps v-if="node.stats.timestamps" 
-          :timestamps="node.stats.timestamps"
-          class="timestamps"
-        />
-        <div>
-          <votes v-if="node.stats.votes"
-            :interactionPath="nodePath"
-            :voters="node.stats.votes"
-            @interactionError="(errorText:string) => {nodeError = errorText}"
+    <section :class="'node'" :id="isCentral ? 'central' : undefined">
+      <h2 v-if="isCentral">{{node.title}}</h2>
+      <button v-else @click="() => {expanded = !expanded}">
+        <h3>{{node.title}}</h3>
+      </button>
+      <section v-show="expanded"
+        class="body"
+      >
+        <p>{{node.body}}</p>
+        <section class="interactions">
+          <timestamps v-if="node.stats.timestamps" 
+            :timestamps="node.stats.timestamps"
+            class="timestamps"
           />
-          <reply :locked="node.locked"
-            :interactionPath="nodePath"
-            class="replyButton" 
-          />
-        </div>
+          <div>
+            <votes v-if="node.stats.votes"
+              :interactionPath="nodePath"
+              :voters="node.stats.votes"
+              @interactionError="(errorText:string) => {nodeError = errorText}"
+            />
+            <reply :locked="node.locked"
+              :interactionPath="nodePath"
+              class="replyButton" 
+            />
+          </div>
+        </section>
       </section>
       <notification :text="nodeError" :desirablity-style="false"/>
     </section>
-    <node v-for="reply of node.replies"
-      :node="reply"
-      :pathToNode="nodePath"
-    />
+    <section v-show="expanded"
+      class="replies"
+    >
+      <node v-for="reply of node.replies"
+        :node="reply"
+        :pathToNode="nodePath"
+      />
+    </section>
   </section>
 </template>
 
@@ -47,6 +56,8 @@
   
   const nodePath = [...props.pathToNode, props.node.id];
 
+  const expanded = ref(props.isCentral ? true : false);
+
   const nodeError = ref<string>("");
 </script>
 
@@ -62,6 +73,14 @@
   .node#central {
     font-size: 1.1em;
     margin-top: 0;
+  }
+
+  .node > button {
+    color: inherit;
+    text-align: inherit;
+    background-color: inherit;
+    padding: 0;
+    width: 100%;
   }
   
   .node > * + * {margin-top: 1.25em}
