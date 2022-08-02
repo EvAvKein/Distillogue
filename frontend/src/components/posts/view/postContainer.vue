@@ -1,6 +1,6 @@
 <template>
   <section id="nodesContainer">
-    <node :node="postObject" :pathToNode="[]" :isCentral="true"/>
+    <node :node="postObject" :pathToNode="[]"/>
   </section>
   
   <modalWrapper :activeByTruthiness="replyPath" 

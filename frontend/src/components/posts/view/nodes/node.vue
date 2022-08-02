@@ -1,7 +1,7 @@
 <template>
   <section class="nodeBranch">
-    <section class="node" :id="isCentral ? 'central' : undefined">
-      <h2 v-if="isCentral">{{node.title}}</h2>
+    <section class="node" :id="centralNode ? 'central' : undefined">
+      <h2 v-if="centralNode">{{node.title}}</h2>
       <button v-else @click="() => {expanded = !expanded}">
         <h3>{{node.title}}</h3>
       </button>
@@ -51,12 +51,13 @@
   const props = defineProps<{
     node:NodeObj;
     pathToNode:NodeObj["id"][];
-    isCentral?:true;
   }>();
+
+  const centralNode = !props.pathToNode.length;
   
   const nodePath = [...props.pathToNode, props.node.id];
 
-  const expanded = ref(props.isCentral ? true : false);
+  const expanded = ref(centralNode);
 
   const nodeError = ref<string>("");
 </script>
