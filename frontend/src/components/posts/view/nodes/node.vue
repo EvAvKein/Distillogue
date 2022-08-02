@@ -1,6 +1,6 @@
 <template>
   <section class="nodeBranch">
-    <section :class="'node'" :id="isCentral ? 'central' : undefined">
+    <section class="node" :id="isCentral ? 'central' : undefined">
       <h2 v-if="isCentral">{{node.title}}</h2>
       <button v-else @click="() => {expanded = !expanded}">
         <h3>{{node.title}}</h3>
