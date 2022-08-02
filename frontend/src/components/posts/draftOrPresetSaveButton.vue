@@ -4,13 +4,13 @@
     class="core_backgroundButton"
     :disabled="typeAtCapacity ? true : false"
   >
-    {{typeAtCapacity ? `${capitalizedType}s at capacity` : `Save ${props.type}`}}
+    {{typeAtCapacity ? `${type}s at capacity` : `Save ${type}`}}
   </button>
 </template>
 
 <script setup lang="ts">
   import {computed} from "vue";
-  import {UserData, Node, UserPatchRequest} from "../../../../shared/objects";
+  import {UserData, UserPatchRequest} from "../../../../shared/objects";
   import {deepCloneFromReactive} from "../../helpers/deepCloneFromReactive";
   import {unix as unixStamp} from "../../../../shared/helpers/timestamps";
   import {jsonFetch} from "../../helpers/jsonFetch";
@@ -19,11 +19,9 @@
 
   const props = defineProps<{
     type:"draft"|"preset";
-    data:Omit<UserData["drafts"][number], "lastEdited"> |UserData["configPresets"][number];
+    data:Omit<UserData["drafts"][number], "lastEdited"> | UserData["configPresets"][number];
   }>();
   const emit = defineEmits(["error"]);
-
-  const capitalizedType = props.type[0].toUpperCase() + props.type.substring(1);
 
   const typeDataName = props.type === "draft" ? "drafts" : "configPresets";
 
@@ -64,6 +62,7 @@
   button {
     display: block;
     margin: auto;
+    text-transform: capitalize;
   }
 
   button[disabled] {
