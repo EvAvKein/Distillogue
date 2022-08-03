@@ -5,7 +5,7 @@
       :class="'core_contentButton' + (currentVote === 'up' ? ' voted' : '')"
       @click="vote('up', !upvoters?.includes(user.data.id))"
     >
-      <img src="../../../../../assets/upArrow.svg">
+      <img src="../../../../assets/upArrow.svg">
     </button>
 
     <span
@@ -21,16 +21,16 @@
       :class="'core_contentButton' + (currentVote === 'down' ? ' voted' : '')"
       @click="vote('down', !downvoters?.includes(user.data.id))"
     >
-      <img src="../../../../../assets/upArrow.svg" style="transform: rotate(180deg);">
+      <img src="../../../../assets/upArrow.svg" style="transform: rotate(180deg);">
     </button>
   </section>
 </template>
 
 <script setup lang="ts">
   import {ref, computed} from "vue";
-  import {Node, NodeInteractionRequest, NodeStats} from "../../../../../../../shared/objects";
-  import {jsonFetch} from "../../../../../helpers/jsonFetch";
-  import {useUser} from "../../../../../stores/user";
+  import {Node, NodeInteractionRequest, NodeStats} from "../../../../../../shared/objects";
+  import {jsonFetch} from "../../../../helpers/jsonFetch";
+  import {useUser} from "../../../../stores/user";
   const user = useUser();
 
   const props = defineProps<{

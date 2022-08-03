@@ -16,7 +16,7 @@
   import {Node} from "../../../shared/objects";
   import {jsonFetch} from "../helpers/jsonFetch";
   import {useUser} from "../stores/user";
-  import postContainer from "../components/posts/view/postContainer.vue";
+  import postContainer from "../components/posts/view/postContainer_core.vue";
 
   const user = useUser();
 

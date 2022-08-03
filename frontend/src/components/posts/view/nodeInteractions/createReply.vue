@@ -40,13 +40,13 @@
 
 <script setup lang="ts">
   import {ref} from "vue";
-  import {Node, NodeCreationRequest, NodeInteractionRequest, UserData} from "../../../../../../../shared/objects";
-  import {jsonFetch} from "../../../../../helpers/jsonFetch";
-  import {useUser} from "../../../../../stores/user";
-  import labelledInput from "../../../../labelledInput.vue";
-  import notification from "../../../../notification.vue";
-  import draftSaveButton from "../../../draftOrPresetSaveButton.vue";
-  import draftsSelection from "../../../draftSelectionCollapsible.vue";
+  import {Node, NodeCreationRequest, NodeInteractionRequest, UserData} from "../../../../../../shared/objects";
+  import {jsonFetch} from "../../../../helpers/jsonFetch";
+  import {useUser} from "../../../../stores/user";
+  import labelledInput from "../../../labelledInput.vue";
+  import notification from "../../../notification.vue";
+  import draftSaveButton from "../../draftOrPresetSaveButton.vue";
+  import draftsSelection from "../../draftSelectionCollapsible.vue";
   const user = useUser();
 
   const props = defineProps<{

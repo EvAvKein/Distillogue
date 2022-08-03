@@ -3,16 +3,16 @@
     :aria-label="locked ? 'Replies locked' : 'Reply'"
     class="core_contentButton"
   >
-    <img v-if="locked" src="../../../../../assets/locked.svg">
+    <img v-if="locked" src="../../../../assets/locked.svg">
       <!-- would've used a ternary src attribute if vite compiled it appropriately -->
-    <img v-else aria-label="Reply" src="../../../../../assets/reply.svg"/> 
+    <img v-else aria-label="Reply" src="../../../../assets/reply.svg"/> 
   </button>
 </template>
 
 <script setup lang="ts">
   import {inject, Ref} from "vue";
-  import {Node} from "../../../../../../../shared/objects";
-  import {useUser} from "../../../../../stores/user";
+  import {Node} from "../../../../../../shared/objects";
+  import {useUser} from "../../../../stores/user";
   const user = useUser();
 
   const props = defineProps<{
