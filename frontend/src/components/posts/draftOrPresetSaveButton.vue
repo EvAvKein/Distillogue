@@ -4,7 +4,7 @@
     class="core_backgroundButton"
     :disabled="typeAtCapacity ? true : false"
   >
-    {{typeAtCapacity ? `${type}s at capacity` : `Save ${type}`}}
+    {{typeAtCapacity ? `${capitalizedType}s at capacity` : `Save ${type}`}}
   </button>
 </template>
 
@@ -24,6 +24,8 @@
   const emit = defineEmits(["error"]);
 
   const typeDataName = props.type === "draft" ? "drafts" : "configPresets";
+
+  const capitalizedType = props.type[0].toUpperCase() + props.type.substring(1);
 
   const typeAtCapacity = computed(() => user.data[typeDataName].length >= 3);
 
@@ -62,7 +64,6 @@
   button {
     display: block;
     margin: auto;
-    text-transform: capitalize;
   }
 
   button[disabled] {
