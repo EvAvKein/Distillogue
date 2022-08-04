@@ -6,8 +6,8 @@ services:
 
   backend:
     build:
-      context: /
-      dockerfile: /backend/dockerfile
+      context: ./
+      dockerfile: ./backend/dockerfile
     ports:
       - "3000:3000"
     links:
@@ -17,8 +17,8 @@ services:
 
   frontend:
     build: 
-      context: /
-      dockerfile: /frontend/dockerfile
+      context: ./
+      dockerfile: ./frontend/dockerfile
     volumes:
       - webfiles:/frontend
 
