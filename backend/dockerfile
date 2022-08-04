@@ -2,19 +2,19 @@ FROM node:16-alpine as setup
 
 # INSTALL
 WORKDIR /shared
-COPY /shared/package*.json /shared
+COPY /shared/package*.json /shared/
 RUN npm install
 
 WORKDIR /backend
-COPY /backend/package*.json /backend
+COPY /backend/package*.json /backend/
 RUN npm install
 
 # BUILD
 WORKDIR /shared
-COPY /shared /shared
+COPY /shared /shared/
 
 WORKDIR /backend
-COPY /backend /backend
+COPY /backend /backend/
 RUN npm run build
 
 # CLEAN
@@ -22,7 +22,7 @@ FROM node:16-alpine
 WORKDIR /backend
 COPY --from=setup /backend/package.json ./
 RUN npm install --omit=dev
-COPY --from=setup /backend/dist ./dist
+COPY --from=setup /backend/dist ./dist/
 
 # HOST
 EXPOSE 3000

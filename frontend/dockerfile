@@ -19,4 +19,4 @@ RUN npm run build
 
 # CLEAN
 FROM node:16-alpine
-COPY --from=setup /frontendSetup/dist /frontend/dist
+COPY --from=setup /frontendSetup/dist /frontend/dist/
