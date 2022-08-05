@@ -19,5 +19,5 @@ jobs:
       - name: Cypress tests
         uses: cypress-io/github-action@v4
         with:
-          working-directory: testing/cypress/e2e
+          working-directory: testing
           browser: chrome
