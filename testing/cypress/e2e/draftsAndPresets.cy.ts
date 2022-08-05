@@ -160,6 +160,7 @@ function testDraftsFunctionalities(submitName:"Post"|"Reply", returnFromRefresh:
     cy.contains("summary", "Drafts").click()
       .parent().contains("button", "Second " + title).click();
     cy.get("form").contains("button", submitName + " (& delete draft 2)").click();
+    cy.wait(250);
 
     returnFromSubmit();
     cy.get("form").contains("summary", "Drafts").parent().should("not.contain.text", "Second " + title);
