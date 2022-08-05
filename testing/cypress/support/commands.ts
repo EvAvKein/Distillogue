@@ -28,6 +28,12 @@ import {randomAlphanumString} from "../helpers/randomAlphanumString";
 
 let LOCAL_STORAGE_MEMORY = {};
 
+Cypress.Commands.overwrite('type', (originalFn:(subject:string, text:Partial<Cypress.TypeOptions>, options:object) => any, subject, text, options = {}) => { // overriding originalFn's type because the original is blatantly incorrect (i.e results in runtime errors)
+  options.delay = 0;
+
+  return originalFn(subject, text, options);
+})
+
 Cypress.Commands.addAll({
   randomAlphanumString,
   signOn(name:string, randomSuffix?:true) {
@@ -52,7 +58,7 @@ Cypress.Commands.addAll({
     cy.visit("/post/create");
 
     cy.get("form").contains("label", "Title").click().focused().type(title);
-    cy.get("form").contains("label", "Body").click().focused().type(body, {delay: 5});
+    cy.get("form").contains("label", "Body").click().focused().type(body);
     if (callbackAffectingConfig) {callbackAffectingConfig()};
     
     cy.get("form").contains("button", "Post").click();
@@ -76,7 +82,7 @@ Cypress.Commands.addAll({
 
     cy.get("#backdrop form").as("replyForm");
     cy.get("@replyForm").contains("Title").type(title);
-    cy.get("@replyForm").contains("Body").type(body, {delay: 5});
+    cy.get("@replyForm").contains("Body").type(body);
     cy.get("@replyForm").contains("Reply").click();
 
     cy.wait(500); // otherwise the following instruction usually executes before the reply's page refresh
