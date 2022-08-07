@@ -70,10 +70,9 @@ To run tests, i.e Cypress, you'll need to:
 
 ## Contributing
 
-Contributions are currently only open towards issues opened by me.
-To contribute towards solving these issues, feel free to submit a pull request! If you have any questions you'd like to ask beforehand, you're welcome to do so in a comment to that issue.
+Contributions are very welcome! See the TODO.md file or GitHub issues.
 
-Other contributions will open (and will be very welcome!) in future, once I feel the project is sufficiently fleshed-out.
+For any questions, comment under a relevant issue or create a new discussion.
 
 ---
 
