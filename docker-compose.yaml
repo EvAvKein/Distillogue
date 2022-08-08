@@ -3,6 +3,9 @@ services:
 
   mongodb:
     image: "mongo"
+    command:
+      - '--logpath'
+      - '/var/log/mongodb/mongod.log'
 
   backend:
     build:
