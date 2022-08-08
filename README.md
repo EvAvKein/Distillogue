@@ -44,10 +44,10 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 
 ### Commands
 #### With Docker
-1. `docker-compose up`: Build & host project on localhost:3000   
-2. `docker-compose -f docker-compose.test.yaml up`: Launch Cypress tests
+1. `docker-compose up` OR `npm run docker`: Build & host project on localhost:3000   
+2. `docker-compose -f docker-compose.test.yaml up` OR `npm run dockerCypress`: Launch Cypress tests
 
-(Or execute both with `docker-compose -f docker-compose.yaml -f docker-compose.test.yaml up`)
+(Or execute both with `docker-compose -f docker-compose.yaml -f docker-compose.test.yaml up` OR `npm run dockerTest`)
 
 #### Without Docker
 1. `npm run build`: Construct files for frontend & backend  

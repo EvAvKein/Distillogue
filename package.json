@@ -16,7 +16,11 @@
     "serveDev": "npm run buildDev && npm run hostDev",
     
     "cypress": "cd testing && npm run cypress",
-    "test": "npm run serve && npm run cypress"
+    "test": "npm run serve && npm run cypress",
+
+    "docker": "docker-compose up",
+    "dockerCypress": "docker-compose -f docker-compose.test.yaml up",
+    "dockerTest": "docker-compose -f docker-compose.yaml -f docker-compose.test.yaml up"
   },
   "homepage": "https://github.com/EvAvKein/Distillogue#readme",
   "repository": {
