@@ -45,17 +45,9 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 ### Commands
 #### With Docker
 1. `docker-compose up`: Build & host project on localhost:3000   
+2. `docker-compose -f docker-compose.test.yaml up`: Launch Cypress tests
 
-To run tests, i.e Cypress, you'll need to:
-  * Install Node.js
-  * Run `npm install` in the "testing" folder
-  * Run `npm run cypress`    
-  <details><summary>Wondering why tests aren't dockerized?</summary>
-    Running tests, i.e Cypress, in interactive mode (which in my opinion is worth much more than console), through a Docker container, seems to be a whole mess that requires a local dependency and then some setup. Wasn't worth it for me to try implementing. 
-  
-    ...But if I'm wrong about the dependency and it's actually possible with just dockerfile/docker-compose and maybe a command, then a pull request would be genuinely appreciated (once the project actually has a Docker dev setup, see: https://github.com/EvAvKein/Distillogue/issues/1).
-  </details>
-&nbsp; <!-- nbsp for spacing i couldn't get with pure markdown (without ruining the above list's spacing) -->
+(Or execute both with `docker-compose -f docker-compose.yaml -f docker-compose.test.yaml up`)
 
 #### Without Docker
 1. `npm run build`: Construct files for frontend & backend  

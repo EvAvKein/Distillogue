@@ -1,0 +1,10 @@
+version: "3"
+services:
+
+  cypress:
+    image: "cypress/included:10.4.0"
+    environment:
+      - CYPRESS_baseUrl=http://backend:3000
+    working_dir: /testing
+    volumes:
+      - ./testing:/testing
