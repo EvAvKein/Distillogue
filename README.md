@@ -43,22 +43,15 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 2. Run `npm run install`
 
 ### Commands
-#### With Docker
-1. `docker-compose up` OR `npm run docker`: Build & host project on localhost:3000   
-2. `docker-compose -f docker-compose.test.yaml up` OR `npm run dockerCypress`: Launch Cypress tests
 
-(Or execute both with `docker-compose -f docker-compose.yaml -f docker-compose.test.yaml up` OR `npm run dockerTest`)
+| Outcome | With Docker | Without Docker |
+| --- | :--- | :--- |
+| Serve (Build & Host) | `docker-compose up` | `npm run serve`|
+| Serve Dev Mode | [Unavailable, contribution is welcome](https://github.com/EvAvKein/Distillogue/issues/1) | `npm run serveDev` |
+| Launch Cypress | `docker-compose -f docker-compose.test.yaml up` <br> OR <br> `npm run dockerCypress` | `npm run cypress`
+| Serve & Cypress | `docker-compose -f docker-compose.yaml -f docker-compose.test.yaml up` <br> OR <br> `npm run dockerTest` | `npm run test` |
 
-#### Without Docker
-1. `npm run build`: Construct files for frontend & backend  
-2. `npm run host`: Launch server (and database) on localhost:3000
-3. `npm run cypress`: Launch Cypress for end-to-end testing
-
-(There's also `npm run serve` which executes 1 & 2, and `npm run test` which executes all 3)
-
-* With `build`, `host`, and `serve`, you for append (no space) `Dev` for modes that watch for file changes and live-reload (frontend changes require refreshing)
-
----
+(For more discrete non-docker commands, see `package.json` and its counterparts in the `frontend` and `backend` folders)
 
 ## Contributing
 
