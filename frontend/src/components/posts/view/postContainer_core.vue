@@ -2,7 +2,7 @@
   <modalWrapper :activeByTruthiness="replyPath" 
     @deactivate="() => {replyPath = null}"
   >
-    <createReply id="createReplyModal"
+    <createReply
       :nodePath="(replyPath as string[])"
       :postConfig="props.postObject.config"
     />
