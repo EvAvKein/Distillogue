@@ -22,7 +22,9 @@
           <img src="../../assets/drafts.svg"/>
           <span>Drafts</span>
         </button>
-        <button @click="currentPage = 'presets'">
+        <button @click="currentPage = 'presets'"
+          class="core_contentButton"
+        >
           <img src="../../assets/configPresets.svg"/>
           <span>Presets</span>
         </button>
