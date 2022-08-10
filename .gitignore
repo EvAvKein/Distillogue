@@ -1,3 +1,4 @@
 node_modules
 dist
 testing/cypress/videos
+testing/cypress/downloads
