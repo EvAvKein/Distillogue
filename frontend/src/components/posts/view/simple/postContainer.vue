@@ -15,5 +15,9 @@
 </script>
 
 <style scoped>
-  #nodesContainer {padding: 1em}
+  #nodesContainer {
+    padding: 0 0.5em 0;
+    width: max-content;
+    margin: auto;
+  }
 </style>
