@@ -1,7 +1,7 @@
 <template>
   <section class="node" :id="centralNode ? 'central' : undefined">
     <h2 v-if="centralNode">{{node.title}}</h2>
-    <button v-else @click="() => {expanded = !expanded}">
+    <button v-else @click="emitExpandToggle">
       <h3>{{node.title}}</h3>
     </button>
     <section v-show="expanded"
@@ -48,10 +48,7 @@
   const centralNode = !props.pathToNode.length;
   const nodePath = [...props.pathToNode, props.node.id];
 
-  const expanded = ref(centralNode);
-  function emitExpandedState() {emit("update:expanded", expanded.value)};
-  emitExpandedState();
-  watch(expanded, emitExpandedState);
+  function emitExpandToggle() {emit("update:expanded", !props.expanded)}
 
   const nodeError = ref<string>("");
 </script>
