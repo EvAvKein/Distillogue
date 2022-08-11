@@ -6,18 +6,18 @@ Remaining known tasks before first deployment:
   * Post-viewing layouts: Simple, mindmap (name TBD), others welcome
   * A ton more config options (many already planned, specifics TBA and/or TBD)
 * Security:
-  * Data validation (API & preemptive frontend)
+  * Data validation (API & preemptive in frontend)
   * Proper registration/authentication (likely only via third parties)
   * DDoS mitigation & maybe a CDN (consider Cloudflare)
   * HTTP headers checkup (API & frontend)
   * Probably others (i.e actively look for more)
 * Regulation:
   * Legal obligations (there's likely a comprehensive resource on this)
-  * Concise ToS/CoC
-  * Moderation interface
-* Transparency
+  * Concise Terms-of-Service/Code-of-Conduct
+  * Moderation interface (for both users & management)
+* Transparency:
   * If collected, publicly display any 'bulk data' (there's probably a better term for that) e.g monthly active users, configs by popularity
-  * A 'why'/core principles/core values/project philosophy page
+  * A 'why'/core-principles/core-values/project-philosophy page
   * Other ideas welcome!
 * Accessibility:
   * Aria attributes
