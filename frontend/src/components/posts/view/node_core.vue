@@ -1,7 +1,10 @@
 <template>
   <section class="node" :id="centralNode ? 'central' : undefined">
     <h2 v-if="centralNode">{{node.title}}</h2>
-    <button v-else @click="emitExpandToggle">
+    <button v-else
+      class="core_contentButton"
+      @click="emitExpandToggle"
+    >
       <h3>{{node.title}}</h3>
     </button>
     <section v-show="expanded"
@@ -31,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-  import {ref, watch} from "vue";
+  import {ref} from "vue";
   import {Node as NodeObj} from "../../../../../shared/objects"; // importing without renaming it causes vite to mix up this class (Node) with this component (node.vue, referenced in the template for recursion) and thus throw an error on runtime when trying to load a node with replies
   import timestamps from "../nodeTimestamps.vue";
   import votes from "./nodeInteractions/vote.vue";
@@ -54,14 +57,13 @@
 </script>
 
 <style scoped>
-  .node > button {
+  .titleButton {
     color: inherit;
     text-align: inherit;
     background-color: inherit;
     padding: 0;
     width: 100%;
   }
-
   h2, h3 {margin: 0}
 
   p {white-space: pre-line}
