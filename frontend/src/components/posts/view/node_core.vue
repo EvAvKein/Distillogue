@@ -2,7 +2,7 @@
   <section class="node" :id="centralNode ? 'central' : undefined">
     <h2 v-if="centralNode">{{node.title}}</h2>
     <button v-else
-      class="core_contentButton"
+      class="core_contentButton titleButton"
       @click="emitExpandToggle"
     >
       <h3>{{node.title}}</h3>
@@ -58,10 +58,7 @@
 
 <style scoped>
   .titleButton {
-    color: inherit;
     text-align: inherit;
-    background-color: inherit;
-    padding: 0;
     width: 100%;
   }
   h2, h3 {margin: 0}
