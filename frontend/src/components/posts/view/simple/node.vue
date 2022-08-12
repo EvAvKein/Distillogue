@@ -43,19 +43,18 @@
   .replies {
     position: relative;
     padding: 0.5em 0 0 1.25em;
-    margin: 0 0 0 0.8em;
+    margin: 0 0 0 1.05em;
   }
 
   .repliesIndent {
     position: absolute;
-    top: -0.25em;
+    top: 0;
     left: 0;
     height: calc(100% + 0.25em);
     width: 0.9em;
     padding: 0;
     background-color: var(--backgroundSubColor);
     border-radius: 0 0 0.5em 0.5em;
-    z-index: -1;
   }
   button.repliesIndent:hover,
   button.repliesIndent:focus,
