@@ -1,5 +1,5 @@
 <template>
-  <section :class="'nodeBranch' + (central ? ' central' : '')">
+  <section  ref="nodeBranch" :class="'nodeBranch' + (central ? ' central' : '')">
     <coreNode :node="node" :pathToNode="pathToNode" v-model:expanded="expanded"/>
     <section class="replies"
       v-show="node.replies.length && expanded"
@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-  import {ref, Ref} from "vue";
+  import {ref, Ref, watch} from "vue";
   import {Node as NodeObj} from "../../../../../../shared/objects"; // importing without renaming it causes vite to mix up this class (Node) with this component (node.vue, referenced in the template for recursion) and thus throw an error on runtime when trying to load a node with replies
   import coreNode from "../node_core.vue";
 
@@ -32,6 +32,11 @@
   const nodePath = [...props.pathToNode, props.node.id];
 
   const expanded = ref(central) as Ref<boolean>;
+
+  const nodeBranch = ref<HTMLElement|null>(null);
+  watch(expanded, () => {
+    setTimeout(() => nodeBranch.value?.scrollIntoView({inline: "start", behavior: "smooth"})); // without a timeout it executes before the UI expands, therefore failing to account for its expanded width
+  });
 </script>
 
 <style>
@@ -64,6 +69,7 @@
     border-radius: 1em;
     box-sizing: border-box;
     width: clamp(15em, 95vw, 40em);
+    scroll-snap-align: start;
   }
 
   .node#central {
