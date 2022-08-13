@@ -21,7 +21,6 @@ Remaining known tasks before first deployment:
   * Other ideas welcome!
 * Accessibility:
   * Aria attributes
-  * Image alt texts
   * Accessibility tree checkup
 * Design makeover:
   * General UI style
