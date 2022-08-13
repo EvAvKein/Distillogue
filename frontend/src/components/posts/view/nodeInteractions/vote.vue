@@ -5,7 +5,7 @@
       :class="'core_contentButton' + (currentVote === 'up' ? ' voted' : '')"
       @click="vote('up', !upvoters?.includes(user.data.id))"
     >
-      <img src="../../../../assets/upArrow.svg">
+      <img src="../../../../assets/upArrow.svg" alt="Upwards arrow icon"/>
     </button>
 
     <span
@@ -21,7 +21,9 @@
       :class="'core_contentButton' + (currentVote === 'down' ? ' voted' : '')"
       @click="vote('down', !downvoters?.includes(user.data.id))"
     >
-      <img src="../../../../assets/upArrow.svg" style="transform: rotate(180deg);">
+      <img style="transform: rotate(180deg)"
+        src="../../../../assets/upArrow.svg" alt="Downwards arrow icon"
+      />
     </button>
   </section>
 </template>

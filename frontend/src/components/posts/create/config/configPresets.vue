@@ -5,11 +5,11 @@
       type="button"
     >
       <img v-if="defaultPresetNames.includes(preset.name)"
-        src="../../../../assets/defaultConfig.svg"
+        src="../../../../assets/defaultConfig.svg" alt="Icon of cogwheel inside a browser window"
       />
         <!-- vite can't handle ternary src, at least currently (2.7.2) -->
       <img v-else
-        src="../../../../assets/customConfig.svg"
+        src="../../../../assets/customConfig.svg" alt="Icon of cogwheel beside a pencil"
       />
       <span>{{preset.name || "[No Title, Edit in Dashboard]"}}</span>
     </button>

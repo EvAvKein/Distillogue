@@ -27,7 +27,7 @@
         type="button"
         @click="() => {configDrawerOpen = !configDrawerOpen}"
       >
-        <img src="../../../assets/fileConfig.svg" alt="File with cogwheel"/>
+        <img src="../../../assets/fileConfig.svg" alt="Icon of file with cogwheel"/>
       </button>
       <section id="config" :inert="configDrawerExists && !configDrawerOpen">
         <configPresets v-model:chosenPreset="configOverridingPreset"/>

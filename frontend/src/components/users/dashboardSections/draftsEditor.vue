@@ -35,7 +35,7 @@
         class="core_contentButton"
         @click="deleteCurrentDraft"
       >
-        <img src="../../../assets/trash.svg"/>
+        <img src="../../../assets/trash.svg" alt="Trashcan icon"/>
         <span>Delete</span>
       </button>
     </section>

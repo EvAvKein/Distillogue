@@ -4,8 +4,7 @@
       <section class="topSection">
         <h4>{{summary.title}}</h4>
         <img v-if="summary.access?.public"
-          alt="Megaphone icon"
-          src="../../../assets/megaphone.svg"
+          src="../../../assets/megaphone.svg" alt="Megaphone icon"
         />
       </section>
       <timestamps v-if="summary.stats.timestamps"

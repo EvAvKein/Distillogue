@@ -7,14 +7,14 @@
             :to="{name: 'browse'}"
             class="core_backgroundButton"
           >
-            <img src="../assets/browse.svg"/>
+            <img src="../assets/browse.svg" alt="Globe icon"/>
             <span>Browse</span>
           </router-link>
           <router-link
             :to="{name: 'createPost'}"
             class="core_backgroundButton"
           >
-            <img src="../assets/post.svg"/>
+            <img src="../assets/post.svg" alt="Pencil icon"/>
             <span>Post</span>
           </router-link>
         </div>
@@ -23,7 +23,7 @@
           aria-label="Front page"
           id="logoLink"
         >
-          <img src="../assets/logo.svg"/>
+          <img src="../assets/logo.svg" alt="Icon of a chemistry flask, with bubbling liquids, hung on a stand"/>
         </router-link>
       </nav>
     </section>
@@ -35,13 +35,13 @@
             :to="{name: 'dashboard'}"
             class="core_backgroundButton"
           >
-            <img src="../assets/dashboard.svg"/>
+            <img src="../assets/dashboard.svg" alt="Dashbard guage icon"/>
             <span>Dashboard</span>
           </router-link>
           <button @click="logOut"
             class="core_backgroundButton"
           >
-            <img src="../assets/leave.svg"/>
+            <img src="../assets/leave.svg" alt="Exiting icon"/>
             <span>Logout</span>
           </button>
         </div>
@@ -49,7 +49,7 @@
           :to="{name: 'join'}"
           class="core_backgroundButton"
         >
-          <img src="../assets/userWithoutPfp.svg"/>
+          <img src="../assets/userWithoutPfp.svg" alt="Non-descript person icon"/>
           <span>Join</span>
         </router-link>
       </nav>

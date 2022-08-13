@@ -6,26 +6,26 @@
         class="core_backgroundButton"
         @click="submitAllChanges"
       >
-        <img src="../../assets/save.svg"/>
+        <img src="../../assets/save.svg" alt="Floppy disk icon"/>
         <span>Save</span>
       </button>
       <nav aria-label="Dashboard page navigation">
         <button @click="currentPage = 'profile'"
           class="core_contentButton"
         >
-          <img src="../../assets/userWithoutPfp.svg"/>
+          <img src="../../assets/userWithoutPfp.svg" alt="Non-descript person icon"/>
           <span>Profile</span>
         </button>
         <button @click="currentPage = 'drafts'"
           class="core_contentButton"
         >
-          <img src="../../assets/drafts.svg"/>
+          <img src="../../assets/drafts.svg" alt="Paper tray icon"/>
           <span>Drafts</span>
         </button>
         <button @click="currentPage = 'presets'"
           class="core_contentButton"
         >
-          <img src="../../assets/configPresets.svg"/>
+          <img src="../../assets/configPresets.svg" alt="Icon of a browser window stacked on another one, with the top window containing a cogwheel"/>
           <span>Presets</span>
         </button>
       </nav>

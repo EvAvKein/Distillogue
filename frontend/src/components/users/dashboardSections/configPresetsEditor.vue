@@ -38,7 +38,7 @@
         class="core_contentButton"
         @click="deleteCurrentPreset"
       >
-        <img src="../../../assets/trash.svg"/>
+        <img src="../../../assets/trash.svg" alt="Trashcan icon"/>
         <span>Delete</span>
       </button>
     </section>
