@@ -1,3 +1,5 @@
+import {waitingTimes} from "../helpers/waitingTimes";
+
 const postTitle = "Title of Test Post " + Math.random();
 const postBody = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mauris vitae ultricies leo integer malesuada nunc.\n\nIpsum a arcu cursus vitae congue mauris rhoncus. Sed turpis tincidunt id aliquet risus feugiat in ante. Sed tempus urna et pharetra pharetra massa massa ultricies. "  + Math.random();
 let postUrl = "";
@@ -36,7 +38,7 @@ describe("Create access & interactions test posts", () => {
   it("Enter access-testing post & copy URL", () => {
     cy.url().should("include", "/browse");
     cy.get("ol").contains("li", "[NON-PUBLIC] " + postTitle).click();
-    cy.wait(250);
+    cy.wait(waitingTimes.pageTransition);
     cy.url().then((url) => {postUrl = url});
   });
 });
@@ -48,13 +50,13 @@ describe("Access", () => {
 
   it("Fail to find inaccessible post through browsing", () => {
     cy.get("header").contains("a", "Browse").click();
-    cy.wait(250);
+    cy.wait(waitingTimes.pageTransition);
     cy.get("ol").should("not.contain.text", "[NON-PUBLIC] " + postTitle);
   });
 
   it("Fail to visit inaccessible post with a URL", () => {
     cy.visit(postUrl);
-    cy.wait(250);
+    cy.wait(waitingTimes.pageColdLoad);
     cy.get("main").find(".notification.negative");
     cy.get("main")
       .should("not.contain.text", "[NON-PUBLIC] " + postTitle)
@@ -86,7 +88,7 @@ describe("Replies & deep interaction", () => { // testing deep-interactions with
     ;
 
     cy.reload();
-    cy.wait(500);
+    cy.wait(waitingTimes.pageColdLoad);
   };
 
   it("Reply to central node", () => {

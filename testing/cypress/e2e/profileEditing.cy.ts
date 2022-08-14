@@ -1,3 +1,5 @@
+import {waitingTimes} from "../helpers/waitingTimes";
+
 describe("Profile editing", () => {
   let username = "profileEditing";
   let about = "Hello, I haven't wrote my About yet!";
@@ -25,6 +27,7 @@ describe("Profile editing", () => {
     cy.get("#dashboardSubmit").should("be.visible");
 
     cy.reload();
+    cy.wait(waitingTimes.pageColdLoad);
     validateProfileData();
     cy.get("#dashboardSubmit").should("not.be.visible");
   });
@@ -46,13 +49,14 @@ describe("Profile editing", () => {
     cy.contains("Name").parent().find("input").clear().type(username);
     cy.get("#dashboardSubmit").click();
 
-    cy.wait(250);
+    cy.wait(waitingTimes.httpRequest);
 
     cy.contains("Name").parent().find("input").should("have.value", username);
     cy.get("#dashboardSubmit").should("not.be.visible");
     cy.get(".notification.positive").should("have.text", "Changes saved!");
 
     cy.reload();
+    cy.wait(waitingTimes.pageColdLoad);
     validateProfileData();
   });
 
@@ -63,13 +67,14 @@ describe("Profile editing", () => {
     cy.contains("About").parent().find("textarea").clear().type(about);
     cy.get("#dashboardSubmit").click();
 
-    cy.wait(250);
+    cy.wait(waitingTimes.httpRequest);
 
     validateProfileData();
     cy.get("#dashboardSubmit").should("not.be.visible");
     cy.get(".notification.positive").should("have.text", "Changes saved!");
 
     cy.reload();
+    cy.wait(waitingTimes.pageColdLoad);
     validateProfileData();
   });
 });

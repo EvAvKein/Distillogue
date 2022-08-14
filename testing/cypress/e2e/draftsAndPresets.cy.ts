@@ -1,9 +1,12 @@
+import {waitingTimes} from "../helpers/waitingTimes";
+
 let title = "Draft Title By Cypress! " + Math.random();
 let body = "Draft Body By Cypress!\n\nThis is a bit of filler text because the body is supposed to be longer :P " + Math.random();
 
 describe("Drafts manipulation in dashboard", () => {
   it("Enter Drafts subpage", () => {
     cy.visit("/");
+    cy.wait(waitingTimes.pageColdLoad);
     cy.signOn("draftsTester" + Math.random());
     cy.contains("a", "Dashboard").click();
     cy.contains("button", "Drafts").click();
@@ -25,11 +28,11 @@ describe("Drafts manipulation in dashboard", () => {
     cy.contains("button", title);
     cy.contains("label", "Body").type(body);
     cy.get("main").contains("Save").click();
-    cy.wait(250);
+    cy.wait(waitingTimes.httpRequest);
     cy.get(".notification.positive").should("contain.text", "Changes saved!");
 
     cy.reload();
-    cy.wait(250);
+    cy.wait(waitingTimes.pageColdLoad);
     cy.contains("button", "Drafts").click();
     cy.contains("button", title).click();
     cy.contains("label", "Title").click().focused().should("have.value", title);
@@ -52,11 +55,11 @@ describe("Drafts manipulation in dashboard", () => {
 
     cy.contains("label", "Body").click().focused().clear().type(body);
     cy.contains("button", "Save").click();
-    cy.wait(250);
+    cy.wait(waitingTimes.httpRequest);
     cy.get(".notification.positive").should("contain.text", "Changes saved!");
 
     cy.reload();
-    cy.wait(250);
+    cy.wait(waitingTimes.pageColdLoad);
     cy.contains("button", "Drafts").click();
     cy.contains("button", title).click();
     cy.contains("label", "Title").click().focused().should("have.value", title);
@@ -75,11 +78,11 @@ describe("Drafts manipulation in dashboard", () => {
     cy.contains("button", "Delete").click();
     cy.get("main").should("not.contain.text", "Second " + title);
     cy.contains("button", "Save").click();
-    cy.wait(250);
+    cy.wait(waitingTimes.httpRequest);
     cy.get(".notification.positive").should("contain.text", "Changes saved!");
 
     cy.reload();
-    cy.wait(250);
+    cy.wait(waitingTimes.pageColdLoad);
     cy.contains("button", "Drafts").click();
     cy.contains("button", title);
     cy.get("main").should("not.contain.text", "Second " + title);
@@ -92,11 +95,11 @@ describe("Drafts manipulation in dashboard", () => {
     cy.contains("Delete").click();
     cy.get("main").should("not.contain.text", title);
     cy.contains("button", "Save").click();
-    cy.wait(250);
+    cy.wait(waitingTimes.httpRequest);
     cy.get(".notification.positive").should("contain.text", "Changes saved!");
 
     cy.reload();
-    cy.wait(250);
+    cy.wait(waitingTimes.pageColdLoad);
     cy.contains("button", "Drafts").click();
     cy.get("main").should("not.contain.text", title);
   });
@@ -118,7 +121,7 @@ function testDraftsFunctionalities(submitName:"Post"|"Reply", returnFromRefresh:
     saveDraft("First " + title, "First " + body);
 
     cy.reload();
-    cy.wait(250);
+    cy.wait(waitingTimes.pageColdLoad);
     returnFromRefresh();
     cy.contains("summary", "Drafts")
       .parent().contains("button", "First " + title);
@@ -150,7 +153,7 @@ function testDraftsFunctionalities(submitName:"Post"|"Reply", returnFromRefresh:
     cy.contains("button", "Drafts at capacity").should("have.attr", "disabled");
 
     cy.reload();
-    cy.wait(250);
+    cy.wait(waitingTimes.pageColdLoad);
     returnFromRefresh();
     cy.get("main").should("not.contain.text", "Save draft");
     cy.contains("button", "Drafts at capacity").should("have.attr", "disabled");
@@ -160,7 +163,7 @@ function testDraftsFunctionalities(submitName:"Post"|"Reply", returnFromRefresh:
     cy.contains("summary", "Drafts").click()
       .parent().contains("button", "Second " + title).click();
     cy.get("form").contains("button", submitName + " (& delete draft 2)").click();
-    cy.wait(250);
+    cy.wait(waitingTimes.pageTransition);
 
     returnFromSubmit();
     cy.get("form").contains("summary", "Drafts").parent().should("not.contain.text", "Second " + title);
@@ -193,7 +196,10 @@ describe("Drafts manipulation in posting page", () => {
   
   testDraftsFunctionalities("Post",
     () => {},
-    () => {cy.go(-1); cy.wait(250)}
+    () => {
+      cy.go(-1);
+      cy.wait(waitingTimes.pageTransition);
+    }
   );
 });
 
