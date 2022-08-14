@@ -1,7 +1,11 @@
 <template>
   <layout/>
   <noscriptWarn/>
-  <router-view/>
+  <router-view v-slot="{Component}">
+    <transition name="route" mode="out-in">
+      <component :is="Component"/>
+    </Transition>
+  </router-view>
 </template>
 
 <script setup lang="ts">
@@ -10,6 +14,22 @@
 </script>
 
 <style>
+.route-enter-from {
+  opacity: 0;
+  transform: translateY(-5em);
+}
+.route-enter-active {
+  transition: opacity 300ms ease-out, transform 350ms ease-out;
+}
+
+.route-leave-to {
+  opacity: 0;
+  transform: translateY(-5em);
+}
+.route-leave-active {
+  transition: opacity 300ms ease-in, transform 350ms ease-in;
+}
+
 :root {
   --textColor: #ffffff;
   --filterToTextColor: brightness(0) invert(1);
