@@ -45,7 +45,7 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 ### Commands
 
 | Outcome | With Docker | Without Docker |
-| --- | :--- | :--- |
+| --- | --- | --- |
 | Serve (Build & Host) | `docker-compose up` | `npm run serve`|
 | Serve Dev Mode | [Unavailable, contribution is welcome](https://github.com/EvAvKein/Distillogue/issues/1) | `npm run serveDev` |
 | Launch Cypress | `docker-compose -f docker-compose.test.yaml up` <br> OR <br> `npm run dockerCypress` | `npm run cypress`
