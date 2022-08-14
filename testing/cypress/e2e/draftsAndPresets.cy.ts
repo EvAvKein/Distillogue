@@ -193,7 +193,7 @@ describe("Drafts manipulation in posting page", () => {
   
   testDraftsFunctionalities("Post",
     () => {},
-    () => {cy.go(-1)}
+    () => {cy.go(-1); cy.wait(250)}
   );
 });
 
