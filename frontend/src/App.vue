@@ -14,22 +14,7 @@
 </script>
 
 <style>
-.route-enter-from {
-  opacity: 0;
-  transform: translateY(-5em);
-}
-.route-enter-active {
-  transition: opacity 300ms ease-out, transform 350ms ease-out;
-}
-
-.route-leave-to {
-  opacity: 0;
-  transform: translateY(-5em);
-}
-.route-leave-active {
-  transition: opacity 300ms ease-in, transform 350ms ease-in;
-}
-
+/* foundational */
 :root {
   --textColor: #ffffff;
   --filterToTextColor: brightness(0) invert(1);
@@ -96,6 +81,7 @@ button, a, summary {
   background-color: var(--textSubColor);
 }
 
+/* core styling classes */
 .core_backgroundButton {
   color: var(--backgroundColor);
   background-color: var(--textColor);
@@ -131,5 +117,22 @@ button, a, summary {
 }
 .core_contentButton:active img {
   filter: var(--filterToHighlightColor);
+}
+
+/* core transitions */
+.route-enter-from {
+  opacity: 0;
+  transform: translateY(-5em);
+}
+.route-enter-active {
+  transition: opacity 300ms ease-out, transform 350ms ease-out;
+}
+
+.route-leave-to {
+  opacity: 0;
+  transform: translateY(-5em);
+}
+.route-leave-active {
+  transition: opacity 300ms ease-in, transform 350ms ease-in;
 }
 </style>
