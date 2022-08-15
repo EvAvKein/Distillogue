@@ -82,6 +82,8 @@
     background-color: var(--backgroundColor);
     display: flex;
     justify-content: space-between;
+    margin-bottom: 0.75em;
+    box-shadow: 0 0 0.75em 0.5em var(--backgroundColor);
   }
 
   #logoLink {height: 2.75em} /* without explictly declaring this, the button is annoying higher (not taller) than its box-shadow (at least on chrome 99) */ 
