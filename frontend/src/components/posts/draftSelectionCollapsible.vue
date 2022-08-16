@@ -1,20 +1,28 @@
 <template>
-  <details><summary>Drafts</summary>
-    <section id="draftsModal">
-      <button v-if="typeof latestDraftIndex === 'number'"
-        type="button"
-        class="core_backgroundButton"
-        @click="unselectDraft"
-      >Preserve chosen draft</button>
-      <draftsSelection @draftSelected="selectDraft"/>
-    </section>
-  </details>
+  <customDetails class="draftsDetails">
+    <template #summary>
+      <span>Drafts</span>
+    </template>
+    <template #content>
+      <section id="draftsContent">
+        <transition name="collapse">
+          <button v-if="typeof latestDraftIndex === 'number'"
+            type="button"
+            class="core_backgroundButton"
+            @click="unselectDraft"
+          >Preserve chosen draft</button>
+        </transition>
+        <draftsSelection @draftSelected="selectDraft"/>
+      </section>
+    </template>
+  </customDetails>
 </template>
 
 <script setup lang="ts">
   import {ref} from "vue";
   import {UserData} from "../../../../shared/objects";
   import {deepCloneFromReactive} from "../../helpers/deepCloneFromReactive";
+  import customDetails from "../animatedDetails.vue";
   import draftsSelection from "../users/draftsList.vue";
 
   const latestDraftIndex = ref<number|null>();
@@ -34,18 +42,16 @@
 </script>
 
 <style scoped>
-  details {
-    padding: 0.5em 0.75em;
-    border-radius: 0.75em;
+  .draftsDetails {
+    padding: 0.5em;
+    border-radius: 0.5em;
   }
-  summary {
-    color: var(--textColor);
-    outline: none;
+  span {
+    display: block;
+    text-align: center;
   }
-  details[open] summary {margin-bottom: 0.5em}
 
-  summary:focus, summary:hover {color: var(--highlightSubColor)}
-  summary:active {color: var(--highlightColor)}
+  #draftsContent {margin-top: 0.5em}
 
   button {
     width: 100%;

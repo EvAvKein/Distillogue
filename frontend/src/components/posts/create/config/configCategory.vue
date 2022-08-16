@@ -1,13 +1,24 @@
 <template>
-  <details :open="openByDefault || false">
-    <summary>{{title}}</summary>
-    <div>
-      <slot></slot>
-    </div>
-  </details>
+  <section>
+    <customDetails
+      :openByDefault="openByDefault"
+    >
+      <template v-slot:summary>
+        <span>{{title}}</span>
+      </template>
+
+      <template #content>
+        <div>
+          <slot></slot>
+        </div>
+      </template>
+    </customDetails>
+  </section>
 </template>
 
 <script setup lang="ts">
+  import customDetails from "../../../animatedDetails.vue";
+
   defineProps<{
     title:string;
     openByDefault?:true;
@@ -15,7 +26,7 @@
 </script>
 
 <style scoped>
-  details {
+  section {
     height: fit-content;
     width: 100%;
     white-space: nowrap;
@@ -23,23 +34,19 @@
     border-radius: 0.5em;
   }
 
-  summary {
-    font-size: 1.25em;
+  span {
+    display: block;
+    text-align: center;
+    font-size: 1.5em;
     padding: 0.25em 0.5em;
   }
-  summary:hover, summary:focus {
-    color: var(--highlightSubColor);
-    outline: none;
-  }
-  summary:active {
-    color: var(--highlightColor);
-  }
 
-  details > div {
+  div {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0.5em 1em 1em;
+    padding: 0.5em 1em;
     gap: 0.5em 1.25em;
+    border-top: 0.15em solid var(--textSubColor);
   }
 </style>

@@ -135,4 +135,19 @@ button, a, summary {
 .route-leave-active {
   transition: opacity 200ms ease-in, transform 250ms ease-in;
 }
+
+.collapse-enter-from, .collapse-leave-to {
+  max-height: 0em;
+  opacity: 0;
+}
+.collapse-leave-from, .collapse-enter-to {
+  max-height: 99em;
+  opacity: 1;
+}
+.collapse-enter-active {
+  transition: opacity 300ms ease-out, max-height 350ms ease-in;
+}
+.collapse-leave-active {
+  transition: opacity 250ms ease-in, max-height 300ms ease-out;
+}
 </style>
