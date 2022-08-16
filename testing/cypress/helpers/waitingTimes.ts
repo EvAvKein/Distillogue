@@ -1,5 +1,5 @@
 const httpRequest = 250;
-const pageTransition = 350;
+const pageTransition = 250;
 
 const waitingTimes = {
   httpRequest: httpRequest,

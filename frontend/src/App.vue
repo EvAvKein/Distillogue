@@ -125,7 +125,7 @@ button, a, summary {
   transform: translateY(-5em);
 }
 .route-enter-active {
-  transition: opacity 300ms ease-out, transform 350ms ease-out;
+  transition: opacity 200ms ease-out, transform 250ms ease-out;
 }
 
 .route-leave-to {
@@ -133,6 +133,6 @@ button, a, summary {
   transform: translateY(-5em);
 }
 .route-leave-active {
-  transition: opacity 300ms ease-in, transform 350ms ease-in;
+  transition: opacity 200ms ease-in, transform 250ms ease-in;
 }
 </style>
