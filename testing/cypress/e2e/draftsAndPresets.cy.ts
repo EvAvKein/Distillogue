@@ -109,7 +109,7 @@ function saveDraft(title:string, body:string) {
   cy.contains("label", "Title").click().focused().clear().type(title);
   cy.contains("label", "Body").click().focused().clear().type(body);
   cy.contains("button", "Save draft").click();
-  cy.contains("summary", "Drafts")
+  cy.contains("button", "Drafts")
     .parent().contains("button", title);
 };
 
@@ -123,21 +123,21 @@ function testDraftsFunctionalities(submitName:"Post"|"Reply", returnFromRefresh:
     cy.reload();
     cy.wait(waitingTimes.pageColdLoad);
     returnFromRefresh();
-    cy.contains("summary", "Drafts")
+    cy.contains("button", "Drafts")
       .parent().contains("button", "First " + title);
   });
 
   it("Select and preserve saved draft", () => {
-    cy.contains("summary", "Drafts").click()
+    cy.contains("button", "Drafts").click()
       .parent().contains("button", "First " + title).click();
 
     cy.contains("label", "Title").click().focused().should("have.value", "First " + title);
     cy.contains("label", "Body").click().focused().should("have.value", "First " + body);
     cy.contains("button", submitName).should("have.text", submitName + " (& delete draft 1)");
-    cy.contains("summary", "Drafts")
+    cy.contains("button", "Drafts")
       .parent().contains("button", "Preserve chosen draft").click();
 
-    cy.contains("summary", "Drafts")
+    cy.contains("button", "Drafts")
       .parent().contains("button", "First " + title)
       .parent().parent().should("not.contain.text", "Preserve chosen draft");
     cy.contains("label", "Title").click().focused().should("have.value", "First " + title);
@@ -160,32 +160,32 @@ function testDraftsFunctionalities(submitName:"Post"|"Reply", returnFromRefresh:
   });
 
   it("Post and destroy draft", () => {
-    cy.contains("summary", "Drafts").click()
+    cy.contains("button", "Drafts").click()
       .parent().contains("button", "Second " + title).click();
     cy.get("form").contains("button", submitName + " (& delete draft 2)").click();
     cy.wait(waitingTimes.pageTransition);
 
     returnFromSubmit();
-    cy.get("form").contains("summary", "Drafts").parent().should("not.contain.text", "Second " + title);
+    cy.get("form").contains("button", "Drafts").parent().should("not.contain.text", "Second " + title);
   });
 
   it("Post and preserve draft", () => {
-    cy.contains("summary", "Drafts").click()
+    cy.contains("button", "Drafts").click()
       .parent().contains("button", "Third " + title).click()
       .parent().parent().contains("button", "Preserve chosen draft").click();
     cy.get("form").contains("button", submitName).click();
 
     returnFromSubmit();
-    cy.contains("summary", "Drafts").parent().contains("button", "Third " + title);
+    cy.contains("button", "Drafts").parent().contains("button", "Third " + title);
   });
 
   it("Modify, post, and destroy draft", () => {
-    cy.contains("summary", "Drafts").click()
+    cy.contains("button", "Drafts").click()
       .parent().contains("button", "First " + title).click();
     cy.get("form").contains("button", submitName + " (& delete draft 1)").click();
 
     returnFromSubmit();
-    cy.get("form").contains("summary", "Drafts").parent().should("not.contain.text", "First " + title);
+    cy.get("form").contains("button", "Drafts").parent().should("not.contain.text", "First " + title);
   });
 };
 

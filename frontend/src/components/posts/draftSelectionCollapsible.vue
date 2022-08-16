@@ -48,6 +48,7 @@
   }
   span {
     display: block;
+    color: var(--textColor);
     text-align: center;
   }
 

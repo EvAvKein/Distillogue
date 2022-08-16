@@ -82,9 +82,9 @@
 
   let inputsAffectedByPresets = [] as HTMLInputElement[];
   onMounted(() => {
-    const presetDetailsElements = Array.from(document.querySelectorAll<HTMLDetailsElement>("#editConfig details"))
+    const presetDetailsElements = Array.from(document.querySelectorAll<HTMLDetailsElement>("#editConfig section[aria-label]"))
       .filter((detailsElement) => {
-        return detailsElement.querySelector("summary")!.innerText === "Access" ? false : detailsElement;
+        return detailsElement.querySelector("button")!.innerText === "Access" ? false : detailsElement;
       });
     presetDetailsElements.forEach((category) => {
       const inputsInCategory = Array.from(category.querySelectorAll<HTMLInputElement>("input"));

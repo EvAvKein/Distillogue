@@ -18,8 +18,8 @@ describe("Create access & interactions test posts", () => {
         cy.get("button").contains("Everything").click();
         cy.get("form #config").contains("Access").parent().contains("Public").click();
         
-        cy.get('form #config details:not([open]) summary').click({multiple: true});
-        cy.get('form #config input[type="checkbox"]').should("be.checked"); // this doesn't actually work, uncomment the above line which checks the "public" checkbox for evidence. i tried changing this assert in multiple ways but nothing worked
+        cy.get('form #editConfig section[aria-label="Closed category"] button').click({multiple: true});
+        cy.get('form #editConfig input[type="checkbox"]').should("be.checked"); // this doesn't actually work, uncomment the above line which checks the "public" checkbox for evidence. i tried changing this assert in multiple ways but nothing worked
       }
     );
 
@@ -29,8 +29,8 @@ describe("Create access & interactions test posts", () => {
       () => {
         cy.get("button").contains("Everything").click();
 
-        cy.get('form #config details:not([open]) summary').click({multiple: true});
-        cy.get('form #config input[type="checkbox"]').should("be.checked");
+        cy.get('form #editConfig section[aria-label="Closed category"] button').click({multiple: true});
+        cy.get('form #editConfig input[type="checkbox"]').should("be.checked");
       }
     );
   });
@@ -167,7 +167,7 @@ describe("Voting", () => {
     validateVoteInterface("down", -1);
   });
 
-  it("Cancel vote (down", () => {
+  it("Cancel vote (down)", () => {
     cy.get(downvoteSelector).first().click();
     validateVoteInterface("none", 0);
     cy.reload();

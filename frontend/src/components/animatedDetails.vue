@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section :aria-label="open ? 'Opened category' : 'Closed category'"> <!-- here for ease of testing, and as a substitute for the equivalent <details> attribute -->
     <button
       class="core_contentButton"
       type="button"
