@@ -2,7 +2,7 @@
   <layout/>
   <noscriptWarn/>
   <router-view v-slot="{Component}">
-    <transition name="route" mode="out-in">
+    <transition name="swap" mode="out-in">
       <component :is="Component"/>
     </Transition>
   </router-view>
@@ -120,18 +120,18 @@
   }
 
   /* core transitions */
-  .route-enter-from {
+  .swap-enter-from {
     opacity: 0;
     transform: translateY(-5em);
   }
-  .route-leave-to {
+  .swap-leave-to {
     opacity: 0;
     transform: translateY(-5em);
   }
-  .route-enter-active {
+  .swap-enter-active {
     transition: opacity 200ms ease-out, transform 250ms ease-out;
   }
-  .route-leave-active {
+  .swap-leave-active {
     transition: opacity 200ms ease-in, transform 250ms ease-in;
   }
 
