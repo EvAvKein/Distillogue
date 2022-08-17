@@ -19,10 +19,7 @@
       :minLineHeight="5"
       v-model="replyBody"
     />
-    <notification
-      :text="notifText"
-      :desirablityStyle="notifDesirability"
-    />
+    <notification :text="notifText" :desirablityStyle="notifDesirability"/>
     <div id="confirmation">
       <draftSaveButton
         :type="'draft'"

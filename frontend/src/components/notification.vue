@@ -1,7 +1,9 @@
 <template>
-  <p v-show="notifText" :class="'notification ' + styleClass">
-    {{notifText}}
-  </p>
+  <transition name="notification">
+    <p v-show="notifText" :class="'notification ' + styleClass">
+      {{notifText}}
+    </p>
+  </transition>
 </template>
 
 <script setup lang="ts">
@@ -57,4 +59,17 @@
     border-color: #00ff00;
     background-color: #00ff0088;
   }
+
+  .notification-enter-from {
+    max-height: 0em;
+    opacity: 0;
+  }
+  .notification-enter-to {
+    max-height: 15em;
+    opacity: 1;
+  }
+  .notification-enter-active {
+    transition: all 300ms ease-in;
+  }
+  /* no leave transition because when the text is removed the element instantly snaps to its minimum size, and any transition after that only gives the user more time to notice what remains after the snapping. a fix to prevent/minimize the snapping would be much appreciated */
 </style>
