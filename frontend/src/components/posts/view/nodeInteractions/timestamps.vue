@@ -10,8 +10,8 @@
 </template>
 
 <script setup lang="ts">
-  import {NodeStats} from "../../../../shared/objects";
-  import timestamp from "../timestamp.vue";
+  import {NodeStats} from "../../../../../../shared/objects";
+  import timestamp from "../../../timestamp.vue";
 
   defineProps<{
     timestamps:NonNullable<NodeStats["timestamps"]>;
