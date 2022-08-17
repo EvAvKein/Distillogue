@@ -6,11 +6,7 @@
       id="usernameInput" :inputId="'loginUsernameField'"
       v-model="username"
     />
-    <notification
-      :text="signingMessage"
-      :desirablityStyle="signingStatus"
-      @expiration="() => {signingMessage = ''}"
-    />
+    <notification :text="signingMessage" :desirablityStyle="signingStatus"/>
     <button @click="signingByInput"
       type="button"
       class="core_backgroundButton"
