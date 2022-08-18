@@ -3,7 +3,7 @@ import express from "express";
 import helmetSecurity from "helmet";
 import {users, posts} from "./mongo.js";
 import * as timestamp from "../../shared/helpers/timestamps.js";
-import {userIdByAuthHeader} from "./helpers/userIdByAuthHeader.js";
+import {userIdByAuthHeader} from "./helpers/userByAuthHeader.js";
 import {nodePathAsMongoLocators} from "./helpers/mongo/nodePathAsMongoLocators.js";
 import {mongoPostsFilterByAccess} from "./helpers/mongo/mongoPostsFilterByAccess.js";
 import {updateDeepProperty} from "./helpers/updateDeepProperty.js";
@@ -86,11 +86,11 @@ app.patch("/api/user/me", async (request, response) => {
 
 app.get("/api/posts/:searchValue?", async (request, response) => {
   const regexFilter = new RegExp(sanitizeForRegex(request.params.searchValue || ""), "i");
-  const userId = await userIdByAuthHeader(request);
+  const user = await userIdByAuthHeader(request);
 
   const topNodesOfPosts = await posts.find<Omit<Node, "replies">>(
     mongoPostsFilterByAccess(
-      userId,
+      user?.data.id,
       {$or: [{title: regexFilter}, {body: regexFilter}]},
     ), 
     {projection: {replies: false}}
@@ -106,20 +106,20 @@ app.get("/api/posts/:searchValue?", async (request, response) => {
 app.post("/api/post", async (request, response) => {
   const postRequest = request.body as NodeCreationRequest;
 
-  const userId = await userIdByAuthHeader(request);
-  if (!userId) {
+  const user = await userIdByAuthHeader(request);
+  if (!user) {
     response.json(new FetchResponse(null, "User authentication failed"));
     return;
   };
 
   const dbResponse = await posts.updateOne(
     {
-      ownerIds: [userId].concat(postRequest.invitedOwnerIds || []),
+      ownerIds: [user.data.id].concat(postRequest.invitedOwnerIds || []),
       title: postRequest.title,
       body: postRequest.body,
       config: postRequest.config
     },
-    {$setOnInsert: new Node(userId, postRequest)},
+    {$setOnInsert: new Node(user.data.id, postRequest)},
     {upsert: true}
   );
 
@@ -130,7 +130,7 @@ app.post("/api/post", async (request, response) => {
 
   if (postRequest.newDraftsState) {
     await users.findOneAndUpdate(
-      {"data.id": userId},
+      {"data.id": user.data.id},
       {$set: {"data.drafts": postRequest.newDraftsState}},
     );
   };
@@ -140,10 +140,10 @@ app.post("/api/post", async (request, response) => {
 
 app.get("/api/post/:id", async (request, response) => {
   const postId = request.params.id as Node["id"];
-  const userId = await userIdByAuthHeader(request);
+  const user = await userIdByAuthHeader(request);
 
   const dbResponse = await posts.findOne<Node|null>(
-    mongoPostsFilterByAccess(userId, {id: postId})
+    mongoPostsFilterByAccess(user?.data.id, {id: postId})
   );
   if (!dbResponse) {
     response.json(new FetchResponse(null, "Post unavailable; Either it doesn't exist, or it's private and you're not authorized"));
@@ -160,7 +160,7 @@ app.get("/api/post/:id", async (request, response) => {
     enabledVoteTypes.forEach((voteTypeName) => {
       post = recursivelyModifyNode(post, (node) => {
         updateDeepProperty(node, "stats.votes." + voteTypeName, (votesArray:UserData["id"][]) => {
-          return votesArray.map((vote) => {return vote === userId ? userId : "redacted"})
+          return votesArray.map((vote) => {return vote === user?.data.id ? user.data.id : "redacted"})
         });
         return node;
       });
@@ -171,8 +171,8 @@ app.get("/api/post/:id", async (request, response) => {
 });
 
 app.patch("/api/interaction", async (request, response) => { // i'm not satisfied with this URI's unRESTfulness, but couldn't come up with an appropriate implementation. "/posts/:nodePath/interactions" results in extremely verbose URIs, "/posts/:postId/interactions" isn't really coherent when a nodePath is still needed, and "/interactions/:interactionType" doesn't help much and disjoints is from other equally-necessary data
-  const userId = await userIdByAuthHeader(request);
-  if (!userId) {
+  const user = await userIdByAuthHeader(request);
+  if (!user) {
     response.json(new FetchResponse(null, "User authentication failed"));
     return;
   };
@@ -181,7 +181,7 @@ app.patch("/api/interaction", async (request, response) => { // i'm not satisfie
   const postId = nodePath[0] as Node["id"];
   const mongoPath = nodePathAsMongoLocators(nodePath);
 
-  const subjectPost = await posts.findOne(mongoPostsFilterByAccess(userId, {id: postId})); // this (and the interaction validations that it enables) would be best implemented as a condition on each interaction (to reduce the number of DB calls) with follow-up code to read the modify result and output any relevant error. see the comment below at latestInteracted updates for explanation on why DB conditionals are currently avoided
+  const subjectPost = await posts.findOne(mongoPostsFilterByAccess(user.data.id, {id: postId})); // this (and the interaction validations that it enables) would be best implemented as a condition on each interaction (to reduce the number of DB calls) with follow-up code to read the modify result and output any relevant error. see the comment below at latestInteracted updates for explanation on why DB conditionals are currently avoided
   if (!subjectPost) {
     response.json(new FetchResponse(null, "Post unavailable; Either it doesn't exist, or it's private and you're not authorized"));
     return;
@@ -201,13 +201,13 @@ app.patch("/api/interaction", async (request, response) => { // i'm not satisfie
 
       const mongoUpdate = voteData.newVoteStatus
         ? {
-            "$addToSet": {[mongoPath.updatePath + "stats.votes." + subjectDirection]: userId},
-            "$pull": {[mongoPath.updatePath + "stats.votes." + oppositeDirection]: userId}
+            "$addToSet": {[mongoPath.updatePath + "stats.votes." + subjectDirection]: user.data.id},
+            "$pull": {[mongoPath.updatePath + "stats.votes." + oppositeDirection]: user.data.id}
           }
         : {
             "$pull": {
-              [mongoPath.updatePath + "stats.votes." + subjectDirection]: userId,
-              [mongoPath.updatePath + "stats.votes." + oppositeDirection]: userId
+              [mongoPath.updatePath + "stats.votes." + subjectDirection]: user.data.id,
+              [mongoPath.updatePath + "stats.votes." + oppositeDirection]: user.data.id
             }
           }
       ;
@@ -227,7 +227,7 @@ app.patch("/api/interaction", async (request, response) => { // i'm not satisfie
 
       (interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest.config = subjectPost.config;
 
-      const newNode = new Node(userId, (interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest);
+      const newNode = new Node(user.data.id, (interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest);
       delete newNode.config;
 
       dbResponse = await posts.findOneAndUpdate(
@@ -238,7 +238,7 @@ app.patch("/api/interaction", async (request, response) => { // i'm not satisfie
 
       if ((interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest.newDraftsState) {
         await users.findOneAndUpdate(
-          {"data.id": userId},
+          {"data.id": user.data.id},
           {$set: {"data.drafts": (interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest.newDraftsState}},
         );
       };
@@ -252,7 +252,7 @@ app.patch("/api/interaction", async (request, response) => { // i'm not satisfie
 
   if (subjectPost?.config!.timestamps?.latestInteracted) {
     await posts.updateOne( // this would be best implemented as an extra modification of each interaction (to keep the interaction itself and this as a singular atomic update), but using conditionals to check if the property exists before updating requires using mongo's aggregation pipeline syntax which is (seemingly) frustratingly limited in assignment commands and is much more verbose & opaque. for the current stage of the project, i.e very early, there's no need to ruin my/the readability of mongo commands for atomic operations' sake
-      mongoPostsFilterByAccess(userId, {id: postId}),
+      mongoPostsFilterByAccess(user.data.id, {id: postId}),
       {$set: {[mongoPath.updatePath + "stats.timestamps.latestInteracted"]: timestamp.unix()}},
       {arrayFilters: mongoPath.arrayFiltersOption}
     );
