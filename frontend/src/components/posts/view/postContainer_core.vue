@@ -2,10 +2,9 @@
   <modalWrapper :activeByTruthiness="replyPath" 
     @deactivate="() => {replyPath = null}"
   >
-    <createReply
-      :nodePath="(replyPath as string[])"
-      :postConfig="props.postObject.config"
-    />
+    <div>
+      <createReply :replyNodePath="replyPath"/>
+    </div>
   </modalWrapper>
 
   <simpleLayout v-if="currentLayout === 'simple'" :postObject="postObject"/>
@@ -16,7 +15,7 @@
   import {ref, provide} from "vue";
   import {Node} from "../../../../../shared/objects";
   import modalWrapper from "../../modalWrapper.vue";
-  import createReply from "./nodeInteractions/createReply.vue";
+  import createReply from "../create/createNode.vue";
 
   import simpleLayout from "./simple/postContainer.vue";
 
@@ -30,3 +29,13 @@
   const replyPath = ref<Node["id"][]|null>(null);
   provide("replyPath", replyPath);
 </script>
+
+<style scoped>
+  div {
+    box-sizing: border-box;
+    width: clamp(20em, 90vw, 50em);
+    background-color: var(--backgroundSubColor);
+    padding: 0.5em 0.25em;
+    border-radius: 1em;
+  }
+</style>
