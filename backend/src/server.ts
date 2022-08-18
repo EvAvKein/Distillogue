@@ -225,6 +225,8 @@ app.patch("/api/interaction", async (request, response) => { // i'm not satisfie
         return;
       };
 
+      (interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest.config = subjectPost.config;
+
       const newNode = new Node(userId, (interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest);
       delete newNode.config;
 
