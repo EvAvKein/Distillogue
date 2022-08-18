@@ -66,7 +66,6 @@
   }
 
   dialog {
-    font-size: clamp(1em, 4vw, 1.5em);
     position: relative;
     margin: auto;
     padding: 0;
