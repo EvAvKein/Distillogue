@@ -1,7 +1,7 @@
 import {users} from "../mongo.js";
 import {Request} from "express";
 
-export async function userIdByAuthHeader(ApiRequest:Request) {
+export async function userByAuthHeader(ApiRequest:Request) {
   const authKey = ApiRequest.headers.authorization?.replace("Bearer ", "");
 
   if (!authKey) return null;

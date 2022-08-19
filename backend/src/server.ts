@@ -3,7 +3,7 @@ import express from "express";
 import helmetSecurity from "helmet";
 import {users, posts} from "./mongo.js";
 import * as timestamp from "../../shared/helpers/timestamps.js";
-import {userIdByAuthHeader} from "./helpers/userByAuthHeader.js";
+import {userByAuthHeader} from "./helpers/userByAuthHeader.js";
 import {nodePathAsMongoLocators} from "./helpers/mongo/nodePathAsMongoLocators.js";
 import {mongoPostsFilterByAccess} from "./helpers/mongo/mongoPostsFilterByAccess.js";
 import {updateDeepProperty} from "./helpers/updateDeepProperty.js";
@@ -86,7 +86,7 @@ app.patch("/api/user/me", async (request, response) => {
 
 app.get("/api/posts/:searchValue?", async (request, response) => {
   const regexFilter = new RegExp(sanitizeForRegex(request.params.searchValue || ""), "i");
-  const user = await userIdByAuthHeader(request);
+  const user = await userByAuthHeader(request);
 
   const topNodesOfPosts = await posts.find<Omit<Node, "replies">>(
     mongoPostsFilterByAccess(
@@ -106,7 +106,7 @@ app.get("/api/posts/:searchValue?", async (request, response) => {
 app.post("/api/post", async (request, response) => {
   const postRequest = request.body as NodeCreationRequest;
 
-  const user = await userIdByAuthHeader(request);
+  const user = await userByAuthHeader(request);
   if (!user) {
     response.json(new FetchResponse(null, "User authentication failed"));
     return;
@@ -140,7 +140,7 @@ app.post("/api/post", async (request, response) => {
 
 app.get("/api/post/:id", async (request, response) => {
   const postId = request.params.id as Node["id"];
-  const user = await userIdByAuthHeader(request);
+  const user = await userByAuthHeader(request);
 
   const dbResponse = await posts.findOne<Node|null>(
     mongoPostsFilterByAccess(user?.data.id, {id: postId})
@@ -171,7 +171,7 @@ app.get("/api/post/:id", async (request, response) => {
 });
 
 app.patch("/api/interaction", async (request, response) => { // i'm not satisfied with this URI's unRESTfulness, but couldn't come up with an appropriate implementation. "/posts/:nodePath/interactions" results in extremely verbose URIs, "/posts/:postId/interactions" isn't really coherent when a nodePath is still needed, and "/interactions/:interactionType" doesn't help much and disjoints is from other equally-necessary data
-  const user = await userIdByAuthHeader(request);
+  const user = await userByAuthHeader(request);
   if (!user) {
     response.json(new FetchResponse(null, "User authentication failed"));
     return;
