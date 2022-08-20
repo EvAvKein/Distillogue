@@ -2,7 +2,7 @@
   <form @submit.prevent :id="nodeIsPost ? 'postMode' : 'replyMode'">
     <section id="writeAndConfirmWrapper">
       <section id="textsBox">
-        <!-- checking drafts is truthy to prevent console error when logging out while this component is mounted -->
+        <!-- unmounting when drafts isn't truthy to prevent a console error when logging out while it's mounted -->
         <draftsSelection v-if="user.data.drafts && user.data.drafts.length > 0"
           id="draftsSelection"
           @draftSelected="draftSelected"
@@ -26,11 +26,13 @@
 
       <section id="confirmation">
         <notification :text="notifText" :desirablityStyle="notifDesirability"/>
-        <draftOrPresetSaveButton
-          :type="'draft'"
-          :data="{title: nodeTitle, body: nodeBody}"
-          @error="(text:string) => {notifText = text; notifDesirability = false}"
-        />
+        <button @click="saveDraft"
+          type="button"
+          class="core_backgroundButton"
+          :disabled="draftsAtCapacity ? true : false"
+        >
+          {{draftsAtCapacity ? "Drafts at capacity" : "Save draft"}}
+        </button>
         <button id="submitButton"
           type="button"
           class="core_backgroundButton"
@@ -55,23 +57,28 @@
           :presetOverride="configOverridingPreset?.config"
           id="editConfig"
         />
-        <draftOrPresetSaveButton
-          :type="'preset'"
-          :data="{name: '', config: (postConfig as PostConfig)}"
-        />
+        <button @click="savePreset"
+          type="button"
+          class="core_backgroundButton"
+          :disabled="presetsAtCapacity ? true : false"
+        >
+          {{presetsAtCapacity ? "Presets at capacity" : "Save preset"}}
+        </button>
       </section>
     </section>
   </form>
 </template>
 
 <script setup lang="ts">
-  import {ref, computed, onMounted, onUnmounted} from "vue";
-  import {Node, PostConfig, NodeCreationRequest, NodeInteractionRequest, UserData} from "../../../../../shared/objects";
+  import {ref, computed, ComputedRef, onMounted, onUnmounted} from "vue";
+  import {Node, PostConfig, NodeCreationRequest, NodeInteractionRequest, UserData, UserPatchRequest} from "../../../../../shared/objects";
+  import {unix} from "../../../../../shared/helpers/timestamps";
+  import {filterByIndex} from "../../../../../shared/helpers/filterByIndexes";
   import {jsonFetch} from "../../../helpers/jsonFetch";
   import {useUser} from "../../../stores/user";
   import {useRouter} from "vue-router";
   import labelledInput from "../../labelledInput.vue";
-  import draftOrPresetSaveButton from "../draftOrPresetSaveButton.vue";
+  import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
   import draftsSelection from "../draftSelectionCollapsible.vue";
   import configPresets from "./config/configPresets.vue";
   import editConfig from "./config/editConfig.vue";
@@ -90,7 +97,7 @@
   const notifText = ref<string>("");
   const notifDesirability = ref<boolean>(true);
 
-  const nodeIsPost =  computed(() => !props.replyNodePath);
+  const nodeIsPost = computed(() => !props.replyNodePath);
 
   const postConfig = ref<PostConfig|undefined>(nodeIsPost.value ? {} : undefined);
   const postInvitedOwners = ref<UserData["id"][]|undefined>(nodeIsPost.value ? [] : undefined);
@@ -99,13 +106,34 @@
   const configDrawerExists = ref<boolean|undefined>(undefined);
   const configDrawerOpen = ref<boolean|undefined>(nodeIsPost.value ? false : undefined);
 
+  let presetsAtCapacity:ComputedRef<boolean>;
+  let savePreset:() => void;
   if (nodeIsPost.value) {
+    presetsAtCapacity = computed(() => user.data.configPresets?.length >= 3);
+    savePreset = async () => {  
+      if (presetsAtCapacity.value) return;
+
+      const newPresetsState = [...user.data.configPresets, {name: "", config: postConfig.value!}];
+
+      const response = await jsonFetch("PATCH", "/user/me",
+        [new UserPatchRequest("configPresets", newPresetsState)],
+        user.data.authKey
+      );
+
+      if (response.error) {
+        notifText.value = response.error.message;
+        notifDesirability.value = false;
+        return;
+      };
+
+      user.data.configPresets = newPresetsState;
+    };
+
     const body = document.getElementsByTagName("body")[0];
     function configInertByScreenWidth() {
       const pxFontSize = Number.parseInt(window.getComputedStyle(body).fontSize);
       configDrawerExists.value = body.clientWidth < (pxFontSize * 55);
     };
-
     onMounted(() => {
       configInertByScreenWidth();
       const bodyObserver = new ResizeObserver(configInertByScreenWidth);
@@ -125,43 +153,63 @@
     currentDraftIndex.value = data.index;
   };
 
-  async function submitNode() {
-    notifText.value = "";
-    const newDraftsState = user.data.drafts.filter((draft, index) => index !== currentDraftIndex.value); // suboptimal, it would be better to intead use a deletedDraftIndex (number|null)... but that requires (TODO) updating 1. the drafts component 2. this component 3. NodeCreationRequest, 4. the backend stuff
+  const draftsAtCapacity = computed(() => user.data.drafts?.length >= 3);
+  async function saveDraft() {
+      if (draftsAtCapacity.value) return;
 
-    const sumbitRequest = nodeIsPost.value
-      ? () => {
-          return jsonFetch("POST", "/post",
-            new NodeCreationRequest(
-              postInvitedOwners!.value,
+      const newDraftsState = [...deepCloneFromReactive(user.data.drafts), {title: nodeTitle.value, body: nodeBody.value, lastEdited: unix()}];
+
+      const response = await jsonFetch("PATCH", "/user/me",
+        [new UserPatchRequest("drafts", newDraftsState)],
+        user.data.authKey
+      );
+
+      if (response.error) {
+        notifText.value = response.error.message;
+        notifDesirability.value = false;
+        return;
+      };
+
+      user.data.drafts = newDraftsState;
+  };
+
+  const apiRequest = nodeIsPost.value
+    ? () => {
+        return jsonFetch("POST", "/post",
+          new NodeCreationRequest(
+            postInvitedOwners!.value,
+            nodeTitle.value,
+            nodeBody.value,
+            currentDraftIndex.value,
+            postConfig!.value,
+          ),
+          user.data.authKey
+        );
+      }
+    : () => {
+        return jsonFetch("PATCH", "/interaction",
+          new NodeInteractionRequest(
+            props.replyNodePath!,
+            "reply",
+            {nodeReplyRequest: new NodeCreationRequest(
+              [user.data.id],
               nodeTitle.value,
               nodeBody.value,
-              newDraftsState,
-              postConfig!.value,
-            ),
-            user.data.authKey
-          );
-        }
-      : () => {
-          return jsonFetch("PATCH", "/interaction",
-            new NodeInteractionRequest(
+              currentDraftIndex.value,
+              undefined,
               props.replyNodePath!,
-              "reply",
-              {nodeReplyRequest: new NodeCreationRequest(
-                [user.data.id],
-                nodeTitle.value,
-                nodeBody.value,
-                newDraftsState,
-                undefined,
-                props.replyNodePath!,
-              )}
-            ),
-            user.data.authKey
-          );
-        }
-    ;
+            )}
+          ),
+          user.data.authKey
+        );
+      }
+  ;
 
-    const response = await sumbitRequest();
+
+  async function submitNode() {
+    notifText.value = "";
+
+    const response = await apiRequest();
 
     if (response.error) {
       notifText.value = response.error.message;
@@ -169,7 +217,10 @@
       return;
     };
 
-    user.data.drafts = newDraftsState;
+    if (typeof currentDraftIndex.value === "number") {
+      const newDraftsState = filterByIndex(deepCloneFromReactive(user.data.drafts), currentDraftIndex.value);
+      user.data.drafts = newDraftsState;
+    };
 
     nodeIsPost.value
       ? router.push("/browse") // should redirect to created post instead, change to that once post URLs are properly implemented
@@ -183,13 +234,13 @@
     display: block;
     position: relative;
     margin: auto;
-    width: min(calc(100% - 1em), 75em);
-    padding: 0 0.5em 0.5em;
+    width: min(calc(100% - 1.5em), 75em);
+    padding: 0 0.75em 0.5em;
     overflow: hidden;
   }
 
   form#postMode #writeAndConfirmWrapper {
-    width: calc(100% - 3.25em);
+    width: calc(100% - 3em);
   }
 
   #textsBox {font-size: clamp(1.25em, 2.25vw, 1.5em)}
@@ -232,6 +283,11 @@
     background-color: var(--backgroundColor);
   }
   #config > * + * {margin-top: 0.5em}
+  
+  #config button {
+    display: block;
+    margin: 0.5em auto;
+  }
 
   #drawerToggler {
     background-color: var(--textColor);

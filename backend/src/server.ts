@@ -7,6 +7,7 @@ import {userByAuthHeader} from "./helpers/userByAuthHeader.js";
 import {nodePathAsMongoLocators} from "./helpers/mongo/nodePathAsMongoLocators.js";
 import {mongoPostsFilterByAccess} from "./helpers/mongo/mongoPostsFilterByAccess.js";
 import {updateDeepProperty} from "./helpers/updateDeepProperty.js";
+import {filterByIndex} from "../../shared/helpers/filterByIndexes.js";
 import {recursivelyModifyNode} from "./helpers/recursivelyModifyNode.js";
 import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
 import {FetchResponse, User, UserData, UserPatchRequest, arrOfEditableUserData, NodeCreationRequest, Node, PostSummary, NodeInteractionRequest, PostConfig} from "../../shared/objects.js";
@@ -123,15 +124,17 @@ app.post("/api/post", async (request, response) => {
     {upsert: true}
   );
 
-  if (dbResponse.matchedCount >= 1) {
-    response.json(new FetchResponse(null, "Duplicate post attempt: This was already posted successfully!")); // this technically makes the request non-idempotent for the user, but (at least when testing on localhost, might need to reevaluate upon hosting) any duplicate request comes back late enough that a site user is redirected away from the page that would display the error before that error gets to display; thus this non-idempotence only affects people who attempt to post through the API directly, mostly likely programmatically, and should be savvy enough to avoid this issue and/or understand it
+  if (dbResponse.matchedCount > 0) { // this technically makes the request non-idempotent for the user, but (at least when testing on localhost, might need to reevaluate upon hosting) any duplicate request comes back late enough that a site user is redirected away from the page that would display the error before that error gets to display; thus this non-idempotence only affects people who attempt to post through the API directly, mostly likely programmatically, and should be savvy enough to understand this issue and/or avoid it
+    response.json(new FetchResponse(null, "Duplicate post attempt: This was already posted successfully!")); 
     return;
   };
 
-  if (postRequest.newDraftsState) {
-    await users.findOneAndUpdate(
+  if (typeof postRequest.deletedDraftIndex === "number") {
+    const newDraftsState = filterByIndex(user.data.drafts, postRequest.deletedDraftIndex);
+
+    users.findOneAndUpdate(
       {"data.id": user.data.id},
-      {$set: {"data.drafts": postRequest.newDraftsState}},
+      {$set: {"data.drafts": newDraftsState}},
     );
   };
 
@@ -236,10 +239,13 @@ app.patch("/api/interaction", async (request, response) => { // i'm not satisfie
         {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"}
       );
 
-      if ((interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest.newDraftsState) {
+      const deletedDraftIndex = (interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest.deletedDraftIndex;
+      if (typeof deletedDraftIndex === "number") {
+        const newDraftsState = filterByIndex(user.data.drafts, deletedDraftIndex);  // turns out pulling from an array by index has been rejected as a mongodb native feature (and the workaround has bad readability), so i'm just opting to override the drafts value instead. see: https://jira.mongodb.org/browse/SERVER-1014
+        
         await users.findOneAndUpdate(
           {"data.id": user.data.id},
-          {$set: {"data.drafts": (interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest.newDraftsState}},
+          {$set: {"data.drafts": newDraftsState}},
         );
       };
       break;

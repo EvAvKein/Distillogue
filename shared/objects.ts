@@ -112,15 +112,15 @@ class NodeCreationRequest {
   invitedOwnerIds:string[]|undefined;
   title:string;
   body:string;
-  newDraftsState?:UserData["drafts"]; // turns out pulling from an array by index has been rejected as a mongodb native feature (and the workaround has bad readability), so i'm just opting to override the drafts value instead. see: https://jira.mongodb.org/browse/SERVER-1014
+  deletedDraftIndex?:number;
   config?:PostConfig;
   nodePath?:Node["id"][];
 
-  constructor(invitedOwnerIds:NodeCreationRequest["invitedOwnerIds"]|undefined, title:NodeCreationRequest["title"], body:NodeCreationRequest["body"], newDraftsState?:NodeCreationRequest["newDraftsState"], config?:NodeCreationRequest["config"], nodePath?:NodeCreationRequest["nodePath"]) {
+  constructor(invitedOwnerIds:NodeCreationRequest["invitedOwnerIds"]|undefined, title:NodeCreationRequest["title"], body:NodeCreationRequest["body"], deletedDraftIndex?:NodeCreationRequest["deletedDraftIndex"], config?:NodeCreationRequest["config"], nodePath?:NodeCreationRequest["nodePath"]) {
     this.invitedOwnerIds = invitedOwnerIds;
     this.title = title;
     this.body = body;
-    newDraftsState ? this.newDraftsState = newDraftsState : delete this.newDraftsState;
+    typeof deletedDraftIndex === "number" ? this.deletedDraftIndex = deletedDraftIndex : delete this.deletedDraftIndex;
     config ? this.config = config : delete this.config;
     nodePath ? this.nodePath = nodePath : delete this.nodePath;
   };
