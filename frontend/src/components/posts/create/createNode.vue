@@ -173,42 +173,40 @@
       user.data.drafts = newDraftsState;
   };
 
-  const apiRequest = nodeIsPost.value
-    ? () => {
-        return jsonFetch("POST", "/post",
-          new NodeCreationRequest(
-            postInvitedOwners!.value,
-            nodeTitle.value,
-            nodeBody.value,
-            currentDraftIndex.value,
-            postConfig!.value,
-          ),
-          user.data.authKey
-        );
-      }
-    : () => {
-        return jsonFetch("PATCH", "/interaction",
-          new NodeInteractionRequest(
-            props.replyNodePath!,
-            "reply",
-            {nodeReplyRequest: new NodeCreationRequest(
-              [user.data.id],
-              nodeTitle.value,
-              nodeBody.value,
-              currentDraftIndex.value,
-              undefined,
-              props.replyNodePath!,
-            )}
-          ),
-          user.data.authKey
-        );
-      }
-  ;
-
-
   async function submitNode() {
     notifText.value = "";
 
+    const apiRequest = nodeIsPost.value
+      ? () => {
+          return jsonFetch("POST", "/post",
+            new NodeCreationRequest(
+              postInvitedOwners!.value,
+              nodeTitle.value,
+              nodeBody.value,
+              currentDraftIndex.value,
+              postConfig!.value,
+            ),
+            user.data.authKey
+          );
+        }
+      : () => {
+          return jsonFetch("PATCH", "/interaction",
+            new NodeInteractionRequest(
+              props.replyNodePath!,
+              "reply",
+              {nodeReplyRequest: new NodeCreationRequest(
+                [user.data.id],
+                nodeTitle.value,
+                nodeBody.value,
+                currentDraftIndex.value,
+                undefined,
+                props.replyNodePath!,
+              )}
+            ),
+            user.data.authKey
+          );
+        }
+      ;
     const response = await apiRequest();
 
     if (response.error) {
