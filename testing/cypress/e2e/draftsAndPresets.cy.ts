@@ -113,16 +113,15 @@ function saveDraft(title:string, body:string) {
     .parent().contains("button", title);
 };
 
-function testDraftsFunctionalities(submitName:"Post"|"Reply", returnFromRefresh:() => any, returnFromSubmit:() => any) {
+function testDraftsFunctionalities(submitName:"Post"|"Reply", recoverFromRefresh:() => any, recoverFromSubmit:() => any) {
   it("Save draft", () => {
-    returnFromRefresh();
+    recoverFromRefresh();
     cy.get("body").should("not.contain.text", "Drafts");
 
     saveDraft("First " + title, "First " + body);
 
     cy.reload();
-    cy.wait(waitingTimes.pageColdLoad);
-    returnFromRefresh();
+    recoverFromRefresh();
     cy.contains("button", "Drafts")
       .parent().contains("button", "First " + title);
   });
@@ -153,8 +152,7 @@ function testDraftsFunctionalities(submitName:"Post"|"Reply", returnFromRefresh:
     cy.contains("button", "Drafts at capacity").should("have.attr", "disabled");
 
     cy.reload();
-    cy.wait(waitingTimes.pageColdLoad);
-    returnFromRefresh();
+    recoverFromRefresh();
     cy.get("main").should("not.contain.text", "Save draft");
     cy.contains("button", "Drafts at capacity").should("have.attr", "disabled");
   });
@@ -163,9 +161,8 @@ function testDraftsFunctionalities(submitName:"Post"|"Reply", returnFromRefresh:
     cy.contains("button", "Drafts").click()
       .parent().contains("button", "Second " + title).click();
     cy.get("form").contains("button", submitName + " (& delete draft 2)").click();
-    cy.wait(waitingTimes.pageTransition);
 
-    returnFromSubmit();
+    recoverFromSubmit();
     cy.get("form").contains("button", "Drafts").parent().should("not.contain.text", "Second " + title);
   });
 
@@ -175,7 +172,7 @@ function testDraftsFunctionalities(submitName:"Post"|"Reply", returnFromRefresh:
       .parent().parent().contains("button", "Preserve chosen draft").click();
     cy.get("form").contains("button", submitName).click();
 
-    returnFromSubmit();
+    recoverFromSubmit();
     cy.contains("button", "Drafts").parent().contains("button", "Third " + title);
   });
 
@@ -184,7 +181,7 @@ function testDraftsFunctionalities(submitName:"Post"|"Reply", returnFromRefresh:
       .parent().contains("button", "First " + title).click();
     cy.get("form").contains("button", submitName + " (& delete draft 1)").click();
 
-    returnFromSubmit();
+    recoverFromSubmit();
     cy.get("form").contains("button", "Drafts").parent().should("not.contain.text", "First " + title);
   });
 };
@@ -192,13 +189,15 @@ function testDraftsFunctionalities(submitName:"Post"|"Reply", returnFromRefresh:
 describe("Drafts manipulation in posting page", () => {
   it("Navigate to posting page", () => {
     cy.contains("a", "Post").click();
+    cy.wait(waitingTimes.pageTransition);
   });
   
   testDraftsFunctionalities("Post",
-    () => {},
+    () => {cy.wait(waitingTimes.pageColdLoad)},
     () => {
-      cy.go(-1);
       cy.wait(waitingTimes.pageTransition);
+      cy.go(-1);
+      cy.wait(waitingTimes.pageColdLoad);
     }
   );
 });
@@ -216,7 +215,13 @@ describe("Drafts manipulation in replying modal", () => {
   });
   
   testDraftsFunctionalities("Reply",
-    () => {cy.get("button[aria-label='Reply']").click()},
-    () => {cy.get("button[aria-label='Reply']").first().click()}
+    () => {
+      cy.wait(waitingTimes.pageColdLoad);
+      cy.get("button[aria-label='Reply']").first().click();
+    },
+    () => {
+      cy.wait(waitingTimes.pageColdLoad);
+      cy.get("button[aria-label='Reply']").first().click();
+    }
   );
 });
