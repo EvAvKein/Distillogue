@@ -17,6 +17,8 @@
     
     "cypress": "cd testing && npm run cypress",
     "test": "npm run serve && npm run cypress",
+    "cypressBrowser": "cd testing && npm run cypressBrowser",
+    "testBrowser": "npm run serve && npm run cypressBrowser",
 
     "docker": "docker-compose up",
     "dockerCypress": "docker-compose -f docker-compose.test.yaml up",
