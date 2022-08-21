@@ -8,28 +8,32 @@
       >
         <h3>{{node.title}}</h3>
       </button>
-      <section v-show="expanded"
-        class="body"
-      >
-        <p>{{node.body}}</p>
-        <interactions :node="node" :pathToNode="pathToNode"/>
-      </section>
+      <transition name="collapse">
+        <section v-show="expanded"
+          class="body"
+        >
+          <p>{{node.body}}</p>
+          <interactions :node="node" :pathToNode="pathToNode"/>
+        </section>
+      </transition>
     </section>
 
-    <section class="replies"
-      v-show="node.replies.length && expanded"
-    >
-      <button v-if="!central"
-        class="repliesIndent core_backgroundButton"
-        @click="() => {if (!central) expanded = !expanded}"
-      ></button>
-      <div v-else class="repliesIndent"></div>
-      <node v-for="reply of node.replies"
-        :node="reply"
-        :pathToNode="nodePath"
-        v-model:expanded="expanded"
-      />
-    </section>
+    <transition name="collapse">
+      <section class="replies"
+        v-show="node.replies.length && expanded"
+      >
+        <button v-if="!central"
+          class="repliesIndent core_backgroundButton"
+          @click="() => {if (!central) expanded = !expanded}"
+        ></button>
+        <div v-else class="repliesIndent"></div>
+        <node v-for="reply of node.replies"
+          :node="reply"
+          :pathToNode="nodePath"
+          v-model:expanded="expanded"
+        />
+      </section>
+    </transition>
   </section>
 </template>
 
