@@ -1,6 +1,21 @@
 <template>
-  <section  ref="nodeBranch" :class="'nodeBranch' + (central ? ' central' : '')">
-    <coreNode :node="node" :pathToNode="pathToNode" v-model:expanded="expanded"/>
+  <section ref="nodeBranch" :class="'nodeBranch' + (central ? ' central' : '')">
+    <section class="node" :id="central ? 'central' : undefined">
+      <h2 v-if="central">{{node.title}}</h2>
+      <button v-else
+        class="core_contentButton titleButton"
+        @click="() => expanded = !expanded"
+      >
+        <h3>{{node.title}}</h3>
+      </button>
+      <section v-show="expanded"
+        class="body"
+      >
+        <p>{{node.body}}</p>
+        <interactions :node="node" :pathToNode="pathToNode"/>
+      </section>
+    </section>
+
     <section class="replies"
       v-show="node.replies.length && expanded"
     >
@@ -21,7 +36,7 @@
 <script setup lang="ts">
   import {ref, Ref, watch} from "vue";
   import {Node as NodeObj} from "../../../../../../shared/objects"; // importing without renaming it causes vite to mix up this class (Node) with this component (node.vue, referenced in the template for recursion) and thus throw an error on runtime when trying to load a node with replies
-  import coreNode from "../node_core.vue";
+  import interactions from "../nodeInteractions/interactions.vue";
 
   const props = defineProps<{
     node:NodeObj;
@@ -40,6 +55,14 @@
 </script>
 
 <style>
+  .titleButton {
+    text-align: inherit;
+    width: 100%;
+  }
+  h2, h3 {margin: 0}
+
+  p {white-space: pre-line}
+
   .replies {
     position: relative;
     padding: 0.5em 0 0 1.25em;
