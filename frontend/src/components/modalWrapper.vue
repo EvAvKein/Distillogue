@@ -1,13 +1,15 @@
 <template>
   <Teleport :to="'body'">
-    <div v-show="activeByTruthiness"
-      id="backdrop" 
-      @mousedown="emitDeactivateIfClicked"
-    >
-      <dialog open>
-        <slot></slot>
-      </dialog> 
-    </div>
+    <transition name="modal">
+      <div v-show="activeByTruthiness"
+        id="backdrop" 
+        @mousedown="emitDeactivateIfClicked"
+      >
+        <dialog open>
+          <slot></slot>
+        </dialog> 
+      </div>
+    </transition>
   </Teleport>
 </template>
 
@@ -71,5 +73,13 @@
     padding: 0;
     background-color: transparent;
     border: none;
+  }
+
+  .modal-enter-from, .modal-leave-to {
+    opacity: 0;
+  }
+
+  .modal-enter-active, .modal-leave-active{
+    transition: opacity 200ms;
   }
 </style>
