@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent :id="nodeIsPost ? 'postMode' : 'replyMode'">
+  <form @submit.prevent :id="reply ? 'replyMode' : 'postMode'">
     <section id="writeAndConfirmWrapper">
       <section id="textsBox">
         <!-- unmounting when drafts isn't truthy to prevent a console error when logging out while it's mounted -->
@@ -37,11 +37,11 @@
           type="button"
           class="core_backgroundButton"
           @click="submitNode"
-        >{{nodeIsPost ? 'Post' : 'Reply'}}{{typeof currentDraftIndex === "number" ? ` (& delete draft ${currentDraftIndex + 1})` : ""}}</button>
+        >{{reply ? 'Reply' : 'Post'}}{{typeof currentDraftIndex === "number" ? ` (& delete draft ${currentDraftIndex + 1})` : ""}}</button>
       </section>
     </section>
 
-    <section v-if="nodeIsPost"
+    <section v-if="!reply"
       id="configDrawer"
       :class="configDrawerOpen ? 'open' : ''"
     >
@@ -87,7 +87,7 @@
   const router = useRouter();
 
   const props = defineProps<{
-    replyNodePath?:Node["id"][]|null;
+    reply?:{nodePath:Node["id"][]|null};
   }>();
 
   const nodeTitle = ref<Node["title"]>("");
@@ -97,18 +97,16 @@
   const notifText = ref<string>("");
   const notifDesirability = ref<boolean>(true);
 
-  const nodeIsPost = computed(() => !props.replyNodePath);
-
-  const postConfig = ref<PostConfig|undefined>(nodeIsPost.value ? {} : undefined);
-  const postInvitedOwners = ref<UserData["id"][]|undefined>(nodeIsPost.value ? [] : undefined);
+  const postConfig = ref<PostConfig|undefined>(props.reply ? undefined : {});
+  const postInvitedOwners = ref<UserData["id"][]|undefined>(props.reply ? undefined : []);
   const configOverridingPreset = ref<UserData["configPresets"][number]|undefined>(undefined);
     
   const configDrawerExists = ref<boolean|undefined>(undefined);
-  const configDrawerOpen = ref<boolean|undefined>(nodeIsPost.value ? false : undefined);
+  const configDrawerOpen = ref<boolean|null>(props.reply ? null : false);
 
   let presetsAtCapacity:ComputedRef<boolean>;
   let savePreset:() => void;
-  if (nodeIsPost.value) {
+  if (!props.reply) {
     presetsAtCapacity = computed(() => user.data.configPresets?.length >= 3);
     savePreset = async () => {  
       if (presetsAtCapacity.value) return;
@@ -176,23 +174,11 @@
   async function submitNode() {
     notifText.value = "";
 
-    const apiRequest = nodeIsPost.value
+    const apiRequest = props.reply
       ? () => {
-          return jsonFetch("POST", "/post",
-            new NodeCreationRequest(
-              postInvitedOwners!.value,
-              nodeTitle.value,
-              nodeBody.value,
-              currentDraftIndex.value,
-              postConfig!.value,
-            ),
-            user.data.authKey
-          );
-        }
-      : () => {
           return jsonFetch("PATCH", "/interaction",
             new NodeInteractionRequest(
-              props.replyNodePath!,
+              props.reply!.nodePath!,
               "reply",
               {nodeReplyRequest: new NodeCreationRequest(
                 [user.data.id],
@@ -200,8 +186,20 @@
                 nodeBody.value,
                 currentDraftIndex.value,
                 undefined,
-                props.replyNodePath!,
+                props.reply!.nodePath!,
               )}
+            ),
+            user.data.authKey
+          );
+        }
+      : () => {
+          return jsonFetch("POST", "/post",
+            new NodeCreationRequest(
+              postInvitedOwners!.value,
+              nodeTitle.value,
+              nodeBody.value,
+              currentDraftIndex.value,
+              postConfig!.value,
             ),
             user.data.authKey
           );
@@ -220,9 +218,9 @@
       user.data.drafts = newDraftsState;
     };
 
-    nodeIsPost.value
-      ? router.push("/browse") // should redirect to created post instead, change to that once post URLs are properly implemented
-      : window.location.reload()
+    props.reply
+      ? window.location.reload()
+      : router.push("/browse") // should redirect to created post instead, change to that once post URLs are properly implemented 
     ;
   };
 </script>
