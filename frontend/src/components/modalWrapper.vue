@@ -43,7 +43,7 @@
   const main = document.querySelector("main")!;
 
   watch(modalTruthiness, (newTruthiness) => {
-    main.style.overflow = newTruthiness ? "hidden" : "auto";
+    main.style.overflow = newTruthiness ? "hidden" : "initial";
 
     [header, main].forEach((element) => {
       (element as HTMLElement & {inert:boolean|undefined|null}) // TODO: once typescript (and vue-typescript dependencies, if those are relevant) supports "inert", remove this intersection
