@@ -89,6 +89,7 @@
     text-decoration: none;
     padding: 0.5em;
     border-radius: 0.5em;
+    transition: background-color 300ms;
   }
   .core_backgroundButton:focus, .core_backgroundButton:hover {
     background-color: var(--highlightSubColor);
