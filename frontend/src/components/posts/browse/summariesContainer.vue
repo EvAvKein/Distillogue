@@ -1,10 +1,12 @@
 <template>
   <ol id="summariesList">
-    <li v-for="(summaryObject, i) in summariesArray" :key="summaryObject.id + i">
-      <postSummary :key="summaryObject.id + i"
-        :summary="summaryObject"
-      />
-    </li>
+    <TransitionGroup name="posts">
+      <li v-for="(summaryObject, i) in summariesArray" :key="summaryObject.id">
+        <postSummary
+          :summary="summaryObject"
+        />
+      </li>
+    </TransitionGroup>
   </ol>
 </template>
 
@@ -26,5 +28,22 @@
 
   #summariesList li + li {
     border-top: 0.25em solid var(--textSubColor);
+  }
+
+  .posts-enter-from,
+  .posts-leave-to {
+    opacity: 0;
+    max-height: 0;
+  }
+
+  .posts-leave-from,
+  .posts-enter-to {
+    max-height: 5em;
+    opacity: 1;
+  }
+  
+  .posts-enter-active,
+  .posts-leave-active {
+    transition: all 400ms ease-out;
   }
 </style>
