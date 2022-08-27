@@ -1,32 +1,45 @@
-Remaining known tasks before first deployment:
+Remaining tasks before each stage of the project:
 
-### Tasks:
-* Basic user & user-to-user functionality (added cautiously, quality & impact > quantity)
-* Flagship features:
-  * Post-viewing layouts: Simple, mindmap (name TBD), others welcome
-  * A ton more config options (many already planned, specifics TBA and/or TBD)
+### Proof-of-concept deployment:
+* Flagship/core features:
+  * Mindmap layout using D3.js (name TBD)
+  * More config options (many already planned, specifics TBA and/or TBD)
 * Security:
-  * Data validation (API & preemptive in frontend)
-  * Proper registration/authentication (likely only via third parties)
-  * DDoS mitigation & maybe a CDN (consider Cloudflare)
+  * Data validation (API & some preemptive in frontend)
   * HTTP headers checkup (API & frontend)
+  * Proper registration/authentication (likely only via third parties)
   * Probably others (i.e actively look for more)
 * Regulation:
   * Legal obligations (there's likely a comprehensive resource on this)
-  * Concise Terms-of-Service/Code-of-Conduct
-  * Moderation interface (for both users & management)
-* Transparency:
-  * If collected, publicly display any 'bulk data' (there's probably a better term for that) e.g monthly active users, configs by popularity
+  * Placeholder terms-of-service/code-of-conduct
+* Design makeover:
+  * Transitions
+
+### Release-candidate deployment
+* All proof-of-concept tasks
+* Flagship/core features:
+  * Another layout? (ideas welcome)
+  * More config options (many already planned, specifics TBA and/or TBD)
+  * User & user-to-user functionalities (latter added very cautiously)
+  * Others? (ideas welcome)
+* Security:
+  * DDoS mitigation & maybe a CDN (consider Cloudflare)
+* Regulation:
+  * Platform moderation
+  * User-to-user moderation (post owner & any appointed)
+  * Concise terms-of-service (and potentially code-of-conduct)
+* Resources & Transparency:
+  * Front page
+  * Footer (with contact details at least)
+  * Publicly display *all* aggregate data collected e.g weeky/monthly active users, configs by popularity
   * A 'why'/core-principles/core-values/project-philosophy page
-  * Other ideas welcome!
+  * Other ideas (especially transparency-related) welcome!
 * Accessibility:
-  * Aria attributes
-  * Accessibility tree checkup
+  * Aria attributes & accessibility tree checkup (need to find free, toggleable, configurable software for testing. devtools accessibility tree is insufficient)
 * Design makeover:
   * General UI style
   * Color palette
-  * Transitions
-  * Long-term (possibly commissioned/paid) logo & icons
-* Simplify contributing:
-  * Prettier
+  * Long-term logo & icons (possibly commissioned/paid)
+* Ease of Contributing:
+  * Prettier (local & CI)
   * Dockerized dev setup (see https://github.com/EvAvKein/Distillogue/issues/1)
