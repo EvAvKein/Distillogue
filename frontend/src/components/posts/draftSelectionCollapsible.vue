@@ -5,6 +5,7 @@
     </template>
     <template #content>
       <section id="draftsContent">
+        <draftsSelection @draftSelected="selectDraft"/>
         <transition name="collapse">
           <button v-if="typeof latestDraftIndex === 'number'"
             type="button"
@@ -12,7 +13,6 @@
             @click="unselectDraft"
           >Preserve chosen draft</button>
         </transition>
-        <draftsSelection @draftSelected="selectDraft"/>
       </section>
     </template>
   </customDetails>
