@@ -68,7 +68,7 @@
     width: 100%;
     color: var(--textColor);
     background-color: var(--backgroundSubColor);
-    border-radius: 1em;
+    border-radius: 0.5em;
     padding: 0.5em 0.75em;
   }
   button:hover, button:focus {
