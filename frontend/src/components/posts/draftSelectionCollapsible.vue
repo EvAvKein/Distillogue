@@ -1,21 +1,23 @@
 <template>
-  <customDetails class="draftsDetails">
-    <template #summary>
-      <span>Drafts</span>
-    </template>
-    <template #content>
-      <section id="draftsContent">
-        <draftsSelection @draftSelected="selectDraft"/>
-        <transition name="collapse">
-          <button v-if="typeof latestDraftIndex === 'number'"
-            type="button"
-            class="core_backgroundButton"
-            @click="unselectDraft"
-          >Preserve chosen draft</button>
-        </transition>
-      </section>
-    </template>
-  </customDetails>
+  <transition name="collapse" appear>
+    <customDetails class="draftsDetails">
+      <template #summary>
+        <span>Drafts</span>
+      </template>
+      <template #content>
+        <section id="draftsContent">
+          <draftsSelection @draftSelected="selectDraft"/>
+          <transition name="collapse">
+            <button v-if="typeof latestDraftIndex === 'number'"
+              type="button"
+              class="core_backgroundButton"
+              @click="unselectDraft"
+            >Preserve chosen draft</button>
+          </transition>
+        </section>
+      </template>
+    </customDetails>
+  </transition>
 </template>
 
 <script setup lang="ts">
