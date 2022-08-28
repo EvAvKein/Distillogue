@@ -45,12 +45,12 @@
 
 <style scoped>
   .draftsDetails {
+    color: var(--textColor);
     padding: 0.5em;
     border-radius: 0.5em;
   }
   span {
     display: block;
-    color: var(--textColor);
     text-align: center;
   }
 
