@@ -57,10 +57,6 @@
   button {
     width: 100%;
     padding: 0.3em;
-    margin-bottom: 1em;
+    margin-top: 0.75em;
   }
-  button + button {margin-top: 1em}
-
-  p {margin: 0}
-  div {font-size: 0.7em}
 </style>
