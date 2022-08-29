@@ -57,8 +57,9 @@
   #draftsContent {margin-top: 0.5em}
 
   button {
-    width: 100%;
+    display: block;
+    width: 90%;
     padding: 0.3em;
-    margin-top: 0.75em;
+    margin: 0.75em auto 0;
   }
 </style>
