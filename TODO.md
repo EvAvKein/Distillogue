@@ -12,8 +12,6 @@ Remaining tasks before each stage of the project:
 * Regulation:
   * Legal obligations (there's likely a comprehensive resource on this)
   * Placeholder terms-of-service/code-of-conduct
-* Design makeover:
-  * Transitions
 
 ### Release-candidate deployment
 * All proof-of-concept tasks
