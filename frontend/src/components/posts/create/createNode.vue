@@ -298,22 +298,17 @@
     width: 2.75em;
     filter: var(--filterToBackgroundColor);
   }
-  
+
+  #drawerToggler, #config {transition: all 300ms}
   #drawerToggler:hover, #drawerToggler:focus {
     outline: none;
     background-color: var(--highlightSubColor)
-  }
-  #drawerToggler:hover img, #drawerToggler:focus img {
-    background-color: var(--filterToHighlightSubColor)
   }
   #drawerToggler:hover + #config, #drawerToggler:focus + #config {
     border-color: var(--highlightSubColor)
   }
   #drawerToggler:active {
     background-color: var(--highlightColor)
-  }
-  #drawerToggler:active img {
-    background-color: var(--filterToHighlightColor)
   }
   #drawerToggler:active + #config {
     border-color: var(--highlightColor)
