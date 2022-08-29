@@ -1,12 +1,16 @@
 <template>
   <section>
-    <button v-for="(preset, index) in presetsState"
-      type="button"
-      class="presetButton core_backgroundButton"
-      @click="() => {selectPreset(index)}"
-    >
-      <p>{{preset.name || "[No Title]"}}</p>
-    </button>
+    <transition name="collapse">
+      <button v-for="(preset, index) in presetsState"
+        type="button"
+        class="presetButton core_backgroundButton"
+        @click="() => {selectPreset(index)}"
+      >
+        <p>{{preset.name || "[No Title]"}}</p>
+      </button>
+    </transition>
+
+    <transition name="collapse">
       <button v-if="presetsState.length < maxPresets"
         id="newPreset"
         class="core_backgroundButton"
@@ -16,32 +20,36 @@
         :text="'Presets at capacity, consider triage'"
         :desirablityStyle="undefined"
       />
-    <section v-if="currentPreset"
-      id="presetsEditor"
-    >
-      <labelledInput
-        id="presetNameInput"
-        :inputId="'editPresetName'"
-        :type="'text'"
-        :label="'Name'"
-        @update:modelValue="(newValue) => {updateCurrentPreset('name', newValue)}"
-        v-model="currentPreset.name"
-      />
-      <editCurrentConfig v-if="currentPreset"
-        id="editConfig"
-        v-model:config="currentPreset.config"
-        @update:config="(newValue) => {updateCurrentPreset('config', newValue)}"
-        :presetOverride="currentPreset.config"
-        :hideUnsavables="true"
-      />
-      <button id="presetDelete"
-        class="core_contentButton"
-        @click="deleteCurrentPreset"
+    </transition>
+    
+    <transition name="collapse">
+      <section v-if="currentPreset"
+        id="presetsEditor"
       >
-        <img src="../../../assets/trash.svg" alt="Trashcan icon"/>
-        <span>Delete</span>
-      </button>
-    </section>
+        <labelledInput
+          id="presetNameInput"
+          :inputId="'editPresetName'"
+          :type="'text'"
+          :label="'Name'"
+          @update:modelValue="(newValue) => {updateCurrentPreset('name', newValue)}"
+          v-model="currentPreset.name"
+        />
+        <editCurrentConfig v-if="currentPreset"
+          id="editConfig"
+          v-model:config="currentPreset.config"
+          @update:config="(newValue) => {updateCurrentPreset('config', newValue)}"
+          :presetOverride="currentPreset.config"
+          :hideUnsavables="true"
+        />
+        <button id="presetDelete"
+          class="core_contentButton"
+          @click="deleteCurrentPreset"
+        >
+          <img src="../../../assets/trash.svg" alt="Trashcan icon"/>
+          <span>Delete</span>
+        </button>
+      </section>
+    </transition>
   </section>
 </template>
 

@@ -1,9 +1,13 @@
 <template>
   <section>
-    <draftsSelection v-if="draftsState.length" id="draftsPicker"
-      :editingModeDraftsState="draftsState"
-      @draftSelected="selectDraft"
-    />
+    <transition name="collapse">
+      <draftsSelection v-if="draftsState.length" id="draftsPicker"
+        :editingModeDraftsState="draftsState"
+        @draftSelected="selectDraft"
+      />
+    </transition>
+
+    <transition name="collapse">
       <button v-if="draftsState.length < maxDrafts"
         id="newDraft"
         class="core_backgroundButton"
@@ -13,32 +17,36 @@
         :text="'Drafts at capacity, consider triage'"
         :desirablityStyle="undefined"
       />
-    <section v-if="currentDraft"
-      id="draftsEditor"
-    >
-      <labelledInput
-        :inputId="'editDraftTitle'"
-        :type="'text'"
-        :label="'Title'"
-        @update:modelValue="(newValue) => {updateCurrentDraft('title', newValue)}"
-        v-model="currentDraft.title"
-      />
-      <labelledInput
-        :inputId="'editDraftBody'"
-        :type="'textarea'"
-        :label="'Body'"
-        :minLineHeight="4"
-        @update:modelValue="(newValue) => {updateCurrentDraft('body', newValue)}"
-        v-model="currentDraft.body"
-      />
-      <button id="draftDelete"
-        class="core_contentButton"
-        @click="deleteCurrentDraft"
+    </transition>
+      
+    <transition name="collapse">
+      <section v-if="currentDraft"
+        id="draftsEditor"
       >
-        <img src="../../../assets/trash.svg" alt="Trashcan icon"/>
-        <span>Delete</span>
-      </button>
-    </section>
+        <labelledInput
+          :inputId="'editDraftTitle'"
+          :type="'text'"
+          :label="'Title'"
+          @update:modelValue="(newValue) => {updateCurrentDraft('title', newValue)}"
+          v-model="currentDraft.title"
+        />
+        <labelledInput
+          :inputId="'editDraftBody'"
+          :type="'textarea'"
+          :label="'Body'"
+          :minLineHeight="4"
+          @update:modelValue="(newValue) => {updateCurrentDraft('body', newValue)}"
+          v-model="currentDraft.body"
+        />
+        <button id="draftDelete"
+          class="core_contentButton"
+          @click="deleteCurrentDraft"
+        >
+          <img src="../../../assets/trash.svg" alt="Trashcan icon"/>
+          <span>Delete</span>
+        </button>
+      </section>
+    </transition>
   </section>
 </template>
 

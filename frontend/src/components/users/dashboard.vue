@@ -1,14 +1,16 @@
 <template>
   <section id="dashboardContainer">
     <section id="dashboardSidebar">
-      <button v-show="changes.length > 0"
-        id="dashboardSubmit"
-        class="core_backgroundButton"
-        @click="submitAllChanges"
-      >
-        <img src="../../assets/save.svg" alt="Floppy disk icon"/>
-        <span>Save</span>
-      </button>
+      <transition name="collapse">
+        <button v-show="changes.length > 0"
+          id="dashboardSubmit"
+          class="core_backgroundButton"
+          @click="submitAllChanges"
+        >
+          <img src="../../assets/save.svg" alt="Floppy disk icon"/>
+          <span>Save</span>
+        </button>
+      </transition>
       <nav aria-label="Dashboard page navigation">
         <button @click="currentPage = 'profile'"
           class="core_contentButton"
@@ -32,15 +34,17 @@
     </section>
     <section id="dashboardPage">
       <notification :text="submitNotif.text" :desirablityStyle="submitNotif.style"/>
-      <profileEditor v-show="currentPage === 'profile'"
-        @newState="updateChangesByNewState"
-      />
-      <draftsEditor v-show="currentPage === 'drafts'"
-        @newState="updateChangesByNewState"
-      />
-      <presetsEditor v-show="currentPage === 'presets'"
-        @newState="updateChangesByNewState"
-      />
+      <transition name="swap" mode="out-in"> <!-- i'd use v-show for these, but multiple ones in a transition unfortunately only renders the initial one -->
+        <profileEditor v-if="currentPage === 'profile'"
+          @newState="updateChangesByNewState"
+        />
+        <draftsEditor v-if="currentPage === 'drafts'"
+          @newState="updateChangesByNewState"
+        />
+        <presetsEditor v-if="currentPage === 'presets'"
+          @newState="updateChangesByNewState"
+        />
+      </transition>
     </section>
   </section>
 </template>
