@@ -56,7 +56,8 @@
 <script setup lang="ts">
   import {ref, toRaw} from "vue";
   import {useUser} from "../../../stores/user";
-  import {UserData, UserPatchRequest} from "../../../../../shared/objects";
+  import {UserPatchRequest} from "../../../../../shared/objects/api";
+  import {UserData} from "../../../../../shared/objects/user";
   import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
   import notification from "../../notification.vue";
   import labelledInput from "../../labelledInput.vue";

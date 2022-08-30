@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
   import {ref} from "vue";
-  import {PostSummary} from "../../../../../shared/objects";
+  import {PostSummary} from "../../../../../shared/objects/post";
   import summariesContainer from "./summariesContainer.vue";
   import summariesSearch from "./summariesSearch.vue";
   const summariesArray = ref<PostSummary[]|undefined>(undefined);

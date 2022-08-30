@@ -53,7 +53,8 @@
 <script setup lang="ts">
   import {ref, toRaw} from "vue";
   import {useUser} from "../../../stores/user";
-  import {UserData, UserPatchRequest} from "../../../../../shared/objects";
+  import {UserData} from "../../../../../shared/objects/user";
+  import {UserPatchRequest} from "../../../../../shared/objects/api";
   import {unix as unixStamp} from "../../../../../shared/helpers/timestamps";
   import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
   import draftsSelection from "../draftsList.vue";

@@ -1,4 +1,4 @@
-import {Node} from "../objects";
+import {Node} from "../objects/post";
 
 export async function findPathToNode(postObject:Node, targetNodeId:Node["id"]) {
   let ancestry = [] as Node["id"][];

@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
   import node from "./node.vue";
-  import {Node} from "../../../../../../shared/objects";
+  import {Node} from "../../../../../../shared/objects/post";
 
   const props = defineProps<{
     postObject:Node;

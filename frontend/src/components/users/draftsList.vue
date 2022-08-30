@@ -14,7 +14,7 @@
 <script setup lang="ts">
   import {watch, ref} from "vue";
   import {useUser} from "../../stores/user";
-  import {UserData} from "../../../../shared/objects";
+  import {UserData} from "../../../../shared/objects/user";
   import timestamp from "../timestamp.vue";
   const user = useUser();
 

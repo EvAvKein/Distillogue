@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-  import {UserData} from "../../../../../../shared/objects";
+  import {UserData} from "../../../../../../shared/objects/user";
   import {useUser} from "../../../../stores/user";
   const user = useUser();
 

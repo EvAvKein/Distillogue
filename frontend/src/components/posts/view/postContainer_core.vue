@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
   import {ref, provide} from "vue";
-  import {Node} from "../../../../../shared/objects";
+  import {Node} from "../../../../../shared/objects/post";
   import modalWrapper from "../../modalWrapper.vue";
   import createReply from "../create/createNode.vue";
 

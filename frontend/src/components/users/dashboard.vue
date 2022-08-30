@@ -53,7 +53,7 @@
   import {ref, reactive} from "vue";
   import {useUser} from "../../stores/user";
   import {jsonFetch} from "../../helpers/jsonFetch";
-  import {UserPatchRequest} from "../../../../shared/objects";
+  import {UserPatchRequest} from "../../../../shared/objects/api";
   import {deepCloneFromReactive} from "../../helpers/deepCloneFromReactive";
   import notification from "../notification.vue";
   import profileEditor from "./dashboardSections/profileEditor.vue";

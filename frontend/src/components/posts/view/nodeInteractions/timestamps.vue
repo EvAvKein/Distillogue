@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-  import {NodeStats} from "../../../../../../shared/objects";
+  import {NodeStats} from "../../../../../../shared/objects/post";
   import timestamp from "../../../timestamp.vue";
 
   defineProps<{

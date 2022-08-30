@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-  import {PostSummary} from "../../../../../shared/objects";
+  import {PostSummary} from "../../../../../shared/objects/post";
   import timestamps from "../view/nodeInteractions/timestamps.vue";
   defineProps<{
     summary:PostSummary;

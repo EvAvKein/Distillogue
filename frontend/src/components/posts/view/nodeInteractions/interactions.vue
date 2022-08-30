@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
   import {ref} from "vue";
-  import {Node} from "../../../../../../shared/objects";
+  import {Node} from "../../../../../../shared/objects/post";
   import timestamps from "../nodeInteractions/timestamps.vue";
   import votes from "./vote.vue";
   import reply from "./replyButton.vue";

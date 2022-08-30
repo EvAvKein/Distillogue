@@ -30,7 +30,8 @@
 
 <script setup lang="ts">
   import {ref, computed} from "vue";
-  import {Node, NodeInteractionRequest, NodeStats} from "../../../../../../shared/objects";
+  import {NodeInteractionRequest} from "../../../../../../shared/objects/api";
+  import {Node, NodeStats} from "../../../../../../shared/objects/post";
   import {jsonFetch} from "../../../../helpers/jsonFetch";
   import {useUser} from "../../../../stores/user";
   const user = useUser();

@@ -1,4 +1,4 @@
-import {Node} from "../../../shared/objects";
+import {Node} from "../../../shared/objects/post";
 
 export function recursivelyModifyNode(node:Node, callbackReturningModified:(node:Node) => Node) {
   let modifiedNode = callbackReturningModified(node);

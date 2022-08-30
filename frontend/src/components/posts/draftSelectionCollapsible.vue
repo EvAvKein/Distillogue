@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
   import {ref} from "vue";
-  import {UserData} from "../../../../shared/objects";
+  import {UserData} from "../../../../shared/objects/user";
   import {deepCloneFromReactive} from "../../helpers/deepCloneFromReactive";
   import customDetails from "../animatedDetails.vue";
   import draftsSelection from "../users/draftsList.vue";

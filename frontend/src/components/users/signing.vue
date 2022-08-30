@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
   import {ref} from "vue";
-  import {UserData} from "../../../../shared/objects";
+  import {UserData} from "../../../../shared/objects/user";
   import {useRouter} from "vue-router";
   import {useUser} from "../../stores/user";
   import {jsonFetch} from "../../helpers/jsonFetch";

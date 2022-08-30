@@ -1,4 +1,4 @@
-import {FetchResponse} from "../../../shared/objects";
+import {FetchResponse} from "../../../shared/objects/api";
 
 export async function jsonFetch(method:"GET"|"POST"|"PATCH", address:string, body:object|null, authKey?:string) {
   const authHeader = authKey ? {Authorization: "Bearer " + authKey} : null;

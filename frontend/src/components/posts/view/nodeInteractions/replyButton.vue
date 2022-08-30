@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
   import {inject, Ref} from "vue";
-  import {Node} from "../../../../../../shared/objects";
+  import {Node} from "../../../../../../shared/objects/post";
   import {useUser} from "../../../../stores/user";
   const user = useUser();
 

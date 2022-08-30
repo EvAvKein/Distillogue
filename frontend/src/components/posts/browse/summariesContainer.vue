@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-  import {PostSummary} from "../../../../../shared/objects";
+  import {PostSummary} from "../../../../../shared/objects/post";
   import postSummary from "./summary.vue";
 
   defineProps<{

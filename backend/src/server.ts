@@ -1,6 +1,9 @@
 import path from "node:path";
 import express from "express";
 import helmetSecurity from "helmet";
+import {FetchResponse, UserPatchRequest, NodeCreationRequest, NodeInteractionRequest} from "../../shared/objects/api.js";
+import {User, UserData, arrOfEditableUserData} from "../../shared/objects/user.js";
+import {PostConfig, Node, PostSummary} from "../../shared/objects/post.js";
 import {users, posts} from "./mongo.js";
 import * as timestamp from "../../shared/helpers/timestamps.js";
 import {userByAuthHeader} from "./helpers/userByAuthHeader.js";
@@ -10,7 +13,6 @@ import {updateDeepProperty} from "./helpers/updateDeepProperty.js";
 import {filterByIndex} from "../../shared/helpers/filterByIndexes.js";
 import {recursivelyModifyNode} from "./helpers/recursivelyModifyNode.js";
 import {sanitizeForRegex} from "./helpers/sanitizeForRegex.js";
-import {FetchResponse, User, UserData, UserPatchRequest, arrOfEditableUserData, NodeCreationRequest, Node, PostSummary, NodeInteractionRequest, PostConfig} from "../../shared/objects.js";
 
 const app = express();
 app.use(express.static("../frontend/dist"));

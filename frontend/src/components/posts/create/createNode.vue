@@ -71,7 +71,9 @@
 
 <script setup lang="ts">
   import {ref, computed, ComputedRef, onMounted, onUnmounted} from "vue";
-  import {Node, PostConfig, NodeCreationRequest, NodeInteractionRequest, UserData, UserPatchRequest} from "../../../../../shared/objects";
+  import {UserData} from "../../../../../shared/objects/user";
+  import {Node, PostConfig} from "../../../../../shared/objects/post";
+  import {NodeCreationRequest, NodeInteractionRequest, UserPatchRequest} from "../../../../../shared/objects/api";
   import {unix} from "../../../../../shared/helpers/timestamps";
   import {filterByIndex} from "../../../../../shared/helpers/filterByIndexes";
   import {jsonFetch} from "../../../helpers/jsonFetch";

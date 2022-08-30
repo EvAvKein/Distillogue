@@ -1,6 +1,6 @@
 // unsatisifed with the term "locators" for this helper, a more technically-accurate and/or easy-to-understand term would be great
 
-import {Node} from "../../../../shared/objects";
+import {Node} from "../../../../shared/objects/post";
 
 interface mongoLocatorsObject {
   updatePath:string,

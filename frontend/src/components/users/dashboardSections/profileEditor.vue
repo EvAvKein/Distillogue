@@ -18,7 +18,7 @@
 <script setup lang="ts">
   import {reactive, watch} from "vue";
   import {useUser} from "../../../stores/user";
-  import {UserPatchRequest} from "../../../../../shared/objects";
+  import {UserPatchRequest} from "../../../../../shared/objects/api";
   import labelledInput from "../../labelledInput.vue";
   const user = useUser();
 
