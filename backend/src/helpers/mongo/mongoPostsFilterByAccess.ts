@@ -1,4 +1,4 @@
-import {UserData} from "../../../../shared/objects/User";
+import {UserData} from "../../../../shared/objects/user";
 import {Node} from "../../../../shared/objects/post";
 import {Filter} from "mongodb";
 

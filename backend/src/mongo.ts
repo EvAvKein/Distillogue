@@ -1,4 +1,4 @@
-import {User} from "../../shared/objects/User";
+import {User} from "../../shared/objects/user";
 import {Node} from "../../shared/objects/post";
 import {MongoClient, Collection} from "mongodb";
 const mongo = new MongoClient(process.env.DOCKERIZED ? "mongodb://mongodb:27017" : "mongodb://localhost");
