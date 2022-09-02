@@ -57,7 +57,7 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 
 Contributions are very welcome! See the TODO.md file or GitHub issues.
 
-For any questions, comment under a relevant issue or create a new discussion.
+For any questions, comment under a relevant issue or create a new issue.
 
 ---
 
