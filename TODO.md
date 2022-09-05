@@ -12,6 +12,9 @@ Remaining tasks before each stage of the project:
 * Regulation:
   * Legal obligations (there's likely a comprehensive resource on this)
   * Placeholder terms-of-service/code-of-conduct
+* Optimization:
+  * Look into updating "interacted" timestamps within the same database operation as the interaction updates (supposedly with MongoDB's aggregation pipeline)
+  * Complete the draftsAndPresets test by finishing the latter portion
 
 ### Release-candidate deployment
 * All proof-of-concept tasks
