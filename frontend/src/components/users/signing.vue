@@ -20,6 +20,7 @@
 
 <script setup lang="ts">
   import {ref} from "vue";
+  import {UserCreationRequest} from "../../../../shared/objects/api";
   import {UserData} from "../../../../shared/objects/user";
   import {useRouter} from "vue-router";
   import {useUser} from "../../stores/user";
@@ -40,7 +41,7 @@
     signingStatus.value = undefined;
     
     const response = await jsonFetch("POST", signingMode.value === "Up" ? "/user" : "/user/me",
-      {username: username.value}
+      new UserCreationRequest(username.value)
     );
 
     if (response.error) {

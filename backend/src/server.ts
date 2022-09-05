@@ -1,7 +1,7 @@
 import path from "node:path";
 import express from "express";
 import helmetSecurity from "helmet";
-import {FetchResponse, UserPatchRequest, NodeCreationRequest, NodeInteractionRequest} from "../../shared/objects/api.js";
+import {FetchResponse, UserCreationRequest, UserPatchRequest, NodeCreationRequest, NodeInteractionRequest} from "../../shared/objects/api.js";
 import {User, UserData, arrOfEditableUserData} from "../../shared/objects/user.js";
 import {PostConfig, Node, PostSummary} from "../../shared/objects/post.js";
 import {users, posts} from "./mongo.js";
@@ -23,7 +23,7 @@ await posts.deleteMany({});
 await users.deleteMany({});
 
 app.post("/api/user", async (request, response) => {
-  const signUpInfo = request.body as {username:UserData["name"]};
+  const signUpInfo = request.body as UserCreationRequest;
 
   const user = await users.findOne({"data.name": signUpInfo.username})
     .catch(() => {response.json(new FetchResponse(null, "Can't register user, database is unresponsive"))});

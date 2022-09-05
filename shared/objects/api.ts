@@ -1,5 +1,5 @@
 import {lookupInOptional} from "../helpers/lookupInOptional.js";
-import {editableUserData} from "./user.js";
+import {UserData, editableUserData} from "./user.js";
 import {Node, PostConfig} from "./post.js";
 
 class FetchResponse {
@@ -11,6 +11,14 @@ class FetchResponse {
   constructor(data:FetchResponse["data"], errorMessage?:lookupInOptional<FetchResponse["error"], "message">) {
     this.data = data;
     errorMessage ? this.error = {message: errorMessage} : delete this.error;
+  };
+};
+
+class UserCreationRequest {
+  username:UserData["name"];
+
+  constructor(username:UserCreationRequest["username"]) {
+    this.username = username;
   };
 };
 
@@ -61,6 +69,7 @@ class NodeInteractionRequest {
 
 export {
   FetchResponse,
+  UserCreationRequest,
   UserPatchRequest,
   NodeCreationRequest,
   NodeInteractionRequest,
