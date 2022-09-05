@@ -40,7 +40,7 @@
       config: {
         timestamps: {
           posted: true,
-          latestInteracted: true,
+          interacted: true,
         },
         votes: {
           up: true,

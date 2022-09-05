@@ -10,7 +10,7 @@
         Posted: <input id="timestamps.posted" type="checkbox" @change="updateConfigByCheckbox"/>
       </label>
       <label>
-        Latest Interacted: <input id="timestamps.latestInteracted" type="checkbox" @change="updateConfigByCheckbox"/>
+        Latest Interacted: <input id="timestamps.interacted" type="checkbox" @change="updateConfigByCheckbox"/>
       </label>
     </category>
     <category title="Voting" class="category">

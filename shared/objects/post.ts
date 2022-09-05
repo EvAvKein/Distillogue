@@ -9,7 +9,7 @@ class PostConfig {
   };
   timestamps?: {
     posted?:true,
-    latestInteracted?:true,
+    interacted?:true,
   };
   votes?:{
     up?:true,
@@ -21,7 +21,7 @@ class PostConfig {
 class NodeStats {
   timestamps?: {
     posted?:number,
-    latestInteracted?:number,
+    interacted?:number,
   };
   votes?:{
     up?:UserData["id"][],
@@ -32,7 +32,7 @@ class NodeStats {
   constructor(config:PostConfig) {
     config.timestamps ? this.timestamps = {} : delete this.timestamps;
       config.timestamps?.posted ? this.timestamps!.posted = unixStamp() : delete this.timestamps?.posted;
-      delete this.timestamps?.latestInteracted;
+      delete this.timestamps?.interacted;
     config.votes ? this.votes = {} : delete this.votes;
       config.votes?.up ? this.votes!.up = [] : delete this.votes?.up;
       config.votes?.down ? this.votes!.down = [] : delete this.votes?.down;

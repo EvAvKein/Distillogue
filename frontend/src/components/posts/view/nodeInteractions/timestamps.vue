@@ -3,9 +3,9 @@
     <div v-if="timestamps.posted"
       class="posted"
     ><span></span>Posted: <timestamp :pastUnix="timestamps.posted"/></div>
-    <div v-if="timestamps.latestInteracted"
+    <div v-if="timestamps.interacted"
       class="interacted"
-    ><span>Latest{{inPostSummary ? " Directly" : ""}} Interacted:</span> <timestamp :pastUnix="timestamps.latestInteracted"/></div>
+    ><span>{{inPostSummary ? "Directly " : ""}}Interacted:</span> <timestamp :pastUnix="timestamps.interacted"/></div>
   </section>
 </template>
 
