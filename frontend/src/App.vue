@@ -124,7 +124,6 @@
     outline: none;
     accent-color: var(--highlightColor);
   }
-
   .core_crudeInput:focus,
   .core_crudeInput:hover {
     box-shadow: 0 0 0.25em 0.25em var(--highlightSubColor);
