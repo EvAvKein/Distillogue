@@ -4,6 +4,7 @@ Remaining tasks before each stage of the project:
 * Flagship/core features:
   * Mindmap layout using D3.js (name TBD)
   * More config options (many already planned, specifics TBA and/or TBD)
+  * Add feedback form
 * Security:
   * Data validation (API & some preemptive in frontend)
   * HTTP headers checkup (API & frontend)
