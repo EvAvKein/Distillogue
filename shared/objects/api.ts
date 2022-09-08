@@ -50,9 +50,12 @@ class NodeCreationRequest {
   };
 };
 
+const arrOfInteractionTypes = ["vote", "reply"] as const;
+type interactionType = typeof arrOfInteractionTypes[number];
+
 class NodeInteractionRequest {
   nodePath:Node["id"][];
-  interactionType:"vote"|"reply";
+  interactionType:interactionType;
   interactionData:{
     voteDirection:"up"|"down",
     newVoteStatus:boolean,
@@ -72,5 +75,6 @@ export {
   UserCreationRequest,
   UserPatchRequest,
   NodeCreationRequest,
+  interactionType, arrOfInteractionTypes,
   NodeInteractionRequest,
 };
