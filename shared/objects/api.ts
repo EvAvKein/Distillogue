@@ -50,17 +50,17 @@ class NodeCreationRequest {
   };
 };
 
-const arrOfInteractionTypes = ["vote", "reply"] as const;
+const arrOfInteractionTypes = ["reply", "vote"] as const;
 type interactionType = typeof arrOfInteractionTypes[number];
 
 class NodeInteractionRequest {
   nodePath:Node["id"][];
   interactionType:interactionType;
-  interactionData:{
+  interactionData: {
+    nodeReplyRequest:NodeCreationRequest,
+  }|{
     voteDirection:"up"|"down",
     newVoteStatus:boolean,
-  }|{
-    nodeReplyRequest:NodeCreationRequest,
   };
 
   constructor(nodePath:NodeInteractionRequest["nodePath"], interactionType:NodeInteractionRequest["interactionType"], interactionData:NodeInteractionRequest["interactionData"]) {
