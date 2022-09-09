@@ -1,8 +1,8 @@
 {
   "type": "module",
   "scripts": {
-    "cypress": ".\\node_modules\\.bin\\cypress run --e2e",
-    "cypressBrowser": ".\\node_modules\\.bin\\cypress open --e2e" 
+    "cypress": "npx cypress run --e2e",
+    "cypressBrowser": "npx cypress open --e2e" 
   },
   "devDependencies": {
     "cypress": "^10.3.0",
