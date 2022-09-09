@@ -1,22 +1,31 @@
 import Joi from "joi";
 import * as Class from "../../objects/api";
-import * as Schema from "./post";
+import * as UserSchema from "./user";
+import * as PostSchema from "./post";
 import {arrOfEditableUserData} from "../../objects/user";
+import {arrOfInteractionTypes} from "../../objects/api";
 
 const UserCreationRequest = Joi.object<Class.UserCreationRequest>({
-  username: Joi.string()
-    .required()
-    .min(3)
-    .max(20)
-    .alphanum()
+  username: UserSchema.UserData.extract("name"),
 }).required();
 
 const UserPatchRequest = Joi.object<Class.UserPatchRequest>({
-  dataName: Joi.string()
+  dataName: Joi.valid(...arrOfEditableUserData)
+    .required(),
+  newValue: Joi.alternatives()
     .required()
-    .valid(...arrOfEditableUserData),
-  newValue: Joi.any() // temp
-    .required()
+    .when("dataName", {is: "name",
+      then: UserSchema.UserData.extract("name")
+    })
+    .when("dataName", {is: "about",
+      then: UserSchema.UserData.extract("about")
+    })
+    .when("dataName", {is: "drafts",
+      then: UserSchema.UserData.extract("drafts")
+    })
+    .when("dataName", {is: "configPresets",
+      then: UserSchema.UserData.extract("configPresets")
+    })
 }).required();
 
 const NodeCreationRequest = Joi.object<Class.NodeCreationRequest>({
@@ -34,7 +43,7 @@ const NodeCreationRequest = Joi.object<Class.NodeCreationRequest>({
     .integer()
     .greater(-1)
     .less(3),
-  config: Schema.PostConfig,
+  config: PostSchema.PostConfig,
   nodePath: Joi.array()
     .items(Joi.string())
 }).required();
@@ -43,10 +52,21 @@ const NodeInteractionRequest = Joi.object<Class.NodeInteractionRequest>({
   nodePath: Joi.array()
     .required()
     .items(Joi.string()),
-  interactionType: Joi.object() // temp
+  interactionType: Joi.valid(...arrOfInteractionTypes)
     .required(),
-  interactionData: Joi.object() // temp
+  interactionData: Joi.alternatives()
     .required()
+    .when("interactionType", {is: "reply",
+      then: NodeCreationRequest.required()
+    })
+    .when("interactionType", {is: "vote",
+      then: {
+        voteDirection: Joi.valid(["up", "down"])
+          .required(),
+        newVoteStatus: Joi.boolean()
+          .required()
+      }
+    })
 }).required();
 
 
