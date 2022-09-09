@@ -17,8 +17,7 @@ class UserData {
   name:string;
   about:string;
   drafts:{title:Node["title"], body:Node["body"], lastEdited:number}[];
-  configPresets:{name:string, config:Omit<PostConfig, "access">}[]
-  settings?:object;
+  configPresets:{name:string, config:Omit<PostConfig, "access">}[];
 
   constructor(name:UserData["name"]) {
     this.id = newId();
@@ -27,11 +26,10 @@ class UserData {
     this.about = "Hello, I haven't wrote my About yet!";
     this.drafts = [];
     this.configPresets = [];
-    delete this.settings;
   };
 };
 
-const arrOfEditableUserData = ["name", "about", "drafts", "configPresets", "settings"] as const;
+const arrOfEditableUserData = ["name", "about", "drafts", "configPresets"] as const;
 type editableUserData = typeof arrOfEditableUserData[number];
 
 class Log {
