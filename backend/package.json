@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "database": "start mongo",
+    "database": "start mongod",
 
     "build": "tsc",
     "buildDev": "tsc --watch",
