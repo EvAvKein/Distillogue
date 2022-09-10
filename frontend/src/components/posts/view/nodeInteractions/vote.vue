@@ -1,6 +1,6 @@
 <template>
   <section aria-label="Vote interactions">
-    <button v-if="voters?.up"
+    <button v-if="voters.up"
       aria-label="Upvote"
       :class="'core_contentButton' + (currentVote === 'up' ? ' voted' : '')"
       @click="vote('up', !upvoters?.includes(user.data.id))"
@@ -16,7 +16,7 @@
       {{totalVotes}}
     </span>
 
-    <button v-if="voters?.down"
+    <button v-if="voters.down"
       aria-label="Downvote"
       :class="'core_contentButton' + (currentVote === 'down' ? ' voted' : '')"
       @click="vote('down', !downvoters?.includes(user.data.id))"
@@ -37,13 +37,13 @@
   const user = useUser();
 
   const props = defineProps<{
-    voters:NodeStats["votes"];
+    voters:NonNullable<NodeStats["votes"]>;
     interactionPath:Node["id"][];
   }>();
   const emit = defineEmits(["interactionError"]);
 
-  const upvoters = ref(props.voters?.up);
-  const downvoters = ref(props.voters?.down);
+  const upvoters = ref(props.voters.up);
+  const downvoters = ref(props.voters.down);
   const totalVotes = computed(() => {
     return (upvoters.value?.length ?? 0) - (downvoters.value?.length ?? 0);
   });

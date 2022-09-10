@@ -1,6 +1,7 @@
 import path from "node:path";
 import express from "express";
 import helmetSecurity from "helmet";
+import {ModifyResult} from "mongodb";
 import {FetchResponse, UserCreationRequest, UserPatchRequest, NodeCreationRequest, NodeInteractionRequest} from "../../shared/objects/api.js";
 import {User, UserData, arrOfEditableUserData} from "../../shared/objects/user.js";
 import {PostConfig, Node, PostSummary} from "../../shared/objects/post.js";
@@ -115,15 +116,19 @@ app.post("/api/post", async (request, response) => {
     return;
   };
 
+  const filterForAlreadySubmitted = {
+    ownerIds: [user.data.id].concat(postRequest.invitedOwnerIds || []),
+    title: postRequest.title,
+    body: postRequest.body,
+    config: postRequest.config
+  };
+  const insertPostIfDoesntExist = {$setOnInsert: new Node(user.data.id, postRequest)};
+  const flagForInsertionwhenNoFilterResults = {upsert: true};
+
   const dbResponse = await posts.updateOne(
-    {
-      ownerIds: [user.data.id].concat(postRequest.invitedOwnerIds || []),
-      title: postRequest.title,
-      body: postRequest.body,
-      config: postRequest.config
-    },
-    {$setOnInsert: new Node(user.data.id, postRequest)},
-    {upsert: true}
+    filterForAlreadySubmitted,
+    insertPostIfDoesntExist,
+    flagForInsertionwhenNoFilterResults
   );
 
   if (dbResponse.matchedCount > 0) { // this technically makes the request non-idempotent for the user, but (at least when testing on localhost, might need to reevaluate upon hosting) any duplicate request comes back late enough that a site user is redirected away from the page that would display the error before that error gets to display; thus this non-idempotence only affects people who attempt to post through the API directly, mostly likely programmatically, and should be savvy enough to understand this issue and/or avoid it
@@ -192,7 +197,7 @@ app.patch("/api/interaction", async (request, response) => { // i'm not satisfie
     return;
   };
   
-  let dbResponse;
+  let dbResponse:ModifyResult<Node>;
   switch(interactionType) {
     case "vote": {
       const voteData = interactionData as {voteDirection:"up"|"down", newVoteStatus:boolean};

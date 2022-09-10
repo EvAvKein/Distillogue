@@ -14,7 +14,7 @@
   import timestamp from "../../../timestamp.vue";
 
   defineProps<{
-    timestamps:NonNullable<NodeStats["timestamps"]>;
+    timestamps:NodeStats["timestamps"];
     inPostSummary?:true;
   }>();
 </script>

@@ -46,8 +46,7 @@
     main.style.overflow = newTruthiness ? "hidden" : "initial";
 
     [header, main].forEach((element) => {
-      (element as HTMLElement & {inert:boolean|undefined|null}) // TODO: once typescript (and vue-typescript dependencies, if those are relevant) supports "inert", remove this intersection
-        .inert = Boolean(props.activeByTruthiness) || null;
+      element.inert = Boolean(props.activeByTruthiness);
     });
   });
 </script>

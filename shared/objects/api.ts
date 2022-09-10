@@ -33,15 +33,15 @@ class UserPatchRequest {
 };
 
 class NodeCreationRequest {
-  invitedOwnerIds:string[]|undefined;
+  invitedOwnerIds?:string[];
   title:string;
   body:string;
   deletedDraftIndex?:number;
   config?:PostConfig;
   nodePath?:Node["id"][];
 
-  constructor(invitedOwnerIds:NodeCreationRequest["invitedOwnerIds"]|undefined, title:NodeCreationRequest["title"], body:NodeCreationRequest["body"], deletedDraftIndex?:NodeCreationRequest["deletedDraftIndex"], config?:NodeCreationRequest["config"], nodePath?:NodeCreationRequest["nodePath"]) {
-    this.invitedOwnerIds = invitedOwnerIds;
+  constructor(invitedOwnerIds:NodeCreationRequest["invitedOwnerIds"], title:NodeCreationRequest["title"], body:NodeCreationRequest["body"], deletedDraftIndex?:NodeCreationRequest["deletedDraftIndex"], config?:NodeCreationRequest["config"], nodePath?:NodeCreationRequest["nodePath"]) {
+    invitedOwnerIds ? this.invitedOwnerIds = invitedOwnerIds : delete this.invitedOwnerIds;
     this.title = title;
     this.body = body;
     typeof deletedDraftIndex === "number" ? this.deletedDraftIndex = deletedDraftIndex : delete this.deletedDraftIndex;

@@ -53,7 +53,6 @@ class Node extends NodeCreationRequest {
     this.replies = [];
     this.stats = new NodeStats(request.config || {});
     request.config ? this.config = request.config : delete this.config;
-    delete this.invitedOwnerIds;
     delete this.locked;
     delete this.past;
   };

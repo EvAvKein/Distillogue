@@ -32,25 +32,25 @@ class UserData {
 const arrOfEditableUserData = ["name", "about", "drafts", "configPresets"] as const;
 type editableUserData = typeof arrOfEditableUserData[number];
 
-class Log {
-  timeUnix:number;
-  userId:UserData["id"];
-  targetId:UserData["id"]|Node["id"];
-  category:"added"|"removed"|"edited";
-  extraData?:object|string|number;
+// class Log {
+//   timeUnix:number;
+//   userId:UserData["id"];
+//   targetId:UserData["id"]|Node["id"];
+//   category:"added"|"removed"|"edited";
+//   extraData?:object|string|number;
 
-  constructor(timeUnix:Log["timeUnix"], userId:Log["userId"], targetId:Log["targetId"], category:Log["category"], extraData?:Log["extraData"]) {
-    this.timeUnix = timeUnix;
-    this.userId = userId;
-    this.targetId = targetId;
-    this.category = category;
-    extraData ? this.extraData = extraData : delete this.extraData;
-  };
-};
+//   constructor(timeUnix:Log["timeUnix"], userId:Log["userId"], targetId:Log["targetId"], category:Log["category"], extraData?:Log["extraData"]) {
+//     this.timeUnix = timeUnix;
+//     this.userId = userId;
+//     this.targetId = targetId;
+//     this.category = category;
+//     extraData ? this.extraData = extraData : delete this.extraData;
+//   };
+// };
 
 export {
   User,
   UserData,
   editableUserData, arrOfEditableUserData,
-  Log,
+  //Log,
 };
