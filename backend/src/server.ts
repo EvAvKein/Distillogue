@@ -97,7 +97,7 @@ app.get("/api/posts/:searchValue?", async (request, response) => {
       {$or: [{title: regexFilter}, {body: regexFilter}]},
     ), 
     {projection: {replies: false}}
-  ).sort({"stats.interacted": -1}).toArray();
+  ).sort({"stats.posted": -1}).toArray();
 
   const postSummaries = topNodesOfPosts.map((post) => {
     return new PostSummary({...post, replies: []});

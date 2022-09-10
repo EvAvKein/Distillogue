@@ -1,6 +1,6 @@
 <template>
   <section class="interactions">
-    <timestamps v-if="node.stats.timestamps" 
+    <timestamps 
       :timestamps="node.stats.timestamps"
       class="timestamps"
     />

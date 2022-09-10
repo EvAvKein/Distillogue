@@ -7,10 +7,7 @@
     </category>
     <category title="Timestamps" class="category">
       <label>
-        Posted: <input id="timestamps.posted" type="checkbox" @change="updateConfigByCheckbox" class="core_crudeInput"/>
-      </label>
-      <label>
-        Latest Interacted: <input id="timestamps.interacted" type="checkbox" @change="updateConfigByCheckbox" class="core_crudeInput"/>
+        Interacted: <input id="timestamps.interacted" type="checkbox" @change="updateConfigByCheckbox" class="core_crudeInput"/>
       </label>
     </category>
     <category title="Voting" class="category">

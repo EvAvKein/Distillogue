@@ -7,7 +7,7 @@
           src="../../../assets/megaphone.svg" alt="Megaphone icon"
         />
       </section>
-      <timestamps v-if="summary.stats.timestamps"
+      <timestamps
         :timestamps="summary.stats.timestamps"
         :inPostSummary="true"
         class="timestampSection"

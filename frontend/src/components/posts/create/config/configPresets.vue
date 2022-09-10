@@ -39,7 +39,6 @@
       name: "Everything",
       config: {
         timestamps: {
-          posted: true,
           interacted: true,
         },
         votes: {

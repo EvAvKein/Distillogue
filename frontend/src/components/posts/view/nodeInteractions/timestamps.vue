@@ -1,8 +1,8 @@
 <template>
   <section>
-    <div v-if="timestamps.posted"
-      class="posted"
-    ><span></span>Posted: <timestamp :pastUnix="timestamps.posted"/></div>
+    <div class="posted">
+      <span></span>Posted: <timestamp :pastUnix="timestamps.posted"/>
+    </div>
     <div v-if="timestamps.interacted"
       class="interacted"
     ><span>{{inPostSummary ? "Directly " : ""}}Interacted:</span> <timestamp :pastUnix="timestamps.interacted"/></div>

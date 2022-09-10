@@ -13,7 +13,6 @@ const PostConfig = Joi.object<Class.PostConfig>({
     public: trueOrNone,
   }),
   timestamps: Joi.object({
-    posted: trueOrNone,
     interacted: trueOrNone,
   }),
   votes: Joi.object({
