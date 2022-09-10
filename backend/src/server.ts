@@ -242,7 +242,7 @@ app.patch("/api/interaction", async (request, response) => { // i'm not satisfie
 
       dbResponse = await posts.findOneAndUpdate(
         {id: postId},
-        {"$push": {[mongoPath.updatePath + "replies"]: newNode}},
+        {"$addToSet": {[mongoPath.updatePath + "replies"]: newNode}},
         {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"}
       );
 
