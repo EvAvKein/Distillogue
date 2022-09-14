@@ -2,7 +2,6 @@ import {waitingTimes} from "../helpers/waitingTimes";
 
 describe("Profile editing", () => {
   let username = "profileEditing";
-  let about = "Hello, I haven't wrote my About yet!";
 
   it("Sign up & enter Dashboard", () => {
     cy.visit("/");
@@ -17,7 +16,6 @@ describe("Profile editing", () => {
 
   function validateProfileData() {
     cy.contains("Name").parent().find("input").should("have.value", username);
-    cy.contains("About").parent().find("textarea").should("have.value", about);
   };
   
   it("Edit and refresh to cancel", () => {
@@ -42,7 +40,7 @@ describe("Profile editing", () => {
     cy.get("#dashboardSubmit").should("not.be.visible");
   });
 
-  it("Edit and save single (Name)", () => {
+  it("Edit and save", () => {
     validateProfileData();
 
     username = "NameChangedByCypress!";
@@ -52,24 +50,6 @@ describe("Profile editing", () => {
     cy.wait(waitingTimes.httpRequest);
 
     cy.contains("Name").parent().find("input").should("have.value", username);
-    cy.get("#dashboardSubmit").should("not.be.visible");
-    cy.get(".notification.positive").should("have.text", "Changes saved!");
-
-    cy.reload();
-    cy.wait(waitingTimes.pageColdLoad);
-    validateProfileData();
-  });
-
-  it("Edit and save multiple (Name & About)", () => {
-    username = "NameChangedAgainByCypress!";
-    cy.contains("Name").parent().find("input").clear().type(username);
-    about = "This about was changed by Cypress!";
-    cy.contains("About").parent().find("textarea").clear().type(about);
-    cy.get("#dashboardSubmit").click();
-
-    cy.wait(waitingTimes.httpRequest);
-
-    validateProfileData();
     cy.get("#dashboardSubmit").should("not.be.visible");
     cy.get(".notification.positive").should("have.text", "Changes saved!");
 

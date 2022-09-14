@@ -6,12 +6,6 @@
       :label="'Name'"
       v-model="inputText.name.value"
     />
-    <labelledInput
-      :inputId="'editProfileAbout'"
-      :type="'textarea'"
-      :label="'About'"
-      v-model="inputText.about.value"
-    />
   </section>
 </template>
 
@@ -26,7 +20,6 @@
 
   const inputText = reactive({ // error fields are prep for clientside data validation, haven't implemented any checks yet since the limits haven't been decided on (as of 18.6.22)
     name: {value: user.data.name, error: ""},
-    about: {value: user.data.about, error: ""},
   } as const);
 
   const inputKeys = Object.keys(inputText) as (keyof typeof inputText)[];

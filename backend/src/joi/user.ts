@@ -10,9 +10,6 @@ const UserData = Joi.object<Class.UserData>({
     .alphanum()
     .min(3)
     .max(20),
-  about: Joi.string()
-    .required()
-    .max(200),
   drafts: Joi.array()
     .required()
     .items(Joi.object({

@@ -17,9 +17,6 @@ const UserPatchRequest = Joi.object<Class.UserPatchRequest>({
     .when("dataName", {is: "name",
       then: UserSchema.UserData.extract("name")
     })
-    .when("dataName", {is: "about",
-      then: UserSchema.UserData.extract("about")
-    })
     .when("dataName", {is: "drafts",
       then: UserSchema.UserData.extract("drafts")
     })
