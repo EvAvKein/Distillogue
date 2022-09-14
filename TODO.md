@@ -2,6 +2,7 @@ Remaining tasks before each stage of the project:
 
 ### Proof-of-concept deployment:
 * Flagship/core features:
+  * Identities system (already planned)
   * Mindmap layout using D3.js (name TBD)
   * More config options (many already planned, specifics TBA and/or TBD)
   * Add feedback form
