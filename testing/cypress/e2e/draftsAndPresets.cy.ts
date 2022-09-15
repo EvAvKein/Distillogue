@@ -46,8 +46,6 @@ describe("Drafts manipulation in dashboard", () => {
   it("Edit existing draft", () => {
     title = "Different " + title;
     body = "Different " + body;
-    
-    cy.contains("button", "Drafts").click();
 
     cy.contains("label", "Title").click().focused().clear().type(title);
     cy.contains("button", title);
