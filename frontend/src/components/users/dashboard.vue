@@ -13,18 +13,21 @@
       </transition>
       <nav aria-label="Dashboard page navigation">
         <button @click="currentPage = 'profile'"
+          :inert="currentPage === 'profile'"
           class="core_contentButton"
         >
           <img src="../../assets/userWithoutPfp.svg" alt="Non-descript person icon"/>
           <span>Profile</span>
         </button>
         <button @click="currentPage = 'drafts'"
+          :inert="currentPage === 'drafts'"
           class="core_contentButton"
         >
           <img src="../../assets/drafts.svg" alt="Paper tray icon"/>
           <span>Drafts</span>
         </button>
         <button @click="currentPage = 'presets'"
+          :inert="currentPage === 'presets'"
           class="core_contentButton"
         >
           <img src="../../assets/configPresets.svg" alt="Icon of a browser window stacked on another one, with the top window containing a cogwheel"/>
@@ -154,6 +157,10 @@
     display: block;
     color: var(--textColor);
     background-color: transparent;
+  }
+
+  nav button[inert] {
+    opacity: 0.8;
   }
 
   #dashboardPage {grid-area: page}
