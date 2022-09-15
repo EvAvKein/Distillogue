@@ -1,26 +1,12 @@
 import Joi from "joi";
-import * as Class from "../../objects/post";
-import * as ApiSchema from "./api";
-import * as UserSchema from "./user";
+import * as Class from "../../../shared/objects/post.js";
+import * as SharedSchema from "./_shared.js"
 
-const trueOrNone = Joi.valid(true);
 const userIdArray = Joi.array()
   .required()
-  .items(UserSchema.UserData.extract("id"));
+  .items(SharedSchema.User.UserData.extract("id"));
 
-const PostConfig = Joi.object<Class.PostConfig>({
-  access: Joi.object({
-    public: trueOrNone,
-  }),
-  timestamps: Joi.object({
-    interacted: trueOrNone,
-  }),
-  votes: Joi.object({
-    up: trueOrNone,
-    down: trueOrNone,
-    anon: trueOrNone,
-  }),
-}).required();
+const PostConfig = SharedSchema.Post.PostConfig;
 
 const NodeStats = Joi.object<Class.NodeStats>({
   timestamps: Joi.object({
@@ -38,8 +24,8 @@ const Node = Joi.object<Class.Node>({
   ownerIds: userIdArray,
   id: Joi.string()
     .required(),
-  title: ApiSchema.NodeCreationRequest.extract("title"),
-  body: ApiSchema.NodeCreationRequest.extract("body"),
+  title: SharedSchema.Post.Node.title,
+  body: SharedSchema.Post.Node.body,
   replies: Joi.array()
     .required()
     .items(Joi.link("#Node")),
@@ -47,8 +33,8 @@ const Node = Joi.object<Class.Node>({
   locked: Joi.valid(true),
   past: Joi.array()
     .items({
-      title: Joi.link("#Node").extract("title"),
-      body: Joi.link("#Node").extract("body"),
+      title: SharedSchema.Post.Node.title,
+      body: SharedSchema.Post.Node.body,
     }),
 }).required().id("Node");
 
