@@ -10,7 +10,10 @@
     "serverDev": "nodemon dist/backend/src/server.js",
 
     "host": "npm run database && npm run server",
-    "hostDev": "npm run database && npm run serverDev"
+    "hostDev": "npm run database && npm run serverDev",
+
+    "serve": "npm run build && npm run host",
+    "serveDev": "start npm run buildDev && npm run hostDev"
   },
   "dependencies": {
     "express": "^4.17.2",
