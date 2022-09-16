@@ -58,6 +58,9 @@
     user-select: none;
   }
 
+  a {color: var(--highlightSubColor)}
+  a:focus, a:hover {color: var(--highlightColor)}
+
   h1, h2, h3, h4, h5, h6, p {margin: 0}
 
   button, a, summary {cursor: pointer}
@@ -90,6 +93,7 @@
   /* core styling classes */
   .core_backgroundButton {
     color: var(--backgroundColor);
+    text-decoration: none;
     background-color: var(--textColor);
     border-radius: 0.2em;
     text-decoration: none;
@@ -106,6 +110,7 @@
 
   .core_contentButton {
     color: inherit;
+    text-decoration: none;
     background-color: transparent;
     padding: 0;
   }
