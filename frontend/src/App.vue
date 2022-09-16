@@ -51,14 +51,20 @@
     background-color: var(--backgroundColor);
   }
 
-  img {pointer-events: none}
+  :focus {outline: none}
 
-  button {font-size: inherit}
+  img {
+    pointer-events: none;
+    user-select: none;
+  }
 
-  button, a, summary {
-    cursor: pointer;
+  h1, h2, h3, h4, h5, h6, p {margin: 0}
+
+  button, a, summary {cursor: pointer}
+  button, a, summary, input, textarea {
+    font-size: inherit;
+    font-family: inherit;
     border: none;
-    outline: none;
   }
 
   ::-webkit-scrollbar {
