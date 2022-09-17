@@ -58,9 +58,6 @@
     user-select: none;
   }
 
-  a {color: var(--highlightSubColor)}
-  a:focus, a:hover {color: var(--highlightColor)}
-
   h1, h2, h3, h4, h5, h6, p {margin: 0}
 
   button, a, summary {cursor: pointer}
