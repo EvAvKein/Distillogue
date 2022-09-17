@@ -7,7 +7,6 @@ Remaining tasks before each stage of the project:
   * More config options (many already planned, specifics TBA and/or TBD)
   * Add feedback form
 * Security:
-  * Data validation (API & some preemptive in frontend)
   * HTTP headers checkup (API & frontend)
   * Proper registration/authentication (likely only via third parties)
   * Probably others (i.e actively look for more)
@@ -46,3 +45,5 @@ Remaining tasks before each stage of the project:
 * Ease of Contributing:
   * Prettier (local & CI)
   * Dockerized dev setup (see https://github.com/EvAvKein/Distillogue/issues/1)
+* Optimization:
+  * Client-side, context-specific input validation
