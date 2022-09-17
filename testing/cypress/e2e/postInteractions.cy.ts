@@ -1,13 +1,14 @@
 import {waitingTimes} from "../helpers/waitingTimes";
+import {randomUsername, randomNodeTitle, randomNodeBody} from "../helpers/randomAlphanumString";
 
-const postTitle = "Title of Test Post " + Math.random();
-const postBody = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mauris vitae ultricies leo integer malesuada nunc.\n\nIpsum a arcu cursus vitae congue mauris rhoncus. Sed turpis tincidunt id aliquet risus feugiat in ante. Sed tempus urna et pharetra pharetra massa massa ultricies. "  + Math.random();
+const postTitle = randomNodeTitle();
+const postBody = randomNodeBody();
 let postUrl = "";
 describe("Create access & interactions test posts", () => {
   
   it("Sign up & nav to posting page", () => {
     cy.visit("/");
-    cy.signOn("postCreator");
+    cy.signOn(randomUsername());
   });
 
   it("Create interactions-testings & access-testing posts", () => {
@@ -45,7 +46,8 @@ describe("Create access & interactions test posts", () => {
 
 describe("Access", () => {
   it("Create account", () => {
-    cy.signOn("accessTester");
+    console.log(randomUsername())
+    cy.signOn(randomUsername());
   });
 
   it("Fail to find inaccessible post through browsing", () => {
@@ -95,35 +97,35 @@ describe("Replies & deep interaction", () => { // testing deep-interactions with
     replyAndValidateNode(
       [postTitle],
       "1st Reply to Central",
-      "filler text"
+      randomNodeBody()
     );
   });
   it("Another reply to central node", () => {
     replyAndValidateNode(
       [postTitle],
       "2nd Reply to Central",
-      "filler text"
+      randomNodeBody()
     );
   });
   it("Reply to reply", () => {
     replyAndValidateNode(
       [postTitle, "1st Reply to Central"],
       "1st Reply to 1st Reply to Central",
-      "filler text"
+      randomNodeBody()
     );
   });
   it("Reply to reply to reply", () => {
     replyAndValidateNode(
       [postTitle, "1st Reply to Central", "1st Reply to 1st Reply to Central"],
       "1st Reply to 1st Reply to 1st Reply to central",
-      "filler text"
+      randomNodeBody()
     );
   });
   it("Another reply to reply", () => {
     replyAndValidateNode(
       [postTitle, "2nd Reply to Central"],
       "1st Reply to 2nd Reply to Central",
-      "filler text"
+      randomNodeBody()
     );
   });
 

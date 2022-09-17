@@ -22,8 +22,13 @@ const UserPatchRequest = Joi.object<Class.UserPatchRequest>({
     .when("dataName", {is: "configPresets",
       then: SharedSchema.User.UserData.extract("configPresets")
     })
-    .default(null)
 }).required();
+
+const UserPatchRequestArray = Joi.array()
+// currently (joi v17.5.0) it doesn't seem possible to properly type this. i'd submit an issue asking about it (because disccussions aren't available for the repo), but i already have a different one there which is the second latest (as of 17.9.22) and don't wanna be too spammy
+  .required()
+  .min(1)
+  .items(UserPatchRequest);
 
 const NodeCreationRequest = Joi.object<Class.NodeCreationRequest>({
   invitedOwnerIds: Joi.array()
@@ -34,7 +39,8 @@ const NodeCreationRequest = Joi.object<Class.NodeCreationRequest>({
     .integer()
     .greater(-1)
     .less(3),
-  config: SharedSchema.Post.PostConfig,
+  config: SharedSchema.Post.PostConfig
+    .optional(),
   nodePath: Joi.array()
     .min(1)
     .items(Joi.string())
@@ -65,7 +71,7 @@ const NodeInteractionRequest = Joi.object<Class.NodeInteractionRequest>({
 
 export {
   UserCreationRequest,
-  UserPatchRequest,
+  UserPatchRequest, UserPatchRequestArray,
   NodeCreationRequest,
   NodeInteractionRequest,
 };

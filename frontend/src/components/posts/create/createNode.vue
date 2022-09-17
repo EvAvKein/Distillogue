@@ -182,14 +182,14 @@
             new NodeInteractionRequest(
               props.reply!.nodePath!,
               "reply",
-              {nodeReplyRequest: new NodeCreationRequest(
+              new NodeCreationRequest(
                 [user.data.id],
                 nodeTitle.value,
                 nodeBody.value,
                 currentDraftIndex.value,
                 undefined,
                 props.reply!.nodePath!,
-              )}
+              )
             ),
             user.data.authKey
           );

@@ -1,13 +1,14 @@
 import {waitingTimes} from "../helpers/waitingTimes";
+import {randomUsername, randomNodeTitle, randomNodeBody} from "../helpers/randomAlphanumString";
 
-let title = "Draft Title By Cypress! " + Math.random();
-let body = "Draft Body By Cypress!\n\nThis is a bit of filler text because the body is supposed to be longer :P " + Math.random();
+let title = "Draft " + randomNodeTitle();
+let body = randomNodeBody();
 
 describe("Drafts manipulation in dashboard", () => {
   it("Enter Drafts subpage", () => {
     cy.visit("/");
     cy.wait(waitingTimes.pageColdLoad);
-    cy.signOn("draftsTester" + Math.random());
+    cy.signOn("drafter" + randomUsername());
     cy.contains("a", "Dashboard").click();
     cy.contains("button", "Drafts").click();
 
@@ -201,15 +202,17 @@ describe("Drafts manipulation in posting page", () => {
 });
 
 describe("Drafts manipulation in replying modal", () => {
+  let replyDraftTitle = "Reply Draft" + randomNodeTitle();
+
   it("Setup (new user, submit new post, enter, open reply modal)", () => {
     cy.contains("Logout").click();
-    cy.signOn("otherDraftsTester" + Math.random());
+    cy.signOn("Other" + randomUsername());
 
     cy.submitPost(
-      "Title of Post for Testing Draft Functionality in Replies" + Math.random(),
-      "The Draft body is supposed to be longer than the title, so here are some extra words to to pad the rest of this sentence. Nonsense 'Lorem ipsum'-esque text got boring :P " + Math.random()
+      replyDraftTitle,
+      randomNodeBody()
     );
-    cy.contains("a", "Title of Post for Testing Draft Functionality in Replies").click();
+    cy.contains("a", replyDraftTitle).click();
   });
   
   testDraftsFunctionalities("Reply",

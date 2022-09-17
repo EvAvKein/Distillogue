@@ -56,9 +56,9 @@ type interactionType = typeof arrOfInteractionTypes[number];
 class NodeInteractionRequest {
   nodePath:Node["id"][];
   interactionType:interactionType;
-  interactionData: {
-    nodeReplyRequest:NodeCreationRequest,
-  }|{
+  interactionData:
+    NodeCreationRequest
+  |{
     voteDirection:"up"|"down",
     newVoteStatus:boolean,
   };

@@ -1,7 +1,8 @@
 import {waitingTimes} from "../helpers/waitingTimes";
+import {randomUsername} from "../helpers/randomAlphanumString";
 
 describe("Profile editing", () => {
-  let username = "profileEditing";
+  let username = "Profile" + randomUsername();
 
   it("Sign up & enter Dashboard", () => {
     cy.visit("/");
@@ -43,7 +44,7 @@ describe("Profile editing", () => {
   it("Edit and save", () => {
     validateProfileData();
 
-    username = "NameChangedByCypress!";
+    username = "Changed" + randomUsername();
     cy.contains("Name").parent().find("input").clear().type(username);
     cy.get("#dashboardSubmit").click();
 

@@ -2,9 +2,11 @@ import path from "node:path";
 import express from "express";
 import helmetSecurity from "helmet";
 import {ModifyResult} from "mongodb";
-import {FetchResponse, UserCreationRequest, UserPatchRequest, NodeCreationRequest, NodeInteractionRequest} from "../../shared/objects/api.js";
+import {FetchResponse, UserPatchRequest, NodeCreationRequest} from "../../shared/objects/api.js";
+import * as apiSchemas from "./joi/api.js";
 import {User, UserData, arrOfEditableUserData} from "../../shared/objects/user.js";
 import {PostConfig, Node, PostSummary} from "../../shared/objects/post.js";
+import {validationSettings} from "./joi/_validationSettings.js";
 import {users, posts} from "./mongo.js";
 import * as timestamp from "../../shared/helpers/timestamps.js";
 import {userByAuthHeader} from "./helpers/userByAuthHeader.js";
@@ -24,9 +26,15 @@ await posts.deleteMany({});
 await users.deleteMany({});
 
 app.post("/api/user", async (request, response) => {
-  const signUpInfo = request.body as UserCreationRequest;
+  const validation = apiSchemas.UserCreationRequest.validate(request.body, validationSettings);
+  if (validation.error) {
+    response.json(new FetchResponse(null, validation.error.message));
+    return;
+  };
 
-  const user = await users.findOne({"data.name": signUpInfo.username})
+  const username = validation.value.username;
+
+  const user = await users.findOne({"data.name": username})
     .catch(() => {response.json(new FetchResponse(null, "Can't register user, database is unresponsive"))});
 
   if (user) {
@@ -34,7 +42,7 @@ app.post("/api/user", async (request, response) => {
     return;
   };
 
-  const newUserData = new UserData(signUpInfo.username);
+  const newUserData = new UserData(username);
   const newUser = new User(newUserData);
 
   await users.insertOne(newUser);
@@ -42,10 +50,23 @@ app.post("/api/user", async (request, response) => {
 });
 
 app.post("/api/user/me", async (request, response) => { // really irritates me that sign-ins are made as POST requests, change to SEARCH if/once browsers support it
-  const authKey = request.headers.authorization?.replace("Bearer ", "");
-  const username = request.body.username as UserData["name"];
+  let userFilter:{[key:string]:string}|undefined;
 
-  const user = await users.findOne(authKey ? {"data.authKey": authKey} : {"data.name": username})
+  const authKey = request.headers.authorization?.replace("Bearer ", "");
+  if (authKey) {userFilter = {"data.authKey": authKey}};
+  
+  if (!userFilter) {
+    const validation = apiSchemas.UserCreationRequest.validate(request.body, validationSettings); // obviously not an endpoint for user creation, but it currently uses the exact some body structure
+    const username = validation.value?.username;
+    if (username) {userFilter = {"data.name": username}}
+  };
+
+  if (!userFilter) {
+    response.json(new FetchResponse(null, "No sign-in data detected"));
+    return;
+  };
+  
+  const user = await users.findOne(userFilter)
     .catch(() => {response.json(new FetchResponse(null, "Can't fetch user, database is unresponsive"))});
 
   if (!user) {
@@ -57,8 +78,14 @@ app.post("/api/user/me", async (request, response) => { // really irritates me t
 });
 
 app.patch("/api/user/me", async (request, response) => {
+  const validation = apiSchemas.UserPatchRequestArray.validate(request.body, validationSettings);
+  if (validation.error) {
+    response.json(new FetchResponse(null, validation.error.message));
+    return;
+  };
+
   const authKey = request.headers.authorization?.replace("Bearer ", "");
-  const editRequests = request.body as UserPatchRequest[];
+  const editRequests = validation.value as UserPatchRequest[];
 
   for (let request of editRequests) {
     if (!arrOfEditableUserData.includes(request.dataName)) {
@@ -108,7 +135,13 @@ app.get("/api/posts/:searchValue?", async (request, response) => {
 });
 
 app.post("/api/post", async (request, response) => {
-  const postRequest = request.body as NodeCreationRequest;
+  const validation = apiSchemas.NodeCreationRequest.validate(request.body, validationSettings);
+  if (validation.error) {
+    response.json(new FetchResponse(null, validation.error.message));
+    return;
+  };
+
+  const postRequest = validation.value;
 
   const user = await userByAuthHeader(request);
   if (!user) {
@@ -181,13 +214,19 @@ app.get("/api/post/:id", async (request, response) => {
 });
 
 app.patch("/api/interaction", async (request, response) => { // i'm not satisfied with this URI's unRESTfulness, but couldn't come up with an appropriate implementation. "/posts/:nodePath/interactions" results in extremely verbose URIs, "/posts/:postId/interactions" isn't really coherent when a nodePath is still needed, and "/interactions/:interactionType" doesn't help much and disjoints is from other equally-necessary data
+  const validation = apiSchemas.NodeInteractionRequest.validate(request.body, validationSettings);
+  if (validation.error) {
+    response.json(new FetchResponse(null, validation.error.message));
+    return;
+  };
+
   const user = await userByAuthHeader(request);
   if (!user) {
     response.json(new FetchResponse(null, "User authentication failed"));
     return;
   };
   
-  const {nodePath, interactionType, interactionData} = request.body as NodeInteractionRequest;
+  const {nodePath, interactionType, interactionData} = validation.value;
   const postId = nodePath[0] as Node["id"];
   const mongoPath = nodePathAsMongoLocators(nodePath);
 
@@ -235,9 +274,9 @@ app.patch("/api/interaction", async (request, response) => { // i'm not satisfie
         return;
       };
 
-      (interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest.config = subjectPost.config;
+      (interactionData as NodeCreationRequest).config = subjectPost.config;
 
-      const newNode = new Node(user.data.id, (interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest);
+      const newNode = new Node(user.data.id, (interactionData as NodeCreationRequest));
       delete newNode.config;
 
       dbResponse = await posts.findOneAndUpdate(
@@ -246,7 +285,7 @@ app.patch("/api/interaction", async (request, response) => { // i'm not satisfie
         {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"}
       );
 
-      const deletedDraftIndex = (interactionData as {nodeReplyRequest:NodeCreationRequest}).nodeReplyRequest.deletedDraftIndex;
+      const deletedDraftIndex = (interactionData as NodeCreationRequest).deletedDraftIndex;
       if (typeof deletedDraftIndex === "number") {
         const newDraftsState = filterByIndex(user.data.drafts, deletedDraftIndex);  // turns out pulling from an array by index has been rejected as a mongodb native feature (and the workaround has bad readability), so i'm just opting to override the drafts value instead. see: https://jira.mongodb.org/browse/SERVER-1014
         

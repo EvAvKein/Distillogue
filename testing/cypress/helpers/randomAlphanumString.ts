@@ -1,4 +1,4 @@
-export function randomAlphanumString(LengthMultiplier?:number, withSpaces?:true) {
+function randomAlphanumString(LengthMultiplier?:number, withSpaces?:true) {
   let string = "";
 
   for (let remainder = LengthMultiplier || 1; remainder > 0; remainder--) {
@@ -7,4 +7,22 @@ export function randomAlphanumString(LengthMultiplier?:number, withSpaces?:true)
   };
 
   return string;
+};
+
+function randomUsername() {
+  return randomAlphanumString(1);
+};
+
+function randomNodeTitle() {
+  return randomAlphanumString(2, true);
+};
+function randomNodeBody() {
+  return randomAlphanumString(7, true);
+};
+
+export {
+  randomAlphanumString,
+  randomUsername,
+  randomNodeTitle,
+  randomNodeBody,
 };

@@ -24,7 +24,6 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-import {randomAlphanumString} from "../helpers/randomAlphanumString";
 import {waitingTimes} from "../helpers/waitingTimes";
 
 let LOCAL_STORAGE_MEMORY = {};
@@ -36,15 +35,11 @@ Cypress.Commands.overwrite('type', (originalFn:(subject:string, text:Partial<Cyp
 })
 
 Cypress.Commands.addAll({
-  randomAlphanumString,
-
-  signOn(name:string, randomSuffix?:true) {
-    const username = name + (randomSuffix ? "_" + randomAlphanumString() : "");
-
+  signOn(name:string) {
     cy.visit("/join");
 
     cy.get("form").should("contain.text", "Sign Up");
-    cy.get("input").type(username);
+    cy.get("input").type(name);
     cy.contains("Continue").click();
     cy.wait(waitingTimes.pageTransition);
 
