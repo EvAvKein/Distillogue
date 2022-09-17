@@ -107,6 +107,7 @@
     if (changesResponse.error) {
       submitNotif.text = changesResponse.error.message;
       submitNotif.style = false;
+      return;
     };
 
     submitNotif.text = "Changes saved!";
