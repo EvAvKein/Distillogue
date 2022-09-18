@@ -7,7 +7,6 @@ Remaining tasks before each stage of the project:
   * More config options (many already planned, specifics TBA and/or TBD)
   * Add feedback form
 * Security:
-  * HTTP headers checkup (API & frontend)
   * Proper registration/authentication (likely only via third parties)
   * Probably others (i.e actively look for more)
 * Regulation:
