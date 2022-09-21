@@ -90,7 +90,7 @@
   /* core styling classes */
   .core_backgroundButton {
     color: var(--backgroundColor);
-    text-decoration: none;
+    text-align: center;
     background-color: var(--textColor);
     border-radius: 0.2em;
     text-decoration: none;
