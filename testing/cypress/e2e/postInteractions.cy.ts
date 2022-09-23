@@ -46,7 +46,6 @@ describe("Create access & interactions test posts", () => {
 
 describe("Access", () => {
   it("Create account", () => {
-    console.log(randomUsername())
     cy.signOn(randomUsername());
   });
 
