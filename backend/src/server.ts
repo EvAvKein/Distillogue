@@ -12,6 +12,7 @@ import * as timestamp from "../../shared/helpers/timestamps.js";
 import {userByAuthHeader} from "./helpers/userByAuthHeader.js";
 import {nodePathAsMongoLocators} from "./helpers/mongo/nodePathAsMongoLocators.js";
 import {mongoPostsFilterByAccess} from "./helpers/mongo/mongoPostsFilterByAccess.js";
+import {mongoInsertIfDoesntExist} from "./helpers/mongo/mongoInsertIfDoesntExist.js";
 import {updateDeepProperty} from "./helpers/updateDeepProperty.js";
 import {filterByIndex} from "../../shared/helpers/filterByIndexes.js";
 import {recursivelyModifyNode} from "./helpers/recursivelyModifyNode.js";
@@ -33,19 +34,16 @@ app.post("/api/users", async (request, response) => {
   };
 
   const username = validation.value.username;
+  const newUser = new User(new UserData(username));
+  
+  const dbResponse = await mongoInsertIfDoesntExist(users, newUser, {name: username});
 
-  const user = await users.findOne({"data.name": username});
-
-  if (user) {
+  if (dbResponse.matchedCount) {
     response.json(new FetchResponse(null, "User already exists!"));
     return;
   };
 
-  const newUserData = new UserData(username);
-  const newUser = new User(newUserData);
-
-  await users.insertOne(newUser);
-  response.json(new FetchResponse(newUserData));
+  response.json(new FetchResponse(newUser.data));
 });
 
 app.post("/api/users/me", async (request, response) => {
@@ -65,11 +63,10 @@ app.post("/api/users/me", async (request, response) => {
     return;
   };
   
-  const user = await users.findOne(userFilter)
-    .catch(() => {response.json(new FetchResponse(null, "Can't fetch user, database is unresponsive"))});
+  const user = await users.findOne(userFilter);
 
   if (!user) {
-    response.json(new FetchResponse(null, "User doesn't exist"));
+    response.json(new FetchResponse(null, "Failed to fetch user"));
     return;
   };
 
@@ -103,13 +100,15 @@ app.patch("/api/users/me", async (request, response) => {
     mongoUpdateObject["data." + request.dataName] = request.newValue;
   });
 
-  await users.findOneAndUpdate(
+  const dbResponse = await users.updateOne(
     {"data.authKey": authKey},
     {$set: mongoUpdateObject},
-  ).catch(() => {
+  );
+
+  if (!dbResponse.modifiedCount) {
     response.json(new FetchResponse(null, "Failed to update database"));
     return;
-  });
+  };
 
   response.json(new FetchResponse(true));
 });
@@ -187,30 +186,26 @@ app.post("/api/posts", async (request, response) => {
     return;
   };
 
-  const filterForAlreadySubmitted = {
-    ownerIds: [user.data.id].concat(postRequest.invitedOwnerIds || []),
-    title: postRequest.title,
-    body: postRequest.body,
-    config: postRequest.config
-  };
-  const insertPostIfDoesntExist = {$setOnInsert: new Node(user.data.id, postRequest)};
-  const flagForInsertionwhenNoFilterResults = {upsert: true};
-
-  const dbResponse = await posts.updateOne(
-    filterForAlreadySubmitted,
-    insertPostIfDoesntExist,
-    flagForInsertionwhenNoFilterResults
+  const dbResponse = await mongoInsertIfDoesntExist(
+    posts,
+    new Node(user.data.id, postRequest),
+    {
+      ownerIds: [user.data.id].concat(postRequest.invitedOwnerIds || []),
+      title: postRequest.title,
+      body: postRequest.body,
+      config: postRequest.config
+    }  
   );
 
-  if (dbResponse.matchedCount > 0) { // this technically makes the request non-idempotent for the user, but (at least when testing on localhost, might need to reevaluate upon hosting) any duplicate request comes back late enough that a site user is redirected away from the page that would display the error before that error gets to display; thus this non-idempotence only affects people who attempt to post through the API directly, mostly likely programmatically, and should be savvy enough to understand this issue and/or avoid it
-    response.json(new FetchResponse(null, "Duplicate post attempt: This was already posted successfully!")); 
+  if (dbResponse.matchedCount) {
+    response.json(new FetchResponse(null, "Post already created!")); 
     return;
   };
 
   if (typeof postRequest.deletedDraftIndex === "number") {
     const newDraftsState = filterByIndex(user.data.drafts, postRequest.deletedDraftIndex);
 
-    users.findOneAndUpdate(
+    users.updateOne(
       {"data.id": user.data.id},
       {$set: {"data.drafts": newDraftsState}},
     );
@@ -235,6 +230,7 @@ app.post("/api/posts/interactions", async (request, response) => { // i'm not sa
   const {nodePath, interactionType, interactionData} = validation.value;
   const postId = nodePath[0] as Node["id"];
   const mongoPath = nodePathAsMongoLocators(nodePath);
+  const mongoUpdatePathOptions = {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"} as const;
 
   const subjectPost = await posts.findOne(mongoPostsFilterByAccess(user.data.id, {id: postId})); // this (and the interaction validations that it enables) would be best implemented as a condition on each interaction (to reduce the number of DB calls) with follow-up code to read the modify result and output any relevant error. see the comment below at interacted updates for explanation on why DB conditionals are currently avoided
   if (!subjectPost) {
@@ -270,7 +266,7 @@ app.post("/api/posts/interactions", async (request, response) => { // i'm not sa
       dbResponse = await posts.findOneAndUpdate(
         {id: postId},
         mongoUpdate,
-        {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"}
+        mongoUpdatePathOptions
       );
       break;
     };
@@ -288,7 +284,7 @@ app.post("/api/posts/interactions", async (request, response) => { // i'm not sa
       dbResponse = await posts.findOneAndUpdate(
         {id: postId},
         {"$addToSet": {[mongoPath.updatePath + "replies"]: newNode}},
-        {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"}
+        mongoUpdatePathOptions
       );
 
       const deletedDraftIndex = (interactionData as NodeCreationRequest).deletedDraftIndex;
