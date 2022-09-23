@@ -115,7 +115,7 @@
 
       const newPresetsState = [...user.data.configPresets, {name: "", config: postConfig.value!}];
 
-      const response = await jsonFetch("PATCH", "/user/me",
+      const response = await jsonFetch("PATCH", "/users/me",
         [new UserPatchRequest("configPresets", newPresetsState)],
         user.data.authKey
       );
@@ -159,7 +159,7 @@
 
       const newDraftsState = [...deepCloneFromReactive(user.data.drafts), {title: nodeTitle.value, body: nodeBody.value, lastEdited: unix()}];
 
-      const response = await jsonFetch("PATCH", "/user/me",
+      const response = await jsonFetch("PATCH", "/users/me",
         [new UserPatchRequest("drafts", newDraftsState)],
         user.data.authKey
       );
@@ -178,7 +178,7 @@
 
     const apiRequest = props.reply
       ? () => {
-          return jsonFetch("PATCH", "/interaction",
+          return jsonFetch("POST", "/posts/interactions",
             new NodeInteractionRequest(
               props.reply!.nodePath!,
               "reply",
@@ -195,7 +195,7 @@
           );
         }
       : () => {
-          return jsonFetch("POST", "/post",
+          return jsonFetch("POST", "/posts",
             new NodeCreationRequest(
               postInvitedOwners!.value,
               nodeTitle.value,

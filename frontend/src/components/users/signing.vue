@@ -40,7 +40,7 @@
     signingMessage.value = `Signing ${signingMode.value.toLowerCase()}...`;
     signingStatus.value = undefined;
     
-    const response = await jsonFetch("POST", signingMode.value === "Up" ? "/user" : "/user/me",
+    const response = await jsonFetch("POST", signingMode.value === "Up" ? "/users" : "/users/me",
       new UserCreationRequest(username.value)
     );
 

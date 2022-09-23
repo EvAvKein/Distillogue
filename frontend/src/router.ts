@@ -71,7 +71,7 @@ router.beforeEach(async (to, from, next) => {
   const authKey = localStorage.getItem("authKey");
 
   if (authKey && !user.data.authKey) {
-    await jsonFetch("POST", "/user/me", null, authKey).then((response) => {
+    await jsonFetch("POST", "/users/me", null, authKey).then((response) => {
       if (!response.error) {user.data = response.data as UserData};
     });
   };

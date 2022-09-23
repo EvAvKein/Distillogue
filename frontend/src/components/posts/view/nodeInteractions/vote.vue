@@ -73,7 +73,7 @@
       return;
     };
 
-    const response = await jsonFetch("PATCH", "/interaction",
+    const response = await jsonFetch("POST", "/posts/interactions",
       new NodeInteractionRequest(
         props.interactionPath,
         "vote",

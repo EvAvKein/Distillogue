@@ -99,7 +99,7 @@
     submitNotif.text = "Submitting changes...";
     submitNotif.style = undefined;
 
-    const changesResponse = await jsonFetch("PATCH", "/user/me",
+    const changesResponse = await jsonFetch("PATCH", "/users/me",
       changes.value,
       user.data.authKey
     );
