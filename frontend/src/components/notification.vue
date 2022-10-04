@@ -38,6 +38,7 @@
 <style scoped>
   .notification {
     width: fit-content;
+    height: fit-content;
     text-align: center;
     font-size: 1em;
     padding: 0.3em;
