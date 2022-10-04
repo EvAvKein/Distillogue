@@ -17,7 +17,7 @@
 <script setup lang="ts">
   import {ref} from "vue";
   import {UserCreationRequest} from "../../../../../shared/objects/api";
-  import {UserData} from "../../../../../shared/objects/user";
+  import {UserPayload} from "../../../../../shared/objects/user";
   import {useRouter} from "vue-router";
   import {useUser} from "../../../stores/user";
   import {jsonFetch} from "../../../helpers/jsonFetch";
@@ -35,7 +35,7 @@
     signingMessage.value = `Signing in...`;
     signingStatus.value = undefined;
     
-    const response = await jsonFetch("POST", "/users/me",
+    const response = await jsonFetch("POST", "/sessions",
       new UserCreationRequest(username.value)
     );
 
@@ -45,8 +45,8 @@
       return;
     };
 
-    user.data = response.data as UserData;
-    localStorage.setItem("authKey", user.data.authKey);
+    user.data = (response.data as UserPayload).data;
+    localStorage.setItem("sessionKey", (response.data as UserPayload).sessionKey);
 
     router.push({name: "browse"});
   };

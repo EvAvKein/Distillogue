@@ -34,7 +34,6 @@ const Post = {
 const User = {
   UserData: Joi.object<UserClass.UserData>({
     id: Joi.string().required(),
-    authKey: Joi.string().required(),
     name: Joi.string()
       .required()
       .alphanum()

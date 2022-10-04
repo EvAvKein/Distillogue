@@ -55,6 +55,7 @@
 <script setup lang="ts">
   import {ref, reactive} from "vue";
   import {useUser} from "../../stores/user";
+  import {getSessionKey} from "../../helpers/getSessionKey";
   import {jsonFetch} from "../../helpers/jsonFetch";
   import {UserPatchRequest} from "../../../../shared/objects/api";
   import {deepCloneFromReactive} from "../../helpers/deepCloneFromReactive";
@@ -76,8 +77,8 @@
 
       const prevChangeExists = existingChangeIndex === -1 ? false : true;
       const inputMatchesUserData = typeof state.newValue === "object" && state.newValue !== null
-        ? JSON.stringify(state.newValue) === JSON.stringify(user.data[state.dataName]) // flawed (as it depends on the contents of both to be in the same sequence), but it's *good enough* as of the current stage of dev (june 2022)
-        : state.newValue === user.data[state.dataName]
+        ? JSON.stringify(state.newValue) === JSON.stringify(user.data![state.dataName]) // flawed (as it depends on the contents of both to be in the same sequence), but it's *good enough* as of the current stage of dev (june 2022)
+        : state.newValue === user.data![state.dataName]
       ;
 
       if (!prevChangeExists && inputMatchesUserData) {
@@ -99,9 +100,9 @@
     submitNotif.text = "Submitting changes...";
     submitNotif.style = undefined;
 
-    const changesResponse = await jsonFetch("PATCH", "/users/me",
+    const changesResponse = await jsonFetch("PATCH", "/users",
       changes.value,
-      user.data.authKey
+      getSessionKey()
     );
 
     if (changesResponse.error) {
@@ -113,7 +114,7 @@
     submitNotif.text = "Changes saved!";
     submitNotif.style = true;
     changes.value.forEach((change) => {
-      (user.data[change.dataName] as any) = deepCloneFromReactive(change).newValue; // considering the circumstances, i dont think coercing an "any" here is actually harmful
+      (user.data![change.dataName] as any) = deepCloneFromReactive(change).newValue; // considering the circumstances, i dont think coercing an "any" here is actually harmful
     });
     changes.value = [];
   };

@@ -2,8 +2,8 @@
   <header>
     <section id="leftSection">
       <nav>
-        <div v-if="user.data.id">
-          <router-link v-if="user.data.id"
+        <div v-if="user.data">
+          <router-link v-if="user.data"
             :to="{name: 'browse'}"
             class="core_backgroundButton"
           >
@@ -27,10 +27,10 @@
         </router-link>
       </nav>
     </section>
-    
+    <notification :text="notifText" :desirablityStyle="notifDesirability"/>
     <section id="rightSection">
       <nav>
-        <div v-if="user.data.id">
+        <div v-if="user.data">
           <router-link 
             :to="{name: 'dashboard'}"
             class="core_backgroundButton"
@@ -58,14 +58,35 @@
 </template>
 
 <script setup lang="ts">
+  import {ref} from "vue";
   import {useRouter} from "vue-router";
   import {useUser} from "../stores/user";
+  import {getSessionKey} from "../helpers/getSessionKey"
+  import {jsonFetch} from "../helpers/jsonFetch";
+  import notification from "./notification.vue";
+  import Notification from "./notification.vue";
   const user = useUser();
   const router = useRouter();
 
-  function logOut() {
+  const notifText = ref("");
+  const notifDesirability = ref<boolean|undefined>(undefined);
+
+  async function logOut() {
+    notifText.value = "";
+    notifDesirability.value = undefined;
+
+    const sessionKey = getSessionKey();
+
+    const logoutRequest = await jsonFetch("DELETE", "/sessions", null, sessionKey);
+
+    if (logoutRequest.error) {
+      notifText.value = logoutRequest.error.message;
+      notifDesirability.value = false;
+      return;
+    };
+    
     user.$reset();
-    localStorage.removeItem("authKey");
+    localStorage.removeItem("sessionKey");
     router.push({name: "join"});
   };
 </script>

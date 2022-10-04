@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 import {useUser} from "./stores/user";
 import {jsonFetch} from "./helpers/jsonFetch";
-import {UserData} from "../../shared/objects/user";
+import {UserData, UserPayload} from "../../shared/objects/user";
 
 import home from "./pages/Home.vue";
 import browse from "./pages/Browse.vue";
@@ -68,12 +68,15 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const user = useUser();
-  const authKey = localStorage.getItem("authKey");
+  const sessionKey = localStorage.getItem("sessionKey");
 
-  if (authKey && !user.data.authKey) {
-    await jsonFetch("POST", "/users/me", null, authKey).then((response) => {
-      if (!response.error) {user.data = response.data as UserData};
-    });
+  if (sessionKey && !user.data) {
+    await jsonFetch("GET", "/sessions", null, sessionKey)
+      .then((response) => {
+        if (!response.error) {
+          user.data = (response.data as UserData);
+        };
+      });
   };
 
   const accountRequired = to.matched.some(record => record.meta.accountRequired);
@@ -82,7 +85,7 @@ router.beforeEach(async (to, from, next) => {
     return;
   };
 
-  if (!user.data.id) {
+  if (!user.data) {
     next({path: "/join"});
     return;
   };

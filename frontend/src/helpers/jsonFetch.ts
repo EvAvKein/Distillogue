@@ -1,7 +1,7 @@
 import {FetchResponse} from "../../../shared/objects/api";
 
-export async function jsonFetch(method:"GET"|"POST"|"PATCH"|"DELETE", address:string, body:object|null, authKey?:string) {
-  const authHeader = authKey ? {Authorization: "Bearer " + authKey} : null;
+export async function jsonFetch(method:"GET"|"POST"|"PATCH"|"DELETE", address:string, body:object|null, sessionKey?:string) {
+  const authHeader = sessionKey ? {Authorization: "Bearer " + sessionKey} : null;
   const requestBody = body ? {body: JSON.stringify(body)} : null;
 
   return await fetch("/api" + address, {

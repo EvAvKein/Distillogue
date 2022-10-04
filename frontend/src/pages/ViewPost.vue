@@ -16,6 +16,7 @@
   import {Node} from "../../../shared/objects/post";
   import {jsonFetch} from "../helpers/jsonFetch";
   import {useUser} from "../stores/user";
+  import {getSessionKey} from "../helpers/getSessionKey";
   import postContainer from "../components/posts/view/postContainer_core.vue";
 
   const user = useUser();
@@ -27,7 +28,7 @@
   const post = ref<Node|undefined>(undefined);
   const notif = ref<{message:string, desirability?:boolean}>({message: "Fetching post...", desirability: undefined});
 
-  jsonFetch("GET", "/posts/" + props.postId, null, user.data.authKey)
+  jsonFetch("GET", "/posts/" + props.postId, null, getSessionKey())
   .then((response) => {
     if (response.error) {
       notif.value = {message: response.error.message, desirability: false};

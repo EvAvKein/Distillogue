@@ -1,8 +1,10 @@
 import {defineStore} from "pinia";
-import {User} from "../../../shared/objects/user";
+import {UserData} from "../../../shared/objects/user";
+
+interface userStore {data?:UserData};
 
 export const useUser = defineStore("user", {
   state: () => {
-    return {data: {}} as User;
+    return {data: undefined} as userStore;
   },
 });

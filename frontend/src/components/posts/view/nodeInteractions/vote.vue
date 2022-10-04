@@ -3,7 +3,7 @@
     <button v-if="voters.up"
       aria-label="Upvote"
       :class="'core_contentButton' + (currentVote === 'up' ? ' voted' : '')"
-      @click="vote('up', !upvoters?.includes(user.data.id))"
+      @click="vote('up', !upvoters?.includes(user.data!.id))"
     >
       <img src="../../../../assets/upArrow.svg" alt="Upwards arrow icon"/>
     </button>
@@ -19,7 +19,7 @@
     <button v-if="voters.down"
       aria-label="Downvote"
       :class="'core_contentButton' + (currentVote === 'down' ? ' voted' : '')"
-      @click="vote('down', !downvoters?.includes(user.data.id))"
+      @click="vote('down', !downvoters?.includes(user.data!.id))"
     >
       <img style="transform: rotate(180deg)"
         src="../../../../assets/upArrow.svg" alt="Downwards arrow icon"
@@ -34,6 +34,7 @@
   import {Node, NodeStats} from "../../../../../../shared/objects/post";
   import {jsonFetch} from "../../../../helpers/jsonFetch";
   import {useUser} from "../../../../stores/user";
+  import {getSessionKey} from "../../../../helpers/getSessionKey";
   const user = useUser();
 
   const props = defineProps<{
@@ -62,13 +63,13 @@
 
   type voteDirection = "up"|"down";
   const currentVote = computed<voteDirection|null>(() => {
-    if (upvoters.value && upvoters.value.includes(user.data.id)) return "up";
-    if (downvoters.value && downvoters.value.includes(user.data.id)) return "down";
+    if (upvoters.value && upvoters.value.includes(user.data!.id)) return "up";
+    if (downvoters.value && downvoters.value.includes(user.data!.id)) return "down";
     return null;
   });
 
   async function vote(voteDirection:voteDirection, newVoteStatus:boolean) {
-    if (!user.data.authKey) {
+    if (!getSessionKey()) {
       emit("interactionError", "Must be logged in to vote");
       return;
     };
@@ -79,7 +80,7 @@
         "vote",
         {voteDirection, newVoteStatus}
       ),
-      user.data.authKey
+      getSessionKey()
     );
 
     if (response.error) {
@@ -96,13 +97,13 @@
       : {subject: downvoters, opposite: upvoters};
 
     if (!newVoteStatus) {
-      array.subject.value!.splice(array.subject.value!.indexOf(user.data.id) , 1);
+      array.subject.value!.splice(array.subject.value!.indexOf(user.data!.id) , 1);
       return;
     };
 
-    array.subject.value!.push(user.data.id);
-    if (array.opposite.value && array.opposite.value.includes(user.data.id)) {
-      array.opposite.value.splice(array.opposite.value.indexOf(user.data.id), 1);
+    array.subject.value!.push(user.data!.id);
+    if (array.opposite.value && array.opposite.value.includes(user.data!.id)) {
+      array.opposite.value.splice(array.opposite.value.indexOf(user.data!.id), 1);
     };
   };
 </script>

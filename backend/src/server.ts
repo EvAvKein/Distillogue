@@ -3,13 +3,14 @@ import express from "express";
 import helmetSecurity from "helmet";
 import {ModifyResult} from "mongodb";
 import {FetchResponse, UserPatchRequest, NodeCreationRequest} from "../../shared/objects/api.js";
+import * as userSchemas from "./joi/user.js";
 import * as apiSchemas from "./joi/api.js";
-import {User, UserData, arrOfEditableUserData} from "../../shared/objects/user.js";
+import {User, UserData, arrOfEditableUserData, UserSession, UserPayload} from "../../shared/objects/user.js";
 import {PostConfig, Node, PostSummary} from "../../shared/objects/post.js";
 import {validationSettings} from "./joi/_validationSettings.js";
 import {users, posts} from "./mongo.js";
 import * as timestamp from "../../shared/helpers/timestamps.js";
-import {userByAuthHeader} from "./helpers/userByAuthHeader.js";
+import {sessionKey, userBySession} from "./helpers/reqHeaders.js";
 import {nodePathAsMongoLocators} from "./helpers/mongo/nodePathAsMongoLocators.js";
 import {mongoPostsFilterByAccess} from "./helpers/mongo/mongoPostsFilterByAccess.js";
 import {mongoInsertIfDoesntExist} from "./helpers/mongo/mongoInsertIfDoesntExist.js";
@@ -36,56 +37,29 @@ app.post("/api/users", async (request, response) => {
   const username = validation.value.username;
   const newUser = new User(new UserData(username));
   
-  const dbResponse = await mongoInsertIfDoesntExist(users, newUser, {name: username});
+  const dbResponse = await mongoInsertIfDoesntExist(users, newUser, {"data.name": username});
 
   if (dbResponse.matchedCount) {
     response.json(new FetchResponse(null, "User already exists!"));
     return;
   };
 
-  response.json(new FetchResponse(newUser.data));
+  response.json(new FetchResponse(new UserPayload(newUser.sessions[0].key, newUser.data)));
 });
 
-app.post("/api/users/me", async (request, response) => {
-  let userFilter:{[key:string]:string}|undefined;
-
-  const authKey = request.headers.authorization?.replace("Bearer ", "");
-  if (authKey) {userFilter = {"data.authKey": authKey}};
-  
-  if (!userFilter) {
-    const validation = apiSchemas.UserCreationRequest.validate(request.body, validationSettings); // obviously not an endpoint for user creation, but it currently uses the exact some body structure
-    const username = validation.value?.username;
-    if (username) {userFilter = {"data.name": username}}
-  };
-
-  if (!userFilter) {
-    response.json(new FetchResponse(null, "No sign-in data detected"));
-    return;
-  };
-  
-  const user = await users.findOne(userFilter);
-
-  if (!user) {
-    response.json(new FetchResponse(null, "Failed to fetch user"));
-    return;
-  };
-
-  response.json(new FetchResponse(user.data));
-});
-
-app.patch("/api/users/me", async (request, response) => {
+app.patch("/api/users", async (request, response) => {
   const validation = apiSchemas.UserPatchRequestArray.validate(request.body, validationSettings);
   if (validation.error) {
     response.json(new FetchResponse(null, validation.error.message));
     return;
   };
 
-  const authKey = request.headers.authorization?.replace("Bearer ", "");
+  const session = sessionKey(request);
   const editRequests = validation.value as UserPatchRequest[];
 
   for (let request of editRequests) {
     if (!arrOfEditableUserData.includes(request.dataName)) {
-      response.json(new FetchResponse(null, "Invalid data insertion"));
+      response.json(new FetchResponse(null, "Invalid data insertion request"));
       return;
     };
 
@@ -101,12 +75,69 @@ app.patch("/api/users/me", async (request, response) => {
   });
 
   const dbResponse = await users.updateOne(
-    {"data.authKey": authKey},
+    {sessions: {$elemMatch: {key: session}}},
     {$set: mongoUpdateObject},
   );
 
   if (!dbResponse.modifiedCount) {
     response.json(new FetchResponse(null, "Failed to update database"));
+    return;
+  };
+
+  response.json(new FetchResponse(true));
+});
+
+app.get("/api/sessions", async (request, response) => {
+  const sessionkey = sessionKey(request);
+
+  const user = await users.findOne({sessions: {$elemMatch: {key: sessionkey}}});
+
+  if (!user) {
+    response.json(new FetchResponse(null, "User session not found"));
+    return;
+  };
+
+  response.json(new FetchResponse(user.data));
+});
+
+app.post("/api/sessions", async (request, response) => {
+  const validation = apiSchemas.UserCreationRequest.validate(request.body, validationSettings); // obviously not a user creation request, but they use the same object (for now. next task is working on proper registration)
+
+  if (validation.error) {
+    response.json(new FetchResponse(null, validation.error.message));
+    return;
+  };
+
+  const auth = validation.value;
+  const newSession = new UserSession();
+  
+  const dbResponse = await users.findOneAndUpdate(
+    {"data.name": auth.username}, // temporary, of course. actual auth soon
+    {$addToSet: {sessions: newSession}},
+  );
+
+  if (!dbResponse.value) {
+    response.json(new FetchResponse(null, "User not found"));
+    return;
+  };
+
+  response.json(new FetchResponse(new UserPayload(newSession.key, dbResponse.value.data)));
+});
+
+// endpoint pending a sessions dashboard section which'd make this relevant
+// app.patch("/api/sessions", async (request, response) => {
+// });
+
+app.delete("/api/sessions", async (request, response) => {
+  const session = sessionKey(request);
+
+  const dbResponse = await users.updateOne(
+    {sessions: {$elemMatch: {key: session}}},
+    {$pull: {sessions: {key: session}}}
+  );
+
+  if (!dbResponse.modifiedCount) {
+    response.json(new FetchResponse(null, "Failed to find session"));
     return;
   };
 
@@ -122,7 +153,7 @@ app.get("/api/posts:search?", async (request, response) => {
   };
 
   const regexFilter = new RegExp(sanitizeForRegex(searchString), "i");
-  const user = await userByAuthHeader(request);
+  const user = await userBySession(request);
 
   const topNodesOfPosts = await posts.find<Omit<Node, "replies">>(
     mongoPostsFilterByAccess(
@@ -141,7 +172,7 @@ app.get("/api/posts:search?", async (request, response) => {
 
 app.get("/api/posts/:id", async (request, response) => {
   const postId = request.params.id as Node["id"];
-  const user = await userByAuthHeader(request);
+  const user = await userBySession(request);
 
   const dbResponse = await posts.findOne<Node|null>(
     mongoPostsFilterByAccess(user?.data.id, {id: postId})
@@ -180,7 +211,7 @@ app.post("/api/posts", async (request, response) => {
 
   const postRequest = validation.value;
 
-  const user = await userByAuthHeader(request);
+  const user = await userBySession(request);
   if (!user) {
     response.json(new FetchResponse(null, "User authentication failed"));
     return;
@@ -221,7 +252,7 @@ app.post("/api/posts/interactions", async (request, response) => { // i'm not sa
     return;
   };
 
-  const user = await userByAuthHeader(request);
+  const user = await userBySession(request);
   if (!user) {
     response.json(new FetchResponse(null, "User authentication failed"));
     return;

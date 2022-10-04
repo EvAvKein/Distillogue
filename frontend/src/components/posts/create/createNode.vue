@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent :id="reply ? 'replyMode' : 'postMode'">
+  <form @submit.prevent :id="reply ? 'replyMode' : 'postMode'" v-if="user.data">
     <section id="writeAndConfirmWrapper">
       <section id="textsBox">
         <!-- unmounting when drafts isn't truthy to prevent a console error when logging out while it's mounted -->
@@ -78,6 +78,7 @@
   import {filterByIndex} from "../../../../../shared/helpers/filterByIndexes";
   import {jsonFetch} from "../../../helpers/jsonFetch";
   import {useUser} from "../../../stores/user";
+  import {getSessionKey} from "../../../helpers/getSessionKey";
   import {useRouter} from "vue-router";
   import labelledInput from "../../labelledInput.vue";
   import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
@@ -107,17 +108,18 @@
   const configDrawerOpen = ref<boolean|null>(props.reply ? null : false);
 
   let presetsAtCapacity:ComputedRef<boolean>;
+
   let savePreset:() => void;
   if (!props.reply) {
-    presetsAtCapacity = computed(() => user.data.configPresets?.length >= 3);
+    presetsAtCapacity = computed(() => user.data!.configPresets?.length >= 3);
     savePreset = async () => {  
       if (presetsAtCapacity.value) return;
 
-      const newPresetsState = [...user.data.configPresets, {name: "", config: postConfig.value!}];
+      const newPresetsState = [...user.data!.configPresets, {name: "", config: postConfig.value!}];
 
-      const response = await jsonFetch("PATCH", "/users/me",
+      const response = await jsonFetch("PATCH", "/users",
         [new UserPatchRequest("configPresets", newPresetsState)],
-        user.data.authKey
+        getSessionKey()
       );
 
       if (response.error) {
@@ -126,7 +128,7 @@
         return;
       };
 
-      user.data.configPresets = newPresetsState;
+      user.data!.configPresets = newPresetsState;
     };
 
     const body = document.getElementsByTagName("body")[0];
@@ -153,15 +155,15 @@
     currentDraftIndex.value = data.index;
   };
 
-  const draftsAtCapacity = computed(() => user.data.drafts?.length >= 3);
+  const draftsAtCapacity = computed(() => user.data!.drafts?.length >= 3);
   async function saveDraft() {
       if (draftsAtCapacity.value) return;
 
-      const newDraftsState = [...deepCloneFromReactive(user.data.drafts), {title: nodeTitle.value, body: nodeBody.value, lastEdited: unix()}];
+      const newDraftsState = [...deepCloneFromReactive(user.data!.drafts), {title: nodeTitle.value, body: nodeBody.value, lastEdited: unix()}];
 
-      const response = await jsonFetch("PATCH", "/users/me",
+      const response = await jsonFetch("PATCH", "/users",
         [new UserPatchRequest("drafts", newDraftsState)],
-        user.data.authKey
+        getSessionKey()
       );
 
       if (response.error) {
@@ -170,7 +172,7 @@
         return;
       };
 
-      user.data.drafts = newDraftsState;
+      user.data!.drafts = newDraftsState;
   };
 
   async function submitNode() {
@@ -183,7 +185,7 @@
               props.reply!.nodePath!,
               "reply",
               new NodeCreationRequest(
-                [user.data.id],
+                [user.data!.id],
                 nodeTitle.value,
                 nodeBody.value,
                 currentDraftIndex.value,
@@ -191,7 +193,7 @@
                 props.reply!.nodePath!,
               )
             ),
-            user.data.authKey
+            getSessionKey()
           );
         }
       : () => {
@@ -203,7 +205,7 @@
               currentDraftIndex.value,
               postConfig!.value,
             ),
-            user.data.authKey
+            getSessionKey()
           );
         }
       ;
@@ -216,8 +218,8 @@
     };
 
     if (typeof currentDraftIndex.value === "number") {
-      const newDraftsState = filterByIndex(deepCloneFromReactive(user.data.drafts), currentDraftIndex.value);
-      user.data.drafts = newDraftsState;
+      const newDraftsState = filterByIndex(deepCloneFromReactive(user.data!.drafts), currentDraftIndex.value);
+      user.data!.drafts = newDraftsState;
     };
 
     props.reply
