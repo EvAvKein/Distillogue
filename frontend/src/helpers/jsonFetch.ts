@@ -1,6 +1,6 @@
 import {FetchResponse} from "../../../shared/objects/api";
 
-export async function jsonFetch(method:"GET"|"POST"|"PATCH", address:string, body:object|null, authKey?:string) {
+export async function jsonFetch(method:"GET"|"POST"|"PATCH"|"DELETE", address:string, body:object|null, authKey?:string) {
   const authHeader = authKey ? {Authorization: "Bearer " + authKey} : null;
   const requestBody = body ? {body: JSON.stringify(body)} : null;
 
