@@ -44,6 +44,8 @@ const User = {
       .items(Joi.object({
         title: Post.Node.title,
         body: Post.Node.title,
+        lastEdited: Joi.number()
+          .required(),
       }))
       .max(3),
     configPresets: Joi.object({
