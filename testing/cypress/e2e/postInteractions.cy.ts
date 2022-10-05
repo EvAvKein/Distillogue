@@ -8,7 +8,7 @@ describe("Create access & interactions test posts", () => {
   
   it("Sign up & nav to posting page", () => {
     cy.visit("/");
-    cy.signOn(randomUsername());
+    cy.signUp(randomUsername());
   });
 
   it("Create interactions-testings & access-testing posts", () => {
@@ -46,7 +46,7 @@ describe("Create access & interactions test posts", () => {
 
 describe("Access", () => {
   it("Create account", () => {
-    cy.signOn(randomUsername());
+    cy.signUp(randomUsername());
   });
 
   it("Fail to find inaccessible post through browsing", () => {
@@ -68,7 +68,7 @@ describe("Access", () => {
 describe("Setup for interactions (switch user & open post)", () => {
   it("Switch account", () => {
     cy.get("header").contains("Logout").click();
-    cy.signOn("interactor");
+    cy.signUp("interactor");
   });
 
   it("Open test post", () => {

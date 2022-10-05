@@ -6,7 +6,7 @@ describe("Profile editing", () => {
 
   it("Sign up & enter Dashboard", () => {
     cy.visit("/");
-    cy.signOn(username);
+    cy.signUp(username);
 
     cy.contains("Dashboard").click();
     cy.url().should("include", "/dashboard");

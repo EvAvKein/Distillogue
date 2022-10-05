@@ -8,7 +8,7 @@ describe("Drafts manipulation in dashboard", () => {
   it("Enter Drafts subpage", () => {
     cy.visit("/");
     cy.wait(waitingTimes.pageColdLoad);
-    cy.signOn("drafter" + randomUsername());
+    cy.signUp("drafter" + randomUsername());
     cy.contains("a", "Dashboard").click();
     cy.contains("button", "Drafts").click();
 
@@ -206,7 +206,7 @@ describe("Drafts manipulation in replying modal", () => {
 
   it("Setup (new user, submit new post, enter, open reply modal)", () => {
     cy.contains("Logout").click();
-    cy.signOn("Other" + randomUsername());
+    cy.signUp("Other" + randomUsername());
 
     cy.submitPost(
       replyDraftTitle,

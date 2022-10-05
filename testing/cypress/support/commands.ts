@@ -35,22 +35,27 @@ Cypress.Commands.overwrite('type', (originalFn:(subject:string, text:Partial<Cyp
 })
 
 Cypress.Commands.addAll({
-  signOn(name:string) {
+  signUp(name:string) {
     cy.visit("/join");
 
     cy.get("form").should("contain.text", "Sign Up");
     cy.get("input").type(name);
     cy.contains("Continue").click();
-    cy.wait(waitingTimes.pageTransition);
 
-    cy.get("body").then(($body) => {
-      if ($body.get()[0].querySelector("form .notification.negative")) {
-        cy.contains("Switch to sign-in").click();
-        cy.contains("Continue").click();
-      };
-    });
-    cy.url().should("include", "/browse");
     cy.wait(waitingTimes.pageTransition);
+    cy.url().should("include", "/browse");
+  },
+
+  signIn(name:string) {
+    cy.visit("/join");
+
+    cy.contains("Switch to sign-in").click();
+    cy.get("form").should("contain.text", "Sign In");
+    cy.get("input").type(name);
+    cy.contains("Continue").click();
+    
+    cy.wait(waitingTimes.pageTransition);
+    cy.url().should("include", "/browse");
   },
 
   submitPost(title:string, body:string, callbackAffectingConfig?:() => void) {
