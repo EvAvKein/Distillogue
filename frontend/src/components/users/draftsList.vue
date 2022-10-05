@@ -22,12 +22,12 @@
     editingModeDraftsState?:UserData["drafts"];
   }>();
 
-  const drafts = ref(props.editingModeDraftsState || user.data.drafts);
+  const drafts = ref(props.editingModeDraftsState || user.data!.drafts);
   const emit = defineEmits(["draftSelected"]);
 
   if (!props.editingModeDraftsState) {
-    watch(user.data, () => {
-      drafts.value = user.data.drafts;
+    watch(user.data!, () => {
+      drafts.value = user.data!.drafts;
     });
   };
 </script>

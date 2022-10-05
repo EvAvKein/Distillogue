@@ -19,7 +19,7 @@
   const emit = defineEmits(["newState"]);
 
   const inputText = reactive({ // error fields are prep for clientside data validation, haven't implemented any checks yet since the limits haven't been decided on (as of 18.6.22)
-    name: {value: user.data.name, error: ""},
+    name: {value: user.data!.name, error: ""},
   } as const);
 
   const inputKeys = Object.keys(inputText) as (keyof typeof inputText)[];

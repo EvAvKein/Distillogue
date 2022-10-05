@@ -61,7 +61,7 @@
   import notification from "../../notification.vue";
   import labelledInput from "../../labelledInput.vue";
   const user = useUser();
-  const draftsState = ref(deepCloneFromReactive(user.data.drafts))
+  const draftsState = ref(deepCloneFromReactive(user.data!.drafts))
   const maxDrafts = 3;
 
   const currentDraft = ref<UserData["drafts"][number]|null>(null);

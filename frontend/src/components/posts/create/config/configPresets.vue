@@ -1,7 +1,7 @@
 <template>
   <section>
     <TransitionGroup name="collapse">
-      <button v-for="(preset, index) in defaultPresets.concat(user.data.configPresets)"
+      <button v-for="(preset, index) in defaultPresets.concat(user.data!.configPresets)"
         :key="preset.name + index"
         type="button"
         @click="emitConfigChange(preset)"

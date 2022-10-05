@@ -63,7 +63,7 @@
   import labelledInput from "../../labelledInput.vue";
   import editCurrentConfig from "../../posts/create/config/editConfig.vue";
   const user = useUser();
-  const presetsState = ref(deepCloneFromReactive(user.data.configPresets));
+  const presetsState = ref(deepCloneFromReactive(user.data!.configPresets));
   const maxPresets = 3;
 
   const currentPreset = ref<UserData["configPresets"][number]|null>(null);
