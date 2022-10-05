@@ -27,7 +27,7 @@
   const replyData = inject("replyData") as Ref<{nodePath:Node["id"][]|null}>;
 
   function reply() {
-    if (!user.data.id) {
+    if (!user.data) {
       emit("interactionError", "Must be logged in to vote");
       return;
     };
