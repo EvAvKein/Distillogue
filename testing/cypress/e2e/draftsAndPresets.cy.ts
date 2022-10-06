@@ -5,10 +5,11 @@ let title = "Draft " + randomNodeTitle();
 let body = randomNodeBody();
 
 describe("Drafts manipulation in dashboard", () => {
+  it("Setup (sign-up)", () => {
+    cy.signUp("drafter" + randomUsername())
+  });
+
   it("Enter Drafts subpage", () => {
-    cy.visit("/");
-    cy.wait(waitingTimes.pageColdLoad);
-    cy.signUp("drafter" + randomUsername());
     cy.contains("a", "Dashboard").click();
     cy.contains("button", "Drafts").click();
 

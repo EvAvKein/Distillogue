@@ -5,9 +5,7 @@ const postTitle = randomNodeTitle();
 const postBody = randomNodeBody();
 let postUrl = "";
 describe("Create access & interactions test posts", () => {
-  
-  it("Sign up & nav to posting page", () => {
-    cy.visit("/");
+  it("Setup (sign-up)", () => {
     cy.signUp(randomUsername());
   });
 

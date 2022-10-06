@@ -4,15 +4,10 @@ import {randomUsername} from "../helpers/randomAlphanumString";
 describe("Profile editing", () => {
   let username = "Profile" + randomUsername();
 
-  it("Sign up & enter Dashboard", () => {
-    cy.visit("/");
+  it("Setup (sign-up & go to Dashboard)", () => {
     cy.signUp(username);
-
     cy.contains("Dashboard").click();
     cy.url().should("include", "/dashboard");
-    
-    cy.get("#dashboardSubmit").should("not.be.visible");
-    validateProfileData();
   });
 
   function validateProfileData() {
@@ -20,6 +15,7 @@ describe("Profile editing", () => {
   };
   
   it("Edit and refresh to cancel", () => {
+    cy.get("#dashboardSubmit").should("not.be.visible");
     validateProfileData();
 
     cy.contains("Name").parent().find("input").clear().type("Temporary change!");
