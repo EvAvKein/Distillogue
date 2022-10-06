@@ -64,9 +64,8 @@ For any questions, comment under a relevant issue or create a new issue.
 ## Maintainers
 
 Eve Aviv Keinan  
-Mastodon: [mstdn.social/@evavkein](https://mstdn.social/@EvAvKein)  
 GitHub: [github.com/evavkein](https://github.com/EvAvKein)  
-Email:  contact@evavkein.com
+Email:  evavkein@gmail.com
 
 ---
 
