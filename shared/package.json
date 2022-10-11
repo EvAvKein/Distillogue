@@ -1,7 +1,7 @@
 {
   "type": "module",
   "dependencies": {
-    "uuid": "^8.3.2"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/uuid": "^8.3.4"

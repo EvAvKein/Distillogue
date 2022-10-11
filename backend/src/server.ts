@@ -338,7 +338,7 @@ app.post("/api/posts/interactions", async (request, response) => { // i'm not sa
   if (subjectPost?.config!.timestamps?.interacted) {
     await posts.updateOne( // this would be best implemented as an extra modification of each interaction (to keep the interaction itself and this as a singular atomic update), but using conditionals to check if the property exists before updating requires using mongo's aggregation pipeline syntax which is (seemingly) frustratingly limited in assignment commands and is much more verbose & opaque. for the current stage of the project, i.e very early, there's no need to ruin my/the readability of mongo commands for atomic operations' sake
       mongoPostsFilterByAccess(user.data.id, {id: postId}),
-      {$set: {[mongoPath.updatePath + "stats.timestamps.interacted"]: timestamp.unix()}},
+      {$set: ({[mongoPath.updatePath + "stats.timestamps.interacted"]: timestamp.unix()} as unknown as {["stats.timestamps.interacted"]:number})}, // if you figure out the proper way to type the generated mongo path (in the module's file), i.e in a way that complies with the mongo types for the document(s), that contribution would be appreciated
       {arrayFilters: mongoPath.arrayFiltersOption}
     );
   };
