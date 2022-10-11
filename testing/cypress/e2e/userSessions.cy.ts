@@ -44,4 +44,8 @@ describe("User session CRUD", () => {
         .to.not.equal(sessionKey);
     });
   });
+
+  it("View & update session in dashboard (TODO pending dashboard section)", () => {
+    
+  });
 });
