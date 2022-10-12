@@ -22,11 +22,11 @@ class UserCreationRequest {
   };
 };
 
-class UserPatchRequest {
-  dataName:editableUserData;
-  newValue:any;
+class UserPatchRequest<dataType extends editableUserData> {
+  dataName:dataType;
+  newValue:UserData[dataType];
 
-  constructor(dataName:UserPatchRequest["dataName"], newValue:UserPatchRequest["newValue"]) {
+  constructor(dataName:UserPatchRequest<dataType>["dataName"], newValue:UserPatchRequest<dataType>["newValue"]) {
     this.dataName = dataName;
     this.newValue = newValue;
   };

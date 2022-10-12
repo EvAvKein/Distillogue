@@ -13,6 +13,7 @@
   import {reactive, watch} from "vue";
   import {useUser} from "../../../stores/user";
   import {UserPatchRequest} from "../../../../../shared/objects/api";
+  import {editableUserData} from "../../../../../shared/objects/user";
   import labelledInput from "../../labelledInput.vue";
   const user = useUser();
 
@@ -25,7 +26,7 @@
   const inputKeys = Object.keys(inputText) as (keyof typeof inputText)[];
 
   watch(inputText, () => {
-    const states = [] as UserPatchRequest[];
+    const states = [] as UserPatchRequest<editableUserData>[];
 
     inputKeys.forEach((inputKey) => {
       states.push(new UserPatchRequest(inputKey, inputText[inputKey].value));

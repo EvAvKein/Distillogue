@@ -58,6 +58,7 @@
   import {getSessionKey} from "../../helpers/getSessionKey";
   import {jsonFetch} from "../../helpers/jsonFetch";
   import {UserPatchRequest} from "../../../../shared/objects/api";
+  import {editableUserData} from "../../../../shared/objects/user";
   import {deepCloneFromReactive} from "../../helpers/deepCloneFromReactive";
   import notification from "../notification.vue";
   import profileEditor from "./dashboardSections/profileEditor.vue";
@@ -68,10 +69,10 @@
   type pageName = "profile"|"drafts"|"presets";
   const currentPage = ref<pageName>("profile");
 
-  const changes = ref<UserPatchRequest[]>([]);
+  const changes = ref<UserPatchRequest<editableUserData>[]>([]);
   const submitNotif = reactive({text: "", style: undefined as boolean|undefined});
 
-  function updateChangesByNewState(newStates:UserPatchRequest[]) {
+  function updateChangesByNewState(newStates:UserPatchRequest<editableUserData>[]) {
     newStates.forEach((state) => {
       const existingChangeIndex = changes.value.findIndex((change) => {return change.dataName === state.dataName});
 

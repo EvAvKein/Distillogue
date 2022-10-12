@@ -1,14 +1,14 @@
 import Joi from "joi";
 import * as Class from "../../../shared/objects/api.js";
 import * as SharedSchema from "./_shared.js"
-import {arrOfEditableUserData} from "../../../shared/objects/user.js";
+import {editableUserData, arrOfEditableUserData} from "../../../shared/objects/user.js";
 import {arrOfInteractionTypes} from "../../../shared/objects/api.js";
 
 const UserCreationRequest = Joi.object<Class.UserCreationRequest>({
   username: SharedSchema.User.UserData.extract("name"),
 }).required();
 
-const UserPatchRequest = Joi.object<Class.UserPatchRequest>({
+const UserPatchRequest = Joi.object<Class.UserPatchRequest<editableUserData>>({
   dataName: Joi.valid(...arrOfEditableUserData)
     .required(),
   newValue: Joi
@@ -24,7 +24,7 @@ const UserPatchRequest = Joi.object<Class.UserPatchRequest>({
     })
 }).required();
 
-const UserPatchRequestArray = Joi.array()
+const UserPatchRequestArray = Joi.array<Class.UserPatchRequest<editableUserData>[]>()
 // currently (joi v17.5.0) it doesn't seem possible to properly type this. i'd submit an issue asking about it (because disccussions aren't available for the repo), but i already have a different one there which is the second latest (as of 17.9.22) and don't wanna be too spammy
   .required()
   .min(1)

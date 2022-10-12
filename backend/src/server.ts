@@ -55,7 +55,7 @@ app.patch("/api/users", async (request, response) => {
   };
 
   const session = sessionKey(request);
-  const editRequests = validation.value as UserPatchRequest[];
+  const editRequests = validation.value;
 
   for (let request of editRequests) {
     if (!arrOfEditableUserData.includes(request.dataName)) {
@@ -64,7 +64,7 @@ app.patch("/api/users", async (request, response) => {
     };
 
     if (request.dataName === "configPresets" && (request.newValue as PostConfig).access) {
-      delete request.newValue.access;
+      delete (request.newValue as PostConfig).access;
     };
   };
 
