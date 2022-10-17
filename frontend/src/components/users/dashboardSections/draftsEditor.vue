@@ -53,6 +53,7 @@
 <script setup lang="ts">
   import {ref, toRaw} from "vue";
   import {useUser} from "../../../stores/user";
+  import {useDashboardEdits} from "../../../stores/dashboardEdits";
   import {UserData} from "../../../../../shared/objects/user";
   import {UserPatchRequest} from "../../../../../shared/objects/api";
   import {unix as unixStamp} from "../../../../../shared/helpers/timestamps";
@@ -61,7 +62,9 @@
   import notification from "../../notification.vue";
   import labelledInput from "../../labelledInput.vue";
   const user = useUser();
-  const draftsState = ref(deepCloneFromReactive(user.data!.drafts))
+  const prevChanges = useDashboardEdits().ofData("drafts");
+
+  const draftsState = ref(prevChanges || deepCloneFromReactive(user.data!.drafts))
   const maxDrafts = 3;
 
   const currentDraft = ref<UserData["drafts"][number]|null>(null);

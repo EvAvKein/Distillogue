@@ -55,6 +55,7 @@
 <script setup lang="ts">
   import {ref, reactive} from "vue";
   import {useUser} from "../../stores/user";
+  import {useDashboardEdits} from "../../stores/dashboardEdits";
   import {getSessionKey} from "../../helpers/getSessionKey";
   import {jsonFetch} from "../../helpers/jsonFetch";
   import {UserPatchRequest} from "../../../../shared/objects/api";
@@ -65,18 +66,17 @@
   import draftsEditor from "./dashboardSections/draftsEditor.vue";
   import presetsEditor from "./dashboardSections/configPresetsEditor.vue";
   const user = useUser();
+  const changes = useDashboardEdits().edits;
 
   type pageName = "profile"|"drafts"|"presets";
   const currentPage = ref<pageName>("profile");
-
-  const changes = ref<UserPatchRequest<editableUserData>[]>([]);
   const submitNotif = reactive({text: "", style: undefined as boolean|undefined});
 
   function updateChangesByNewState(newStates:UserPatchRequest<editableUserData>[]) {
     newStates.forEach((state) => {
-      const existingChangeIndex = changes.value.findIndex((change) => {return change.dataName === state.dataName});
-
+      const existingChangeIndex = changes.findIndex((change) => change.dataName === state.dataName);
       const prevChangeExists = existingChangeIndex === -1 ? false : true;
+      
       const inputMatchesUserData = typeof state.newValue === "object" && state.newValue !== null
         ? JSON.stringify(state.newValue) === JSON.stringify(user.data![state.dataName]) // flawed (as it depends on the contents of both to be in the same sequence), but it's *good enough* as of the current stage of dev (june 2022)
         : state.newValue === user.data![state.dataName]
@@ -87,13 +87,13 @@
       };
 
       if (!prevChangeExists) {
-        changes.value.push(state);
+        changes.push(state);
         return;
       };
 
       inputMatchesUserData
-        ? changes.value.splice(existingChangeIndex, 1)
-        : changes.value[existingChangeIndex].newValue = state.newValue
+        ? changes.splice(existingChangeIndex, 1)
+        : changes[existingChangeIndex].newValue = state.newValue
     });
   };
 
@@ -102,7 +102,7 @@
     submitNotif.style = undefined;
 
     const changesResponse = await jsonFetch("PATCH", "/users",
-      changes.value,
+      changes,
       getSessionKey()
     );
 
@@ -114,10 +114,10 @@
 
     submitNotif.text = "Changes saved!";
     submitNotif.style = true;
-    changes.value.forEach((change) => {
+    changes.forEach((change) => {
       (user.data![change.dataName] as any) = deepCloneFromReactive(change).newValue; // considering the circumstances, i dont think coercing an "any" here is actually harmful
     });
-    changes.value = [];
+    changes.length = 0;
   };
 </script>
 

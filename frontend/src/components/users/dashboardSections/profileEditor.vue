@@ -12,15 +12,17 @@
 <script setup lang="ts">
   import {reactive, watch} from "vue";
   import {useUser} from "../../../stores/user";
+  import {useDashboardEdits} from "../../../stores/dashboardEdits";
   import {UserPatchRequest} from "../../../../../shared/objects/api";
   import {editableUserData} from "../../../../../shared/objects/user";
   import labelledInput from "../../labelledInput.vue";
   const user = useUser();
+  const prevChanges = useDashboardEdits().ofData("name");
 
   const emit = defineEmits(["newState"]);
 
   const inputText = reactive({ // error fields are prep for clientside data validation, haven't implemented any checks yet since the limits haven't been decided on (as of 18.6.22)
-    name: {value: user.data!.name, error: ""},
+    name: {value: prevChanges || user.data!.name, error: ""},
   } as const);
 
   const inputKeys = Object.keys(inputText) as (keyof typeof inputText)[];

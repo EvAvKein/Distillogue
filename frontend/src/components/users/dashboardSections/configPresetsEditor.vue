@@ -56,6 +56,7 @@
 <script setup lang="ts">
   import {ref, toRaw} from "vue";
   import {useUser} from "../../../stores/user";
+  import {useDashboardEdits} from "../../../stores/dashboardEdits";
   import {UserPatchRequest} from "../../../../../shared/objects/api";
   import {UserData} from "../../../../../shared/objects/user";
   import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
@@ -63,7 +64,9 @@
   import labelledInput from "../../labelledInput.vue";
   import editCurrentConfig from "../../posts/create/config/editConfig.vue";
   const user = useUser();
-  const presetsState = ref(deepCloneFromReactive(user.data!.configPresets));
+  const prevChanges = useDashboardEdits().ofData("configPresets");
+
+  const presetsState = ref(prevChanges || deepCloneFromReactive(user.data!.configPresets));
   const maxPresets = 3;
 
   const currentPreset = ref<UserData["configPresets"][number]|null>(null);
