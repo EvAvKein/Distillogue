@@ -1,48 +1,57 @@
 Remaining tasks before each stage of the project:
 
-### Proof-of-concept deployment:
-* Flagship/core features:
-  * Identities system (already planned)
-  * Mindmap layout using D3.js (name TBD)
-  * More config options (many already planned, specifics TBA and/or TBD)
-  * Add feedback form
-* Security:
-  * Proper registration/authentication (likely only via third parties)
-  * Probably others (i.e actively look for more)
-* Regulation:
-  * Legal obligations (there's likely a comprehensive resource on this)
+<hr>
+
+## Pre-alpha/for-junior-portfolio's-sake deployment
+* ### Resources & Transparency:
+  * Basic front page (e.g pre-alpha disclaimers)
+  * Basic about page
+  * Contact info
+* ### Regulation:
+  * Basic legal obligations
   * Placeholder terms-of-service/code-of-conduct
-* Optimization:
-  * Look into updating "interacted" timestamps within the same database operation as the interaction updates (supposedly with MongoDB's aggregation pipeline)
+* ### Optimization:
+  * Update "interacted" timestamps within the same database operation as the interaction updates (supposedly with MongoDB's aggregation pipeline)
   * Complete the draftsAndPresets test by finishing the latter portion
 
-### Release-candidate deployment
-* All proof-of-concept tasks
-* Flagship/core features:
-  * Another layout? (ideas welcome)
-  * More config options (many already planned, specifics TBA and/or TBD)
+## Proof-of-concept deployment
+* ### All of the above
+* ### Flagship/core features:
+  * Identities system (already planned)
+  * Mindmap layout using D3.js (name TBD), and potentially another? (ideas welcome)
+  * More post config options (many already planned, specifics TBA and/or TBD)
   * User & user-to-user functionalities (latter added very cautiously)
   * Others? (ideas welcome)
-* Security:
-  * DDoS mitigation & maybe a CDN (consider Cloudflare)
-* Regulation:
+* ### Regulation:
   * Platform moderation
   * User-to-user moderation (post owner & any appointed)
-  * Concise terms-of-service (and potentially code-of-conduct)
-* Resources & Transparency:
-  * Front page
-  * Footer (with contact details at least)
-  * Publicly display *all* aggregate data collected e.g weeky/monthly active users, configs by popularity
+* ### Resources & Transparency:
+  * Publicly display any and all aggregate data collected e.g weeky/monthly active users, configs by popularity
   * A 'why'/core-principles/core-values/project-philosophy page
-  * Other ideas (especially transparency-related) welcome!
-* Accessibility:
-  * Aria attributes & accessibility tree checkup (need to find free, toggleable, configurable software for testing. devtools accessibility tree is insufficient)
-* Design makeover:
+  * Contact page (e.g feedback/contact form)
+* ### Design makeover:
   * General UI style
   * Color palette
   * Long-term logo & icons (possibly commissioned/paid)
-* Ease of Contributing:
+* ### Accessibility:
+  * Aria attributes & accessibility tree checkup (need to find free, toggleable, configurable software for testing. devtools accessibility tree is insufficient)
+* ### Ease of Contributing:
   * Prettier (local & CI)
   * Dockerized dev setup (see https://github.com/EvAvKein/Distillogue/issues/1)
-* Optimization:
-  * Client-side, context-specific input validation
+<hr>
+
+## Release-candidate deployment
+* ### All of the above
+* ### Security:
+  * Proper registration/authentication (likely only via third parties)
+  * DDoS mitigation & maybe a CDN (consider Cloudflare)
+* ### Regulation:
+  * Comprehensive legal obligations
+  * Concise terms-of-service (and potentially code-of-conduct)
+* ### Resources & Transparency:
+  * Proper front page
+  * Proper about page
+  * Concise footer
+  * Other ideas (especially transparency-related) welcome!
+* ### Optimization:
+  * Client-side input validation (for preemptive human-readable errors)
