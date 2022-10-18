@@ -1,6 +1,6 @@
 <template>
   <section>
-    <transition name="collapse">
+    <transition-group name="collapse">
       <button v-for="(preset, index) in presetsState"
         type="button"
         class="presetButton core_backgroundButton"
@@ -8,7 +8,7 @@
       >
         <p>{{preset.name || "[No Title]"}}</p>
       </button>
-    </transition>
+    </transition-group>
 
     <transition name="collapse">
       <button v-if="presetsState.length < maxPresets"
