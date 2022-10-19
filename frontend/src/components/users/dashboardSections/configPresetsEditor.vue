@@ -2,6 +2,7 @@
   <section>
     <transition-group name="collapse">
       <button v-for="(preset, index) in presetsState"
+        :key="index"
         type="button"
         class="presetButton core_backgroundButton"
         @click="() => {selectPreset(index)}"
