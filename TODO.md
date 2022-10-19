@@ -3,6 +3,8 @@ Remaining tasks before each stage of the project:
 <hr>
 
 ## Pre-alpha/for-junior-portfolio's-sake deployment
+* ### Infrastructure
+  * Docker network setup for prod (nginx, TLS)
 * ### Resources & Transparency:
   * Basic front page (e.g pre-alpha disclaimers)
   * Basic about page
@@ -52,6 +54,7 @@ Remaining tasks before each stage of the project:
   * Proper front page
   * Proper about page
   * Concise footer
+  * Versioned API
   * Other ideas (especially transparency-related) welcome!
 * ### Optimization:
   * Client-side input validation (for preemptive human-readable errors)
