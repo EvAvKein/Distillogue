@@ -1,19 +1,18 @@
 <template>
-  <section>
-    <customDetails
-      :openByDefault="openByDefault"
-    >
-      <template v-slot:summary>
-        <span>{{title}}</span>
-      </template>
+  <customDetails
+    :openByDefault="openByDefault"
+    class="configCategory"
+  >
+    <template v-slot:summary>
+      <span>{{title}}</span>
+    </template>
 
-      <template #content>
-        <div>
-          <slot></slot>
-        </div>
-      </template>
-    </customDetails>
-  </section>
+    <template #content>
+      <div>
+        <slot></slot>
+      </div>
+    </template>
+  </customDetails>
 </template>
 
 <script setup lang="ts">
@@ -26,7 +25,7 @@
 </script>
 
 <style scoped>
-  section {
+  .configCategory {
     height: fit-content;
     width: 100%;
     white-space: nowrap;
