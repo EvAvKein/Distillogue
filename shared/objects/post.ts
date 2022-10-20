@@ -8,7 +8,6 @@ class PostConfig {
     public?:true;
   };
   timestamps?: {
-    posted?:true,
     interacted?:true,
   };
   votes?:{
