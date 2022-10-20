@@ -1,18 +1,21 @@
 <template>
   <section>
     <TransitionGroup name="collapse">
-      <button v-for="(preset, index) in defaultPresets.concat(user.data!.configPresets)"
-        :key="preset.name + index"
+      <button v-for="(preset, index) in defaultPresets"
+        :key="preset.name + 'default' + index"
         type="button"
         @click="emitConfigChange(preset)"
       >
-        <img v-if="defaultPresetNames.includes(preset.name)"
-          src="../../../../assets/defaultConfig.svg" alt="Icon of cogwheel inside a browser window"
-        />
-          <!-- vite can't handle ternary src, at least currently (2.7.2) -->
-        <img v-else
-          src="../../../../assets/customConfig.svg" alt="Icon of cogwheel beside a pencil"
-        />
+        <img src="../../../../assets/defaultConfig.svg" alt="Icon of cogwheel inside a browser window"/>
+        <span>{{preset.name}}</span>
+      </button>
+
+      <button v-for="(preset, index) in user.data!.configPresets"
+        :key="preset.name + 'custom' + index"
+        type="button"
+        @click="emitConfigChange(preset)"
+      >
+        <img src="../../../../assets/customConfig.svg" alt="Icon of cogwheel beside a pencil"/>
         <span>{{preset.name || "[No Title, Edit in Dashboard]"}}</span>
       </button>
     </TransitionGroup>
