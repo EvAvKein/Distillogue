@@ -162,10 +162,6 @@
     background-color: transparent;
   }
 
-  nav button[inert] {
-    opacity: 0.8;
-  }
-
   #dashboardPage {grid-area: page}
 
   @media (min-width: 30em) {

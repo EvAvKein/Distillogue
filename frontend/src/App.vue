@@ -104,6 +104,9 @@
   .core_backgroundButton:active {
     background-color: var(--highlightColor);
   }
+  .core_backgroundButton[inert] {
+    background-color: var(--textSubColor);
+  }
 
   .core_contentButton {
     color: inherit;
@@ -126,6 +129,12 @@
   }
   .core_contentButton:active img {
     filter: var(--filterToHighlightColor);
+  }
+  .core_contentButton[inert] {
+    color: var(--textSubColor);
+  }
+  .core_contentButton[inert] img {
+    filter: var(--filterToTextSubColor);
   }
 
   .core_crudeInput {
