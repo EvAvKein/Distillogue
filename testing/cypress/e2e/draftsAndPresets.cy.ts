@@ -1,8 +1,9 @@
 import {waitingTimes} from "../helpers/waitingTimes";
 import {randomUsername, randomNodeTitle, randomNodeBody} from "../helpers/randomAlphanumString";
+import {PostConfig} from "../../../shared/objects/post";
 
-let title = "Draft " + randomNodeTitle();
-let body = randomNodeBody();
+let draftTitle = "Draft " + randomNodeTitle();
+let draftBody = randomNodeBody();
 
 describe("Drafts manipulation in dashboard", () => {
   it("Setup (sign-up)", () => {
@@ -42,18 +43,18 @@ describe("Drafts manipulation in dashboard", () => {
   };
 
   it("Create, write, and save draft", () => {
-    createAndValidateDraft(title, body);
+    createAndValidateDraft(draftTitle, draftBody);
   });
 
   it("Edit existing draft", () => {
-    title = "Different " + title;
-    body = "Different " + body;
+    draftTitle = "Different " + draftTitle;
+    draftBody = "Different " + draftBody;
 
-    cy.contains("label", "Title").click().focused().clear().type(title);
-    cy.contains("button", title);
+    cy.contains("label", "Title").click().focused().clear().type(draftTitle);
+    cy.contains("button", draftTitle);
     cy.contains("button", "Save");
 
-    cy.contains("label", "Body").click().focused().clear().type(body);
+    cy.contains("label", "Body").click().focused().clear().type(draftBody);
     cy.contains("button", "Save").click();
     cy.wait(waitingTimes.httpRequest);
     cy.get(".notification.positive").should("contain.text", "Changes saved!");
@@ -61,22 +62,22 @@ describe("Drafts manipulation in dashboard", () => {
     cy.reload();
     cy.wait(waitingTimes.pageColdLoad);
     cy.contains("button", "Drafts").click();
-    cy.contains("button", title).click();
-    cy.contains("label", "Title").click().focused().should("have.value", title);
-    cy.contains("label", "Body").click().focused().should("have.value", body);
+    cy.contains("button", draftTitle).click();
+    cy.contains("label", "Title").click().focused().should("have.value", draftTitle);
+    cy.contains("label", "Body").click().focused().should("have.value", draftBody);
   });
 
   it("Create drafts to capacity", () => {
-    createAndValidateDraft("Second " + title, "Second " + body);
-    createAndValidateDraft("Third " + title, "Third " + body);
+    createAndValidateDraft("Second " + draftTitle, "Second " + draftBody);
+    createAndValidateDraft("Third " + draftTitle, "Third " + draftBody);
     cy.get("main").should("not.contain.text", "New draft");
     cy.get(".notification").should("contain.text", "Drafts at capacity, consider triage");
   });
 
   it("Delete drafts", () => {
-    cy.contains("button", "Second " + title).click();
+    cy.contains("button", "Second " + draftTitle).click();
     cy.contains("button", "Delete").click();
-    cy.get("main").should("not.contain.text", "Second " + title);
+    cy.get("main").should("not.contain.text", "Second " + draftTitle);
     cy.contains("button", "Save").click();
     cy.wait(waitingTimes.httpRequest);
     cy.get(".notification.positive").should("contain.text", "Changes saved!");
@@ -84,16 +85,16 @@ describe("Drafts manipulation in dashboard", () => {
     cy.reload();
     cy.wait(waitingTimes.pageColdLoad);
     cy.contains("button", "Drafts").click();
-    cy.contains("button", title);
-    cy.get("main").should("not.contain.text", "Second " + title);
-    cy.contains("button", "Third " + title);
+    cy.contains("button", draftTitle);
+    cy.get("main").should("not.contain.text", "Second " + draftTitle);
+    cy.contains("button", "Third " + draftTitle);
 
-    cy.contains("button", "Third " + title).click();
+    cy.contains("button", "Third " + draftTitle).click();
     cy.contains("button", "Delete").click();
-    cy.get("main").should("not.contain.text", "Third " + title);
-    cy.contains("button", title).click();
+    cy.get("main").should("not.contain.text", "Third " + draftTitle);
+    cy.contains("button", draftTitle).click();
     cy.contains("Delete").click();
-    cy.get("main").should("not.contain.text", title);
+    cy.get("main").should("not.contain.text", draftTitle);
     cy.contains("button", "Save").click();
     cy.wait(waitingTimes.httpRequest);
     cy.get(".notification.positive").should("contain.text", "Changes saved!");
@@ -101,7 +102,7 @@ describe("Drafts manipulation in dashboard", () => {
     cy.reload();
     cy.wait(waitingTimes.pageColdLoad);
     cy.contains("button", "Drafts").click();
-    cy.get("main").should("not.contain.text", title);
+    cy.get("main").should("not.contain.text", draftTitle);
   });
 });
 
@@ -118,35 +119,35 @@ function testDraftsFunctionalities(submitName:"Post"|"Reply", recoverFromRefresh
     recoverFromRefresh();
     cy.get("body").should("not.contain.text", "Drafts");
 
-    saveDraft("First " + title, "First " + body);
+    saveDraft("First " + draftTitle, "First " + draftBody);
 
     cy.reload();
     recoverFromRefresh();
     cy.contains("button", "Drafts")
-      .parent().contains("button", "First " + title);
+      .parent().contains("button", "First " + draftTitle);
   });
 
   it("Select and preserve saved draft", () => {
     cy.contains("button", "Drafts").click()
-      .parent().contains("button", "First " + title).click();
+      .parent().contains("button", "First " + draftTitle).click();
 
-    cy.contains("label", "Title").click().focused().should("have.value", "First " + title);
-    cy.contains("label", "Body").click().focused().should("have.value", "First " + body);
+    cy.contains("label", "Title").click().focused().should("have.value", "First " + draftTitle);
+    cy.contains("label", "Body").click().focused().should("have.value", "First " + draftBody);
     cy.contains("button", submitName).should("have.text", submitName + " (& delete draft 1)");
     cy.contains("button", "Drafts")
       .parent().contains("button", "Preserve chosen draft").click();
 
     cy.contains("button", "Drafts")
-      .parent().contains("button", "First " + title)
+      .parent().contains("button", "First " + draftTitle)
       .parent().parent().should("not.contain.text", "Preserve chosen draft");
-    cy.contains("label", "Title").click().focused().should("have.value", "First " + title);
-    cy.contains("label", "Body").click().focused().should("have.value", "First " + body);
+    cy.contains("label", "Title").click().focused().should("have.value", "First " + draftTitle);
+    cy.contains("label", "Body").click().focused().should("have.value", "First " + draftBody);
     cy.contains("button", submitName).should("have.text", submitName);
   });
 
   it("Save drafts to capacity", () => {
-    saveDraft("Second " + title, "Second " + body);
-    saveDraft("Third " + title, "Third " + body);
+    saveDraft("Second " + draftTitle, "Second " + draftBody);
+    saveDraft("Third " + draftTitle, "Third " + draftBody);
 
     cy.get("main").should("not.contain.text", "Save draft");
     cy.contains("button", "Drafts at capacity").should("have.attr", "inert");
@@ -159,30 +160,30 @@ function testDraftsFunctionalities(submitName:"Post"|"Reply", recoverFromRefresh
 
   it("Post and destroy draft", () => {
     cy.contains("button", "Drafts").click()
-      .parent().contains("button", "Second " + title).click();
+      .parent().contains("button", "Second " + draftTitle).click();
     cy.get("form").contains("button", submitName + " (& delete draft 2)").click();
 
     recoverFromSubmit();
-    cy.get("form").contains("button", "Drafts").parent().should("not.contain.text", "Second " + title);
+    cy.get("form").contains("button", "Drafts").parent().should("not.contain.text", "Second " + draftTitle);
   });
 
   it("Post and preserve draft", () => {
     cy.contains("button", "Drafts").click()
-      .parent().contains("button", "Third " + title).click()
+      .parent().contains("button", "Third " + draftTitle).click()
       .parent().parent().contains("button", "Preserve chosen draft").click();
     cy.get("form").contains("button", submitName).click();
 
     recoverFromSubmit();
-    cy.contains("button", "Drafts").parent().contains("button", "Third " + title);
+    cy.contains("button", "Drafts").parent().contains("button", "Third " + draftTitle);
   });
 
   it("Modify, post, and destroy draft", () => {
     cy.contains("button", "Drafts").click()
-      .parent().contains("button", "First " + title).click();
+      .parent().contains("button", "First " + draftTitle).click();
     cy.get("form").contains("button", submitName + " (& delete draft 1)").click();
 
     recoverFromSubmit();
-    cy.get("form").contains("button", "Drafts").parent().should("not.contain.text", "First " + title);
+    cy.get("form").contains("button", "Drafts").parent().should("not.contain.text", "First " + draftTitle);
   });
 };
 
@@ -226,4 +227,172 @@ describe("Drafts manipulation in replying modal", () => {
       cy.get("button[aria-label='Reply']").first().click();
     }
   );
+});
+
+function expandAllConfigCategories() {
+  cy.get("#editConfig").as("configSection").children().click({multiple: true});
+};
+
+function editConfig(config:PostConfig) {
+  expandAllConfigCategories();
+
+  cy.get("@configSection").children().each((categoryElem) => {
+    const category = categoryElem.children("button")[0].innerText.toLowerCase();
+
+    categoryElem.children("div > label").each((index, settingElem) => {
+      const setting = settingElem.innerText.replace(":", "").toLowerCase();
+      const checked = (settingElem.querySelector("input") as HTMLInputElement).checked;
+
+      if (checked !== config[category][setting]) {
+        cy.get("@configCategory").contains(setting, {matchCase: false}).click();
+      };
+    });
+  });
+};
+// TODO: extract code from above and below functions into one function which accepts a callback for each's distinguishing final action (TL;DR postponed because typescript)
+function validateConfig(config:PostConfig) {
+  expandAllConfigCategories();
+
+  cy.get("@configSection").children().each((categoryElem) => {
+    const category = categoryElem.children("button")[0].innerText.toLowerCase();
+
+    categoryElem.children("div > label").each((index, settingElem) => {
+      const setting = settingElem.innerText.replace(":", "").toLowerCase();
+      const checked = (settingElem.querySelector("input") as HTMLInputElement).checked;
+
+      expect(checked).to.equal(config[category][setting]);
+    });
+  });
+};
+
+describe("Presets manipulation in dashboard", () => {
+
+
+  it("Setup (navigate to page)", () => {
+    cy.signUp("drafter" + randomUsername());
+    cy.visit("/dashboard");
+    cy.contains("button", "Presets").click();
+    cy.wait(waitingTimes.pageTransition);
+  });
+
+  it("Save preset", () => {
+    const presetName = "Preset 1 ";
+    const config:PostConfig = {timestamps: {interacted: true}, votes: {up: true}};
+
+    cy.contains("New preset").click();
+    cy.contains("Save");
+    cy.contains("[No Title]");
+    cy.should("not.contain.text", "Access");
+
+    cy.contains("Name").type(presetName);
+    editConfig(config);
+    cy.contains("Save").click();
+    cy.wait(waitingTimes.httpRequest);
+    cy.get(".notification.positive");
+
+    cy.reload();
+    cy.wait(waitingTimes.pageColdLoad);
+    cy.contains("Presets").click();
+    cy.contains(presetName).click();
+    cy.contains("Name").click().focused().should("have.value", presetName);
+    validateConfig(config);
+  });
+
+  it("Save presets to capacity", () => {
+    [{name: "Preset 2", config: {votes: {down: true, anon: true}} as PostConfig},
+    {name: "Preset 3", config: {votes: {up: true, anon: true}} as PostConfig}]
+    .forEach((preset, index) => {
+      cy.contains("New preset").click();
+      cy.get(".presetButton").should("have.length", index + 2)
+        .then((buttons) => {if (buttons.length === 3) {
+          cy.get("body").should("not.contain.text", "New preset");
+          cy.get(".notification").contains("at capacity");
+        }});
+      cy.contains("Name").click().type(preset.name);
+      cy.contains("button", preset.name);
+      editConfig(preset.config);
+      cy.contains("button", "Save").click();
+      cy.wait(waitingTimes.httpRequest);
+      cy.get(".notification.positive");
+
+      cy.reload();
+      cy.wait(waitingTimes.pageColdLoad);
+      cy.contains("Presets").click();
+      cy.get(".presetButton").should("have.length", index + 2);
+      cy.contains("button", preset.name).click();
+      validateConfig(preset.config);
+    });
+  });
+
+  it("Edit preset", () => {
+    const oldName = "Preset 2";
+    const newName = "Edited Preset";
+    const newConfig:PostConfig = {timestamps: {interacted: true}, votes: {down: true}};
+
+    cy.contains(oldName).click();
+    cy.contains("Name").click().focused().clear().type(newName);
+    cy.contains("button", newName);
+    cy.should("not.contain.text", oldName);
+    editConfig(newConfig);
+    cy.contains("Save").click();
+    cy.wait(waitingTimes.httpRequest);
+    cy.get(".notification.positive");
+
+    cy.reload();
+    cy.wait(waitingTimes.pageColdLoad);
+    cy.contains("button", "Presets").click();
+    cy.should("not.contain.text", oldName);
+    cy.contains("button", newName).click();
+    validateConfig(newConfig);
+  });
+    
+  it("Delete preset", () => {
+    const deletedName = "Preset 1";
+
+    cy.contains(deletedName).click();
+    cy.contains("Delete").click();
+    cy.contains("Save").click()
+    cy.wait(waitingTimes.httpRequest);
+    cy.get(".notification.positive");
+    cy.get(".presetButton").should("have.length", 2);
+
+    cy.reload();
+    cy.wait(waitingTimes.pageColdLoad);
+    cy.contains("button", "Presets").click();
+    cy.get(".presetButton").should("have.length", 2);
+    cy.should("not.contain.text", deletedName);
+  });
+});
+
+describe("Preset manipulation in posting page", () => {
+  function validateCustomPresetCount(count:number) {
+    cy.get('[data-testClass="customPresetButton"]').should("have.length", count);
+  };
+
+  it("Setup (navigate to page)", () => {
+    cy.get("header").contains("Post").click();
+    cy.wait(waitingTimes.pageTransition);
+  });
+
+  it("Create a new preset (to capacity)", () => {
+    const newConfig:PostConfig = {timestamps: {interacted: true}, votes: {down: true, anon: true}};
+
+    validateCustomPresetCount(2);
+    editConfig(newConfig);
+    cy.contains("Save preset").click();
+    cy.wait(waitingTimes.httpRequest);
+    cy.get(".notification.positive");
+    validateCustomPresetCount(3);
+    cy.get("body").should("not.contain.text", "Save preset");
+    cy.contains("Presets at capacity").should("have.attr", "inert");
+
+    cy.reload();
+    validateCustomPresetCount(3);
+    cy.get("body").should("not.contain.text", "Save preset");
+    cy.contains("Presets at capacity").should("have.attr", "inert");
+    cy.get('[data-testClass="customPresetButton"]').last().click();
+    validateConfig(newConfig);
+  });
+
+  // TODO: test for posting with custom preset (will get on that in the next few days, need a breather)
 });

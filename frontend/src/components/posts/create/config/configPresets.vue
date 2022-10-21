@@ -14,6 +14,7 @@
         :key="preset.name + 'custom' + index"
         type="button"
         @click="emitConfigChange(preset)"
+        data-testClass="customPresetButton"
       >
         <img src="../../../../assets/customConfig.svg" alt="Icon of cogwheel beside a pencil"/>
         <span>{{preset.name || "[No Title, Edit in Dashboard]"}}</span>
