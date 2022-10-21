@@ -149,12 +149,12 @@ function testDraftsFunctionalities(submitName:"Post"|"Reply", recoverFromRefresh
     saveDraft("Third " + title, "Third " + body);
 
     cy.get("main").should("not.contain.text", "Save draft");
-    cy.contains("button", "Drafts at capacity").should("have.attr", "disabled");
+    cy.contains("button", "Drafts at capacity").should("have.attr", "inert");
 
     cy.reload();
     recoverFromRefresh();
     cy.get("main").should("not.contain.text", "Save draft");
-    cy.contains("button", "Drafts at capacity").should("have.attr", "disabled");
+    cy.contains("button", "Drafts at capacity").should("have.attr", "inert");
   });
 
   it("Post and destroy draft", () => {
