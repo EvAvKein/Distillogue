@@ -29,7 +29,7 @@
         <button @click="saveDraft"
           type="button"
           class="core_backgroundButton"
-          :disabled="draftsAtCapacity ? true : false"
+          :inert="draftsAtCapacity ? true : false"
         >
           {{draftsAtCapacity ? "Drafts at capacity" : "Save draft"}}
         </button>
@@ -60,7 +60,7 @@
         <button @click="savePreset"
           type="button"
           class="core_backgroundButton"
-          :disabled="presetsAtCapacity ? true : false"
+          :inert="presetsAtCapacity ? true : false"
         >
           {{presetsAtCapacity ? "Presets at capacity" : "Save preset"}}
         </button>
