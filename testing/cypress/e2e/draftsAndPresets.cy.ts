@@ -12,6 +12,7 @@ describe("Drafts manipulation in dashboard", () => {
   it("Enter Drafts subpage", () => {
     cy.contains("Dashboard").click();
     cy.contains("Drafts").click();
+    cy.wait(waitingTimes.pageTransition);
 
     cy.get("main")
       .should("not.contain.text", "Title")
