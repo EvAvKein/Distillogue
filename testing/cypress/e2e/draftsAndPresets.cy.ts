@@ -1,6 +1,5 @@
 import {waitingTimes} from "../helpers/waitingTimes";
 import {randomUsername, randomNodeTitle, randomNodeBody} from "../helpers/randomAlphanumString";
-import {PostConfig} from "../../../shared/objects/post";
 
 let draftTitle = "Draft " + randomNodeTitle();
 let draftBody = randomNodeBody();
@@ -11,35 +10,35 @@ describe("Drafts manipulation in dashboard", () => {
   });
 
   it("Enter Drafts subpage", () => {
-    cy.contains("a", "Dashboard").click();
-    cy.contains("button", "Drafts").click();
+    cy.contains("Dashboard").click();
+    cy.contains("Drafts").click();
 
     cy.get("main")
       .should("not.contain.text", "Title")
       .should("not.contain.text", "Body")
       .should("not.contain.text", "Delete");
-    cy.contains("button", "Save").should("not.be.visible");
+    cy.contains("Save").should("not.be.visible");
   });
 
   function createAndValidateDraft(title:string, body:string) {
-    cy.contains("button", "New draft").click();
-    cy.contains("button", "[No Title]").should("contain.text", "Edited: Now");
-    cy.contains("button", "Delete");
-    cy.contains("button", "Save");
+    cy.contains("New draft").click();
+    cy.contains("[No Title]").should("contain.text", "Edited: Now");
+    cy.contains("Delete");
+    cy.contains("Save");
 
     cy.contains("label", "Title").type(title);
-    cy.contains("button", title);
-    cy.contains("label", "Body").type(body);
+    cy.contains(title);
+    cy.contains("Body").type(body);
     cy.get("main").contains("Save").click();
     cy.wait(waitingTimes.httpRequest);
     cy.get(".notification.positive").should("contain.text", "Changes saved!");
 
     cy.reload();
     cy.wait(waitingTimes.pageColdLoad);
-    cy.contains("button", "Drafts").click();
-    cy.contains("button", title).click();
+    cy.contains("Drafts").click();
+    cy.contains(title).click();
     cy.contains("label", "Title").click().focused().should("have.value", title);
-    cy.contains("label", "Body").click().focused().should("have.value", body);
+    cy.contains("Body").click().focused().should("have.value", body);
   };
 
   it("Create, write, and save draft", () => {
@@ -51,20 +50,20 @@ describe("Drafts manipulation in dashboard", () => {
     draftBody = "Different " + draftBody;
 
     cy.contains("label", "Title").click().focused().clear().type(draftTitle);
-    cy.contains("button", draftTitle);
-    cy.contains("button", "Save");
+    cy.contains(draftTitle);
+    cy.contains("Save");
 
-    cy.contains("label", "Body").click().focused().clear().type(draftBody);
-    cy.contains("button", "Save").click();
+    cy.contains("Body").click().focused().clear().type(draftBody);
+    cy.contains("Save").click();
     cy.wait(waitingTimes.httpRequest);
     cy.get(".notification.positive").should("contain.text", "Changes saved!");
 
     cy.reload();
     cy.wait(waitingTimes.pageColdLoad);
-    cy.contains("button", "Drafts").click();
-    cy.contains("button", draftTitle).click();
+    cy.contains("Drafts").click();
+    cy.contains(draftTitle).click();
     cy.contains("label", "Title").click().focused().should("have.value", draftTitle);
-    cy.contains("label", "Body").click().focused().should("have.value", draftBody);
+    cy.contains("Body").click().focused().should("have.value", draftBody);
   });
 
   it("Create drafts to capacity", () => {
@@ -75,43 +74,43 @@ describe("Drafts manipulation in dashboard", () => {
   });
 
   it("Delete drafts", () => {
-    cy.contains("button", "Second " + draftTitle).click();
-    cy.contains("button", "Delete").click();
+    cy.contains("Second " + draftTitle).click();
+    cy.contains("Delete").click();
     cy.get("main").should("not.contain.text", "Second " + draftTitle);
-    cy.contains("button", "Save").click();
+    cy.contains("Save").click();
     cy.wait(waitingTimes.httpRequest);
     cy.get(".notification.positive").should("contain.text", "Changes saved!");
 
     cy.reload();
     cy.wait(waitingTimes.pageColdLoad);
-    cy.contains("button", "Drafts").click();
-    cy.contains("button", draftTitle);
+    cy.contains("Drafts").click();
+    cy.contains(draftTitle);
     cy.get("main").should("not.contain.text", "Second " + draftTitle);
-    cy.contains("button", "Third " + draftTitle);
+    cy.contains("Third " + draftTitle);
 
-    cy.contains("button", "Third " + draftTitle).click();
-    cy.contains("button", "Delete").click();
+    cy.contains("Third " + draftTitle).click();
+    cy.contains("Delete").click();
     cy.get("main").should("not.contain.text", "Third " + draftTitle);
-    cy.contains("button", draftTitle).click();
+    cy.contains(draftTitle).click();
     cy.contains("Delete").click();
     cy.get("main").should("not.contain.text", draftTitle);
-    cy.contains("button", "Save").click();
+    cy.contains("Save").click();
     cy.wait(waitingTimes.httpRequest);
     cy.get(".notification.positive").should("contain.text", "Changes saved!");
 
     cy.reload();
     cy.wait(waitingTimes.pageColdLoad);
-    cy.contains("button", "Drafts").click();
+    cy.contains("Drafts").click();
     cy.get("main").should("not.contain.text", draftTitle);
   });
 });
 
 function saveDraft(title:string, body:string) {
   cy.contains("label", "Title").click().focused().clear().type(title);
-  cy.contains("label", "Body").click().focused().clear().type(body);
-  cy.contains("button", "Save draft").click();
-  cy.contains("button", "Drafts")
-    .parent().contains("button", title);
+  cy.contains("Body").click().focused().clear().type(body);
+  cy.contains("Save draft").click();
+  cy.contains("Drafts")
+    .parent().contains(title);
 };
 
 function testDraftsFunctionalities(submitName:"Post"|"Reply", recoverFromRefresh:() => any, recoverFromSubmit:() => any) {
@@ -123,25 +122,25 @@ function testDraftsFunctionalities(submitName:"Post"|"Reply", recoverFromRefresh
 
     cy.reload();
     recoverFromRefresh();
-    cy.contains("button", "Drafts")
-      .parent().contains("button", "First " + draftTitle);
+    cy.contains("Drafts")
+      .parent().contains("First " + draftTitle);
   });
 
   it("Select and preserve saved draft", () => {
-    cy.contains("button", "Drafts").click()
-      .parent().contains("button", "First " + draftTitle).click();
+    cy.contains("Drafts").click()
+      .parent().contains("First " + draftTitle).click();
 
     cy.contains("label", "Title").click().focused().should("have.value", "First " + draftTitle);
-    cy.contains("label", "Body").click().focused().should("have.value", "First " + draftBody);
+    cy.contains("Body").click().focused().should("have.value", "First " + draftBody);
     cy.contains("button", submitName).should("have.text", submitName + " (& delete draft 1)");
-    cy.contains("button", "Drafts")
-      .parent().contains("button", "Preserve chosen draft").click();
+    cy.contains("Drafts")
+      .parent().contains("Preserve chosen draft").click();
 
-    cy.contains("button", "Drafts")
-      .parent().contains("button", "First " + draftTitle)
+    cy.contains("Drafts")
+      .parent().contains("First " + draftTitle)
       .parent().parent().should("not.contain.text", "Preserve chosen draft");
     cy.contains("label", "Title").click().focused().should("have.value", "First " + draftTitle);
-    cy.contains("label", "Body").click().focused().should("have.value", "First " + draftBody);
+    cy.contains("Body").click().focused().should("have.value", "First " + draftBody);
     cy.contains("button", submitName).should("have.text", submitName);
   });
 
@@ -150,46 +149,46 @@ function testDraftsFunctionalities(submitName:"Post"|"Reply", recoverFromRefresh
     saveDraft("Third " + draftTitle, "Third " + draftBody);
 
     cy.get("main").should("not.contain.text", "Save draft");
-    cy.contains("button", "Drafts at capacity").should("have.attr", "inert");
+    cy.contains("Drafts at capacity").should("have.attr", "inert");
 
     cy.reload();
     recoverFromRefresh();
     cy.get("main").should("not.contain.text", "Save draft");
-    cy.contains("button", "Drafts at capacity").should("have.attr", "inert");
+    cy.contains("Drafts at capacity").should("have.attr", "inert");
   });
 
   it("Post and destroy draft", () => {
-    cy.contains("button", "Drafts").click()
-      .parent().contains("button", "Second " + draftTitle).click();
-    cy.get("form").contains("button", submitName + " (& delete draft 2)").click();
+    cy.contains("Drafts").click()
+      .parent().contains("Second " + draftTitle).click();
+    cy.get("form").contains(submitName + " (& delete draft 2)").click();
 
     recoverFromSubmit();
-    cy.get("form").contains("button", "Drafts").parent().should("not.contain.text", "Second " + draftTitle);
+    cy.get("form").contains("Drafts").parent().should("not.contain.text", "Second " + draftTitle);
   });
 
   it("Post and preserve draft", () => {
-    cy.contains("button", "Drafts").click()
-      .parent().contains("button", "Third " + draftTitle).click()
-      .parent().parent().contains("button", "Preserve chosen draft").click();
-    cy.get("form").contains("button", submitName).click();
+    cy.contains("Drafts").click()
+      .parent().contains("Third " + draftTitle).click()
+      .parent().parent().contains("Preserve chosen draft").click();
+    cy.get("form").contains(submitName).click();
 
     recoverFromSubmit();
-    cy.contains("button", "Drafts").parent().contains("button", "Third " + draftTitle);
+    cy.contains("Drafts").parent().contains("Third " + draftTitle);
   });
 
   it("Modify, post, and destroy draft", () => {
-    cy.contains("button", "Drafts").click()
-      .parent().contains("button", "First " + draftTitle).click();
-    cy.get("form").contains("button", submitName + " (& delete draft 1)").click();
+    cy.contains("Drafts").click()
+      .parent().contains("First " + draftTitle).click();
+    cy.get("form").contains(submitName + " (& delete draft 1)").click();
 
     recoverFromSubmit();
-    cy.get("form").contains("button", "Drafts").parent().should("not.contain.text", "First " + draftTitle);
+    cy.get("form").contains("Drafts").parent().should("not.contain.text", "First " + draftTitle);
   });
 };
 
 describe("Drafts manipulation in posting page", () => {
   it("Navigate to posting page", () => {
-    cy.contains("a", "Post").click();
+    cy.contains("Post").click();
     cy.wait(waitingTimes.pageTransition);
   });
   
@@ -214,7 +213,7 @@ describe("Drafts manipulation in replying modal", () => {
       replyDraftTitle,
       randomNodeBody()
     );
-    cy.contains("a", replyDraftTitle).click();
+    cy.contains(replyDraftTitle).click();
   });
   
   testDraftsFunctionalities("Reply",
@@ -287,7 +286,7 @@ describe("Presets manipulation in dashboard", () => {
   it("Setup (navigate to page)", () => {
     cy.signUp("drafter" + randomUsername());
     cy.visit("/dashboard");
-    cy.contains("button", "Presets").click();
+    cy.contains("Presets").click();
     cy.wait(waitingTimes.pageTransition);
   });
 
@@ -325,9 +324,9 @@ describe("Presets manipulation in dashboard", () => {
           cy.get(".notification").contains("at capacity");
         }});
       cy.contains("Name").click().type(preset.name);
-      cy.contains("button", preset.name);
+      cy.contains(preset.name);
       editConfig(preset.config);
-      cy.contains("button", "Save").click();
+      cy.contains("Save").click();
       cy.wait(waitingTimes.httpRequest);
       cy.get(".notification.positive");
 
@@ -335,7 +334,7 @@ describe("Presets manipulation in dashboard", () => {
       cy.wait(waitingTimes.pageColdLoad);
       cy.contains("Presets").click();
       cy.get(".presetButton").should("have.length", index + 2);
-      cy.contains("button", preset.name).click();
+      cy.contains(preset.name).click();
       validateConfig(preset.config);
     });
   });
@@ -350,7 +349,7 @@ describe("Presets manipulation in dashboard", () => {
 
     cy.contains(oldName).click();
     cy.contains("Name").click().focused().clear().type(newName);
-    cy.contains("button", newName);
+    cy.contains(newName);
     cy.should("not.contain.text", oldName);
     editConfig(newConfig);
     cy.contains("Save").click();
@@ -359,9 +358,9 @@ describe("Presets manipulation in dashboard", () => {
 
     cy.reload();
     cy.wait(waitingTimes.pageColdLoad);
-    cy.contains("button", "Presets").click();
+    cy.contains("Presets").click();
     cy.should("not.contain.text", oldName);
-    cy.contains("button", newName).click();
+    cy.contains(newName).click();
     validateConfig(newConfig);
   });
     
@@ -377,7 +376,7 @@ describe("Presets manipulation in dashboard", () => {
 
     cy.reload();
     cy.wait(waitingTimes.pageColdLoad);
-    cy.contains("button", "Presets").click();
+    cy.contains("Presets").click();
     cy.get(".presetButton").should("have.length", 2);
     cy.should("not.contain.text", deletedName);
   });
