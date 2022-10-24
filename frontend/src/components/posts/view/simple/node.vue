@@ -65,7 +65,10 @@
   }
   h2, h3 {margin: 0}
 
-  p {white-space: pre-line}
+  p {
+    white-space: pre-line;
+    margin-bottom: 1em;
+  }
 
   .replies {
     position: relative;
