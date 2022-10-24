@@ -413,5 +413,21 @@ describe("Preset manipulation in posting page", () => {
     validateConfig(newConfig);
   });
 
-  // TODO: test for posting with custom preset (will get on that in the next few days, need a breather)
+  it("Post with dashboard preset", () => {
+    const postTitle = "Custom Preset " + randomNodeTitle();
+
+    cy.submitPost(
+      postTitle,
+      randomNodeBody(),
+      () => {cy.contains("Edited Preset").click()}
+    );
+    cy.contains(postTitle).click();
+    cy.wait(waitingTimes.pageTransition);
+    
+    cy.get('[aria-label="Upvote"]').should("not.exist");
+    cy.get('[aria-label="Downvote"]').should("exist");
+
+    cy.submitReply([postTitle], randomNodeTitle(), randomNodeBody());
+    cy.get('.interacted').should("exist");
+  });
 });
