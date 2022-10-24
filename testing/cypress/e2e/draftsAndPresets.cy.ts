@@ -229,45 +229,61 @@ describe("Drafts manipulation in replying modal", () => {
   );
 });
 
-function expandAllConfigCategories() {
-  cy.get("#editConfig").as("configSection").children().click({multiple: true});
+interface configByUiText {
+  Access?: {
+    Public?:true,
+  },
+  Timestamps?: {
+    Interacted?:true,
+  },
+  Voting?: {
+    Upvotes?:true,
+    Downvotes?:true,
+    Anonymous?:true,
+  }
 };
 
-function editConfig(config:PostConfig) {
+function expandAllConfigCategories() {
+  cy.get("#editConfig").as("configCategory").find(".category button").click({multiple: true});
+};
+
+function editConfig(config:configByUiText) {
   expandAllConfigCategories();
 
-  cy.get("@configSection").children().each((categoryElem) => {
-    const category = categoryElem.children("button")[0].innerText.toLowerCase();
-
-    categoryElem.children("div > label").each((index, settingElem) => {
-      const setting = settingElem.innerText.replace(":", "").toLowerCase();
+  cy.get("@configCategory").children().each((categoryElem) => {
+    const category = categoryElem.children("button")[0].innerText;
+    if (category === "Access") return;
+    
+    categoryElem.find("div > label").each((index, settingElem) => {
+      const setting = settingElem.innerText.replace(": ", "");
       const checked = (settingElem.querySelector("input") as HTMLInputElement).checked;
-
-      if (checked !== config[category][setting]) {
+      
+      if (config[category] && checked != Boolean(config[category][setting])) {
+        console.log(checked != config[category][setting])
+        console.log("clicked " + setting);
         cy.get("@configCategory").contains(setting, {matchCase: false}).click();
       };
     });
   });
 };
 // TODO: extract code from above and below functions into one function which accepts a callback for each's distinguishing final action (TL;DR postponed because typescript)
-function validateConfig(config:PostConfig) {
+function validateConfig(config:configByUiText) {
   expandAllConfigCategories();
 
-  cy.get("@configSection").children().each((categoryElem) => {
-    const category = categoryElem.children("button")[0].innerText.toLowerCase();
+  cy.get("@configCategory").children().each((categoryElem) => {
+    const category = categoryElem.children("button")[0].innerText;
+    if (category === "Access") return;
 
-    categoryElem.children("div > label").each((index, settingElem) => {
-      const setting = settingElem.innerText.replace(":", "").toLowerCase();
+    categoryElem.find("div > label").each((index, settingElem) => {
+      const setting = settingElem.innerText.replace(": ", "");
       const checked = (settingElem.querySelector("input") as HTMLInputElement).checked;
 
-      expect(checked).to.equal(config[category][setting]);
+      expect(checked, setting).to.equal(Boolean(config[category] && config[category][setting]));
     });
   });
 };
 
 describe("Presets manipulation in dashboard", () => {
-
-
   it("Setup (navigate to page)", () => {
     cy.signUp("drafter" + randomUsername());
     cy.visit("/dashboard");
@@ -277,7 +293,7 @@ describe("Presets manipulation in dashboard", () => {
 
   it("Save preset", () => {
     const presetName = "Preset 1 ";
-    const config:PostConfig = {timestamps: {interacted: true}, votes: {up: true}};
+    const config:configByUiText = {Timestamps: {Interacted: true}, Voting: {Upvotes: true}};
 
     cy.contains("New preset").click();
     cy.contains("Save");
@@ -299,8 +315,8 @@ describe("Presets manipulation in dashboard", () => {
   });
 
   it("Save presets to capacity", () => {
-    [{name: "Preset 2", config: {votes: {down: true, anon: true}} as PostConfig},
-    {name: "Preset 3", config: {votes: {up: true, anon: true}} as PostConfig}]
+    [{name: "Preset 2", config: {Voting: {Downvotes: true, Anonymous: true}} as configByUiText},
+    {name: "Preset 3", config: {Voting: {Upvotes: true, Anonymous: true}} as configByUiText}]
     .forEach((preset, index) => {
       cy.contains("New preset").click();
       cy.get(".presetButton").should("have.length", index + 2)
@@ -327,7 +343,10 @@ describe("Presets manipulation in dashboard", () => {
   it("Edit preset", () => {
     const oldName = "Preset 2";
     const newName = "Edited Preset";
-    const newConfig:PostConfig = {timestamps: {interacted: true}, votes: {down: true}};
+    const newConfig:configByUiText = {Timestamps: {Interacted: true}, Voting: {Downvotes: true}};
+    cy.reload();
+    cy.wait(waitingTimes.pageColdLoad);
+    cy.contains("Presets").click();
 
     cy.contains(oldName).click();
     cy.contains("Name").click().focused().clear().type(newName);
@@ -375,7 +394,7 @@ describe("Preset manipulation in posting page", () => {
   });
 
   it("Create a new preset (to capacity)", () => {
-    const newConfig:PostConfig = {timestamps: {interacted: true}, votes: {down: true, anon: true}};
+    const newConfig:configByUiText= {Access: {Public: true}, Timestamps: {Interacted: true}, Voting: {Downvotes: true, Anonymous: true}};
 
     validateCustomPresetCount(2);
     editConfig(newConfig);
