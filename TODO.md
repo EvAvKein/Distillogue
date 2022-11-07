@@ -6,7 +6,6 @@ Remaining tasks before each stage of the project:
 * ### Infrastructure
   * Docker network setup for prod (nginx, TLS)
 * ### Resources & Transparency:
-  * Basic front page (e.g pre-alpha disclaimers)
   * Basic about page
   * Contact info
 * ### Regulation:
