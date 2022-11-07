@@ -23,7 +23,7 @@
           aria-label="Front page"
           id="logoLink"
         >
-          <img src="../assets/logo.svg" alt="Icon of a chemistry flask, with bubbling liquids, hung on a stand"/>
+          <img src="../assets/logo.svg" alt="Distillogue's Logo: A chemistry flask, with bubbling liquids, hung on a stand"/>
         </router-link>
       </nav>
     </section>
