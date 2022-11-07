@@ -14,7 +14,6 @@ Remaining tasks before each stage of the project:
   * Placeholder terms-of-service/code-of-conduct
 * ### Optimization:
   * Update "interacted" timestamps within the same database operation as the interaction updates (supposedly with MongoDB's aggregation pipeline)
-  * Complete the draftsAndPresets test by finishing the latter portion
 
 ## Proof-of-concept deployment
 * ### All of the above
