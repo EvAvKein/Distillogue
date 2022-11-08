@@ -9,9 +9,7 @@
 
     <h2>Disclaimers</h2>
     <ul>
-      <!-- commented until deployment, for the slim chance that anyone clones and locally-hosts the project before that happens
-        <li>Data you submit on this website is public (no proper authentication yet, only usernames) and very temporary (for rapid development's sake, all user-generated data is deleted on every update)</li>
-      -->
+      <li>Data you submit on this website is public (no proper authentication yet, only usernames) and very temporary (for rapid development's sake, all user-generated data is deleted on every update)</li>
       <li>In this early stage of the project, core features are a much higher priority for me than interface beauty. What currently exists is basic development styling, and I'm keenly aware of many of its thematic/design deficiencies</li>
     </ul>
 
