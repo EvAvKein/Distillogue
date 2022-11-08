@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 import {useUser} from "./stores/user";
 import {jsonFetch} from "./helpers/jsonFetch";
-import {UserData, UserPayload} from "../../shared/objects/user";
+import {UserData} from "../../shared/objects/user";
 
 import home from "./pages/Home.vue";
 import about from "./pages/about.vue";
