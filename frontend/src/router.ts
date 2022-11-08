@@ -4,7 +4,7 @@ import {jsonFetch} from "./helpers/jsonFetch";
 import {UserData} from "../../shared/objects/user";
 
 import home from "./pages/Home.vue";
-import about from "./pages/about.vue";
+import about from "./pages/About.vue";
 import browse from "./pages/Browse.vue";
 import createPost from "./pages/CreatePost.vue";
 import viewPost from "./pages/ViewPost.vue";
