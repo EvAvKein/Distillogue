@@ -3,7 +3,7 @@
     <section id="leftSection">
       <nav>
         <div v-if="user.data">
-          <router-link v-if="user.data"
+          <router-link
             :to="{name: 'browse'}"
             class="core_backgroundButton"
           >
