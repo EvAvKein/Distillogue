@@ -28,7 +28,7 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 * Node.js
 * MongoDB [(Instructions for enabling "mongo" command on Windows 10)](https://stackoverflow.com/a/41507803)
 * Windows, for `start` in some of the `npm run` commands: If not using Windows, replace with your OS's equivalent for execution in new/background terminal
-* Nodemon (`npm install -g nodemon`), for `npm run serverDev` in backend and dependent commands: Restarts the server whenever server code changes. If you'd rather avoid the dependency, replace `nodemon` with `node` in the backend's `package.json`.
+* Nodemon (`npm install -g nodemon`), for `npm run serverDev` in backend and dependent commands: Restarts the server whenever server code changes. If you'd rather avoid the dependency, replace `nodemon` with `node` in the backend's `package.json` commands.
 
 ---
 
