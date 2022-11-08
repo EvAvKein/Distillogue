@@ -18,13 +18,22 @@
             <span>Post</span>
           </router-link>
         </div>
-        <router-link v-else
-          :to="{name: 'home'}"
-          aria-label="Front page"
-          id="logoLink"
-        >
-          <img src="../assets/logo.svg" alt="Distillogue's Logo: A chemistry flask, with bubbling liquids, hung on a stand"/>
-        </router-link>
+        <div v-else>
+          <router-link 
+            :to="{name: 'home'}"
+            aria-label="Front page"
+            id="logoLink"
+          >
+            <img src="../assets/logo.svg" alt="Distillogue's Logo: A chemistry flask, with bubbling liquids, hung on a stand"/>
+          </router-link>
+          <router-link 
+            :to="{name: 'about'}"
+            class="core_backgroundButton"
+          >
+            <img src="../assets/megaphone.svg" alt="Traffic cone icon, denoting" style="transform: scaleX(-1);"/>
+            <span>About</span>
+          </router-link>
+        </div>
       </nav>
     </section>
     <notification :text="notifText" :desirablityStyle="notifDesirability"/>

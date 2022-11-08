@@ -4,6 +4,7 @@ import {jsonFetch} from "./helpers/jsonFetch";
 import {UserData, UserPayload} from "../../shared/objects/user";
 
 import home from "./pages/Home.vue";
+import about from "./pages/about.vue";
 import browse from "./pages/Browse.vue";
 import createPost from "./pages/CreatePost.vue";
 import viewPost from "./pages/ViewPost.vue";
@@ -16,6 +17,11 @@ const routes = [
     name: "home",
     path: "/",
     component: home,
+  },
+  {
+    name: "about",
+    path: "/about",
+    component: about,
   },
   {
     name: "browse",
