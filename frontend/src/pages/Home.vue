@@ -6,11 +6,11 @@
     <section>
       <notification
         :text="`DISCLAIMER: THIS SITE IS A DEMO
-          This project is in very early development, and currently hosted only for my programming portfolio.
-          Any data you submit here is public (no proper authentication yet, only usernames) and very temporary (for rapid development's sake, all user-generated data is deleted on every update)`"
+          This project is in very early development, and any data you submit here is public and temporary`"
         :desirablityStyle="false"
         :customDuration="null"
       />
+      <a href="/about" class="core_backgroundButton">For more info</a>
     </section>
   </main>
 </template>
@@ -21,8 +21,8 @@
 
 <style scoped>
   main {
-    font-size: clamp(0.7em, 2vw, 1em);
-    max-width: 60em;
+    font-size: clamp(0.7em, 2.5vw, 1.25em);
+    max-width: 30em;
     margin-inline: auto;
     padding: 0 0.75em 0.75em;
   }
@@ -38,7 +38,6 @@
     margin-inline: auto;
   }
 
-  section {
-    font-size: 1.25em;
-  }
+  section {font-size: 1.25em}
+  a {display: block}
 </style>
