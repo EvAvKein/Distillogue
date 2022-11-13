@@ -1,7 +1,7 @@
 <template>
   <main>
     <h1>About</h1>
-    <p>
+    <p id="greeting">
       Hello! I'm Eve Aviv Keinan, and Distillogue is the primary project in <a href="https://evavkein.com/portfolio" class="core_contentButton">my programming portfolio</a>
     </p>
 
@@ -18,17 +18,31 @@
     <h2>Concepts</h2>
     <ul>
       <li>
-        <strong>A social tool, not a social hub</strong>: For many reasons, I'm not interested in this being anyone's primary social app.<br/>
-        I plan for this to be a social-media-adjacent tool for people who primarily communicate elsewhere: The future/existence of public posts beyond the project's early development is very uncertain, and plans for any user-to-user interactions (as opposed to post/topic-centric ones) are minimal and under intense scrutiny
+        <p>
+          <strong>A social tool, not a social hub</strong>: For many reasons, I'm not interested in this being anyone's primary social app
+        </p>
+        <p>
+          I plan for this to be a social-media-adjacent tool for people who primarily communicate elsewhere: The future/existence of public posts beyond the project's early development is very uncertain, and plans for any user-to-user interactions (as opposed to post/topic-centric ones) are minimal and under intense scrutiny
+        </p>
       </li>
       <li>
-        <strong>Highly customizable</strong>: The project's main gimmick is the (planned) wide of variety of options for post configurations: Allowing users to formulate their preferred social environment with just the features they appreciate, with which they 'distill' the social dynamics/interactions/options to their preference (which of course includes the ability to save custom presets).<br/>
-        I also plan on there being multiple layout options, but intergrating that with a variety of configurations sounds like an inordinate amount of labor (at least currently as a solo dev), and I only conceived two layouts I'm satisfied with thus far.<br/>
-        I'm open to the idea of allowing user-created plugins for various configurations/layouts (and/or maybe even robust support for forking e.g Mastodon), but that's far off in the future if/when the project matures and/or gains a userbase
+        <p>
+          <strong>Highly customizable</strong>: The project's main gimmick is the (planned) wide of variety of options for post configurations: Allowing users to formulate their preferred social environment with just the features they appreciate, with which they 'distill' the social dynamics/interactions/options to their preference (which of course includes the ability to save custom presets)
+        </p>
+        <p>
+          I also plan on there being multiple layout options, but intergrating that with a variety of configurations sounds like an inordinate amount of labor (at least currently as a solo dev), and I only conceived two layouts I'm satisfied with thus far
+        </p>
+        <p>
+          I'm open to the idea of allowing user-created plugins for various configurations/layouts (and/or maybe even robust support for forking e.g Mastodon), but that's far off in the future if/when the project matures and/or gains a userbase
+        </p>
       </li>
       <li>
-        <strong>User-moderated</strong>: To avoid the time-sinks and drama of platform moderation, I want to hand over moderation to the users as much as legally/ethically viable (which is much more sensible alongside plans to remove public posts).<br/>
-        I plan on implementing robust configurations for moderation paradigms (e.g direct/representative-democracy, creator-approved moderators) and functionalities, alongside carefully-conceived optional and/or obligatory countermeasures (likely just for the less-democratic ones) to mitigate abuse
+        <p>
+          <strong>User-moderated</strong>: To avoid the time-sinks and drama of platform moderation, I want to hand over moderation to the users as much as legally/ethically viable (which is much more sensible alongside plans to remove public posts)
+        </p>
+        <p>
+          I plan on implementing robust configurations for moderation paradigms (e.g direct/representative-democracy, creator-approved moderators) and functionalities, alongside carefully-conceived optional and/or obligatory countermeasures (likely just for the less-democratic ones) to mitigate abuse
+        </p>
       </li>
     </ul>
 
@@ -59,9 +73,12 @@
     text-align: center;
   }
 
-  p {text-align: center}
+  #greeting {text-align: center}
   
   h2 {font-size: 2em}
 
   li + li {margin-top: 1em}
+
+  p {margin-bottom: 0}
+  p + p {margin-top: 0.75em}
 </style>
