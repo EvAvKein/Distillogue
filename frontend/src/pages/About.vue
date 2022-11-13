@@ -43,9 +43,6 @@
       <li>
         I dont know how much I'd wanna work on this project in my free time when I'm employed, but if it'll have any interest/co-contributors I definitely wouldn't wanna abandon it
       </li>
-      <li>
-        Once I have enough actual professional experience to make my experience with Vue in this project insignificant (and assuming I didn't completely shelf the project), I'll likely migrate it to Svelte. Svelte is simpler and more enjoyable to work with (the latter being especially important in a side-project), and the code with both frameworks is structured similarly enough that it doesn't seem prohibitively exhausting
-      </li>
     </ul>
   </main>
 </template>
