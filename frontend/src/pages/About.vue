@@ -58,6 +58,22 @@
         I dont know how much I'd wanna work on this project in my free time when I'm employed, but if it'll have any interest/co-contributors I definitely wouldn't wanna abandon it
       </li>
     </ul>
+
+    <hr/>
+
+    <h2>Contact</h2>
+
+    <ul>
+      <li>
+        Technical: <a class="core_contentButton">https://github.com/EvAvKein/Distillogue/issues</a>
+      </li>
+      <li>
+        Questions & suggestions: <a class="core_contentButton">https://github.com/EvAvKein/Distillogue/discussions</a>
+      </li>
+      <li>
+        High-priority / private: <address>EvAvKein@gmail.com</address>
+      </li>
+    </ul>
   </main>
 </template>
 
@@ -81,4 +97,13 @@
 
   p {margin-bottom: 0}
   p + p {margin-top: 0.75em}
+
+  a {text-decoration: underline}
+  address {
+    display: inline;
+    font-style: normal;
+    user-select: all;
+    text-decoration: underline dotted;
+    text-underline-offset: 0.2em;
+  }
 </style>
