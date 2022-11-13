@@ -5,8 +5,6 @@ Remaining tasks before each stage of the project:
 ## Pre-alpha/for-junior-portfolio's-sake deployment
 * ### Infrastructure
   * Docker network setup for prod (nginx, TLS)
-* ### Resources & Transparency:
-  * Contact info
 * ### Regulation:
   * Basic legal obligations
   * Placeholder terms-of-service/code-of-conduct
