@@ -3,6 +3,8 @@ Remaining tasks before each stage of the project:
 <hr>
 
 ## Pre-alpha/for-junior-portfolio's-sake deployment
+* ### Core features:
+  * Session-management dashboard page
 * ### Infrastructure
   * Docker network setup for prod (nginx, TLS)
 * ### Regulation:
