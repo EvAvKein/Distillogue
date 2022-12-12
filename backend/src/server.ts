@@ -271,6 +271,34 @@ app.post("/api/posts/interactions", async (request, response) => { // i'm not sa
   
   let dbResponse:ModifyResult<Node>;
   switch(interactionType) {
+    case "reply": {
+      if (subjectPost.locked) {
+        response.json(new FetchResponse(null, "Replies are locked for this node"));
+        return;
+      };
+
+      (interactionData as NodeCreationRequest).config = subjectPost.config;
+
+      const newNode = new Node(user.data.id, (interactionData as NodeCreationRequest));
+      delete newNode.config;
+
+      dbResponse = await posts.findOneAndUpdate(
+        {id: postId},
+        {"$addToSet": {[mongoPath.updatePath + "replies"]: newNode}},
+        mongoUpdatePathOptions
+      );
+
+      const deletedDraftIndex = (interactionData as NodeCreationRequest).deletedDraftIndex;
+      if (typeof deletedDraftIndex === "number") {
+        const newDraftsState = filterByIndex(user.data.drafts, deletedDraftIndex);  // turns out pulling from an array by index has been rejected as a mongodb native feature (and the workaround has bad readability), so i'm just opting to override the drafts value instead. see: https://jira.mongodb.org/browse/SERVER-1014
+        
+        await users.findOneAndUpdate(
+          {"data.id": user.data.id},
+          {$set: {"data.drafts": newDraftsState}},
+        );
+      };
+      break;
+    };
     case "vote": {
       const voteData = interactionData as {voteDirection:"up"|"down", newVoteStatus:boolean};
       const subjectDirection = voteData.voteDirection;
@@ -299,34 +327,6 @@ app.post("/api/posts/interactions", async (request, response) => { // i'm not sa
         mongoUpdate,
         mongoUpdatePathOptions
       );
-      break;
-    };
-    case "reply": {
-      if (subjectPost.locked) {
-        response.json(new FetchResponse(null, "Replies are locked for this node"));
-        return;
-      };
-
-      (interactionData as NodeCreationRequest).config = subjectPost.config;
-
-      const newNode = new Node(user.data.id, (interactionData as NodeCreationRequest));
-      delete newNode.config;
-
-      dbResponse = await posts.findOneAndUpdate(
-        {id: postId},
-        {"$addToSet": {[mongoPath.updatePath + "replies"]: newNode}},
-        mongoUpdatePathOptions
-      );
-
-      const deletedDraftIndex = (interactionData as NodeCreationRequest).deletedDraftIndex;
-      if (typeof deletedDraftIndex === "number") {
-        const newDraftsState = filterByIndex(user.data.drafts, deletedDraftIndex);  // turns out pulling from an array by index has been rejected as a mongodb native feature (and the workaround has bad readability), so i'm just opting to override the drafts value instead. see: https://jira.mongodb.org/browse/SERVER-1014
-        
-        await users.findOneAndUpdate(
-          {"data.id": user.data.id},
-          {$set: {"data.drafts": newDraftsState}},
-        );
-      };
       break;
     };
   };
