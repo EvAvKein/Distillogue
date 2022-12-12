@@ -245,7 +245,7 @@ app.post("/api/posts", async (request, response) => {
   response.json(new FetchResponse(true));
 });
 
-app.post("/api/posts/interactions", async (request, response) => { // i'm not satisfied with this URI's unRESTfulness, but couldn't come up with an appropriate implementation. "/posts/:nodePath/interactions" results in extremely verbose URIs, "/posts/:postId/interactions" is kinda coherent when a nodePath is needed, and "/posts/interactions/:interactionType" just splits the interaction info (as interactionData in the body is still necessary)
+app.post("/api/posts/interactions", async (request, response) => { // URI/endpoint open to RESTfulness improvement suggestions
   const validation = apiSchemas.NodeInteractionRequest.validate(request.body, validationSettings);
   if (validation.error) {
     response.json(new FetchResponse(null, validation.error.message));
