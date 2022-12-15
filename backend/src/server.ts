@@ -1,7 +1,7 @@
 import path from "node:path";
 import express from "express";
 import helmetSecurity from "helmet";
-import {ModifyResult} from "mongodb";
+import {UpdateFilter} from "mongodb";
 import {FetchResponse, UserPatchRequest, NodeCreationRequest} from "../../shared/objects/api.js";
 import * as userSchemas from "./joi/user.js";
 import * as apiSchemas from "./joi/api.js";
@@ -12,8 +12,9 @@ import {users, posts} from "./mongo.js";
 import * as timestamp from "../../shared/helpers/timestamps.js";
 import {sessionKey, userBySession} from "./helpers/reqHeaders.js";
 import {nodePathAsMongoLocators} from "./helpers/mongo/nodePathAsMongoLocators.js";
-import {mongoPostsFilterByAccess} from "./helpers/mongo/mongoPostsFilterByAccess.js";
+import {mongoFilterPostsByAccess} from "./helpers/mongo/mongoFilterPostsByAccess.js";
 import {mongoInsertIfDoesntExist} from "./helpers/mongo/mongoInsertIfDoesntExist.js";
+import {mongoMergeUpdateFilters} from "./helpers/mongo/mongoMergeUpdateFilters.js";
 import {updateDeepProperty} from "./helpers/updateDeepProperty.js";
 import {filterByIndex} from "../../shared/helpers/filterByIndexes.js";
 import {recursivelyModifyNode} from "./helpers/recursivelyModifyNode.js";
@@ -156,7 +157,7 @@ app.get("/api/posts:search?", async (request, response) => {
   const user = await userBySession(request);
 
   const topNodesOfPosts = await posts.find<Omit<Node, "replies">>(
-    mongoPostsFilterByAccess(
+    mongoFilterPostsByAccess(
       user?.data.id,
       {$or: [{title: regexFilter}, {body: regexFilter}]},
     ), 
@@ -175,7 +176,7 @@ app.get("/api/posts/:id", async (request, response) => {
   const user = await userBySession(request);
 
   const dbResponse = await posts.findOne<Node|null>(
-    mongoPostsFilterByAccess(user?.data.id, {id: postId})
+    mongoFilterPostsByAccess(user?.data.id, {id: postId})
   );
   if (!dbResponse) {
     response.json(new FetchResponse(null, "Post unavailable; Either it doesn't exist, or it's private and you're not authorized"));
@@ -185,7 +186,7 @@ app.get("/api/posts/:id", async (request, response) => {
   let post = dbResponse;
   if (post.config?.votes?.anon) {
     const enabledVoteTypes = [] as ("up"|"down")[]; 
-    (["up", "down"] as ("up"|"down")[]).forEach((voteType) => {
+    (["up", "down"] as const).forEach((voteType) => {
       if (post.config!.votes![voteType]) {enabledVoteTypes.push(voteType)};
     });
 
@@ -245,7 +246,7 @@ app.post("/api/posts", async (request, response) => {
   response.json(new FetchResponse(true));
 });
 
-app.post("/api/posts/interactions", async (request, response) => { // URI/endpoint open to RESTfulness improvement suggestions
+app.post("/api/posts/interactions", async (request, response) => { // URI open to RESTfulness improvement suggestions
   const validation = apiSchemas.NodeInteractionRequest.validate(request.body, validationSettings);
   if (validation.error) {
     response.json(new FetchResponse(null, validation.error.message));
@@ -263,87 +264,87 @@ app.post("/api/posts/interactions", async (request, response) => { // URI/endpoi
   const mongoPath = nodePathAsMongoLocators(nodePath);
   const mongoUpdatePathOptions = {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"} as const;
 
-  const subjectPost = await posts.findOne(mongoPostsFilterByAccess(user.data.id, {id: postId})); // this (and the interaction validations that it enables) would be best implemented as a condition on each interaction (to reduce the number of DB calls) with follow-up code to read the modify result and output any relevant error. see the comment below at interacted updates for explanation on why DB conditionals are currently avoided
+  const subjectPost = await posts.findOne(mongoFilterPostsByAccess(user.data.id, {id: postId})); // implementing this (and the derived validations) as part of an aggregation pipeline with the interaction request would eliminate a race condition, but mongo pipeline operations have various issues (verbosity, limitations, low readability) and concurrent usage (& contributor count) is currently too low to merit wrangling with those issues
   if (!subjectPost) {
     response.json(new FetchResponse(null, "Post unavailable; Either it doesn't exist, or it's private and you're not authorized"));
     return;
   };
   
-  let dbResponse:ModifyResult<Node>;
+  let mongoUpdate:UpdateFilter<Node>;
+  let updateFollowup:undefined|(() => Promise<true|string>);
   switch(interactionType) {
     case "reply": {
-      if (subjectPost.locked) {
-        response.json(new FetchResponse(null, "Replies are locked for this node"));
-        return;
-      };
+      const replyData = interactionData as NodeCreationRequest;
+      replyData.config = subjectPost.config;
 
-      (interactionData as NodeCreationRequest).config = subjectPost.config;
-
-      const newNode = new Node(user.data.id, (interactionData as NodeCreationRequest));
+      const newNode = new Node(user.data.id, replyData);
       delete newNode.config;
 
-      dbResponse = await posts.findOneAndUpdate(
-        {id: postId},
-        {"$addToSet": {[mongoPath.updatePath + "replies"]: newNode}},
-        mongoUpdatePathOptions
-      );
+      mongoUpdate = {$push: {[mongoPath.updatePath + "replies"]: newNode}}; // $addToSet would be preferable to $push... if there was a way to ignore differences in particular properties (id)
 
-      const deletedDraftIndex = (interactionData as NodeCreationRequest).deletedDraftIndex;
+      const deletedDraftIndex = replyData.deletedDraftIndex;
       if (typeof deletedDraftIndex === "number") {
-        const newDraftsState = filterByIndex(user.data.drafts, deletedDraftIndex);  // turns out pulling from an array by index has been rejected as a mongodb native feature (and the workaround has bad readability), so i'm just opting to override the drafts value instead. see: https://jira.mongodb.org/browse/SERVER-1014
+        const newDraftsState = filterByIndex(user.data.drafts, deletedDraftIndex); // turns out pulling from an array by index has been rejected as a mongodb native feature (and the workaround has bad readability), so i'm just opting to override the drafts value instead. see: https://jira.mongodb.org/browse/SERVER-1014
         
-        await users.findOneAndUpdate(
-          {"data.id": user.data.id},
-          {$set: {"data.drafts": newDraftsState}},
-        );
+        updateFollowup = async function() {
+          const draftDeletion = await users.findOneAndUpdate(
+            {"data.id": user.data.id},
+            {$set: {"data.drafts": newDraftsState}},
+          );
+
+          return draftDeletion ? true : "Draft deletion failed";
+        };
+
       };
       break;
     };
     case "vote": {
       const voteData = interactionData as {voteDirection:"up"|"down", newVoteStatus:boolean};
-      const subjectDirection = voteData.voteDirection;
-      const oppositeDirection = voteData.voteDirection === "up" ? "down" : "up";
+      const subjectVote = voteData.voteDirection;
+      const oppositeVote = voteData.voteDirection === "up" ? "down" : "up";
 
-      if (!subjectPost.config?.votes?.[subjectDirection]) {
+      if (!subjectPost.config?.votes?.[subjectVote]) {
         response.json(new FetchResponse(null, "Vote interaction unavailable for this node"));
         return;
       };
 
-      const mongoUpdate = voteData.newVoteStatus
-        ? {
-            "$addToSet": {[mongoPath.updatePath + "stats.votes." + subjectDirection]: user.data.id},
-            "$pull": {[mongoPath.updatePath + "stats.votes." + oppositeDirection]: user.data.id}
-          }
-        : {
-            "$pull": {
-              [mongoPath.updatePath + "stats.votes." + subjectDirection]: user.data.id,
-              [mongoPath.updatePath + "stats.votes." + oppositeDirection]: user.data.id
-            }
-          }
-      ;
+      const pathToSubjectVotes = mongoPath.updatePath + "stats.votes." + subjectVote;
+      const pathToOppositeVotes = mongoPath.updatePath + "stats.votes." + oppositeVote;
 
-      dbResponse = await posts.findOneAndUpdate(
-        {id: postId},
-        mongoUpdate,
-        mongoUpdatePathOptions
-      );
+      mongoUpdate = voteData.newVoteStatus
+        ? {
+            $addToSet: {[pathToSubjectVotes]: user.data.id},
+            $pull: {[pathToOppositeVotes]: user.data.id}
+          }
+        : {$pull: {
+            [pathToSubjectVotes]: user.data.id,
+            [pathToOppositeVotes]: user.data.id
+          }};
       break;
     };
   };
+
+  const dbResponse = await posts.findOneAndUpdate(
+    mongoFilterPostsByAccess(user.data.id, {id: postId}),
+    mongoMergeUpdateFilters(
+      {$set: {[mongoPath.updatePath + "stats.timestamps.interacted"]: timestamp.unix()}} as unknown as {$set: {["stats.timestamps.interacted"]:number}}, // if you figure out how to eliminate the need for this type override, the contribution would be appreciated
+      mongoUpdate
+    ), 
+    mongoUpdatePathOptions
+  );
+
   if (!dbResponse.value) {
     response.json(new FetchResponse(null, "Invalid interaction request"));
     return;
   };
 
-  if (subjectPost?.config!.timestamps?.interacted) {
-    await posts.updateOne( // this would be best implemented as an extra modification of each interaction (to keep the interaction itself and this as a singular atomic update), but using conditionals to check if the property exists before updating requires using mongo's aggregation pipeline syntax which is (seemingly) frustratingly limited in assignment commands and is much more verbose & opaque. for the current stage of the project, i.e very early, there's no need to ruin my/the readability of mongo commands for atomic operations' sake
-      mongoPostsFilterByAccess(user.data.id, {id: postId}),
-      {$set: ({[mongoPath.updatePath + "stats.timestamps.interacted"]: timestamp.unix()} as unknown as {["stats.timestamps.interacted"]:number})}, // if you figure out the proper way to type the generated mongo path (in the module's file), i.e in a way that complies with the mongo types for the document(s), that contribution would be appreciated
-      {arrayFilters: mongoPath.arrayFiltersOption}
-    );
+  if (!updateFollowup) {
+    response.json(new FetchResponse(true));
+    return;
   };
 
-  response.json(new FetchResponse(true));
+  const dbFollowupResponse = updateFollowup();
+  response.json(typeof dbFollowupResponse === "string" ? new FetchResponse(null, dbFollowupResponse) : new FetchResponse(true));
 });
 
 app.get("*", function(request, response) {
