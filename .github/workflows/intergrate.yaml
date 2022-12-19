@@ -25,3 +25,4 @@ jobs:
         with:
           working-directory: testing
           browser: chrome
+          config: baseUrl=http://localhost
