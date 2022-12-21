@@ -5,8 +5,6 @@ Remaining tasks before each stage of the project:
 ## Pre-alpha/for-junior-portfolio's-sake deployment
 * ### Core features:
   * Session-management dashboard page
-* ### Infrastructure
-  * Docker network setup for prod (nginx, TLS)
 * ### Regulation:
   * Placeholder terms-of-service/code-of-conduct
 
@@ -39,6 +37,7 @@ Remaining tasks before each stage of the project:
 ## Release-candidate deployment
 * ### All of the above
 * ### Security:
+  * HTTPS
   * Proper registration/authentication (likely only via third parties)
   * DDoS mitigation & maybe a CDN (consider Cloudflare)
 * ### Regulation:
