@@ -30,7 +30,7 @@
             :to="{name: 'about'}"
             class="core_backgroundButton"
           >
-            <img src="../assets/megaphone.svg" alt="Traffic cone icon, denoting" style="transform: scaleX(-1);"/>
+            <img src="../assets/megaphone.svg" alt="Megaphone icon" style="transform: scaleX(-1);"/>
             <span>About</span>
           </router-link>
         </div>
