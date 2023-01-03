@@ -5,7 +5,7 @@ services:
     image: "nginx"
     build:
       context: ./
-      dockerfile: ./backend/nginx/dockerfile
+      dockerfile: ./backend/nginx/dev.dockerfile
     ports:
       - "80:80"
       - "443:443"
