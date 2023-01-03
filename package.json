@@ -21,8 +21,8 @@
     "testBrowser": "npm run serve && npm run cypressBrowser",
 
     "docker": "docker-compose up",
-    "dockerCypress": "docker-compose -f docker-compose.test.yaml up",
-    "dockerTest": "docker-compose up --detach && docker-compose -f docker-compose.test.yaml up"
+    "dockerCypress": "docker-compose -f docker-compose.tests.yaml up",
+    "dockerTest": "docker-compose up --detach && docker-compose -f docker-compose.tests.yaml up"
   },
   "homepage": "https://github.com/EvAvKein/Distillogue#readme",
   "repository": {
