@@ -2,14 +2,9 @@ Remaining tasks before each stage of the project:
 
 <hr>
 
-## Pre-alpha/for-junior-portfolio's-sake deployment
-* ### Core features:
-  * Session-management dashboard page
-* ### Regulation:
-  * Placeholder terms-of-service/code-of-conduct
+## ~~Pre-alpha/for-junior-portfolio's-sake deployment~~ COMPLETE
 
 ## Proof-of-concept deployment
-* ### All of the above
 * ### Flagship/core features:
   * Identities system (already planned)
   * Mindmap layout using D3.js (name TBD), and potentially another? (ideas welcome)
@@ -36,6 +31,8 @@ Remaining tasks before each stage of the project:
 
 ## Release-candidate deployment
 * ### All of the above
+* # Core features:
+  * Session-management dashboard page
 * ### Security:
   * HTTPS (see https://github.com/EvAvKein/Distillogue/issues/2)
   * Proper registration/authentication (likely only via third parties)
