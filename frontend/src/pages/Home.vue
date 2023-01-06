@@ -10,7 +10,7 @@
         :desirablityStyle="false"
         :customDuration="null"
       />
-      <a href="/about" class="core_backgroundButton">For more info</a>
+      <router-link class="core_backgroundButton" :to="{name: 'terms'}">For more info</router-link>
     </section>
   </main>
 </template>
