@@ -37,7 +37,7 @@ Remaining tasks before each stage of the project:
 ## Release-candidate deployment
 * ### All of the above
 * ### Security:
-  * HTTPS
+  * HTTPS (see https://github.com/EvAvKein/Distillogue/issues/2)
   * Proper registration/authentication (likely only via third parties)
   * DDoS mitigation & maybe a CDN (consider Cloudflare)
 * ### Regulation:
