@@ -1,6 +1,6 @@
 # Distillogue
 
-A tool for conducting dialogue in the distilled format of your choice; currently in very early development.
+A tool for conducting dialogue in the distilled format of your choice; currently in very early development, with a demo hosted at http://distillogue.com
 
 ---
 
