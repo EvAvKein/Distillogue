@@ -7,14 +7,6 @@
 
     <hr/>
 
-    <h2>Disclaimers</h2>
-    <ul>
-      <li>Data you submit on this website is public (no proper authentication yet, only usernames) and very temporary (for rapid development's sake, all user-generated data is deleted on every update)</li>
-      <li>In this early stage of the project, core features are a much higher priority for me than interface beauty. What currently exists is basic development styling, and I'm keenly aware of many of its thematic/design deficiencies</li>
-    </ul>
-
-    <hr/>
-
     <h2>Concepts</h2>
     <ul>
       <li>
@@ -52,10 +44,16 @@
 
     <ul>
       <li>
+        In this early stage of the project, core features are a much higher priority for me than interface appeal. What currently exists is basic development styling, and I'm keenly aware of many of its thematic/design deficiencies
+      </li>
+      <li>
         I'm currently the sole contributor to the project, and my attention is split between this, jobseeking, and working on my personal site (to improve my chances when jobseeking). I'm also the sole designer for this (in both UI/UX and systems/concept), which slows down development a bit
       </li>
       <li>
         I dont know how much I'd wanna work on this project in my free time when I'm employed, but if it'll have any interest/co-contributors I definitely wouldn't wanna abandon it
+      </li>
+      <li>
+        For this website's and API's informal terms for service, <router-link class="core_contentButton" :to="{name: 'terms'}">click here</router-link>
       </li>
     </ul>
 

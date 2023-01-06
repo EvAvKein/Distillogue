@@ -5,6 +5,7 @@ import {UserData} from "../../shared/objects/user";
 
 import home from "./pages/Home.vue";
 import about from "./pages/About.vue";
+import terms from "./pages/Terms.vue";
 import browse from "./pages/Browse.vue";
 import createPost from "./pages/CreatePost.vue";
 import viewPost from "./pages/ViewPost.vue";
@@ -22,6 +23,11 @@ const routes = [
     name: "about",
     path: "/about",
     component: about,
+  },
+  {
+    name: "terms",
+    path: "/terms",
+    component: terms,
   },
   {
     name: "browse",
