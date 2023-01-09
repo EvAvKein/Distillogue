@@ -1,10 +1,10 @@
-Remaining tasks before each stage of the project:
+# Remaining tasks for each stage of the project
 
 <hr>
 
-## ~~Pre-alpha/for-junior-portfolio's-sake deployment~~ COMPLETE
+## ~~Minimal initial deployment~~ COMPLETE
 
-## Proof-of-concept deployment
+## Proof-of-concept
 * ### Flagship/core features:
   * Identities system (already planned)
   * Mindmap layout using D3.js (name TBD), and potentially another? (ideas welcome)
@@ -17,21 +17,14 @@ Remaining tasks before each stage of the project:
 * ### Resources & Transparency:
   * Publicly display any and all aggregate data collected e.g weeky/monthly active users, configs by popularity
   * A 'why'/core-principles/core-values/project-philosophy page
-  * Contact page (e.g feedback/contact form)
-* ### Design makeover:
-  * General UI style
-  * Color palette
-  * Long-term logo & icons (possibly commissioned/paid)
-* ### Accessibility:
-  * Aria attributes & accessibility tree checkup (need to find free, toggleable, configurable software for testing. devtools accessibility tree is insufficient)
 * ### Ease of Contributing:
   * Prettier (local & CI)
   * Dockerized dev setup (see https://github.com/EvAvKein/Distillogue/issues/1)
 <hr>
 
-## Release-candidate deployment
+## Release-worthy
 * ### All of the above
-* # Core features:
+* ### Basic features:
   * Session-management dashboard page
 * ### Security:
   * HTTPS (see https://github.com/EvAvKein/Distillogue/issues/2)
@@ -40,11 +33,18 @@ Remaining tasks before each stage of the project:
 * ### Regulation:
   * Comprehensive legal obligations
   * Concise terms-of-service (and potentially code-of-conduct)
+* ### Design:
+  * General UI makeover
+  * Better color palette
+  * Long-term logo & icons (possibly commissioned/paid)
 * ### Resources & Transparency:
   * Proper front page
   * Proper about page
   * Concise footer
   * Versioned API
+  * Contact page (e.g feedback/contact form)
   * Other ideas (especially transparency-related) welcome!
+* ### Accessibility:
+  * Aria attributes & accessibility tree checkup (need to find free, toggleable, configurable software for testing. devtools accessibility tree is insufficient)
 * ### Optimization:
   * Client-side input validation (for preemptive human-readable errors)
