@@ -2,58 +2,58 @@ import {waitingTimes} from "../helpers/waitingTimes";
 import {randomUsername} from "../helpers/randomAlphanumString";
 
 describe("Profile editing", () => {
-  let username = "Profile" + randomUsername();
+	let username = "Profile" + randomUsername();
 
-  it("Setup (sign-up & go to Dashboard)", () => {
-    cy.signUp(username);
-    cy.contains("Dashboard").click();
-    cy.url().should("include", "/dashboard");
-  });
+	it("Setup (sign-up & go to Dashboard)", () => {
+		cy.signUp(username);
+		cy.contains("Dashboard").click();
+		cy.url().should("include", "/dashboard");
+	});
 
-  function validateProfileData() {
-    cy.contains("Name").parent().find("input").should("have.value", username);
-  };
-  
-  it("Edit and refresh to cancel", () => {
-    cy.get("#dashboardSubmit").should("not.be.visible");
-    validateProfileData();
+	function validateProfileData() {
+		cy.contains("Name").parent().find("input").should("have.value", username);
+	}
 
-    cy.contains("Name").parent().find("input").clear().type("Temporary change!");
-    cy.get("#dashboardSubmit").should("be.visible");
+	it("Edit and refresh to cancel", () => {
+		cy.get("#dashboardSubmit").should("not.be.visible");
+		validateProfileData();
 
-    cy.reload();
-    cy.wait(waitingTimes.pageColdLoad);
-    validateProfileData();
-    cy.get("#dashboardSubmit").should("not.be.visible");
-  });
+		cy.contains("Name").parent().find("input").clear().type("Temporary change!");
+		cy.get("#dashboardSubmit").should("be.visible");
 
-  it("Edit and undo to cancel", () => {
-    validateProfileData();
+		cy.reload();
+		cy.wait(waitingTimes.pageColdLoad);
+		validateProfileData();
+		cy.get("#dashboardSubmit").should("not.be.visible");
+	});
 
-    cy.contains("Name").parent().find("input").type("ExtraText");
-    cy.get("#dashboardSubmit").should("be.visible");
+	it("Edit and undo to cancel", () => {
+		validateProfileData();
 
-    cy.contains("Name").parent().find("input").clear().type(username);
-    cy.get("#dashboardSubmit").should("not.be.visible");
-  });
+		cy.contains("Name").parent().find("input").type("ExtraText");
+		cy.get("#dashboardSubmit").should("be.visible");
 
-  it("Edit and save", () => {
-    validateProfileData();
+		cy.contains("Name").parent().find("input").clear().type(username);
+		cy.get("#dashboardSubmit").should("not.be.visible");
+	});
 
-    username = "Changed" + randomUsername();
-    cy.contains("Name").parent().find("input").clear().type(username);
-    cy.get("#dashboardSubmit").click();
+	it("Edit and save", () => {
+		validateProfileData();
 
-    cy.wait(waitingTimes.httpRequest);
+		username = "Changed" + randomUsername();
+		cy.contains("Name").parent().find("input").clear().type(username);
+		cy.get("#dashboardSubmit").click();
 
-    cy.contains("Name").parent().find("input").should("have.value", username);
-    cy.get("#dashboardSubmit").should("not.be.visible");
-    cy.get(".notification.positive").should("have.text", "Changes saved!");
+		cy.wait(waitingTimes.httpRequest);
 
-    cy.reload();
-    cy.wait(waitingTimes.pageColdLoad);
-    validateProfileData();
-  });
+		cy.contains("Name").parent().find("input").should("have.value", username);
+		cy.get("#dashboardSubmit").should("not.be.visible");
+		cy.get(".notification.positive").should("have.text", "Changes saved!");
+
+		cy.reload();
+		cy.wait(waitingTimes.pageColdLoad);
+		validateProfileData();
+	});
 });
 
 // drafts & presets sections are skipped as they're best covered as their own spec (draftsAndPresets.cy.ts)

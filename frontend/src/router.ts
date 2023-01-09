@@ -14,95 +14,94 @@ import join from "./pages/Join.vue";
 import notFound from "./pages/NotFound.vue";
 
 const routes = [
-  {
-    name: "home",
-    path: "/",
-    component: home,
-  },
-  {
-    name: "about",
-    path: "/about",
-    component: about,
-  },
-  {
-    name: "terms",
-    path: "/terms",
-    component: terms,
-  },
-  {
-    name: "browse",
-    path: "/browse",
-    component: browse,
-    meta: {
-      accountRequired: true,
-    },
-  },
-  {
-    name: "createPost",
-    path: "/post/create",
-    component: createPost,
-    meta: {
-      accountRequired: true,
-    },
-  },
-  {
-    name: "viewPost",
-    path: "/post/view/:postId",
-    component: viewPost,
-    props: true,
-    meta: {
-      accountRequired: true,
-    },
-  },
-  {
-    name: "dashboard",
-    path: "/dashboard",
-    component: dashboard,
-    meta: {
-      accountRequired: true,
-    },
-  },
-  {
-    name: "join",
-    path: "/join",
-    component: join,
-  },
-  {
-    path: "/:pathMatch(.*)*",
-    component: notFound,
-  },
+	{
+		name: "home",
+		path: "/",
+		component: home,
+	},
+	{
+		name: "about",
+		path: "/about",
+		component: about,
+	},
+	{
+		name: "terms",
+		path: "/terms",
+		component: terms,
+	},
+	{
+		name: "browse",
+		path: "/browse",
+		component: browse,
+		meta: {
+			accountRequired: true,
+		},
+	},
+	{
+		name: "createPost",
+		path: "/post/create",
+		component: createPost,
+		meta: {
+			accountRequired: true,
+		},
+	},
+	{
+		name: "viewPost",
+		path: "/post/view/:postId",
+		component: viewPost,
+		props: true,
+		meta: {
+			accountRequired: true,
+		},
+	},
+	{
+		name: "dashboard",
+		path: "/dashboard",
+		component: dashboard,
+		meta: {
+			accountRequired: true,
+		},
+	},
+	{
+		name: "join",
+		path: "/join",
+		component: join,
+	},
+	{
+		path: "/:pathMatch(.*)*",
+		component: notFound,
+	},
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes,
+	history: createWebHistory(process.env.BASE_URL),
+	routes,
 });
 
 router.beforeEach(async (to, from, next) => {
-  const user = useUser();
-  const sessionKey = localStorage.getItem("sessionKey");
+	const user = useUser();
+	const sessionKey = localStorage.getItem("sessionKey");
 
-  if (sessionKey && !user.data) {
-    await jsonFetch("GET", "/sessions", null, sessionKey)
-      .then((response) => {
-        if (!response.error) {
-          user.data = (response.data as UserData);
-        };
-      });
-  };
+	if (sessionKey && !user.data) {
+		await jsonFetch("GET", "/sessions", null, sessionKey).then((response) => {
+			if (!response.error) {
+				user.data = response.data as UserData;
+			}
+		});
+	}
 
-  const accountRequired = to.matched.some(record => record.meta.accountRequired);
-  if (!accountRequired) {
-    next();
-    return;
-  };
+	const accountRequired = to.matched.some((record) => record.meta.accountRequired);
+	if (!accountRequired) {
+		next();
+		return;
+	}
 
-  if (!user.data) {
-    next({path: "/join"});
-    return;
-  };
+	if (!user.data) {
+		next({path: "/join"});
+		return;
+	}
 
-  next();
+	next();
 });
 
 export default router;

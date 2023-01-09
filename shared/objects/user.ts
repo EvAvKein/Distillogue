@@ -2,65 +2,65 @@ import {v4 as newId} from "uuid";
 import {PostConfig, Node} from "./post.js";
 
 class User {
-  auths:UserAuth[];
-  sessions:UserSession[];
-  banned?:true;
-  data:UserData;
+	auths: UserAuth[];
+	sessions: UserSession[];
+	banned?: true;
+	data: UserData;
 
-  constructor(data:UserData) {
-    this.auths = [];
-    this.sessions = [new UserSession()];
-    delete this.banned;
-    this.data = data;
-  };
-};
+	constructor(data: UserData) {
+		this.auths = [];
+		this.sessions = [new UserSession()];
+		delete this.banned;
+		this.data = data;
+	}
+}
 
 class UserAuth {
-  provider:"Distillogue";
-  key:string;
+	provider: "Distillogue";
+	key: string;
 
-  constructor(provider:UserAuth["provider"], key:UserAuth["key"]) {
-    this.provider = provider;
-    this.key = key;
-  };
-};
+	constructor(provider: UserAuth["provider"], key: UserAuth["key"]) {
+		this.provider = provider;
+		this.key = key;
+	}
+}
 
 class UserSession {
-  name?:string;
-  key:string;
+	name?: string;
+	key: string;
 
-  constructor(name?:UserSession["name"]) {
-    name ? this.name = name : delete this.name;
-    this.key = newId() + newId() + newId();
-  };
-};
+	constructor(name?: UserSession["name"]) {
+		name ? (this.name = name) : delete this.name;
+		this.key = newId() + newId() + newId();
+	}
+}
 
 class UserData {
-  id:string;
-  name:string;
-  drafts:{title:Node["title"], body:Node["body"], lastEdited:number}[];
-  configPresets:{name:string, config:Omit<PostConfig, "access">}[];
+	id: string;
+	name: string;
+	drafts: {title: Node["title"]; body: Node["body"]; lastEdited: number}[];
+	configPresets: {name: string; config: Omit<PostConfig, "access">}[];
 
-  constructor(name:UserData["name"]) {
-    this.id = newId();
-    this.name = name;
-    this.drafts = [];
-    this.configPresets = [];
-  };
-};
+	constructor(name: UserData["name"]) {
+		this.id = newId();
+		this.name = name;
+		this.drafts = [];
+		this.configPresets = [];
+	}
+}
 
 class UserPayload {
-  sessionKey:UserSession["key"];
-  data:UserData;
+	sessionKey: UserSession["key"];
+	data: UserData;
 
-  constructor(sessionKey:UserPayload["sessionKey"], userData:UserPayload["data"]) {
-    this.sessionKey = sessionKey;
-    this.data = userData;
-  };
-};
+	constructor(sessionKey: UserPayload["sessionKey"], userData: UserPayload["data"]) {
+		this.sessionKey = sessionKey;
+		this.data = userData;
+	}
+}
 
 const arrOfEditableUserData = ["name", "drafts", "configPresets"] as const;
-type editableUserData = typeof arrOfEditableUserData[number];
+type editableUserData = (typeof arrOfEditableUserData)[number];
 
 // class Log {
 //   timeUnix:number;
@@ -79,11 +79,12 @@ type editableUserData = typeof arrOfEditableUserData[number];
 // };
 
 export {
-  User,
-  UserAuth,
-  UserSession,
-  UserData,
-  UserPayload,
-  editableUserData, arrOfEditableUserData,
-  //Log,
+	User,
+	UserAuth,
+	UserSession,
+	UserData,
+	UserPayload,
+	editableUserData,
+	arrOfEditableUserData,
+	//Log,
 };

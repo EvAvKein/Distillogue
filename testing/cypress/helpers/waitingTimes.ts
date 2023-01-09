@@ -2,9 +2,9 @@ const httpRequest = 250;
 const pageTransition = 250;
 
 const waitingTimes = {
-  httpRequest: httpRequest,
-  pageColdLoad: httpRequest + pageTransition,
-  pageTransition: (pageTransition * 1.5) + httpRequest, // no need to wait for the entirety of the incoming page's transition, cypress can interact before it's done
+	httpRequest: httpRequest,
+	pageColdLoad: httpRequest + pageTransition,
+	pageTransition: pageTransition * 1.5 + httpRequest, // no need to wait for the entirety of the incoming page's transition, cypress can interact before it's done
 };
 
 export {waitingTimes};

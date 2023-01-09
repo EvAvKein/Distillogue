@@ -1,28 +1,32 @@
 import {Node} from "../objects/post";
 
-export async function findPathToNode(postObject:Node, targetNodeId:Node["id"]) {
-  let ancestry = [] as Node["id"][];
+export async function findPathToNode(postObject: Node, targetNodeId: Node["id"]) {
+	let ancestry = [] as Node["id"][];
 
-  async function lookForTargetNode(currentNode:Node, targetNodeId:Node["id"], ancestryOfCurrent:Node["id"][]):Promise<void> {
-    if (ancestry.includes(targetNodeId)) {
-      return;
-    };
+	async function lookForTargetNode(
+		currentNode: Node,
+		targetNodeId: Node["id"],
+		ancestryOfCurrent: Node["id"][]
+	): Promise<void> {
+		if (ancestry.includes(targetNodeId)) {
+			return;
+		}
 
-    const ancestryWithCurrentNode = [...ancestryOfCurrent, currentNode.id];
+		const ancestryWithCurrentNode = [...ancestryOfCurrent, currentNode.id];
 
-    if (currentNode.id == targetNodeId) {
-      ancestry = ancestryWithCurrentNode;
-      return;
-    };
-  
-    currentNode.replies.forEach((replyNode) => {
-      lookForTargetNode(replyNode, targetNodeId, ancestryWithCurrentNode);
-    });
-  };
+		if (currentNode.id == targetNodeId) {
+			ancestry = ancestryWithCurrentNode;
+			return;
+		}
 
-  await lookForTargetNode(postObject, targetNodeId, []);
+		currentNode.replies.forEach((replyNode) => {
+			lookForTargetNode(replyNode, targetNodeId, ancestryWithCurrentNode);
+		});
+	}
 
-  return ancestry;
-};
+	await lookForTargetNode(postObject, targetNodeId, []);
 
-// no longer in use because i figured it's probably better to have a slower load time than slower interaction time (and the requisite refactor put this out of use). keeping it for the time being because it's still potentially useful code 
+	return ancestry;
+}
+
+// no longer in use because i figured it's probably better to have a slower load time than slower interaction time (and the requisite refactor put this out of use). keeping it for the time being because it's still potentially useful code

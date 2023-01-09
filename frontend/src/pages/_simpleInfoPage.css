@@ -1,28 +1,40 @@
 main {
-  padding: 0 0.75em 0.5em;
-  max-width: 65em;
-  margin: auto;
+	padding: 0 0.75em 0.5em;
+	max-width: 65em;
+	margin: auto;
 }
 
 h1 {
-  font-size: 3.5em;
-  text-align: center;
+	font-size: 3.5em;
+	text-align: center;
 }
 
-#greeting {text-align: center}
+#greeting {
+	text-align: center;
+}
 
-h2 {font-size: 2em}
+h2 {
+	font-size: 2em;
+}
 
-li + li {margin-top: 1em}
+li + li {
+	margin-top: 1em;
+}
 
-p {margin-bottom: 0}
-p + p {margin-top: 0.75em}
+p {
+	margin-bottom: 0;
+}
+p + p {
+	margin-top: 0.75em;
+}
 
-a {text-decoration: underline}
+a {
+	text-decoration: underline;
+}
 address {
-  display: inline;
-  font-style: normal;
-  user-select: all;
-  text-decoration: underline dotted;
-  text-underline-offset: 0.2em;
+	display: inline;
+	font-style: normal;
+	user-select: all;
+	text-decoration: underline dotted;
+	text-underline-offset: 0.2em;
 }

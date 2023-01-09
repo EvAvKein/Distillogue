@@ -1,6 +1,5 @@
 version: "3"
 services:
-
   nginx:
     image: "nginx"
     build:
@@ -39,7 +38,7 @@ services:
     restart: unless-stopped
 
   frontend:
-    build: 
+    build:
       context: ./
       dockerfile: ./frontend/dockerfile
     volumes:

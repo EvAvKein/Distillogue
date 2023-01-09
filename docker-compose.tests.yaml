@@ -1,6 +1,5 @@
 version: "3"
 services:
-
   cypress:
     image: "cypress/included:10.4.0"
     environment:

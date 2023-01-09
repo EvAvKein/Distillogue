@@ -14,14 +14,14 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands';
+import "./commands";
 
 beforeEach(() => {
-  cy.restoreLocalStorage();
+	cy.restoreLocalStorage();
 });
 
 afterEach(() => {
-  cy.saveLocalStorage();
+	cy.saveLocalStorage();
 });
 
 // Alternatively you can use CommonJS syntax:

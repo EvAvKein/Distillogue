@@ -1,17 +1,17 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "rootDirs": ["./", "./shared"],
-    "outDir": "./dist",
-    "strict": true,
-    // "sourceMap": true,
-    "jsx": "preserve",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "lib": ["esnext", "dom"],
-  },
-  "include": ["*.ts", "src/**/*.ts", "src/**/*.vue", "src/env.d.ts", "src/main.ts"],
-  "exclude": ["./node_modules"]
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "esnext",
+		"moduleResolution": "node",
+		"rootDirs": ["./", "./shared"],
+		"outDir": "./dist",
+		"strict": true,
+		// "sourceMap": true,
+		"jsx": "preserve",
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"lib": ["esnext", "dom"]
+	},
+	"include": ["*.ts", "src/**/*.ts", "src/**/*.vue", "src/env.d.ts", "src/main.ts"],
+	"exclude": ["./node_modules"]
 }

@@ -1,12 +1,11 @@
 <template>
-  <main>
-    <createPost/>
-  </main>
+	<main>
+		<createPost />
+	</main>
 </template>
 
 <script setup lang="ts">
-  import createPost from "../components/posts/create/createNode.vue";
+	import createPost from "../components/posts/create/createNode.vue";
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

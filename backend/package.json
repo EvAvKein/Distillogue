@@ -1,27 +1,27 @@
 {
-  "type": "module",
-  "scripts": {
-    "database": "start mongod",
-    "build": "tsc",
-    "buildDev": "tsc --watch",
-    "server": "node dist/backend/src/server.js",
-    "serverDev": "nodemon dist/backend/src/server.js",
-    "host": "npm run database && npm run server",
-    "hostDev": "npm run database && npm run serverDev",
-    "serve": "npm run build && npm run host",
-    "serveDev": "start npm run buildDev && npm run hostDev"
-  },
-  "dependencies": {
-    "express": "^4.17.2",
-    "helmet": "^6.0.0",
-    "joi": "^17.5.0",
-    "mongodb": "^4.3.1",
-    "uuid": "^9.0.0"
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.13",
-    "@types/node": "^18.8.4",
-    "@types/uuid": "^8.3.4",
-    "typescript": "^4.4.4"
-  }
+	"type": "module",
+	"scripts": {
+		"database": "start mongod",
+		"build": "tsc",
+		"buildDev": "tsc --watch",
+		"server": "node dist/backend/src/server.js",
+		"serverDev": "nodemon dist/backend/src/server.js",
+		"host": "npm run database && npm run server",
+		"hostDev": "npm run database && npm run serverDev",
+		"serve": "npm run build && npm run host",
+		"serveDev": "start npm run buildDev && npm run hostDev"
+	},
+	"dependencies": {
+		"express": "^4.17.2",
+		"helmet": "^6.0.0",
+		"joi": "^17.5.0",
+		"mongodb": "^4.3.1",
+		"uuid": "^9.0.0"
+	},
+	"devDependencies": {
+		"@types/express": "^4.17.13",
+		"@types/node": "^18.8.4",
+		"@types/uuid": "^8.3.4",
+		"typescript": "^4.4.4"
+	}
 }

@@ -1,135 +1,140 @@
 <template>
-  <section aria-label="Vote interactions">
-    <button v-if="voters.up"
-      aria-label="Upvote"
-      :class="'core_contentButton' + (currentVote === 'up' ? ' voted' : '')"
-      @click="vote('up', !upvoters?.includes(user.data!.id))"
-    >
-      <img src="../../../../assets/upArrow.svg" alt="Upwards arrow icon"/>
-    </button>
+	<section aria-label="Vote interactions">
+		<button
+			v-if="voters.up"
+			aria-label="Upvote"
+			:class="'core_contentButton' + (currentVote === 'up' ? ' voted' : '')"
+			@click="vote('up', !upvoters?.includes(user.data!.id))"
+		>
+			<img src="../../../../assets/upArrow.svg" alt="Upwards arrow icon" />
+		</button>
 
-    <span
-      aria-label="Votes status"
-      :title="title"
-      :class="title.length > 0 ? 'hasDetails' : ''"
-    >
-      {{totalVotes}}
-    </span>
+		<span aria-label="Votes status" :title="title" :class="title.length > 0 ? 'hasDetails' : ''">
+			{{ totalVotes }}
+		</span>
 
-    <button v-if="voters.down"
-      aria-label="Downvote"
-      :class="'core_contentButton' + (currentVote === 'down' ? ' voted' : '')"
-      @click="vote('down', !downvoters?.includes(user.data!.id))"
-    >
-      <img style="transform: rotate(180deg)"
-        src="../../../../assets/upArrow.svg" alt="Downwards arrow icon"
-      />
-    </button>
-  </section>
+		<button
+			v-if="voters.down"
+			aria-label="Downvote"
+			:class="'core_contentButton' + (currentVote === 'down' ? ' voted' : '')"
+			@click="vote('down', !downvoters?.includes(user.data!.id))"
+		>
+			<img style="transform: rotate(180deg)" src="../../../../assets/upArrow.svg" alt="Downwards arrow icon" />
+		</button>
+	</section>
 </template>
 
 <script setup lang="ts">
-  import {ref, computed} from "vue";
-  import {NodeInteractionRequest} from "../../../../../../shared/objects/api";
-  import {Node, NodeStats} from "../../../../../../shared/objects/post";
-  import {jsonFetch} from "../../../../helpers/jsonFetch";
-  import {useUser} from "../../../../stores/user";
-  import {getSessionKey} from "../../../../helpers/getSessionKey";
-  const user = useUser();
+	import {ref, computed} from "vue";
+	import {NodeInteractionRequest} from "../../../../../../shared/objects/api";
+	import {Node, NodeStats} from "../../../../../../shared/objects/post";
+	import {jsonFetch} from "../../../../helpers/jsonFetch";
+	import {useUser} from "../../../../stores/user";
+	import {getSessionKey} from "../../../../helpers/getSessionKey";
+	const user = useUser();
 
-  const props = defineProps<{
-    voters:NonNullable<NodeStats["votes"]>;
-    interactionPath:Node["id"][];
-  }>();
-  const emit = defineEmits(["interactionError"]);
+	const props = defineProps<{
+		voters: NonNullable<NodeStats["votes"]>;
+		interactionPath: Node["id"][];
+	}>();
+	const emit = defineEmits(["interactionError"]);
 
-  const upvoters = ref(props.voters.up);
-  const downvoters = ref(props.voters.down);
-  const totalVotes = computed(() => {
-    return (upvoters.value?.length ?? 0) - (downvoters.value?.length ?? 0);
-  });
-  
-  const title = computed(() => {
-    let titleVar = "";
+	const upvoters = ref(props.voters.up);
+	const downvoters = ref(props.voters.down);
+	const totalVotes = computed(() => {
+		return (upvoters.value?.length ?? 0) - (downvoters.value?.length ?? 0);
+	});
 
-    const anyUpvotes = upvoters.value && upvoters.value.length > 0;
-    const anyDownvotes = downvoters.value && downvoters.value.length > 0;
+	const title = computed(() => {
+		let titleVar = "";
 
-    if (anyUpvotes) {titleVar += `Upvotes: ${upvoters.value!.length}`};
-    if (anyUpvotes && anyDownvotes) {titleVar += "\n"};
-    if (anyDownvotes) {titleVar += `Downvotes: ${downvoters.value!.length}`};
-    return titleVar;
-  });
+		const anyUpvotes = upvoters.value && upvoters.value.length > 0;
+		const anyDownvotes = downvoters.value && downvoters.value.length > 0;
 
-  type voteDirection = "up"|"down";
-  const currentVote = computed<voteDirection|null>(() => {
-    if (upvoters.value && upvoters.value.includes(user.data!.id)) return "up";
-    if (downvoters.value && downvoters.value.includes(user.data!.id)) return "down";
-    return null;
-  });
+		if (anyUpvotes) {
+			titleVar += `Upvotes: ${upvoters.value!.length}`;
+		}
+		if (anyUpvotes && anyDownvotes) {
+			titleVar += "\n";
+		}
+		if (anyDownvotes) {
+			titleVar += `Downvotes: ${downvoters.value!.length}`;
+		}
+		return titleVar;
+	});
 
-  async function vote(voteDirection:voteDirection, newVoteStatus:boolean) {
-    if (!getSessionKey()) {
-      emit("interactionError", "Must be logged in to vote");
-      return;
-    };
+	type voteDirection = "up" | "down";
+	const currentVote = computed<voteDirection | null>(() => {
+		if (upvoters.value && upvoters.value.includes(user.data!.id)) return "up";
+		if (downvoters.value && downvoters.value.includes(user.data!.id)) return "down";
+		return null;
+	});
 
-    const response = await jsonFetch("POST", "/posts/interactions",
-      new NodeInteractionRequest(
-        props.interactionPath,
-        "vote",
-        {voteDirection, newVoteStatus}
-      ),
-      getSessionKey()
-    );
+	async function vote(voteDirection: voteDirection, newVoteStatus: boolean) {
+		if (!getSessionKey()) {
+			emit("interactionError", "Must be logged in to vote");
+			return;
+		}
 
-    if (response.error) {
-      emit("interactionError", response.error.message)
-      return;
-    };
-      
-    adjustLocalVoteArrays(voteDirection, newVoteStatus);
-  };
+		const response = await jsonFetch(
+			"POST",
+			"/posts/interactions",
+			new NodeInteractionRequest(props.interactionPath, "vote", {voteDirection, newVoteStatus}),
+			getSessionKey()
+		);
 
-  function adjustLocalVoteArrays(voteDirection:voteDirection, newVoteStatus:boolean) {
-    const array = voteDirection === "up"
-      ? {subject: upvoters, opposite: downvoters}
-      : {subject: downvoters, opposite: upvoters};
+		if (response.error) {
+			emit("interactionError", response.error.message);
+			return;
+		}
 
-    if (!newVoteStatus) {
-      array.subject.value!.splice(array.subject.value!.indexOf(user.data!.id) , 1);
-      return;
-    };
+		adjustLocalVoteArrays(voteDirection, newVoteStatus);
+	}
 
-    array.subject.value!.push(user.data!.id);
-    if (array.opposite.value && array.opposite.value.includes(user.data!.id)) {
-      array.opposite.value.splice(array.opposite.value.indexOf(user.data!.id), 1);
-    };
-  };
+	function adjustLocalVoteArrays(voteDirection: voteDirection, newVoteStatus: boolean) {
+		const array =
+			voteDirection === "up" ? {subject: upvoters, opposite: downvoters} : {subject: downvoters, opposite: upvoters};
+
+		if (!newVoteStatus) {
+			array.subject.value!.splice(array.subject.value!.indexOf(user.data!.id), 1);
+			return;
+		}
+
+		array.subject.value!.push(user.data!.id);
+		if (array.opposite.value && array.opposite.value.includes(user.data!.id)) {
+			array.opposite.value.splice(array.opposite.value.indexOf(user.data!.id), 1);
+		}
+	}
 </script>
 
 <style scoped>
-  section {
-    font-size: 1.15em;
-    width: max-content;
-    text-align: center;
-  }
+	section {
+		font-size: 1.15em;
+		width: max-content;
+		text-align: center;
+	}
 
-  button {
-    display: block;
-    margin: auto;
-    height: 1em;
-  }
+	button {
+		display: block;
+		margin: auto;
+		height: 1em;
+	}
 
-  .voted {
-    filter: var(--filterToHighlightColor)
-  }
-  .voted:hover {
-    filter: var(--filterToHighlightSubColor)
-  }
+	.voted {
+		filter: var(--filterToHighlightColor);
+	}
+	.voted:hover {
+		filter: var(--filterToHighlightSubColor);
+	}
 
-  img {height: inherit}
+	img {
+		height: inherit;
+	}
 
-  span.hasDetails {cursor: help}
-  span:not(.hasDetails) {cursor: default}
+	span.hasDetails {
+		cursor: help;
+	}
+	span:not(.hasDetails) {
+		cursor: default;
+	}
 </style>

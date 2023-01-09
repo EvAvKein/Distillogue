@@ -3,30 +3,30 @@
 import {Node} from "../../../../shared/objects/post";
 
 interface mongoLocatorsObject {
-  updatePath:string,
-  arrayFiltersOption?:{}[],
-};
+	updatePath: string;
+	arrayFiltersOption?: {}[];
+}
 
-export function nodePathAsMongoLocators(nodePath:Node["id"][]) {
-  if (nodePath.length < 2) {
-    return {
-      updatePath: "",
-      arrayFiltersOption: undefined,
-    } as mongoLocatorsObject;
-  };
+export function nodePathAsMongoLocators(nodePath: Node["id"][]) {
+	if (nodePath.length < 2) {
+		return {
+			updatePath: "",
+			arrayFiltersOption: undefined,
+		} as mongoLocatorsObject;
+	}
 
-  let identifier = "";
-  let mongoPath = "";
-  const filtersArray = [] as {}[];
+	let identifier = "";
+	let mongoPath = "";
+	const filtersArray = [] as {}[];
 
-  nodePath.slice(1).forEach((nodeId) => {
-    identifier += "o";
-    mongoPath += `replies.$[${identifier}].`;
-    filtersArray.push({[identifier + ".id"]: nodeId});
-  });
+	nodePath.slice(1).forEach((nodeId) => {
+		identifier += "o";
+		mongoPath += `replies.$[${identifier}].`;
+		filtersArray.push({[identifier + ".id"]: nodeId});
+	});
 
-  return {
-    updatePath: mongoPath,
-    arrayFiltersOption: filtersArray,
-  } as mongoLocatorsObject;
-};
+	return {
+		updatePath: mongoPath,
+		arrayFiltersOption: filtersArray,
+	} as mongoLocatorsObject;
+}

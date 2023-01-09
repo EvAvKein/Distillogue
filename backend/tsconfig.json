@@ -1,16 +1,16 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "rootDirs": ["./", "../shared"],
-    "outDir": "./dist",
-    "strict": true,
-    // "sourceMap": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "lib": ["esnext"],
-  },
-  "include": ["*.ts", "src/**/*.ts", "../shared/**/*.ts"],
-  "exclude": ["./node_modules"]
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "esnext",
+		"moduleResolution": "node",
+		"rootDirs": ["./", "../shared"],
+		"outDir": "./dist",
+		"strict": true,
+		// "sourceMap": true,
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"lib": ["esnext"]
+	},
+	"include": ["*.ts", "src/**/*.ts", "../shared/**/*.ts"],
+	"exclude": ["./node_modules"]
 }

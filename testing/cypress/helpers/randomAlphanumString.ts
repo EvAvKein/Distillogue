@@ -1,28 +1,25 @@
-function randomAlphanumString(LengthMultiplier?:number, withSpaces?:true) {
-  let string = "";
+function randomAlphanumString(LengthMultiplier?: number, withSpaces?: true) {
+	let string = "";
 
-  for (let remainder = LengthMultiplier || 1; remainder > 0; remainder--) {
-    if (withSpaces && remainder < LengthMultiplier) {string += " "};
-    string += Math.random().toString(36).slice(2);
-  };
+	for (let remainder = LengthMultiplier || 1; remainder > 0; remainder--) {
+		if (withSpaces && remainder < LengthMultiplier) {
+			string += " ";
+		}
+		string += Math.random().toString(36).slice(2);
+	}
 
-  return string;
-};
+	return string;
+}
 
 function randomUsername() {
-  return randomAlphanumString(1);
-};
+	return randomAlphanumString(1);
+}
 
 function randomNodeTitle() {
-  return randomAlphanumString(2, true);
-};
+	return randomAlphanumString(2, true);
+}
 function randomNodeBody() {
-  return randomAlphanumString(7, true);
-};
+	return randomAlphanumString(7, true);
+}
 
-export {
-  randomAlphanumString,
-  randomUsername,
-  randomNodeTitle,
-  randomNodeBody,
-};
+export {randomAlphanumString, randomUsername, randomNodeTitle, randomNodeBody};

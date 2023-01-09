@@ -1,3 +1,3 @@
 export function getSessionKey() {
-  return localStorage.getItem("sessionKey") || undefined;
-};
+	return localStorage.getItem("sessionKey") || undefined;
+}

@@ -1,35 +1,34 @@
 {
-  "name": "distillogue",
-  "description": "A tool for conducting dialogue in the distilled format of your choice; currently in very early development.",
-  "author": "Eve Aviv Keinan",
-  "license": "MIT",
-  "scripts": {
-    "install": "cd shared && npm install && cd ../backend && npm install && cd ../frontend && npm install && cd ../testing && npm install",
-
-    "build": "cd backend && npm run build && cd ../frontend && npm run build",
-    "buildDev": "cd backend && start npm run buildDev && cd ../frontend && start npm run buildDev",
-
-    "host": "cd backend && start npm run host",
-    "hostDev": "cd backend && start npm run hostDev",
-
-    "serve": "npm run build && npm run host",
-    "serveDev": "npm run buildDev && npm run hostDev",
-    
-    "cypress": "cd testing && npm run cypress",
-    "test": "npm run serve && npm run cypress",
-    "cypressBrowser": "cd testing && npm run cypressBrowser",
-    "testBrowser": "npm run serve && npm run cypressBrowser",
-
-    "docker": "docker-compose up",
-    "dockerCypress": "docker-compose -f docker-compose.tests.yaml up",
-    "dockerTest": "docker-compose up --detach && docker-compose -f docker-compose.tests.yaml up"
-  },
-  "homepage": "https://github.com/EvAvKein/Distillogue#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/EvAvKein/Distillogue.git"
-  },
-  "bugs": {
-    "url": "https://github.com/EvAvKein/Distillogue/issues"
-  }
+	"name": "distillogue",
+	"description": "A tool for conducting dialogue in the distilled format of your choice; currently in very early development.",
+	"author": "Eve Aviv Keinan",
+	"license": "MIT",
+	"scripts": {
+		"install": "npm install && cd shared && npm install && cd ../backend && npm install && cd ../frontend && npm install && cd ../testing && npm install",
+		"build": "cd backend && npm run build && cd ../frontend && npm run build",
+		"buildDev": "cd backend && start npm run buildDev && cd ../frontend && start npm run buildDev",
+		"host": "cd backend && start npm run host",
+		"hostDev": "cd backend && start npm run hostDev",
+		"serve": "npm run build && npm run host",
+		"serveDev": "npm run buildDev && npm run hostDev",
+		"cypress": "cd testing && npm run cypress",
+		"test": "npm run serve && npm run cypress",
+		"cypressBrowser": "cd testing && npm run cypressBrowser",
+		"testBrowser": "npm run serve && npm run cypressBrowser",
+		"docker": "docker-compose up",
+		"dockerCypress": "docker-compose -f docker-compose.tests.yaml up",
+		"dockerTest": "docker-compose up --detach && docker-compose -f docker-compose.tests.yaml up",
+		"prettier": "npx prettier --write ."
+	},
+	"homepage": "https://github.com/EvAvKein/Distillogue#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/EvAvKein/Distillogue.git"
+	},
+	"bugs": {
+		"url": "https://github.com/EvAvKein/Distillogue/issues"
+	},
+	"devDependencies": {
+		"prettier": "2.8.2"
+	}
 }

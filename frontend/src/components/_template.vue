@@ -1,21 +1,17 @@
-<template>
-
-</template>
+<template></template>
 
 <script setup lang="ts">
-  // import {ref, computed} from "vue";
-  // import {useRouter} from "vue-router";
-  // import {useUser} from "../stores/user";
+	// import {ref, computed} from "vue";
+	// import {useRouter} from "vue-router";
+	// import {useUser} from "../stores/user";
 
-  // const props = defineProps<{
-    
-  // }>();
+	// const props = defineProps<{
 
-  // const emit = defineEmits([
+	// }>();
 
-  // ]);
+	// const emit = defineEmits([
+
+	// ]);
 </script>
 
-<style scoped>
-  
-</style>
+<style scoped></style>
