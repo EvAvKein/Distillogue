@@ -46,7 +46,7 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 #### With Node
 
 1. Install the above dependencies (excluding Docker of course) & clone this project via download/Git
-2. Run `npm run install`
+2. Run `npm run installAll`
 
 ### Commands
 
