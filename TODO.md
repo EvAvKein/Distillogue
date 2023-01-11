@@ -19,7 +19,6 @@
   - Publicly display any and all aggregate data collected e.g weeky/monthly active users, configs by popularity
   - A 'why'/core-principles/core-values/project-philosophy page
 - ### Ease of Contributing:
-  - Prettier (local & CI)
   - Dockerized dev setup (see https://github.com/EvAvKein/Distillogue/issues/1)
   <hr>
 
