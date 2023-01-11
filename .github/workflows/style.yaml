@@ -7,7 +7,7 @@ on:
     branches: ["main"]
 
 jobs:
-  Prettier Check:
+  Prettier:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,5 +19,7 @@ jobs:
           node-version: "16"
           cache: "npm"
 
-      - run: npm ci
-      - run: npx prettier --check .
+      - name: Prettier
+        run: |
+          npm ci
+          npx prettier --check .
