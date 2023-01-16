@@ -41,14 +41,16 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 
 ### Prerequisites
 
+1. Clone this project via Git/download
+
 #### With Docker
 
-1. Install & open Docker
+2. Install & launch Docker
 
 #### With Node
 
-1. Install the above dependencies (excluding Docker of course) & clone this project via download/Git
-2. Run `npm run installAll`
+3. Install the above dependencies (excluding Docker of course)
+4. Run `npm run installAll`
 
 ### Commands
 
