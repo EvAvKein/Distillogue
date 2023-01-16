@@ -21,8 +21,10 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 - Frontend: Vue.js + TypeScript
 - Server: Node.js + Express.js + TypeScript
 - Database: MongoDB
+- Proxy: Nginx
 - Testing: Cypress
 - Packaging: Docker
+- Formatting: Prettier
 
 ### Dependencies
 
