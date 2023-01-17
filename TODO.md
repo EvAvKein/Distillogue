@@ -20,6 +20,9 @@
   - A 'why'/core-principles/core-values/project-philosophy page
 - ### Ease of Contributing:
   - Dockerized dev setup (see https://github.com/EvAvKein/Distillogue/issues/1)
+- ### Optimization:
+  - Migrate tests from Cypress to Playwright
+  - Write test for dashboard contacts page
   <hr>
 
 ## Release-worthy
