@@ -13,7 +13,8 @@ const UserPatchRequest = Joi.object<Class.UserPatchRequest<editableUserData>>({
 	newValue: Joi.required()
 		.when("dataName", {is: "name", then: SharedSchema.User.UserData.extract("name")})
 		.when("dataName", {is: "drafts", then: SharedSchema.User.UserData.extract("drafts")})
-		.when("dataName", {is: "configPresets", then: SharedSchema.User.UserData.extract("configPresets")}),
+		.when("dataName", {is: "configPresets", then: SharedSchema.User.UserData.extract("configPresets")})
+		.when("dataName", {is: "contacts", then: SharedSchema.User.UserData.extract("contacts")}),
 }).required();
 
 const UserPatchRequestArray = Joi.array<Class.UserPatchRequest<editableUserData>[]>()

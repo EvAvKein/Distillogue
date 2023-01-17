@@ -28,6 +28,10 @@
 					/>
 					<span>Presets</span>
 				</button>
+				<button @click="currentPage = 'contacts'" :inert="currentPage === 'contacts'" class="core_contentButton">
+					<img src="../../assets/contacts.svg" alt="Address book icon" />
+					<span>Contacts</span>
+				</button>
 			</nav>
 		</section>
 		<section id="dashboardPage">
@@ -37,6 +41,7 @@
 				<profileEditor v-if="currentPage === 'profile'" @newState="updateChangesByNewState" />
 				<draftsEditor v-if="currentPage === 'drafts'" @newState="updateChangesByNewState" />
 				<presetsEditor v-if="currentPage === 'presets'" @newState="updateChangesByNewState" />
+				<contactsEditor v-if="currentPage === 'contacts'" @newState="updateChangesByNewState" />
 			</transition>
 		</section>
 	</section>
@@ -55,10 +60,11 @@
 	import profileEditor from "./dashboardSections/profileEditor.vue";
 	import draftsEditor from "./dashboardSections/draftsEditor.vue";
 	import presetsEditor from "./dashboardSections/configPresetsEditor.vue";
+	import contactsEditor from "./dashboardSections/contactsEditor.vue";
 	const user = useUser();
 	const changes = useDashboardEdits().edits;
 
-	type pageName = "profile" | "drafts" | "presets";
+	type pageName = "profile" | "drafts" | "presets" | "contacts";
 	const currentPage = ref<pageName>("profile");
 	const submitNotif = reactive({text: "", style: undefined as boolean | undefined});
 

@@ -47,6 +47,14 @@ const User = {
 					config: Post.PostConfig, // should exclude the "access" property, but waiting on a conclusion for this issue i opened (and it wouldn't be terrible to not exclude it in the meanwhile): https://github.com/hapijs/joi/issues/2832
 				}).max(3)
 			),
+		contacts: Joi.array()
+			.required()
+			.items(
+				Joi.object({
+					name: Joi.string().required(),
+					id: Joi.string().required(),
+				}).max(3)
+			),
 	}).required(),
 };
 
