@@ -42,10 +42,11 @@
 	type subkeyOfPostConfig = keysFromAllObjects<PostConfig[keyof PostConfig]>; // don't ask me why this works, but `keyof PostConfig[keyof PostConfig]` doesnt
 
 	type configProperty = "votes";
-	// i tried and failed to create a generic which, when provided the T of a key of PostConfig, returns the keys of PostConfig[T] (e.g keyOfPostConfigProp<"votes"> === "up"|"down"|"anon")
-	// i'm not even sure it's possible
 	type configSubproperty = "up";
-
+	// TODO: the above two types exist because i tried and failed to turn the below function into a generic which narrows the subproperty param based on the property param (so i could call `config[property][subproperty]` without the hard-typed overrides)
+	// this commented-out generic and test are the closest i got, which may or may not be helpful
+	//		type keyOfPostConfigProp<T extends keyof PostConfig> = keyof Required<PostConfig>[T];
+	//		let test: keyOfPostConfigProp<"votes">;
 	function editConfigProperty(property: keyof PostConfig, subproperty: subkeyOfPostConfig, newValue: true | undefined) {
 		if (subproperty && !props.config[property]) {
 			props.config[property] = {};
