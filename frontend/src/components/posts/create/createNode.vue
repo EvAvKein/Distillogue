@@ -51,10 +51,10 @@
 				<img src="../../../assets/fileConfig.svg" alt="Icon of file with cogwheel" />
 			</button>
 			<section id="config" :inert="configDrawerExists && !configDrawerOpen">
-				<configPresets v-model:chosenPreset="configOverridingPreset" />
+				<presets v-model:chosenPreset="presetOverridingConfig" />
 				<editConfig
 					v-model:config="(postConfig as PostConfig)"
-					:presetOverride="configOverridingPreset?.config"
+					:presetOverride="presetOverridingConfig?.config"
 					id="editConfig"
 				/>
 				<button
@@ -84,7 +84,7 @@
 	import labelledInput from "../../labelledInput.vue";
 	import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
 	import draftsSelection from "../draftSelectionCollapsible.vue";
-	import configPresets from "./config/configPresets.vue";
+	import presets from "./config/presets.vue";
 	import editConfig from "./config/editConfig.vue";
 	import notification from "../../notification.vue";
 	const user = useUser();
@@ -103,7 +103,7 @@
 
 	const postConfig = ref<PostConfig | undefined>(props.reply ? undefined : {});
 	const postInvitedOwners = ref<UserData["id"][] | undefined>(props.reply ? undefined : []);
-	const configOverridingPreset = ref<UserData["configPresets"][number] | undefined>(undefined);
+	const presetOverridingConfig = ref<UserData["presets"][number] | undefined>(undefined);
 
 	const configDrawerExists = ref<boolean | undefined>(undefined);
 	const configDrawerOpen = ref<boolean | null>(props.reply ? null : false);
@@ -112,16 +112,16 @@
 
 	let savePreset: () => void;
 	if (!props.reply) {
-		presetsAtCapacity = computed(() => user.data!.configPresets?.length >= 3);
+		presetsAtCapacity = computed(() => user.data!.presets?.length >= 3);
 		savePreset = async () => {
 			if (presetsAtCapacity.value) return;
 
-			const newPresetsState = [...user.data!.configPresets, {name: "", config: postConfig.value!}];
+			const newPresetsState = [...user.data!.presets, {name: "", config: postConfig.value!}];
 
 			const response = await jsonFetch(
 				"PATCH",
 				"/users",
-				[new UserPatchRequest("configPresets", newPresetsState)],
+				[new UserPatchRequest("presets", newPresetsState)],
 				getSessionKey()
 			);
 
@@ -131,7 +131,7 @@
 				return;
 			}
 
-			user.data!.configPresets = newPresetsState;
+			user.data!.presets = newPresetsState;
 		};
 
 		const body = document.getElementsByTagName("body")[0];

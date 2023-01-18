@@ -39,14 +39,14 @@ class UserData {
 	id: string;
 	name: string;
 	drafts: {title: Node["title"]; body: Node["body"]; lastEdited: number}[];
-	configPresets: {name: string; config: Omit<PostConfig, "access">}[];
+	presets: {name: string; config: Omit<PostConfig, "access">}[];
 	contacts: {id: UserData["id"]; name: UserData["name"]}[];
 
 	constructor(name: UserData["name"]) {
 		this.id = newId();
 		this.name = name;
 		this.drafts = [];
-		this.configPresets = [];
+		this.presets = [];
 		this.contacts = [];
 	}
 }
@@ -61,7 +61,7 @@ class UserPayload {
 	}
 }
 
-const arrOfEditableUserData = ["name", "drafts", "configPresets", "contacts"] as const;
+const arrOfEditableUserData = ["name", "drafts", "presets", "contacts"] as const;
 type editableUserData = (typeof arrOfEditableUserData)[number];
 
 // class Log {

@@ -74,17 +74,17 @@
 	import labelledInput from "../../labelledInput.vue";
 	import editCurrentConfig from "../../posts/create/config/editConfig.vue";
 	const user = useUser();
-	const prevChanges = useDashboardEdits().ofData("configPresets");
+	const prevChanges = useDashboardEdits().ofData("presets");
 
-	const presetsState = ref(prevChanges || deepCloneFromReactive(user.data!.configPresets));
+	const presetsState = ref(prevChanges || deepCloneFromReactive(user.data!.presets));
 	const maxPresets = 3;
 
-	const currentPreset = ref<UserData["configPresets"][number] | null>(null);
+	const currentPreset = ref<UserData["presets"][number] | null>(null);
 	const currentPresetIndex = ref<number | null>(null);
 
 	const emit = defineEmits(["newState"]);
 	function emitNewPresetsState() {
-		emit("newState", [new UserPatchRequest("configPresets", toRaw(presetsState.value))]);
+		emit("newState", [new UserPatchRequest("presets", toRaw(presetsState.value))]);
 	}
 
 	function createNewPreset() {

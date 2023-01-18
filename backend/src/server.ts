@@ -63,7 +63,7 @@ app.patch("/api/users", async (request, response) => {
 			return;
 		}
 
-		if (request.dataName === "configPresets" && (request.newValue as PostConfig).access) {
+		if (request.dataName === "presets" && (request.newValue as PostConfig).access) {
 			delete (request.newValue as PostConfig).access;
 		}
 	}

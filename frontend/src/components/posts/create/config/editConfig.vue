@@ -97,20 +97,20 @@
 		updateConfigByPreset(props.config);
 	});
 
-	function updateConfigByPreset(configPreset: PostConfig) {
+	function updateConfigByPreset(preset: PostConfig) {
 		inputsAffectedByPresets.forEach((inputElement) => {
 			const configProperties = inputElement.id.split(".");
 			const property = configProperties[0] as keyof PostConfig;
 			const subProperty = configProperties[1] as keysInObjectsOfPostConfig | undefined;
 
 			if (subProperty) {
-				inputElement.checked = configPreset[property as configProperty]?.[subProperty as configSubproperty] || false;
+				inputElement.checked = preset[property as configProperty]?.[subProperty as configSubproperty] || false;
 			} else {
-				inputElement.checked = (configPreset[property] as true | undefined) || false;
+				inputElement.checked = (preset[property] as true | undefined) || false;
 			}
 		});
 
-		emit("update:config", configPreset);
+		emit("update:config", preset);
 	}
 
 	const presetOverride = toRef(props, "presetOverride");

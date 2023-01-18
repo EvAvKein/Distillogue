@@ -39,7 +39,7 @@ const User = {
 				})
 			)
 			.max(3),
-		configPresets: Joi.array()
+		presets: Joi.array()
 			.required()
 			.items(
 				Joi.object({

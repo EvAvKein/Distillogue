@@ -5,17 +5,17 @@
 				v-for="(preset, index) in defaultPresets"
 				:key="preset.name + 'default' + index"
 				type="button"
-				@click="emitConfigChange(preset)"
+				@click="emitPresetChange(preset)"
 			>
 				<img src="../../../../assets/defaultConfig.svg" alt="Icon of cogwheel inside a browser window" />
 				<span>{{ preset.name }}</span>
 			</button>
 
 			<button
-				v-for="(preset, index) in user.data!.configPresets"
+				v-for="(preset, index) in user.data!.presets"
 				:key="preset.name + 'custom' + index"
 				type="button"
-				@click="emitConfigChange(preset)"
+				@click="emitPresetChange(preset)"
 				data-testClass="customPresetButton"
 			>
 				<img src="../../../../assets/customConfig.svg" alt="Icon of cogwheel beside a pencil" />
@@ -31,7 +31,7 @@
 	const user = useUser();
 
 	const props = defineProps<{
-		chosenPreset?: UserData["configPresets"][number];
+		chosenPreset?: UserData["presets"][number];
 	}>();
 
 	const emit = defineEmits(["update:chosenPreset"]);
@@ -54,14 +54,14 @@
 				},
 			},
 		},
-	] as UserData["configPresets"];
+	] as UserData["presets"];
 
 	const defaultPresetNames = defaultPresets.map((preset) => {
 		return preset.name;
 	});
 
-	function emitConfigChange(configPreset: UserData["configPresets"][number]) {
-		emit("update:chosenPreset", configPreset);
+	function emitPresetChange(preset: UserData["presets"][number]) {
+		emit("update:chosenPreset", preset);
 	}
 </script>
 

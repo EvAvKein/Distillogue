@@ -23,7 +23,7 @@
 				</button>
 				<button @click="currentPage = 'presets'" :inert="currentPage === 'presets'" class="core_contentButton">
 					<img
-						src="../../assets/configPresets.svg"
+						src="../../assets/presets.svg"
 						alt="Icon of a browser window stacked on another one, with the top window containing a cogwheel"
 					/>
 					<span>Presets</span>
@@ -59,7 +59,7 @@
 	import notification from "../notification.vue";
 	import profileEditor from "./dashboardSections/profileEditor.vue";
 	import draftsEditor from "./dashboardSections/draftsEditor.vue";
-	import presetsEditor from "./dashboardSections/configPresetsEditor.vue";
+	import presetsEditor from "./dashboardSections/presetsEditor.vue";
 	import contactsEditor from "./dashboardSections/contactsEditor.vue";
 	const user = useUser();
 	const changes = useDashboardEdits().edits;
