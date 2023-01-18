@@ -1,41 +1,24 @@
 <template>
-	<section>
-		<labelledInput :inputId="'editProfileName'" :type="'text'" :label="'Name'" v-model="inputText.name.value" />
-	</section>
+	<labelledInput :inputId="'editProfileName'" :type="'text'" :label="'Name'" v-model="nameState" />
 </template>
 
 <script setup lang="ts">
-	import {reactive, watch} from "vue";
+	import {ref, watch, toRaw} from "vue";
+	import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
 	import {useUser} from "../../../stores/user";
 	import {useDashboardEdits} from "../../../stores/dashboardEdits";
 	import {UserPatchRequest} from "../../../../../shared/objects/api";
-	import {editableUserData} from "../../../../../shared/objects/user";
 	import labelledInput from "../../labelledInput.vue";
 	const user = useUser();
 	const prevChanges = useDashboardEdits().ofData("name");
 
 	const emit = defineEmits(["newState"]);
 
-	const inputText = reactive({
-		// error fields are prep for clientside data validation, haven't implemented any checks yet since the limits haven't been decided on (as of 18.6.22)
-		name: {value: prevChanges || user.data!.name, error: ""},
-	} as const);
+	const nameState = ref(prevChanges || deepCloneFromReactive(user.data!.name));
 
-	const inputKeys = Object.keys(inputText) as (keyof typeof inputText)[];
-
-	watch(inputText, () => {
-		const states = [] as UserPatchRequest<editableUserData>[];
-
-		inputKeys.forEach((inputKey) => {
-			states.push(new UserPatchRequest(inputKey, inputText[inputKey].value));
-		});
-
-		emit("newState", states);
+	watch(nameState, () => {
+		emit("newState", [new UserPatchRequest("name", toRaw(nameState.value))]);
 	});
 </script>
 
-<style scoped>
-	section > * + * {
-		margin-top: 1em;
-	}
-</style>
+<style scoped></style>
