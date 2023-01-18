@@ -28,7 +28,6 @@
 <script setup lang="ts">
 	import {watch, toRef, onMounted} from "vue";
 	import {PostConfig} from "../../../../../../shared/objects/post";
-	import {propertiesByType} from "../../../../helpers/propertiesByType";
 	import category from "./configCategory.vue";
 
 	const props = defineProps<{
@@ -40,24 +39,16 @@
 	const emit = defineEmits(["update:config"]);
 
 	type keysFromAllObjects<T> = T extends object ? keyof T : never;
-
-	type keysOfObjectsInPostConfig = keyof propertiesByType<PostConfig, object>;
-	type keysInObjectsOfPostConfig = keysFromAllObjects<PostConfig[keysOfObjectsInPostConfig]>;
+	type subkeyOfPostConfig = keysFromAllObjects<PostConfig[keyof PostConfig]>; // don't ask me why this works, but `keyof PostConfig[keyof PostConfig]` doesnt
 
 	type configProperty = "votes";
-	// i tried and failed to create a generic which either:
-	// 1. dynamically narrows the subproperty param's union to only the keys that fit whichever object PostConfig[property] is attempting to resolve to
-	// 2. dynamically narrows the property param's union to whichever key refers to the object that includes the subproperty key being passed
-	// i'm not even sure these kinds of behaviors are possible, i might be thinking about this way too imperatively
+	// i tried and failed to create a generic which, when provided the T of a key of PostConfig, returns the keys of PostConfig[T] (e.g keyOfPostConfigProp<"votes"> === "up"|"down"|"anon")
+	// i'm not even sure it's possible
 	type configSubproperty = "up";
 
-	function editConfigProperty(
-		property: keyof PostConfig,
-		subproperty: keysInObjectsOfPostConfig,
-		newValue: true | undefined
-	) {
+	function editConfigProperty(property: keyof PostConfig, subproperty: subkeyOfPostConfig, newValue: true | undefined) {
 		if (subproperty && !props.config[property]) {
-			props.config[property as keysOfObjectsInPostConfig] = {};
+			props.config[property] = {};
 		}
 
 		newValue
@@ -76,7 +67,7 @@
 	function updateConfigByCheckbox(event: Event) {
 		const configProperties = (event.target as HTMLInputElement).id.split(".");
 		const property = configProperties[0] as keyof PostConfig;
-		const subProperty = configProperties[1] as keysInObjectsOfPostConfig;
+		const subProperty = configProperties[1] as subkeyOfPostConfig;
 
 		editConfigProperty(property, subProperty, checkboxEventToConfigValue(event));
 		emit("update:config", props.config);
@@ -101,7 +92,7 @@
 		inputsAffectedByPresets.forEach((inputElement) => {
 			const configProperties = inputElement.id.split(".");
 			const property = configProperties[0] as keyof PostConfig;
-			const subProperty = configProperties[1] as keysInObjectsOfPostConfig | undefined;
+			const subProperty = configProperties[1] as subkeyOfPostConfig | undefined;
 
 			if (subProperty) {
 				inputElement.checked = preset[property as configProperty]?.[subProperty as configSubproperty] || false;
