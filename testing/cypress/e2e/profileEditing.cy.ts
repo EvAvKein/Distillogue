@@ -55,5 +55,3 @@ describe("Profile editing", () => {
 		validateProfileData();
 	});
 });
-
-// drafts & presets sections are skipped as they're best covered as their own spec (draftsAndPresets.cy.ts)
