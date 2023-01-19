@@ -115,31 +115,20 @@
 
 <style scoped>
 	#dashboardContainer {
-		display: grid;
-		font-size: clamp(1.1em, 2.25vw, 1.5em);
-		grid-template-columns: 1fr 3.5fr;
-		grid-template-areas: "sidebar page";
+		display: flex;
+		font-size: 1.5em;
 		gap: 0.75em;
-	}
-
-	#dashboardSidebar {
-		grid-area: sidebar;
-		height: 100%;
-		white-space: nowrap;
 	}
 
 	#dashboardSidebar button {
 		width: 100%;
-		font-size: inherit;
+		white-space: nowrap;
 		font-weight: bold;
 		padding: 0.4em;
 	}
 
 	#dashboardSubmit img {
 		filter: var(--filterToBackgroundColor);
-	}
-	#dashboardSubmit + nav {
-		margin-top: 0.25em;
 	}
 
 	img {
@@ -158,10 +147,10 @@
 	}
 
 	#dashboardPage {
-		grid-area: page;
+		flex-grow: 1;
 	}
 
-	@media (min-width: 30em) {
+	@media (min-width: 40em) {
 		img + span {
 			display: inline;
 		}
