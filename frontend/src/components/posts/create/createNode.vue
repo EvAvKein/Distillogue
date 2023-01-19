@@ -235,7 +235,7 @@
 			user.data!.drafts = newDraftsState;
 		}
 
-		props.reply ? window.location.reload() : router.push("/browse"); // should redirect to created post instead, change to that once post URLs are properly implemented
+		props.reply ? router.go(0) : router.push("/browse"); // should redirect to created post instead, change to that once post URLs are properly implemented
 	}
 </script>
 
