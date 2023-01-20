@@ -2,7 +2,7 @@ version: "3"
 services:
   certbot:
     image: certbot/certbot
-    command: sh -c "certbot certonly --webroot -w /tmp/acme_challenge -d distillogue.com --text --agree-tos --email evavkein@email.com --rsa-key-size 4096 --verbose --keep-until-expiring --preferred-challenges=http"
+    command: sh -c "certbot certonly --webroot -w /tmp/acme_challenge -d distillogue.com --text --agree-tos --email evavkein@gmail.com --rsa-key-size 4096 --verbose --keep-until-expiring --preferred-challenges=http"
     entrypoint: ""
     volumes:
       - "/etc/letsencrypt:/etc/letsencrypt"
