@@ -31,7 +31,6 @@
 - ### Basic features:
   - Session-management dashboard page
 - ### Security:
-  - HTTPS (see https://github.com/EvAvKein/Distillogue/issues/2)
   - Proper registration/authentication (likely only via third parties)
   - DDoS mitigation & maybe a CDN (consider Cloudflare)
 - ### Regulation:
