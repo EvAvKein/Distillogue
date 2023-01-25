@@ -1,17 +1,17 @@
 <template>
 	<section id="editConfig">
-		<category v-if="!hideUnsavables" title="Access" class="category" :openByDefault="true">
+		<category v-if="!hideUnsavables" :title="'Access'" class="category" :openByDefault="true">
 			<label>
 				Public: <input id="access.public" type="checkbox" @change="updateConfigByCheckbox" class="core_crudeInput" />
 			</label>
 		</category>
-		<category title="Timestamps" class="category">
+		<category :title="'Timestamps'" class="category">
 			<label>
 				Interacted:
 				<input id="timestamps.interacted" type="checkbox" @change="updateConfigByCheckbox" class="core_crudeInput" />
 			</label>
 		</category>
-		<category title="Voting" class="category">
+		<category :title="'Voting'" class="category">
 			<label>
 				Upvotes: <input id="votes.up" type="checkbox" @change="updateConfigByCheckbox" class="core_crudeInput" />
 			</label>
