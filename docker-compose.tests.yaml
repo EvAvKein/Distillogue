@@ -1,16 +1,8 @@
 version: "3"
 services:
-  cypress:
-    image: "cypress/included:10.4.0"
-    environment:
-      - CYPRESS_baseUrl=http://nginx
-    working_dir: /testing
+  playwright:
+    build:
+      context: ./
+      dockerfile: ./testing/dockerfile
     volumes:
-      - ./testing:/testing
-    networks:
-      - proxyToServer
-
-networks:
-  proxyToServer:
-    name: custom_proxyToServer
-    external: true
+      - ./testing/playwright-report:/testing/playwright-report

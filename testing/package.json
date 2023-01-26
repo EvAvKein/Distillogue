@@ -1,11 +1,12 @@
 {
 	"type": "module",
 	"scripts": {
-		"cypress": "npx cypress run --e2e",
-		"cypressBrowser": "npx cypress open --e2e"
+		"install": "npx playwright install --with-deps",
+		"playwright": "npx playwright test",
+		"showReport": "npx playwright show-report"
 	},
 	"devDependencies": {
-		"cypress": "^10.10.0",
+		"@playwright/test": "^1.29.2",
 		"typescript": "^4.8.4"
 	}
 }

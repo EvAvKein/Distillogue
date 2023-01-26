@@ -1,7 +1,7 @@
-function randomAlphanumString(LengthMultiplier?: number, withSpaces?: true) {
+function randomAlphanumString(LengthMultiplier = 1, withSpaces?: true) {
 	let string = "";
 
-	for (let remainder = LengthMultiplier || 1; remainder > 0; remainder--) {
+	for (let remainder = LengthMultiplier; remainder > 0; remainder--) {
 		if (withSpaces && remainder < LengthMultiplier) {
 			string += " ";
 		}

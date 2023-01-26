@@ -21,7 +21,7 @@
 - ### Ease of Contributing:
   - Dockerized dev setup (see https://github.com/EvAvKein/Distillogue/issues/1)
 - ### Tests:
-  - Migrate tests from Cypress to Playwright
+  - Finish Playwright tests setup
   - Write test for dashboard contacts page
 - ### Optimization:
   - Rewrite dashboard to contact API upon every change
