@@ -15,19 +15,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
 
-      - name: Setup
-        run: cd testing && npx playwright install --with-deps
+      - name: Launch project
+        run: docker-compose up --detach
 
-      - name: Tests
-        run: npx playwright test
+      - name: Launch tests
+        run: docker-compose -f docker-compose.tests.yaml up
 
       - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: playwright-report
-          path: playwright-report/
+          path: ./testing/playwright-report/
           retention-days: 7
