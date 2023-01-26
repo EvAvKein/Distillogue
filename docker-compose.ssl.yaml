@@ -5,7 +5,7 @@ services:
     command: sh -c "certbot certonly --webroot -w /tmp/acme_challenge -d distillogue.com --text --agree-tos --email evavkein@gmail.com --rsa-key-size 4096 --verbose --keep-until-expiring --preferred-challenges=http"
     entrypoint: ""
     volumes:
-      - "/etc/letsencrypt:/etc/letsencrypt"
-      - "/tmp/acme_challenge:/tmp/acme_challenge"
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /tmp/acme_challenge:/tmp/acme_challenge
     environment:
       - TERM=xterm
