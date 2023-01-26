@@ -22,7 +22,7 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 - Server: Node.js + Express.js + TypeScript
 - Database: MongoDB
 - Proxy: Nginx
-- Testing: Cypress
+- Testing: Playwright
 - Packaging: Docker
 - Formatting: Prettier
 
