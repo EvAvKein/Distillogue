@@ -5,7 +5,7 @@
 			:inputId="'summariesSearchInput'"
 			:type="'search'"
 			v-model="searchValue"
-			@input="debounce(fetchAndEmitPosts, 1000)"
+			@input="debounce(1000, fetchAndEmitPosts)"
 		/>
 		<p v-show="summariesDescription">
 			{{ summariesDescription }}

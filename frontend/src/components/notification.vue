@@ -24,9 +24,7 @@
 			notifText.value = newText || "";
 
 			if (props.customDuration !== null && notifText.value !== "") {
-				debounce(() => {
-					notifText.value = "";
-				}, props.customDuration || 3000 + notifText.value.length * 150);
+				debounce(props.customDuration || 3000 + notifText.value.length * 150, () => (notifText.value = ""));
 			}
 		}
 	);
