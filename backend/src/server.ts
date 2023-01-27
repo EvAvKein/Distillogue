@@ -68,7 +68,7 @@ app.patch("/api/users", async (request, response) => {
 		}
 	}
 
-	const mongoUpdateObject = {} as {[key: string]: any}; // a bare minimum type, because idk how to actually type the key as `data.${editableUserData}`, and i'm not sure it's even possible to type the value as the value of whichever editableUserData property is being passed
+	const mongoUpdateObject = {} as {[key: string]: any}; // TODO: a bare minimum type, because idk how to actually type the key as `data.${editableUserData}`, and i'm not sure it's even possible to type the value as the value of whichever editableUserData property is being passed
 
 	editRequests.forEach((request) => {
 		mongoUpdateObject["data." + request.dataName] = request.newValue;
@@ -98,7 +98,7 @@ app.get("/api/sessions", async (request, response) => {
 });
 
 app.post("/api/sessions", async (request, response) => {
-	const validation = apiSchemas.UserCreationRequest.validate(request.body, validationSettings); // obviously not a user creation request, but they use the same object (for now. next task is working on proper registration)
+	const validation = apiSchemas.UserCreationRequest.validate(request.body, validationSettings); // obviously not a user creation request, but they use the same object (until proper auth)
 
 	if (validation.error) {
 		response.json(new FetchResponse(null, validation.error.message));
@@ -109,7 +109,7 @@ app.post("/api/sessions", async (request, response) => {
 	const newSession = new UserSession();
 
 	const dbResponse = await users.findOneAndUpdate(
-		{"data.name": auth.username}, // temporary, of course. actual auth soon
+		{"data.name": auth.username}, // temporary, of course. until proper auth
 		{$addToSet: {sessions: newSession}}
 	);
 
@@ -258,7 +258,7 @@ app.post("/api/posts/interactions", async (request, response) => {
 	const mongoPath = nodePathAsMongoLocators(nodePath);
 	const mongoUpdatePathOptions = {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"} as const;
 
-	const subjectPost = await posts.findOne(mongoFilterPostsByAccess(user.data.id, {id: postId})); // implementing this (and the derived validations) as part of an aggregation pipeline with the interaction request would eliminate a race condition, but mongo pipeline operations have various issues (verbosity, limitations, low readability) and concurrent usage (& contributor count) is currently too low to merit wrangling with those issues
+	const subjectPost = await posts.findOne(mongoFilterPostsByAccess(user.data.id, {id: postId})); // implementing this (and the derived validations) as part of an aggregation pipeline with the interaction request would eliminate a race condition, but mongo pipeline operations have various issues (verbosity, technical limitations, low readability) and concurrent usage (& contributor count) is currently too low to merit wrangling with those issues
 	if (!subjectPost) {
 		response.json(
 			new FetchResponse(null, "Post unavailable; Either it doesn't exist, or it's private and you're not authorized")

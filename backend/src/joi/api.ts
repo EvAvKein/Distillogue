@@ -18,7 +18,6 @@ const UserPatchRequest = Joi.object<Class.UserPatchRequest<editableUserData>>({
 }).required();
 
 const UserPatchRequestArray = Joi.array<Class.UserPatchRequest<editableUserData>[]>()
-	// currently (joi v17.5.0) it doesn't seem possible to properly type this. i'd submit an issue asking about it (because disccussions aren't available for the repo), but i already have a different one there which is the second latest (as of 17.9.22) and don't wanna be too spammy
 	.required()
 	.min(1)
 	.items(UserPatchRequest);
