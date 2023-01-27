@@ -19,7 +19,6 @@
 	import {apiFetch} from "../../../helpers/apiFetch";
 	import {debounce} from "../../../helpers/debounce";
 	import labelledInput from "../../labelledInput.vue";
-	import {getSessionKey} from "../../../helpers/getSessionKey";
 
 	const props = defineProps<{fetchAllOnMount?: true}>();
 	const emit = defineEmits(["fetchedSummaries"]);
@@ -30,7 +29,7 @@
 	async function fetchAndEmitPosts() {
 		summariesDescription.value = "Fetching Posts...";
 
-		const fetchResponse = await apiFetch("GET", "/posts?search=" + searchValue.value, null, getSessionKey());
+		const fetchResponse = await apiFetch("GET", "/posts?search=" + searchValue.value, null);
 		if (fetchResponse.error) {
 			summariesDescription.value = fetchResponse.error.message;
 			return;
