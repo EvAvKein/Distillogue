@@ -52,8 +52,7 @@
 	import {ref} from "vue";
 	import {useRouter} from "vue-router";
 	import {useUser} from "../stores/user";
-	import {getSessionKey} from "../helpers/getSessionKey";
-	import {jsonFetch} from "../helpers/jsonFetch";
+	import {apiFetch} from "../helpers/apiFetch";
 	import notification from "./notification.vue";
 	import Notification from "./notification.vue";
 	const user = useUser();
@@ -66,9 +65,7 @@
 		notifText.value = "";
 		notifDesirability.value = undefined;
 
-		const sessionKey = getSessionKey();
-
-		const logoutRequest = await jsonFetch("DELETE", "/sessions", null, sessionKey);
+		const logoutRequest = await apiFetch("DELETE", "/sessions", null);
 
 		if (logoutRequest.error) {
 			notifText.value = logoutRequest.error.message;

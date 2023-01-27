@@ -19,7 +19,7 @@
 	import {UserPayload} from "../../../../../shared/objects/user";
 	import {useRouter} from "vue-router";
 	import {useUser} from "../../../stores/user";
-	import {jsonFetch} from "../../../helpers/jsonFetch";
+	import {apiFetch} from "../../../helpers/apiFetch";
 	import inputField from "../../labelledInput.vue";
 	import notification from "../../notification.vue";
 	const router = useRouter();
@@ -34,7 +34,7 @@
 		signingMessage.value = `Signing in...`;
 		signingStatus.value = undefined;
 
-		const response = await jsonFetch("POST", "/sessions", new UserCreationRequest(username.value));
+		const response = await apiFetch("POST", "/sessions", new UserCreationRequest(username.value));
 
 		if (response.error) {
 			signingMessage.value = response.error.message;

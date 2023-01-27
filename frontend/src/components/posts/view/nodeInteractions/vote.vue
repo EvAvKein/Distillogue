@@ -28,9 +28,8 @@
 	import {ref, computed} from "vue";
 	import {NodeInteractionRequest} from "../../../../../../shared/objects/api";
 	import {Node, NodeStats} from "../../../../../../shared/objects/post";
-	import {jsonFetch} from "../../../../helpers/jsonFetch";
+	import {apiFetch} from "../../../../helpers/apiFetch";
 	import {useUser} from "../../../../stores/user";
-	import {getSessionKey} from "../../../../helpers/getSessionKey";
 	const user = useUser();
 
 	const props = defineProps<{
@@ -71,16 +70,15 @@
 	});
 
 	async function vote(voteDirection: voteDirection, newVoteStatus: boolean) {
-		if (!getSessionKey()) {
+		if (!user.data) {
 			emit("interactionError", "Must be logged in to vote");
 			return;
 		}
 
-		const response = await jsonFetch(
+		const response = await apiFetch(
 			"POST",
 			"/posts/interactions",
-			new NodeInteractionRequest(props.interactionPath, "vote", {voteDirection, newVoteStatus}),
-			getSessionKey()
+			new NodeInteractionRequest(props.interactionPath, "vote", {voteDirection, newVoteStatus})
 		);
 
 		if (response.error) {

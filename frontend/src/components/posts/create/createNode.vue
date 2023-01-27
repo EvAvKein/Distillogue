@@ -77,9 +77,8 @@
 	import {NodeCreationRequest, NodeInteractionRequest, UserPatchRequest} from "../../../../../shared/objects/api";
 	import {unix} from "../../../../../shared/helpers/timestamps";
 	import {filterByIndex} from "../../../../../shared/helpers/filterByIndexes";
-	import {jsonFetch} from "../../../helpers/jsonFetch";
+	import {apiFetch} from "../../../helpers/apiFetch";
 	import {useUser} from "../../../stores/user";
-	import {getSessionKey} from "../../../helpers/getSessionKey";
 	import {useRouter} from "vue-router";
 	import labelledInput from "../../labelledInput.vue";
 	import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
@@ -118,12 +117,7 @@
 
 			const newPresetsState = [...user.data!.presets, {name: "", config: postConfig.value!}];
 
-			const response = await jsonFetch(
-				"PATCH",
-				"/users",
-				[new UserPatchRequest("presets", newPresetsState)],
-				getSessionKey()
-			);
+			const response = await apiFetch("PATCH", "/users", [new UserPatchRequest("presets", newPresetsState)]);
 
 			if (response.error) {
 				notifText.value = response.error.message;
@@ -169,12 +163,7 @@
 			{title: nodeTitle.value, body: nodeBody.value, lastEdited: unix()},
 		];
 
-		const response = await jsonFetch(
-			"PATCH",
-			"/users",
-			[new UserPatchRequest("drafts", newDraftsState)],
-			getSessionKey()
-		);
+		const response = await apiFetch("PATCH", "/users", [new UserPatchRequest("drafts", newDraftsState)]);
 
 		if (response.error) {
 			notifText.value = response.error.message;
@@ -190,7 +179,7 @@
 
 		const apiRequest = props.reply
 			? () => {
-					return jsonFetch(
+					return apiFetch(
 						"POST",
 						"/posts/interactions",
 						new NodeInteractionRequest(
@@ -204,12 +193,11 @@
 								undefined,
 								props.reply!.nodePath!
 							)
-						),
-						getSessionKey()
+						)
 					);
 			  }
 			: () => {
-					return jsonFetch(
+					return apiFetch(
 						"POST",
 						"/posts",
 						new NodeCreationRequest(
@@ -218,8 +206,7 @@
 							nodeBody.value,
 							currentDraftIndex.value,
 							postConfig!.value
-						),
-						getSessionKey()
+						)
 					);
 			  };
 		const response = await apiRequest();

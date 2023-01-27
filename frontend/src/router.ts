@@ -1,6 +1,6 @@
 import {createRouter, createWebHistory} from "vue-router";
 import {useUser} from "./stores/user";
-import {jsonFetch} from "./helpers/jsonFetch";
+import {apiFetch} from "./helpers/apiFetch";
 import {UserData} from "../../shared/objects/user";
 
 import home from "./pages/Home.vue";
@@ -83,7 +83,7 @@ router.beforeEach(async (to, from, next) => {
 	const sessionKey = localStorage.getItem("sessionKey");
 
 	if (sessionKey && !user.data) {
-		await jsonFetch("GET", "/sessions", null, sessionKey).then((response) => {
+		await apiFetch("GET", "/sessions", null).then((response) => {
 			if (!response.error) {
 				user.data = response.data as UserData;
 			}

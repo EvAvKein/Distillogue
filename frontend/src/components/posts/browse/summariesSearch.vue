@@ -16,7 +16,7 @@
 <script setup lang="ts">
 	import {ref, onMounted} from "vue";
 	import {PostSummary} from "../../../../../shared/objects/post";
-	import {jsonFetch} from "../../../helpers/jsonFetch";
+	import {apiFetch} from "../../../helpers/apiFetch";
 	import {debounce} from "../../../helpers/debounce";
 	import labelledInput from "../../labelledInput.vue";
 	import {getSessionKey} from "../../../helpers/getSessionKey";
@@ -30,7 +30,7 @@
 	async function fetchAndEmitPosts() {
 		summariesDescription.value = "Fetching Posts...";
 
-		const fetchResponse = await jsonFetch("GET", "/posts?search=" + searchValue.value, null, getSessionKey());
+		const fetchResponse = await apiFetch("GET", "/posts?search=" + searchValue.value, null, getSessionKey());
 		if (fetchResponse.error) {
 			summariesDescription.value = fetchResponse.error.message;
 			return;

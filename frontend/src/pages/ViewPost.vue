@@ -9,9 +9,8 @@
 	import {ref} from "vue";
 	import notification from "../components/notification.vue";
 	import {Node} from "../../../shared/objects/post";
-	import {jsonFetch} from "../helpers/jsonFetch";
+	import {apiFetch} from "../helpers/apiFetch";
 	import {useUser} from "../stores/user";
-	import {getSessionKey} from "../helpers/getSessionKey";
 	import postContainer from "../components/posts/view/postContainer_core.vue";
 
 	const user = useUser();
@@ -23,7 +22,7 @@
 	const post = ref<Node | undefined>(undefined);
 	const notif = ref<{message: string; desirability?: boolean}>({message: "Fetching post...", desirability: undefined});
 
-	jsonFetch("GET", "/posts/" + props.postId, null, getSessionKey()).then((response) => {
+	apiFetch("GET", "/posts/" + props.postId, null).then((response) => {
 		if (response.error) {
 			notif.value = {message: response.error.message, desirability: false};
 			return;

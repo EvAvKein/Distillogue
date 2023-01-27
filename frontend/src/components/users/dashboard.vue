@@ -51,8 +51,7 @@
 	import {ref, reactive} from "vue";
 	import {useUser} from "../../stores/user";
 	import {useDashboardEdits} from "../../stores/dashboardEdits";
-	import {getSessionKey} from "../../helpers/getSessionKey";
-	import {jsonFetch} from "../../helpers/jsonFetch";
+	import {apiFetch} from "../../helpers/apiFetch";
 	import {UserPatchRequest} from "../../../../shared/objects/api";
 	import {editableUserData} from "../../../../shared/objects/user";
 	import {deepCloneFromReactive} from "../../helpers/deepCloneFromReactive";
@@ -96,7 +95,7 @@
 		submitNotif.text = "Submitting changes...";
 		submitNotif.style = undefined;
 
-		const changesResponse = await jsonFetch("PATCH", "/users", changes, getSessionKey());
+		const changesResponse = await apiFetch("PATCH", "/users", changes);
 
 		if (changesResponse.error) {
 			submitNotif.text = changesResponse.error.message;
