@@ -25,7 +25,7 @@
   - Write test for dashboard contacts page
 - ### Optimization:
   - Rewrite dashboard to contact API upon every change
-    - (more resource-intensive... but also more user-friendly, simpler in code, and easier to test)
+    - (more resource-intensive... but also more user-friendly, less delicate to code/extend, and easier to test)
     <hr>
 
 ## Release-worthy
