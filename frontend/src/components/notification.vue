@@ -30,12 +30,8 @@
 	);
 
 	const styleClass = computed(() => {
-		if (props.desirablityStyle === true) {
-			return "positive";
-		}
-		if (props.desirablityStyle === false) {
-			return "negative";
-		}
+		if (props.desirablityStyle === true) return "positive";
+		if (props.desirablityStyle === false) return "negative";
 		return "";
 	});
 </script>
