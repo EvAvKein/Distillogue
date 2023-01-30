@@ -27,7 +27,7 @@
 			</section>
 
 			<section id="confirmation">
-				<notification :text="notifText" :desirablityStyle="notifDesirability" />
+				<notification v-model:text="notifText" :desirablityStyle="notifDesirability" />
 				<button @click="saveDraft" type="button" class="core_backgroundButton" :inert="draftsAtCapacity ? true : false">
 					{{ draftsAtCapacity ? "Drafts at capacity" : "Save draft" }}
 				</button>

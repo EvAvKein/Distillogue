@@ -26,7 +26,7 @@
 				</div>
 			</nav>
 		</section>
-		<notification :text="notifText" :desirablityStyle="notifDesirability" />
+		<notification v-model:text="notifText" :desirablityStyle="notifDesirability" />
 		<section id="rightSection">
 			<nav>
 				<div v-if="user.data">
@@ -58,11 +58,11 @@
 	const router = useRouter();
 
 	const notifText = ref("");
-	const notifDesirability = ref<boolean | undefined>(undefined);
+	const notifDesirability = ref<boolean | null>(null);
 
 	async function logOut() {
 		notifText.value = "";
-		notifDesirability.value = undefined;
+		notifDesirability.value = null;
 
 		const logoutRequest = await apiFetch("DELETE", "/sessions");
 

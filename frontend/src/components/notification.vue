@@ -1,30 +1,29 @@
 <template>
 	<transition name="notification">
-		<p v-show="notifText" :class="'notification ' + styleClass">
-			{{ notifText }}
+		<p v-show="text" :class="'notification ' + styleClass">
+			{{ text }}
 		</p>
 	</transition>
+	{{ text }}
 </template>
 
 <script setup lang="ts">
-	import {ref, watch, computed} from "vue";
+	import {watch, computed} from "vue";
 	import {debounce} from "../helpers/debounce";
 
 	const props = defineProps<{
-		text?: string;
-		desirablityStyle?: boolean;
+		text: string;
+		desirablityStyle: boolean | null;
 		customDuration?: number | null;
 	}>();
 
-	const notifText = ref<string>(props.text || "");
+	const emit = defineEmits(["update:text"]);
 
 	watch(
 		() => props.text,
 		(newText) => {
-			notifText.value = newText || "";
-
-			if (props.customDuration !== null && notifText.value !== "") {
-				debounce(props.customDuration || 3000 + notifText.value.length * 150, () => (notifText.value = ""));
+			if (newText && props.customDuration !== null) {
+				debounce(props.customDuration || 300 + newText.length * 15, () => emit("update:text", ""));
 			}
 		}
 	);

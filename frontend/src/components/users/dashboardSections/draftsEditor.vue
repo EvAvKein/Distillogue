@@ -13,7 +13,7 @@
 			<button v-if="draftsState.length < maxDrafts" id="newDraft" class="core_backgroundButton" @click="createNewDraft">
 				<p>New draft</p>
 			</button>
-			<notification v-else :text="'Drafts at capacity, consider triage'" :desirablityStyle="undefined" />
+			<notification v-else :text="'Drafts at capacity, consider triage'" :desirablityStyle="null" />
 		</transition>
 
 		<transition name="collapse">

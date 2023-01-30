@@ -8,7 +8,7 @@
 			:inputId="'loginUsernameField'"
 			v-model="username"
 		/>
-		<notification :text="signingMessage" :desirablityStyle="signingStatus" />
+		<notification v-model:text="signingMessage" :desirablityStyle="signingStatus" />
 		<button @click="signingByInput" type="button" class="core_backgroundButton">Continue</button>
 	</form>
 </template>
@@ -27,12 +27,12 @@
 
 	const username = ref<string>("");
 
-	const signingMessage = ref<string | undefined>(undefined);
-	const signingStatus = ref<boolean | undefined>(undefined);
+	const signingMessage = ref("");
+	const signingStatus = ref<boolean | null>(null);
 
 	async function signingByInput() {
 		signingMessage.value = `Signing up...`;
-		signingStatus.value = undefined;
+		signingStatus.value = null;
 
 		const response = await apiFetch("POST", "/users", new UserCreationRequest(username.value));
 

@@ -35,7 +35,7 @@
 			</nav>
 		</section>
 		<section id="dashboardPage">
-			<notification :text="submitNotif.text" :desirablityStyle="submitNotif.style" />
+			<notification v-model:text="submitNotif.text" :desirablityStyle="submitNotif.style" />
 			<transition name="swap" mode="out-in">
 				<!-- i'd use v-show for these, but multiple ones in a transition unfortunately only renders the initial one -->
 				<profileEditor v-if="currentPage === 'profile'" @newState="updateChangesByNewState" />
@@ -65,7 +65,7 @@
 
 	type pageName = "profile" | "drafts" | "presets" | "contacts";
 	const currentPage = ref<pageName>("profile");
-	const submitNotif = reactive({text: "", style: undefined as boolean | undefined});
+	const submitNotif = reactive({text: "", style: null as boolean | null});
 
 	function updateChangesByNewState(newStates: UserPatchRequest<editableUserData>[]) {
 		newStates.forEach((state) => {
@@ -93,7 +93,7 @@
 
 	async function submitAllChanges() {
 		submitNotif.text = "Submitting changes...";
-		submitNotif.style = undefined;
+		submitNotif.style = null;
 
 		const changesResponse = await apiFetch("PATCH", "/users", changes);
 

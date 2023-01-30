@@ -1,7 +1,7 @@
 <template>
 	<main>
 		<postContainer v-if="post" :postObject="post" />
-		<notification v-else :text="notif.message" :desirablityStyle="notif.desirability" />
+		<notification v-else v-model:text="notif.message" :desirablityStyle="notif.desirability" />
 	</main>
 </template>
 
@@ -20,7 +20,7 @@
 	}>();
 
 	const post = ref<Node | undefined>(undefined);
-	const notif = ref<{message: string; desirability?: boolean}>({message: "Fetching post...", desirability: undefined});
+	const notif = ref<{message: string; desirability: boolean | null}>({message: "Fetching post...", desirability: null});
 
 	apiFetch("GET", "/posts/" + props.postId).then((response) => {
 		if (response.error) {

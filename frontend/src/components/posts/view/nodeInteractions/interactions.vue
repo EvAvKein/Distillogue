@@ -10,7 +10,7 @@
 			/>
 			<reply :locked="node.locked" :interactionPath="nodePath" class="replyButton" />
 		</div>
-		<notification :text="interactionError" :desirablity-style="false" />
+		<notification v-model:text="interactionError" :desirablity-style="false" />
 	</section>
 </template>
 
