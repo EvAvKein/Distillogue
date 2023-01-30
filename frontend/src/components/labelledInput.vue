@@ -22,12 +22,10 @@
 			@input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
 		/>
 		<label :for="inputId">{{ label || type }}</label>
-		<notification :text="error" :desirablityStyle="false" />
 	</div>
 </template>
 
 <script setup lang="ts">
-	import notification from "./notification.vue";
 	defineProps<{
 		inputId: string;
 		type: string;
@@ -37,7 +35,6 @@
 		minLength?: number;
 		maxLength?: number;
 		minLineHeight?: number;
-		error?: string;
 	}>();
 
 	const emit = defineEmits(["update:modelValue"]);
