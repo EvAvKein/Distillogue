@@ -21,7 +21,7 @@
 
 	function reply() {
 		if (!user.data) {
-			emit("interactionError", "Must be logged in to vote");
+			emit("interactionError", "Must be logged in to reply");
 			return;
 		}
 
