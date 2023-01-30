@@ -10,10 +10,7 @@
 	import notification from "../components/notification.vue";
 	import {Node} from "../../../shared/objects/post";
 	import {apiFetch} from "../helpers/apiFetch";
-	import {useUser} from "../stores/user";
 	import postContainer from "../components/posts/view/postContainer_core.vue";
-
-	const user = useUser();
 
 	const props = defineProps<{
 		postId: string;
