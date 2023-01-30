@@ -65,7 +65,7 @@
 		notifText.value = "";
 		notifDesirability.value = undefined;
 
-		const logoutRequest = await apiFetch("DELETE", "/sessions", null);
+		const logoutRequest = await apiFetch("DELETE", "/sessions");
 
 		if (logoutRequest.error) {
 			notifText.value = logoutRequest.error.message;

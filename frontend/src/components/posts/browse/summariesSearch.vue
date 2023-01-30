@@ -29,7 +29,7 @@
 	async function fetchAndEmitPosts() {
 		summariesDescription.value = "Fetching Posts...";
 
-		const fetchResponse = await apiFetch("GET", "/posts?search=" + searchValue.value, null);
+		const fetchResponse = await apiFetch("GET", "/posts?search=" + searchValue.value);
 		if (fetchResponse.error) {
 			summariesDescription.value = fetchResponse.error.message;
 			return;

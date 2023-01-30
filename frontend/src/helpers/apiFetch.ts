@@ -1,6 +1,6 @@
 import {FetchResponse} from "../../../shared/objects/api";
 
-export async function apiFetch(method: "GET" | "POST" | "PATCH" | "DELETE", address: string, body: object | null) {
+export async function apiFetch(method: "GET" | "POST" | "PATCH" | "DELETE", address: string, body?: object) {
 	const sessionKey = localStorage.getItem("sessionKey");
 	const authHeader = sessionKey ? {Authorization: "Bearer " + sessionKey} : null;
 	const requestBody = body ? {body: JSON.stringify(body)} : null;
