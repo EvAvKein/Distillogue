@@ -2,7 +2,7 @@
 	<div>
 		<textarea
 			v-if="type === 'textarea'"
-			:value="modelValue ?? ''"
+			:value="modelValue"
 			:id="inputId"
 			:minLength="minLength"
 			:maxlength="maxLength"
@@ -13,7 +13,7 @@
 		<input
 			v-else
 			:type="type"
-			:value="modelValue ?? ''"
+			:value="modelValue"
 			:id="inputId"
 			:minLength="minLength"
 			:maxLength="maxLength"
