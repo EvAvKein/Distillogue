@@ -19,9 +19,8 @@
 		desirability: null as boolean | null,
 	});
 
-	watch(nameState, () => {
+	watch(nameState, (newName) => {
 		debounce(750, async () => {
-			const newName = nameState.value;
 			// TODO: client-side checks, pending a module which exports auth data (min and max length in this case) to both backend and frontend
 
 			const response = await apiFetch("PATCH", "/users", [new UserPatchRequest("name", newName)]);
