@@ -26,6 +26,7 @@
 - ### Optimization:
   - Rewrite dashboard to contact API upon every change
     - (more resource-intensive... but also more user-friendly, less delicate to code/extend, and easier to test)
+  - Refactor dashboard to serve sections as sub-routes
     <hr>
 
 ## Release-worthy
