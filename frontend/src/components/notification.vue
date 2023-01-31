@@ -4,7 +4,6 @@
 			{{ text }}
 		</p>
 	</transition>
-	{{ text }}
 </template>
 
 <script setup lang="ts">
@@ -23,7 +22,7 @@
 		() => props.text,
 		(newText) => {
 			if (newText && props.customDuration !== null) {
-				debounce(props.customDuration || 300 + newText.length * 15, () => emit("update:text", ""));
+				debounce(props.customDuration || 3000 + newText.length * 150, () => emit("update:text", ""));
 			}
 		}
 	);
