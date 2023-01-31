@@ -55,3 +55,4 @@
   - Aria attributes & accessibility tree checkup (need to find free, toggleable, configurable software for testing. devtools accessibility tree is insufficient)
 - ### Optimization:
   - Client-side input validation (for preemptive, human-readable errors)
+  - Resolve TODO situations noted in various code comments
