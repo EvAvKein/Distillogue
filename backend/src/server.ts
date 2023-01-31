@@ -48,6 +48,7 @@ app.post("/api/users", async (request, response) => {
 });
 
 app.patch("/api/users", async (request, response) => {
+	// TODO: the "PUT" method seems more appropriate, as it's receiving a complete replacement... but this would require changing the endpoint's path as to not indicate complete user-data replacement, probably changing to "/users/[userId]/[property]"
 	const validation = apiSchemas.UserPatchRequestArray.validate(request.body, validationSettings);
 	if (validation.error) {
 		response.json(new FetchResponse(null, validation.error.message));
