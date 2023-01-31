@@ -2,12 +2,13 @@
 	<section>
 		<section>
 			<labelledInput :label="'Name'" :inputId="'newContactName'" :type="'text'" v-model="newContactName" />
-			<labelledInput :label="'User ID'" :inputId="'newContactId'" :type="'text'" v-model="newContactId" />
+			<labelledInput :label="'ID'" :inputId="'newContactId'" :type="'text'" v-model="newContactId" />
 			<button id="newContactButton" class="core_backgroundButton" @click="createNewContact">New contact</button>
+			<notification :text="notif.text" :desirablityStyle="notif.desirability" />
 		</section>
 		<ul>
 			<transition-group name="collapse">
-				<li v-for="(contact, index) of contactsState">
+				<li v-for="(contact, index) of user.data!.contacts">
 					<animatedDetails>
 						<template #summary>
 							{{ contact.name }}
@@ -16,7 +17,7 @@
 							<div>{{ contact.id }}</div>
 						</template>
 					</animatedDetails>
-					<button class="deleteContactButton core_contentButton" @click="() => deleteCurrentContact(index)">
+					<button class="deleteContactButton core_contentButton" @click="() => deleteContact(index)">
 						<img src="../../../assets/trash.svg" alt="Trash icon" />
 					</button>
 				</li>
@@ -26,33 +27,47 @@
 </template>
 
 <script setup lang="ts">
-	import {ref, toRaw} from "vue";
-	import labelledInput from "../../labelledInput.vue";
+	import {ref} from "vue";
+	import {apiFetch} from "../../../helpers/apiFetch";
 	import {UserPatchRequest} from "../../../../../shared/objects/api";
-	import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
 	import {useUser} from "../../../stores/user";
-	import {useDashboardEdits} from "../../../stores/dashboardEdits";
 	import animatedDetails from "../../animatedDetails.vue";
+	import labelledInput from "../../labelledInput.vue";
+	import notification from "../../notification.vue";
 	const user = useUser();
 
-	const prevChanges = useDashboardEdits().ofData("contacts");
-	const contactsState = ref(prevChanges || deepCloneFromReactive(user.data!.contacts));
 	const newContactName = ref("");
 	const newContactId = ref("");
 
-	const emit = defineEmits(["newState"]);
-	function emitNewContactsState() {
-		emit("newState", [new UserPatchRequest("contacts", toRaw(contactsState.value))]);
-	}
+	const notif = ref({
+		text: "",
+		desirability: null as boolean | null,
+	});
 
 	function createNewContact() {
-		contactsState.value.push({name: newContactName.value, id: newContactId.value});
-		emitNewContactsState();
+		const contactsWithNew = [{name: newContactName.value, id: newContactId.value}, ...user.data!.contacts];
+		updateContacts(contactsWithNew);
 	}
 
-	function deleteCurrentContact(index: number) {
-		contactsState.value.splice(index as number, 1);
-		emitNewContactsState();
+	function deleteContact(deletionIndex: number) {
+		const contactsAfterDeletion = user.data!.contacts.filter((contact, index) => index !== deletionIndex);
+		updateContacts(contactsAfterDeletion);
+	}
+
+	async function updateContacts(newContactsState: NonNullable<typeof user.data>["contacts"]) {
+		notif.value.text = "";
+
+		const response = await apiFetch("PATCH", "/users", [new UserPatchRequest("contacts", newContactsState)]);
+
+		if (response.error) {
+			notif.value.text = response.error.message;
+			notif.value.desirability = false;
+			return;
+		}
+		user.data!.contacts = newContactsState;
+
+		notif.value.text = "Contacts updated!";
+		notif.value.desirability = true;
 	}
 </script>
 
