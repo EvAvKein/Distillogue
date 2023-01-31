@@ -36,13 +36,10 @@
 		</section>
 		<section id="dashboardPage">
 			<notification v-model:text="submitNotif.text" :desirablityStyle="submitNotif.style" />
-			<transition name="swap" mode="out-in">
-				<!-- i'd use v-show for these, but multiple ones in a transition unfortunately only renders the initial one -->
-				<profileEditor v-if="currentPage === 'profile'" @newState="updateChangesByNewState" />
-				<draftsEditor v-if="currentPage === 'drafts'" @newState="updateChangesByNewState" />
-				<presetsEditor v-if="currentPage === 'presets'" @newState="updateChangesByNewState" />
-				<contactsEditor v-if="currentPage === 'contacts'" @newState="updateChangesByNewState" />
-			</transition>
+			<profileEditor v-if="currentPage === 'profile'" @newState="updateChangesByNewState" />
+			<draftsEditor v-if="currentPage === 'drafts'" @newState="updateChangesByNewState" />
+			<presetsEditor v-if="currentPage === 'presets'" @newState="updateChangesByNewState" />
+			<contactsEditor v-if="currentPage === 'contacts'" @newState="updateChangesByNewState" />
 		</section>
 	</section>
 </template>
