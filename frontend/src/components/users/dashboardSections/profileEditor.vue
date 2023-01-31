@@ -1,23 +1,41 @@
 <template>
-	<labelledInput :inputId="'editProfileName'" :type="'text'" :label="'Name'" v-model="nameState" />
+	<labelledInput :label="'Name'" :inputId="'editUserName'" :type="'text'" v-model="nameState" />
+	<notification v-model:text="nameNotif.text" :desirablityStyle="nameNotif.desirability" />
 </template>
 
 <script setup lang="ts">
 	import {ref, watch, toRaw} from "vue";
-	import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
+	import {debounce} from "../../../helpers/debounce";
+	import {apiFetch} from "../../../helpers/apiFetch";
 	import {useUser} from "../../../stores/user";
-	import {useDashboardEdits} from "../../../stores/dashboardEdits";
 	import {UserPatchRequest} from "../../../../../shared/objects/api";
 	import labelledInput from "../../labelledInput.vue";
+	import notification from "../../notification.vue";
 	const user = useUser();
-	const prevChanges = useDashboardEdits().ofData("name");
 
-	const emit = defineEmits(["newState"]);
-
-	const nameState = ref(prevChanges || deepCloneFromReactive(user.data!.name));
+	const nameState = ref(toRaw(user.data!.name));
+	const nameNotif = ref({
+		text: "",
+		desirability: null as boolean | null,
+	});
 
 	watch(nameState, () => {
-		emit("newState", [new UserPatchRequest("name", toRaw(nameState.value))]);
+		debounce(750, async () => {
+			const newName = nameState.value;
+			// TODO: client-side checks, pending a module which exports auth data (min and max length in this case) to both backend and frontend
+
+			const response = await apiFetch("PATCH", "/users", [new UserPatchRequest("name", newName)]);
+
+			if (response.error) {
+				nameNotif.value.text = response.error.message;
+				nameNotif.value.desirability = false;
+				return;
+			}
+			user.data!.name = newName;
+
+			nameNotif.value.text = `Name changed to "${user.data!.name}"!`;
+			nameNotif.value.desirability = true;
+		});
 	});
 </script>
 
