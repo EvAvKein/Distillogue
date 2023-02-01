@@ -65,9 +65,6 @@
 			return;
 		}
 		user.data!.contacts = newContactsState;
-
-		notif.value.text = "Contacts updated!";
-		notif.value.desirability = true;
 	}
 </script>
 

@@ -31,9 +31,6 @@
 				return;
 			}
 			user.data!.name = newName;
-
-			nameNotif.value.text = `Name changed to "${user.data!.name}"!`;
-			nameNotif.value.desirability = true;
 		});
 	});
 </script>
