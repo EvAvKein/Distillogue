@@ -1,5 +1,5 @@
-let timer: undefined | number;
-export function debounce(delay: number, func: Function) {
+let timer: undefined | ReturnType<typeof setTimeout>;
+export function debounce(delay: number, func: () => void) {
 	if (timer) clearTimeout(timer);
 	timer = setTimeout(func, delay);
 }
