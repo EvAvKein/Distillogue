@@ -33,8 +33,8 @@ const User = {
 			.required()
 			.items(
 				Joi.object({
-					title: Post.Node.title,
-					body: Post.Node.title,
+					title: Joi.string().required().allow(""),
+					body: Joi.string().required().allow(""),
 					lastEdited: Joi.number().required(),
 				})
 			)
