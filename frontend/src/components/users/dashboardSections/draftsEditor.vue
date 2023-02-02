@@ -1,47 +1,43 @@
 <template>
 	<section>
-		<transition name="collapse">
-			<draftsSelection
-				v-if="draftsState.length"
-				id="draftsPicker"
-				:editingModeDraftsState="draftsState"
-				@draftSelected="selectDraft"
-			/>
-		</transition>
+		<ol>
+			<TransitionGroup name="collapse">
+				<li v-for="(draft, index) in user.data!.drafts">
+					<button type="button" class="core_backgroundButton" @click="selectDraft(index)">
+						<p :key="reassignToRerenderList + index">{{ draft.title || "[No Title]" }}</p>
+						<div :key="reassignToRerenderList + index">Edited: <timestamp :pastUnix="draft.lastEdited" /></div>
+					</button>
+				</li>
+			</TransitionGroup>
+		</ol>
 
-		<transition name="collapse">
-			<button v-if="draftsState.length < maxDrafts" id="newDraft" class="core_backgroundButton" @click="createNewDraft">
+		<transition>
+			<button v-if="user.data!.drafts.length < maxDrafts" class="core_backgroundButton" @click="createDraft">
 				<p>New draft</p>
 			</button>
 			<notification v-else :text="'Drafts at capacity, consider triage'" :desirablityStyle="null" />
 		</transition>
 
+		<notification :text="notif.text" :desirablityStyle="notif.desirability" />
+
 		<transition name="collapse">
-			<section v-if="currentDraft" id="draftsEditor">
+			<section v-if="typeof currentDraft.index === 'number'">
 				<labelledInput
 					:inputId="'editDraftTitle'"
 					:type="'text'"
 					:label="'Title'"
-					@update:modelValue="
-						(newValue) => {
-							updateCurrentDraft('title', newValue);
-						}
-					"
 					v-model="currentDraft.title"
+					@update:modelValue="updateCurrentDraft"
 				/>
 				<labelledInput
 					:inputId="'editDraftBody'"
 					:type="'textarea'"
 					:label="'Body'"
 					:minLineHeight="4"
-					@update:modelValue="
-						(newValue) => {
-							updateCurrentDraft('body', newValue);
-						}
-					"
 					v-model="currentDraft.body"
+					@update:modelValue="updateCurrentDraft"
 				/>
-				<button id="draftDelete" class="core_contentButton" @click="deleteCurrentDraft">
+				<button id="deletionButton" class="core_contentButton" @click="deleteCurrentDraft">
 					<img src="../../../assets/trash.svg" alt="Trashcan icon" />
 					<span>Delete</span>
 				</button>
@@ -52,81 +48,119 @@
 
 <script setup lang="ts">
 	import {ref, toRaw} from "vue";
+	import {apiFetch} from "../../../helpers/apiFetch";
 	import {useUser} from "../../../stores/user";
-	import {useDashboardEdits} from "../../../stores/dashboardEdits";
-	import {UserData} from "../../../../../shared/objects/user";
 	import {UserPatchRequest} from "../../../../../shared/objects/api";
 	import {unix as unixStamp} from "../../../../../shared/helpers/timestamps";
-	import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
-	import draftsSelection from "../draftsList.vue";
+	import timestamp from "../../timestamp.vue";
 	import notification from "../../notification.vue";
 	import labelledInput from "../../labelledInput.vue";
+	import {debounce} from "../../../helpers/debounce";
 	const user = useUser();
-	const prevChanges = useDashboardEdits().ofData("drafts");
 
-	const draftsState = ref(prevChanges || deepCloneFromReactive(user.data!.drafts));
+	const reassignToRerenderList = ref(0);
+
 	const maxDrafts = 3;
 
-	const currentDraft = ref<UserData["drafts"][number] | null>(null);
-	const currentDraftIndex = ref<number | null>(null);
+	const currentDraft = ref({
+		title: "",
+		body: "",
+		index: null as number | null,
+	});
 
-	const emit = defineEmits(["newState"]);
-	function emitNewDraftsState() {
-		emit("newState", [new UserPatchRequest("drafts", toRaw(draftsState.value))]);
+	const notif = ref({
+		text: "",
+		desirability: null as boolean | null,
+	});
+
+	function createDraft() {
+		requestDraftsUpdate([...user.data!.drafts, {title: "", body: "", lastEdited: unixStamp()}]).then(() =>
+			selectDraft(user.data!.drafts.length - 1)
+		);
 	}
 
-	function createNewDraft() {
-		draftsState.value.push({title: "", body: "", lastEdited: unixStamp()});
+	function selectDraft(index: number) {
+		const selectedDraft = user.data!.drafts[index];
 
-		const newDraftIndex = draftsState.value.length - 1;
-		currentDraftIndex.value = newDraftIndex;
-		currentDraft.value = draftsState.value[newDraftIndex];
-		emitNewDraftsState();
+		currentDraft.value.title = selectedDraft.title;
+		currentDraft.value.body = selectedDraft.body;
+		currentDraft.value.index = index;
+		reassignToRerenderList.value += 1;
 	}
 
-	function selectDraft(data: {draft: UserData["drafts"][number]; index: number}) {
-		currentDraftIndex.value = data.index;
-		currentDraft.value = draftsState.value[data.index];
-	}
+	function updateCurrentDraft() {
+		debounce(750, () => {
+			const {title, body, index} = currentDraft.value;
 
-	function updateCurrentDraft(draftSection: "title" | "body", newValue: string) {
-		currentDraft.value![draftSection] = toRaw(newValue);
-		emitNewDraftsState();
+			const newDraftsState = toRaw(user.data!.drafts);
+			newDraftsState[index!] = {title: title, body: body, lastEdited: unixStamp()};
+
+			requestDraftsUpdate(newDraftsState);
+		});
 	}
 
 	function deleteCurrentDraft() {
-		draftsState.value.splice(currentDraftIndex.value as number, 1);
-		currentDraftIndex.value = null;
-		currentDraft.value = null;
-		emitNewDraftsState();
+		const draftsWithoutCurrent = user.data!.drafts.filter((draft, index) => index !== currentDraft.value.index);
+		requestDraftsUpdate(draftsWithoutCurrent);
+		currentDraft.value.index = null;
+	}
+
+	async function requestDraftsUpdate(newDraftsState: NonNullable<typeof user.data>["drafts"]) {
+		notif.value.text = "";
+
+		const response = await apiFetch("PATCH", "/users", [new UserPatchRequest("drafts", newDraftsState)]);
+
+		if (response.error) {
+			notif.value.text = response.error.message;
+			notif.value.desirability = false;
+			return;
+		}
+		user.data!.drafts = newDraftsState;
+		reassignToRerenderList.value += 1;
 	}
 </script>
 
 <style scoped>
-	#draftsPicker {
-		margin-bottom: 0.5em;
+	ol {
+		list-style: none;
+		margin: 0;
+		padding: 0;
 	}
 
-	#newDraft {
+	li + li,
+	ol + button {
+		margin-top: 1em;
+	}
+	li button,
+	ol + button {
 		font-size: 0.9em;
+		padding: 0.3em;
+		width: 100%;
+	}
+	ol + button {
 		display: block;
 		width: 90%;
 		margin-inline: auto;
-		padding: 0.3em;
-	}
-	#newDraft p {
-		margin: 0;
 	}
 
-	#draftDelete {
+	button p {
+		margin: 0;
+	}
+	ol button p {
+		font-weight: bold;
+	}
+	ol button div {
+		font-size: 0.7em;
+	}
+
+	#deletionButton {
 		display: block;
 		margin: auto;
-		font-size: inherit;
 	}
-	#draftDelete img {
+	#deletionButton img {
 		height: 1.75em;
 	}
-	#draftDelete span {
+	#deletionButton span {
 		vertical-align: super;
 	}
 </style>
