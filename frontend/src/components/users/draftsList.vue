@@ -4,11 +4,7 @@
 			v-for="(draft, index) in drafts"
 			type="button"
 			class="core_backgroundButton"
-			@click="
-				() => {
-					emit('draftSelected', {draft, index});
-				}
-			"
+			@click="() => emit('draftSelected', {draft, index})"
 		>
 			<p>{{ draft.title || "[No Title]" }}</p>
 			<div>Edited: <timestamp :pastUnix="draft.lastEdited" /></div>

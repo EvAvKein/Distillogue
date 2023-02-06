@@ -18,11 +18,7 @@
 				<button
 					v-if="!central"
 					class="repliesIndent core_backgroundButton"
-					@click="
-						() => {
-							if (!central) expanded = !expanded;
-						}
-					"
+					@click="() => (!central ? (expanded = !expanded) : null)"
 				></button>
 				<div v-else class="repliesIndent"></div>
 				<node v-for="reply of node.replies" :node="reply" :pathToNode="nodePath" v-model:expanded="expanded" />

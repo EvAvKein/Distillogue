@@ -40,9 +40,7 @@
 
 	const upvoters = ref(props.voters.up);
 	const downvoters = ref(props.voters.down);
-	const totalVotes = computed(() => {
-		return (upvoters.value?.length ?? 0) - (downvoters.value?.length ?? 0);
-	});
+	const totalVotes = computed(() => (upvoters.value?.length ?? 0) - (downvoters.value?.length ?? 0));
 
 	const title = computed(() => {
 		let titleVar = "";

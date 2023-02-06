@@ -18,7 +18,5 @@ export async function apiFetch(method: "GET" | "POST" | "PATCH" | "DELETE", addr
 			const responseObject = (await response.json()) as FetchResponse;
 			return responseObject;
 		})
-		.catch(() => {
-			return new FetchResponse(null, "Failed to contact server");
-		});
+		.catch(() => new FetchResponse(null, "Failed to contact server"));
 }

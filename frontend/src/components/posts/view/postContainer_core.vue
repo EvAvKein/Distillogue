@@ -1,12 +1,5 @@
 <template>
-	<modalWrapper
-		:activeByTruthiness="replyData.nodePath"
-		@deactivate="
-			() => {
-				replyData.nodePath = null;
-			}
-		"
-	>
+	<modalWrapper :activeByTruthiness="replyData.nodePath" @deactivate="() => (replyData.nodePath = null)">
 		<div>
 			<createReply :reply="replyData" />
 		</div>

@@ -39,15 +39,7 @@
 		</section>
 
 		<section v-if="!reply" id="configDrawer" :class="configDrawerOpen ? 'open' : ''">
-			<button
-				id="drawerToggler"
-				type="button"
-				@click="
-					() => {
-						configDrawerOpen = !configDrawerOpen;
-					}
-				"
-			>
+			<button id="drawerToggler" type="button" @click="() => (configDrawerOpen = !configDrawerOpen)">
 				<img src="../../../assets/fileConfig.svg" alt="Icon of file with cogwheel" />
 			</button>
 			<section id="config" :inert="configDrawerExists && !configDrawerOpen">
