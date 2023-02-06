@@ -48,6 +48,7 @@
 
 <script setup lang="ts">
 	import {ref, toRaw} from "vue";
+	import {user as userValidation} from "../../../../../shared/objects/validationUnits";
 	import {apiFetch} from "../../../helpers/apiFetch";
 	import {useUser} from "../../../stores/user";
 	import {UserPatchRequest} from "../../../../../shared/objects/api";
@@ -60,7 +61,7 @@
 
 	const reassignToRerenderList = ref(0);
 
-	const maxDrafts = 3;
+	const maxDrafts = userValidation.drafts.max;
 
 	const currentDraft = ref({
 		title: "",

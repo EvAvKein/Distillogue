@@ -2,12 +2,13 @@
 import Joi from "joi";
 import * as PostClass from "../../../shared/objects/post.js";
 import * as UserClass from "../../../shared/objects/user.js";
+import {node, user} from "../../../shared/objects/validationUnits.js";
 
 const trueOrNone = Joi.valid(true);
 const Post = {
 	Node: {
-		title: Joi.string().required().min(8).max(100),
-		body: Joi.string().required().min(50).max(2500),
+		title: Joi.string().required().min(node.title.min).max(node.title.max),
+		body: Joi.string().required().min(node.body.min).max(node.body.max),
 	},
 
 	PostConfig: Joi.object<PostClass.PostConfig>({
@@ -28,7 +29,7 @@ const Post = {
 const User = {
 	UserData: Joi.object<UserClass.UserData>({
 		id: Joi.string().required(),
-		name: Joi.string().required().alphanum().min(3).max(20),
+		name: Joi.string().required().alphanum().min(user.name.min).max(user.name.max),
 		drafts: Joi.array()
 			.required()
 			.items(
@@ -38,16 +39,16 @@ const User = {
 					lastEdited: Joi.number().required(),
 				})
 			)
-			.max(3),
+			.max(user.drafts.max),
 		presets: Joi.array()
 			.required()
 			.items(
 				Joi.object({
-					name: Joi.string().allow("").max(20),
+					name: Joi.string().allow("").max(user.presets.name.max),
 					config: Post.PostConfig, // should exclude the "access" property, but waiting on a conclusion for this issue i opened (and it wouldn't be terrible to not exclude it in the meanwhile): https://github.com/hapijs/joi/issues/2832
 				})
 			)
-			.max(3),
+			.max(user.presets.max),
 		contacts: Joi.array()
 			.required()
 			.items(

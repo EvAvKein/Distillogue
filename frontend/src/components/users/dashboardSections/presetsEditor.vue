@@ -47,6 +47,7 @@
 
 <script setup lang="ts">
 	import {ref, toRaw} from "vue";
+	import {user as userValidation} from "../../../../../shared/objects/validationUnits";
 	import {apiFetch} from "../../../helpers/apiFetch";
 	import {useUser} from "../../../stores/user";
 	import {UserPatchRequest} from "../../../../../shared/objects/api";
@@ -59,7 +60,7 @@
 
 	const reassignToRerenderList = ref(0);
 
-	const maxPresets = 3;
+	const maxPresets = userValidation.presets.max;
 
 	const currentPreset = ref({
 		name: "" as UserData["presets"][number]["name"],
