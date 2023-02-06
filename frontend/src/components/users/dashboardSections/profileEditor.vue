@@ -22,7 +22,6 @@
 	watch(nameState, (newName) => {
 		debounce(750, async () => {
 			nameNotif.value.text = "";
-			// TODO: client-side checks, pending a module which exports auth data (min and max length in this case) to both backend and frontend
 
 			const response = await apiFetch("PATCH", "/users", [new UserPatchRequest("name", newName)]);
 
