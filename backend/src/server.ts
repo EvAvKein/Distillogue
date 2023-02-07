@@ -69,7 +69,9 @@ app.patch("/api/users", async (request, response) => {
 		}
 	}
 
-	const mongoUpdateObject = {} as {[key: string]: any}; // TODO: a bare minimum type, because idk how to actually type the key as `data.${editableUserData}`, and i'm not sure it's even possible to type the value as the value of whichever editableUserData property is being passed
+	const mongoUpdateObject = {} as {[key: string]: any};
+	// ^ TODO: a bare minimum type, because idk how declare the type below without actually requiring a type argument (i.e infer T from key and apply it to type of value)
+	//	type mongoUpdateObject<T extends editableUserData> = {[key in `data.${T}`]: UserData[T]};
 
 	editRequests.forEach((request) => {
 		mongoUpdateObject["data." + request.dataName] = request.newValue;
