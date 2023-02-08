@@ -21,12 +21,12 @@
 				<span>Contacts</span>
 			</button>
 		</nav>
-	</section>
-	<section id="dashboardPage">
-		<profileEditor v-if="currentPage === 'profile'" />
-		<draftsEditor v-if="currentPage === 'drafts'" />
-		<presetsEditor v-if="currentPage === 'presets'" />
-		<contactsEditor v-if="currentPage === 'contacts'" />
+		<section id="dashboardPage">
+			<profileEditor v-if="currentPage === 'profile'" />
+			<draftsEditor v-if="currentPage === 'drafts'" />
+			<presetsEditor v-if="currentPage === 'presets'" />
+			<contactsEditor v-if="currentPage === 'contacts'" />
+		</section>
 	</section>
 </template>
 
