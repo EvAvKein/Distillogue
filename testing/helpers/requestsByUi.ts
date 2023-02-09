@@ -1,10 +1,11 @@
 import {expect, type Page} from "@playwright/test";
+import {randomUsername} from "./randomAlphanumString";
 
-async function signUp(page: Page, name: string) {
+async function signUp(page: Page, name?: string) {
 	await page.goto("/join");
 
 	await expect(page.getByText("Sign Up")).toBeVisible();
-	await page.locator("input").fill(name);
+	await page.locator("input").fill(name ?? randomUsername());
 	await page.getByRole("button", {name: "Continue"}).click();
 
 	await expect(page).toHaveURL(/.*browse/);
