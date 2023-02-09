@@ -1,5 +1,5 @@
 import {expect, type Page} from "@playwright/test";
-import {randomUsername} from "./randomAlphanumString";
+import {randomUsername} from "./randomAlphanumString.js";
 
 async function signUp(page: Page, name?: string) {
 	await page.goto("/join");
