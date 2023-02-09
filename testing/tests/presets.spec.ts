@@ -1,5 +1,5 @@
 import {test, expect, type Page} from "@playwright/test";
-import {signUp, createPost, createReply, expandConfigCategories} from "../helpers/shortcuts.js";
+import {signUp, createPost, createReply, expandConfigCategories} from "../helpers/requestsByUi.js";
 import {randomUsername, randomNodeTitle, randomNodeBody} from "../helpers/randomAlphanumString.js";
 
 interface configByUiText {

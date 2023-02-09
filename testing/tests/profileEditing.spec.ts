@@ -1,5 +1,5 @@
 import {test, expect} from "@playwright/test";
-import {signUp} from "../helpers/shortcuts.js";
+import {signUp} from "../helpers/requestsByUi.js";
 import {randomUsername} from "../helpers/randomAlphanumString.js";
 
 test.describe.fixme("Profile editing", () => {

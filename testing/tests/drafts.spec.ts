@@ -1,5 +1,5 @@
 import {test, expect, type Page} from "@playwright/test";
-import {signUp, createPost} from "../helpers/shortcuts.js";
+import {signUp, createPost} from "../helpers/requestsByUi.js";
 import {randomUsername, randomNodeTitle, randomNodeBody} from "../helpers/randomAlphanumString.js";
 
 let draftTitle = "Draft " + randomNodeTitle();
