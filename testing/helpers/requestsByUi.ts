@@ -22,6 +22,10 @@ async function signIn(page: Page, name: string) {
 	await expect(page).toHaveURL(/.*browse/);
 }
 
+async function signOut(page: Page) {
+	await page.locator("header").getByText("Logout").click();
+}
+
 async function createPost(page: Page, title: string, body: string, extraConfiguration?: (page: Page) => Promise<void>) {
 	await page.goto("/post/create");
 
@@ -60,4 +64,4 @@ async function expandNodePath(page: Page, nodeTitlesPath: string[]) {
 	});
 }
 
-export {signUp, signIn, createPost, createReply, expandConfigCategories, expandNodePath};
+export {signUp, signIn, signOut, createPost, createReply, expandConfigCategories, expandNodePath};
