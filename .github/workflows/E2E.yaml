@@ -20,7 +20,7 @@ jobs:
         run: docker-compose up --detach
 
       - name: Launch tests
-        run: docker-compose -f docker-compose.tests.yaml --env CI=true up
+        run: docker-compose --env CI=true -f docker-compose.tests.yaml up
 
       - uses: actions/upload-artifact@v3
         if: always()
