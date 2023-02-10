@@ -14,4 +14,4 @@ COPY /testing/ /testing
 
 # RUN
 WORKDIR /testing
-CMD ["npm", "run", "playwright"]
+CMD ["npm", "run", "playwright", "--reporter=line"]
