@@ -2,7 +2,7 @@
 	"type": "module",
 	"scripts": {
 		"install": "npx playwright install --with-deps",
-		"playwright": "npx playwright test",
+		"playwright": "npx playwright test --reporter=html",
 		"showReport": "npx playwright show-report"
 	},
 	"devDependencies": {

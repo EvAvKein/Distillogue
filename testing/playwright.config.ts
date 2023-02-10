@@ -7,7 +7,6 @@ const config: PlaywrightTestConfig = {
 	timeout: 60 * 1000,
 	expect: {timeout: 5 * 1000},
 
-	reporter: "html",
 	use: {
 		baseURL: "http://localhost:3000",
 		trace: "on",
