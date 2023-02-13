@@ -10,6 +10,7 @@ WORKDIR /testing
 RUN npm install
 
 # COPY
+COPY /shared/ /shared
 COPY /testing/ /testing
 
 # RUN
