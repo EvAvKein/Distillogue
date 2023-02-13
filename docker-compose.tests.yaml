@@ -6,3 +6,9 @@ services:
       dockerfile: ./testing/dockerfile
     volumes:
       - ./testing/playwright-report:/testing/playwright-report
+    networks:
+      - custom_proxyToServer
+
+networks:
+  custom_proxyToServer:
+    external: true
