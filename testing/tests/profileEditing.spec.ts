@@ -1,46 +1,38 @@
 import {test, expect} from "@playwright/test";
-import {signUp} from "../helpers/requestsByUi.js";
+import {createUserAndSession} from "../helpers/requestsByApi.js";
+import {setSessionKey} from "../helpers/sessionKey.js";
 import {randomUsername} from "../helpers/randomAlphanumString.js";
+import {user} from "../../shared/objects/validationUnits.js";
 
-test.describe.fixme("Profile editing", () => {
-	let username = "User" + randomUsername();
+test.describe("Profile editing - UI", () => {
+	test("Change name", async ({page, request}) => {
+		let {name, sessionKey} = await createUserAndSession(request);
+		await page.goto("/");
+		await setSessionKey(page, sessionKey);
+		await page.goto("/dashboard");
+		const nameInput = page.getByLabel("Name");
+		await expect(nameInput).toHaveValue(name);
 
-	test("Setup (sign-up & go to Dashboard)", async ({page}) => {
-		await signUp(page, username);
-		await page.locator("header").getByText("Dashboard").click();
-
-		await expect(page.getByLabel("Name")).toHaveValue(username);
-		expect(await page.locator("#dashboardSubmit").count()).toBeFalsy();
-	});
-
-	test("Edit and refresh to cancel", async ({page}) => {
-		await page.getByLabel("Name").fill("Temporary");
-		await expect(page.locator("#dashboardSubmit")).toBeVisible();
-
-		await page.reload();
-		await expect(page.getByLabel("Name")).toHaveValue(username);
-		expect(await page.locator("#dashboardSubmit").count()).toBeFalsy();
-	});
-
-	test("Edit and restore to cancel", async ({page}) => {
-		await page.getByLabel("Name").fill("Temporary2");
-		await expect(page.locator("#dashboardSubmit")).toBeVisible();
-
-		await page.getByLabel("Name").fill(username);
-		expect(await page.locator("#dashboardSubmit").count()).toBeFalsy();
-	});
-
-	test("Edit and save", async ({page}) => {
-		const newUsername = "User2" + randomUsername();
-
-		await page.getByLabel("Name").fill(newUsername);
-		await page.locator("#dashboardSubmit").click();
-
-		await expect(page.locator(".notification.positive")).toBeVisible();
-		expect(await page.locator("#dashboardSubmit").count()).toBeFalsy();
-		await page.getByLabel("Name").fill(newUsername);
+		name = "new" + randomUsername();
+		nameInput.fill(name);
+		expect(await page.locator(".notification.negative").count()).toBeFalsy();
 
 		await page.reload();
-		await expect(page.getByLabel("Name")).toHaveValue(newUsername);
+		await expect(page.getByLabel("Name")).toHaveValue(name);
+	});
+
+	test("Fail to change name outside character limits", async ({page, request}) => {
+		const {sessionKey} = await createUserAndSession(request);
+		await page.goto("/");
+		await setSessionKey(page, sessionKey);
+		await page.goto("/dashboard");
+
+		const namesOutsideLimits = ["A".repeat(user.name.min - 1), "A".repeat(user.name.max + 1)];
+		for (const invalidName of namesOutsideLimits) {
+			await page.getByLabel("Name").fill(invalidName);
+			await expect(page.locator(".notification.negative")).toBeVisible();
+			await page.reload();
+			await expect(page.getByLabel("Name")).not.toHaveValue(invalidName);
+		}
 	});
 });
