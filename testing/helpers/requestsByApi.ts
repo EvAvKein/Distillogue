@@ -1,26 +1,26 @@
 import {type APIRequestContext, expect} from "@playwright/test";
 import {randomUsername} from "./randomAlphanumString.js";
-import {NodeCreationRequest} from "../../shared/objects/api";
-type request = APIRequestContext;
+import {NodeCreationRequest} from "../../shared/objects/api.js";
+type Request = APIRequestContext;
 
-async function createUser(request: request, name?: string) {
+async function createUser(request: Request, name?: string) {
 	return request.post("/api/users", {data: {username: name ?? randomUsername()}});
 }
-async function createSession(request: request, name: string) {
+async function createSession(request: Request, name: string) {
 	return request.post("/api/sessions", {data: {username: name}});
 }
-async function getSession(request: request, authKey: string) {
+async function getSession(request: Request, authKey: string) {
 	return request.get("/api/sessions", {
 		headers: {authorization: "Bearer" + authKey},
 	});
 }
-async function deleteSession(request: request, authKey: string) {
+async function deleteSession(request: Request, authKey: string) {
 	return request.delete("/api/sessions", {
 		headers: {authorization: "Bearer" + authKey},
 	});
 }
 
-async function createUserAndSession(request: request) {
+async function createUserAndSession(request: Request) {
 	const name = randomUsername();
 
 	const userCreationResponse = await createUser(request, name);
@@ -34,7 +34,7 @@ async function createUserAndSession(request: request) {
 	return {name: name, sessionKey: sessionKey as string};
 }
 
-async function createPost(request: request, authKey: string, postRequest: NodeCreationRequest) {
+async function createPost(request: Request, authKey: string, postRequest: NodeCreationRequest) {
 	return request.post("/api/posts", {
 		headers: {authorization: "Bearer" + authKey},
 		data: postRequest,
