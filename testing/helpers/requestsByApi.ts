@@ -17,7 +17,7 @@ async function getSession(request: Request, authKey: string) {
 }
 async function deleteSession(request: Request, authKey: string) {
 	return request.delete("/api/sessions", {
-		headers: {authorization: "Bearer" + authKey},
+		headers: {authorization: "Bearer " + authKey},
 	});
 }
 
