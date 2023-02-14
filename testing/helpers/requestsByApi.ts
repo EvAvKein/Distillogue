@@ -1,5 +1,6 @@
-import {type APIRequestContext, expect} from "@playwright/test";
+import {type APIRequestContext, type Page, expect} from "@playwright/test";
 import {randomUsername} from "./randomAlphanumString.js";
+import {setSessionKey} from "./sessionKey.js";
 import {NodeCreationRequest} from "../../shared/objects/api.js";
 type Request = APIRequestContext;
 
@@ -34,6 +35,14 @@ async function createUserAndSession(request: Request) {
 	return {name: name, sessionKey: sessionKey as string};
 }
 
+async function signUp(request: Request, page: Page) {
+	const data = await createUserAndSession(request);
+	await page.goto("/");
+	await setSessionKey(page, data.sessionKey);
+
+	return data;
+}
+
 async function createPost(request: Request, authKey: string, postRequest: NodeCreationRequest) {
 	return request.post("/api/posts", {
 		headers: {authorization: "Bearer" + authKey},
@@ -41,4 +50,4 @@ async function createPost(request: Request, authKey: string, postRequest: NodeCr
 	});
 }
 
-export {createUser, createSession, getSession, deleteSession, createUserAndSession, createPost};
+export {createUser, createSession, getSession, deleteSession, createUserAndSession, signUp, createPost};
