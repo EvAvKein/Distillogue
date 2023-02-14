@@ -18,7 +18,7 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 		const searchString = request.query.search || "";
 
 		if (searchString && typeof searchString !== "string") {
-			response.json(new FetchResponse(null, "Search value must be a string"));
+			response.status(400).json(new FetchResponse(null, "Search value must be a string"));
 			return;
 		}
 
@@ -37,7 +37,7 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 			return new PostSummary({...post, replies: []});
 		});
 
-		response.json(new FetchResponse(postSummaries));
+		response.status(200).json(new FetchResponse(postSummaries));
 	});
 
 	app.get("/api/posts/:id", async (request, response) => {
@@ -46,9 +46,14 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 
 		const dbResponse = await postsDb.findOne<Node | null>(mongoFilterPostsByAccess(user?.data.id, {id: postId}));
 		if (!dbResponse) {
-			response.json(
-				new FetchResponse(null, "Post unavailable; Either it doesn't exist, or it's private and you're not authorized")
-			);
+			response
+				.status(404)
+				.json(
+					new FetchResponse(
+						null,
+						"Post unavailable; Either it doesn't exist, or it's private and you're not authorized"
+					)
+				);
 			return;
 		}
 
@@ -73,13 +78,13 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 			});
 		}
 
-		response.json(new FetchResponse(post));
+		response.status(200).json(new FetchResponse(post));
 	});
 
 	app.post("/api/posts", async (request, response) => {
 		const validation = apiSchemas.NodeCreationRequest.validate(request.body, validationSettings);
 		if (validation.error) {
-			response.json(new FetchResponse(null, validation.error.message));
+			response.status(400).json(new FetchResponse(null, validation.error.message));
 			return;
 		}
 
@@ -87,7 +92,7 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 
 		const user = await userBySession(request);
 		if (!user) {
-			response.json(new FetchResponse(null, "User authentication failed"));
+			response.status(401).json(new FetchResponse(null, "User authentication failed"));
 			return;
 		}
 
@@ -99,7 +104,7 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 		});
 
 		if (dbResponse.matchedCount) {
-			response.json(new FetchResponse(null, "Post already created!"));
+			response.status(208).json(new FetchResponse(null, "Post already created!"));
 			return;
 		}
 
@@ -109,6 +114,8 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 			usersDb.updateOne({"data.id": user.data.id}, {$set: {"data.drafts": newDraftsState}});
 		}
 
-		response.json(new FetchResponse(true));
+		response.status(200).json(new FetchResponse(true));
+		// 201 would be a more appropriate status code, but that should accompany the created resource's value/location
+		// TODO: add the post ID to the response, and use the ID in the frontend to navigate to the post
 	});
 }

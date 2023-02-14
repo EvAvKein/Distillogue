@@ -17,13 +17,13 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 		// URI open to RESTfulness improvement suggestions
 		const validation = apiSchemas.NodeInteractionRequest.validate(request.body, validationSettings);
 		if (validation.error) {
-			response.json(new FetchResponse(null, validation.error.message));
+			response.status(400).json(new FetchResponse(null, validation.error.message));
 			return;
 		}
 
 		const user = await userBySession(request);
 		if (!user) {
-			response.json(new FetchResponse(null, "User authentication failed"));
+			response.status(401).json(new FetchResponse(null, "User authentication failed"));
 			return;
 		}
 
@@ -34,9 +34,14 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 
 		const subjectPost = await postsDb.findOne(mongoFilterPostsByAccess(user.data.id, {id: postId})); // implementing this (and the derived validations) as part of an aggregation pipeline with the interaction request would eliminate a race condition, but mongo pipeline operations have various issues (verbosity, technical limitations, low readability) and concurrent usage (& contributor count) is currently too low to merit wrangling with those issues
 		if (!subjectPost) {
-			response.json(
-				new FetchResponse(null, "Post unavailable; Either it doesn't exist, or it's private and you're not authorized")
-			);
+			response
+				.status(404)
+				.json(
+					new FetchResponse(
+						null,
+						"Post unavailable; Either it doesn't exist, or it's private and you're not authorized"
+					)
+				);
 			return;
 		}
 
@@ -73,7 +78,7 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 				const oppositeVote = voteData.voteDirection === "up" ? "down" : "up";
 
 				if (!subjectPost.config?.votes?.[subjectVote]) {
-					response.json(new FetchResponse(null, "Vote interaction unavailable for this node"));
+					response.status(400).json(new FetchResponse(null, "Vote interaction unavailable for this node"));
 					return;
 				}
 
@@ -107,18 +112,18 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 		);
 
 		if (!dbResponse.value) {
-			response.json(new FetchResponse(null, "Invalid interaction request"));
+			response.status(400).json(new FetchResponse(null, "Invalid interaction request"));
 			return;
 		}
 
 		if (!updateFollowup) {
-			response.json(new FetchResponse(true));
+			response.status(204).json(new FetchResponse(true));
 			return;
 		}
 
 		const dbFollowupResponse = await updateFollowup();
 		typeof dbFollowupResponse === "string"
-			? response.json(new FetchResponse(null, dbFollowupResponse))
-			: response.json(new FetchResponse(true));
+			? response.status(500).json(new FetchResponse(null, dbFollowupResponse))
+			: response.status(204).json(new FetchResponse(true));
 	});
 }

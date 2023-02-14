@@ -12,7 +12,7 @@ export default function (app: Express, usersDb: Collection<User>) {
 	app.post("/api/users", async (request, response) => {
 		const validation = apiSchemas.UserCreationRequest.validate(request.body, validationSettings);
 		if (validation.error) {
-			response.json(new FetchResponse(null, validation.error.message));
+			response.status(400).json(new FetchResponse(null, validation.error.message));
 			return;
 		}
 
@@ -22,18 +22,18 @@ export default function (app: Express, usersDb: Collection<User>) {
 		const dbResponse = await mongoInsertIfDoesntExist(usersDb, newUser, {"data.name": username});
 
 		if (dbResponse.matchedCount) {
-			response.json(new FetchResponse(null, "User already exists!"));
+			response.status(403).json(new FetchResponse(null, "User already exists!"));
 			return;
 		}
 
-		response.json(new FetchResponse(new UserPayload(newUser.sessions[0].key, newUser.data)));
+		response.status(201).json(new FetchResponse(new UserPayload(newUser.sessions[0].key, newUser.data)));
 	});
 
 	app.patch("/api/users", async (request, response) => {
 		// TODO: the "PUT" method seems more appropriate, as it's receiving a complete replacement... but this would require changing the endpoint's path as to not indicate complete user-data replacement, probably changing to "/users/[userId]/[property]"
 		const validation = apiSchemas.UserPatchRequestArray.validate(request.body, validationSettings);
 		if (validation.error) {
-			response.json(new FetchResponse(null, validation.error.message));
+			response.status(400).json(new FetchResponse(null, validation.error.message));
 			return;
 		}
 
@@ -42,7 +42,7 @@ export default function (app: Express, usersDb: Collection<User>) {
 
 		for (let request of editRequests) {
 			if (!arrOfEditableUserData.includes(request.dataName)) {
-				response.json(new FetchResponse(null, "Invalid data insertion request"));
+				response.status(400).json(new FetchResponse(null, "Invalid data insertion request"));
 				return;
 			}
 
@@ -62,10 +62,10 @@ export default function (app: Express, usersDb: Collection<User>) {
 		const dbResponse = await usersDb.updateOne({sessions: {$elemMatch: {key: session}}}, {$set: mongoUpdateObject});
 
 		if (!dbResponse.modifiedCount) {
-			response.json(new FetchResponse(null, "Failed to update database"));
+			response.status(500).json(new FetchResponse(null, "Failed to update database"));
 			return;
 		}
 
-		response.json(new FetchResponse(true));
+		response.status(204).json(new FetchResponse(true));
 	});
 }

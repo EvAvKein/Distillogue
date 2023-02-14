@@ -13,18 +13,18 @@ export default function (app: Express, usersDb: Collection<User>) {
 		const user = await usersDb.findOne({sessions: {$elemMatch: {key: sessionkey}}});
 
 		if (!user) {
-			response.json(new FetchResponse(null, "User session not found"));
+			response.status(404).json(new FetchResponse(null, "User session not found"));
 			return;
 		}
 
-		response.json(new FetchResponse(user.data));
+		response.status(200).json(new FetchResponse(user.data));
 	});
 
 	app.post("/api/sessions", async (request, response) => {
 		const validation = apiSchemas.UserCreationRequest.validate(request.body, validationSettings); // obviously not a user creation request, but they use the same object (until proper auth)
 
 		if (validation.error) {
-			response.json(new FetchResponse(null, validation.error.message));
+			response.status(400).json(new FetchResponse(null, validation.error.message));
 			return;
 		}
 
@@ -37,11 +37,11 @@ export default function (app: Express, usersDb: Collection<User>) {
 		);
 
 		if (!dbResponse.value) {
-			response.json(new FetchResponse(null, "User not found"));
+			response.status(404).json(new FetchResponse(null, "User not found"));
 			return;
 		}
 
-		response.json(new FetchResponse(new UserPayload(newSession.key, dbResponse.value.data)));
+		response.status(201).json(new FetchResponse(new UserPayload(newSession.key, dbResponse.value.data)));
 	});
 
 	// endpoint pending a sessions dashboard section which'd make this relevant
@@ -57,10 +57,10 @@ export default function (app: Express, usersDb: Collection<User>) {
 		);
 
 		if (!dbResponse.modifiedCount) {
-			response.json(new FetchResponse(null, "Failed to find session"));
+			response.status(404).json(new FetchResponse(null, "Failed to find session"));
 			return;
 		}
 
-		response.json(new FetchResponse(true));
+		response.status(200).json(new FetchResponse(true));
 	});
 }
