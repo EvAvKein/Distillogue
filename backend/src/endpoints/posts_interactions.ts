@@ -117,8 +117,8 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 		}
 
 		const dbFollowupResponse = await updateFollowup();
-		response.json(
-			typeof dbFollowupResponse === "string" ? new FetchResponse(null, dbFollowupResponse) : new FetchResponse(true)
-		);
+		typeof dbFollowupResponse === "string"
+			? response.json(new FetchResponse(null, dbFollowupResponse))
+			: response.json(new FetchResponse(true));
 	});
 }
