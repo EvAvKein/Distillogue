@@ -1,5 +1,6 @@
 import {type PlaywrightTestArgs, type APIRequestContext, expect} from "@playwright/test";
 import {randomUsername} from "./randomAlphanumString.js";
+import {NodeCreationRequest} from "../../shared/objects/api";
 type request = PlaywrightTestArgs["request"];
 
 async function createUser(request: request, name?: string) {
@@ -33,4 +34,11 @@ async function createUserAndSession(request: APIRequestContext) {
 	return {name: name, sessionKey: sessionKey as string};
 }
 
-export {createUser, createSession, getSession, deleteSession, createUserAndSession};
+async function createPost(request: request, authKey: string, postRequest: NodeCreationRequest) {
+	return request.post("/api/posts", {
+		headers: {authorization: "Bearer" + authKey},
+		data: postRequest,
+	});
+}
+
+export {createUser, createSession, getSession, deleteSession, createUserAndSession, createPost};
