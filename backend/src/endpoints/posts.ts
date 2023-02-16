@@ -112,6 +112,6 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 			usersDb.updateOne({"data.id": user.data.id}, {$set: {"data.drafts": newDraftsState}});
 		}
 
-		response.status(201).json(newPost);
+		response.status(201).json(new FetchResponse(newPost));
 	});
 }
