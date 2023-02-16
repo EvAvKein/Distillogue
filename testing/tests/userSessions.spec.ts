@@ -10,7 +10,7 @@ test.describe("User sessions - API", async () => {
 		await expect(await deleteSession(request, sessionKey)).toBeOK();
 
 		const invalidSessionRequest = await getSession(request, sessionKey);
-		expect((await invalidSessionRequest.json()).data).toBeNull();
+		expect((await invalidSessionRequest.json()).data).toBeFalsy();
 	});
 
 	test("Obtain different key for new session by same user", async ({request}) => {

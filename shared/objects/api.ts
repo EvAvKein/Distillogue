@@ -1,16 +1,15 @@
-import {lookupInOptional} from "../helpers/lookupInOptional.js";
 import {UserData, editableUserData} from "./user.js";
 import {Node, PostConfig} from "./post.js";
 
 class FetchResponse {
-	data: null | object | any[] | true;
+	data?: unknown;
 	error?: {
 		message: string;
 	};
 
-	constructor(data: FetchResponse["data"], errorMessage?: lookupInOptional<FetchResponse["error"], "message">) {
-		this.data = data;
-		errorMessage ? (this.error = {message: errorMessage}) : delete this.error;
+	constructor(data?: FetchResponse["data"], error?: FetchResponse["error"]) {
+		data ? (this.data = data) : delete this.data;
+		error ? (this.error = error) : delete this.error;
 	}
 }
 

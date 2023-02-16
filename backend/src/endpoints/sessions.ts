@@ -13,7 +13,7 @@ export default function (app: Express, usersDb: Collection<User>) {
 		const user = await usersDb.findOne({sessions: {$elemMatch: {key: sessionkey}}});
 
 		if (!user) {
-			response.status(404).json(new FetchResponse(null, "User session not found"));
+			response.status(404).json(new FetchResponse(null, {message: "User session not found"}));
 			return;
 		}
 
@@ -24,7 +24,7 @@ export default function (app: Express, usersDb: Collection<User>) {
 		const validation = apiSchemas.UserCreationRequest.validate(request.body, validationSettings); // obviously not a user creation request, but they use the same object (until proper auth)
 
 		if (validation.error) {
-			response.status(400).json(new FetchResponse(null, validation.error.message));
+			response.status(400).json(new FetchResponse(null, {message: validation.error.message}));
 			return;
 		}
 
@@ -37,7 +37,7 @@ export default function (app: Express, usersDb: Collection<User>) {
 		);
 
 		if (!dbResponse.value) {
-			response.status(404).json(new FetchResponse(null, "User not found"));
+			response.status(404).json(new FetchResponse(null, {message: "User not found"}));
 			return;
 		}
 
@@ -57,7 +57,7 @@ export default function (app: Express, usersDb: Collection<User>) {
 		);
 
 		if (!dbResponse.modifiedCount) {
-			response.status(404).json(new FetchResponse(null, "Failed to find session"));
+			response.status(404).json(new FetchResponse(null, {message: "Failed to find session"}));
 			return;
 		}
 

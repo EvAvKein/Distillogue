@@ -18,7 +18,7 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 		const searchString = request.query.search || "";
 
 		if (searchString && typeof searchString !== "string") {
-			response.status(400).json(new FetchResponse(null, "Search value must be a string"));
+			response.status(400).json(new FetchResponse(null, {message: "Search value must be a string"}));
 			return;
 		}
 
@@ -46,14 +46,11 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 
 		const dbResponse = await postsDb.findOne<Node | null>(mongoFilterPostsByAccess(user?.data.id, {id: postId}));
 		if (!dbResponse) {
-			response
-				.status(404)
-				.json(
-					new FetchResponse(
-						null,
-						"Post unavailable; Either it doesn't exist, or it's private and you're not authorized"
-					)
-				);
+			response.status(404).json(
+				new FetchResponse(null, {
+					message: "Post unavailable; Either it doesn't exist, or it's private and you're not authorized",
+				})
+			);
 			return;
 		}
 
@@ -84,7 +81,7 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 	app.post("/api/posts", async (request, response) => {
 		const validation = apiSchemas.NodeCreationRequest.validate(request.body, validationSettings);
 		if (validation.error) {
-			response.status(400).json(new FetchResponse(null, validation.error.message));
+			response.status(400).json(new FetchResponse(null, {message: validation.error.message}));
 			return;
 		}
 
@@ -92,7 +89,7 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 
 		const user = await userBySession(request);
 		if (!user) {
-			response.status(401).json(new FetchResponse(null, "User authentication failed"));
+			response.status(401).json(new FetchResponse(null, {message: "User authentication failed"}));
 			return;
 		}
 
@@ -104,7 +101,7 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 		});
 
 		if (dbResponse.matchedCount) {
-			response.status(208).json(new FetchResponse(null, "Post already created!"));
+			response.status(208).json(new FetchResponse(null, {message: "Post already created!"}));
 			return;
 		}
 
