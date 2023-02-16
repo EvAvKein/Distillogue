@@ -13,10 +13,9 @@ export async function apiFetch(method: "GET" | "POST" | "PATCH" | "DELETE", addr
 		method: method,
 		...requestBody, // might as well repeat the above pattern
 	})
-		.then(async (response) => {
-			if (!response.ok) throw response;
-			const responseObject = (await response.json()) as FetchResponse;
-			return responseObject;
+		.then(async (response): Promise<FetchResponse> => {
+			const body = await response.text();
+			return body ? JSON.parse(body) : {};
 		})
 		.catch(() => new FetchResponse(null, {message: "Failed to contact server"}));
 }
