@@ -93,7 +93,8 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 			return;
 		}
 
-		const dbResponse = await mongoInsertIfDoesntExist(postsDb, new Node(user.data.id, postRequest), {
+		const newPost = new Node(user.data.id, postRequest);
+		const dbResponse = await mongoInsertIfDoesntExist(postsDb, newPost, {
 			ownerIds: [user.data.id].concat(postRequest.invitedOwnerIds || []),
 			title: postRequest.title,
 			body: postRequest.body,
@@ -111,8 +112,6 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 			usersDb.updateOne({"data.id": user.data.id}, {$set: {"data.drafts": newDraftsState}});
 		}
 
-		response.status(200).end();
-		// 201 would be a more appropriate status code, but that should accompany the created resource's value/location
-		// TODO: add the post ID to the response, and use the ID in the frontend to navigate to the post
+		response.status(201).json(newPost);
 	});
 }
