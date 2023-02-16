@@ -47,7 +47,7 @@ const routes = [
 	},
 	{
 		name: "viewPost",
-		path: "/post/view/:postId",
+		path: "/post/:postId",
 		component: viewPost,
 		props: true,
 		meta: {
