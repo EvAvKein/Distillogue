@@ -114,13 +114,13 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 		}
 
 		if (!updateFollowup) {
-			response.status(204).json(new FetchResponse(true));
+			response.status(204).end();
 			return;
 		}
 
 		const dbFollowupResponse = await updateFollowup();
 		typeof dbFollowupResponse === "string"
 			? response.status(500).json(new FetchResponse(null, {message: dbFollowupResponse}))
-			: response.status(204).json(new FetchResponse(true));
+			: response.status(204).end();
 	});
 }

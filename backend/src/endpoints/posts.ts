@@ -111,7 +111,7 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 			usersDb.updateOne({"data.id": user.data.id}, {$set: {"data.drafts": newDraftsState}});
 		}
 
-		response.status(200).json(new FetchResponse(true));
+		response.status(200).end();
 		// 201 would be a more appropriate status code, but that should accompany the created resource's value/location
 		// TODO: add the post ID to the response, and use the ID in the frontend to navigate to the post
 	});

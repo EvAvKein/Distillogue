@@ -66,6 +66,6 @@ export default function (app: Express, usersDb: Collection<User>) {
 			return;
 		}
 
-		response.status(204).json(new FetchResponse(true));
+		response.status(204).end();
 	});
 }
