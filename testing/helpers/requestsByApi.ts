@@ -45,7 +45,7 @@ async function signUp(request: Request, page: Page) {
 
 async function createPost(request: Request, authKey: string, postRequest: NodeCreationRequest) {
 	return request.post("/api/posts", {
-		headers: {authorization: "Bearer" + authKey},
+		headers: {authorization: "Bearer " + authKey},
 		data: postRequest,
 	});
 }
