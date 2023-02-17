@@ -50,9 +50,6 @@ const routes = [
 		path: "/post/:postId",
 		component: viewPost,
 		props: true,
-		meta: {
-			accountRequired: true,
-		},
 	},
 	{
 		name: "dashboard",
