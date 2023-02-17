@@ -4,7 +4,7 @@
 			v-if="voters.up"
 			aria-label="Upvote"
 			:class="'core_contentButton' + (currentVote === 'up' ? ' voted' : '')"
-			@click="vote('up', !upvoters?.includes(user.data!.id))"
+			@click="vote('up')"
 		>
 			<img src="../../../../assets/upArrow.svg" alt="Upwards arrow icon" />
 		</button>
@@ -17,7 +17,7 @@
 			v-if="voters.down"
 			aria-label="Downvote"
 			:class="'core_contentButton' + (currentVote === 'down' ? ' voted' : '')"
-			@click="vote('down', !downvoters?.includes(user.data!.id))"
+			@click="vote('down')"
 		>
 			<img style="transform: rotate(180deg)" src="../../../../assets/upArrow.svg" alt="Downwards arrow icon" />
 		</button>
@@ -62,16 +62,20 @@
 
 	type voteDirection = "up" | "down";
 	const currentVote = computed<voteDirection | null>(() => {
-		if (upvoters.value && upvoters.value.includes(user.data!.id)) return "up";
-		if (downvoters.value && downvoters.value.includes(user.data!.id)) return "down";
+		if (!user.data) return null;
+		if (upvoters.value && upvoters.value.includes(user.data.id)) return "up";
+		if (downvoters.value && downvoters.value.includes(user.data.id)) return "down";
 		return null;
 	});
 
-	async function vote(voteDirection: voteDirection, newVoteStatus: boolean) {
+	async function vote(voteDirection: voteDirection) {
 		if (!user.data) {
 			emit("interactionError", "Must be logged in to vote");
 			return;
 		}
+
+		const voters = voteDirection === "up" ? upvoters.value : downvoters.value;
+		const newVoteStatus = !voters?.includes(user.data.id);
 
 		const response = await apiFetch(
 			"POST",
