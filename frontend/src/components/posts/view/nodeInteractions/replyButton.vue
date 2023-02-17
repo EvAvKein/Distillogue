@@ -20,13 +20,13 @@
 	const replyData = inject("replyData") as Ref<{nodePath: Node["id"][] | null}>;
 
 	function reply() {
-		if (!user.data) {
-			emit("interactionError", "Must be logged in to reply");
+		if (props.locked) {
+			emit("interactionError", "Replies locked");
 			return;
 		}
 
-		if (props.locked) {
-			emit("interactionError", "Replies locked");
+		if (!user.data) {
+			emit("interactionError", "Must be logged in to reply");
 			return;
 		}
 
