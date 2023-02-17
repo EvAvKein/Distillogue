@@ -34,9 +34,8 @@ async function createPost(page: Page, title: string, body: string, extraConfigur
 	if (extraConfiguration) await extraConfiguration(page);
 
 	await page.getByRole("button", {name: "Post"}).click();
-
-	await expect(page).toHaveURL(/.*browse/);
-	await expect(page.locator("li").first()).toContainText(title);
+	await expect(page).toHaveURL(/post\/.*/);
+	await expect(page.locator(".notification.negative")).not.toBeVisible();
 }
 
 async function createReply(page: Page, nodeTitlesPath: string[], replyTitle: string, replyBody: string) {
