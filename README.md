@@ -54,12 +54,12 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 
 ### Commands
 
-| Outcome              | With Docker                                                                                               | With Node                                               |
-| -------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| Serve (Build & Host) | `docker-compose up`                                                                                       | `npm run serve`                                         |
-| Serve Dev Mode       | [Unavailable, contribution is welcome](https://github.com/EvAvKein/Distillogue/issues/1)                  | `npm run serveDev`                                      |
-| Launch Cypress       | `docker-compose -f docker-compose.tests.yaml up` <br> OR <br> `npm run dockerCypress`                     | `npm run cypress` <br> OR <br> `npm run cypressBrowser` |
-| Serve & Cypress      | `docker-compose -f docker-compose.yaml -f docker-compose.tests.yaml up` <br> OR <br> `npm run dockerTest` | `npm run test` <br> OR <br> `npm run testBrowser`       |
+| Outcome              | With Docker                                                                                               | With Node            |
+| -------------------- | --------------------------------------------------------------------------------------------------------- | -------------------- |
+| Serve (Build & Host) | `docker-compose up`                                                                                       | `npm run serve`      |
+| Serve Dev Mode       | [Unavailable, contribution is welcome](https://github.com/EvAvKein/Distillogue/issues/1)                  | `npm run serveDev`   |
+| Launch Playwright    | `docker-compose -f docker-compose.tests.yaml up` <br> OR <br> `npm run dockerPlaywright`                  | `npm run playwright` |
+| Serve & Playwright   | `docker-compose -f docker-compose.yaml -f docker-compose.tests.yaml up` <br> OR <br> `npm run dockerTest` | `npm run test`       |
 
 (For more discrete Node commands, see `package.json` and its counterparts in the `frontend` and `backend` folders)
 
