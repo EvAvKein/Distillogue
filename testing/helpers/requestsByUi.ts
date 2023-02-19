@@ -52,15 +52,18 @@ async function createReply(page: Page, nodeTitlesPath: string[], replyTitle: str
 
 async function expandConfigCategories(page: Page) {
 	const closedCategories = await page.locator('.configCategory[aria-label="Closed category"] > button').all();
-	closedCategories.forEach(async (category) => await category.click());
+	for (const category of closedCategories) {
+		await category.click();
+	}
 }
 
 async function expandNodePath(page: Page, nodeTitlesPath: string[]) {
-	nodeTitlesPath.slice(1).forEach(async (replyTitle) => {
-		const node = page.locator(".node:not(#central)", {has: page.locator(`text="${replyTitle}"`)});
+	for (const replyTitle of nodeTitlesPath.slice(1)) {
+		const node = page.locator(".node", {has: page.locator(`text="${replyTitle}"`)});
+		if ((await node.getAttribute("id")) === "central") continue;
 		const nodeExpanded = await node.locator(".body").isVisible();
-		if (!nodeExpanded) node.getByText(replyTitle).click();
-	});
+		if (!nodeExpanded) await node.getByText(replyTitle).click();
+	}
 }
 
 export {signUp, signIn, signOut, createPost, createReply, expandConfigCategories, expandNodePath};
