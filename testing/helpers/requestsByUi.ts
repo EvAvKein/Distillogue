@@ -1,5 +1,5 @@
 import {expect, type Page} from "@playwright/test";
-import {randomUsername} from "./randomAlphanumString.js";
+import {randomNodeBody, randomUsername} from "./randomAlphanumString.js";
 
 async function signUp(page: Page, name?: string) {
 	await page.goto("/join");
@@ -38,7 +38,7 @@ async function createPost(page: Page, title: string, body: string, extraConfigur
 	await expect(page.locator(".notification.negative")).not.toBeVisible();
 }
 
-async function createReply(page: Page, nodeTitlesPath: string[], replyTitle: string, replyBody: string) {
+async function createReply(page: Page, nodeTitlesPath: string[], replyTitle: string, replyBody?: string) {
 	await expandNodePath(page, nodeTitlesPath);
 
 	const parentNode = page.locator(".node", {has: page.getByText(nodeTitlesPath[nodeTitlesPath.length - 1])});
@@ -46,7 +46,7 @@ async function createReply(page: Page, nodeTitlesPath: string[], replyTitle: str
 
 	const replyForm = page.locator("dialog");
 	await replyForm.getByLabel("Title").fill(replyTitle);
-	await replyForm.getByLabel("Body").fill(replyBody);
+	await replyForm.getByLabel("Body").fill(replyBody || randomNodeBody());
 	await replyForm.getByRole("button", {name: "Reply"}).click();
 }
 
