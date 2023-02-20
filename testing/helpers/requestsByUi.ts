@@ -1,5 +1,9 @@
-import {expect, type Page} from "@playwright/test";
-import {randomNodeBody, randomUsername} from "./randomAlphanumString.js";
+import {expect, type Page, type APIRequestContext} from "@playwright/test";
+import {randomUsername, randomNodeTitle, randomNodeBody} from "./randomAlphanumString.js";
+import {NodeCreationRequest} from "../../shared/objects/api.js";
+import {type Node, type PostConfig} from "../../shared/objects/post.js";
+import {type FetchResponse} from "../../shared/objects/api.js";
+import * as api from "./requestsByApi.js";
 
 async function signUp(page: Page, name?: string) {
 	await page.goto("/join");
@@ -66,4 +70,31 @@ async function expandNodePath(page: Page, nodeTitlesPath: string[]) {
 	}
 }
 
-export {signUp, signIn, signOut, createPost, createReply, expandConfigCategories, expandNodePath};
+async function setupUserWithPostAndOpen(page: Page, request: APIRequestContext, postConfig?: PostConfig) {
+	const {sessionKey} = await api.signUp(request, page);
+
+	const postTitle = randomNodeTitle();
+
+	const response = (await (
+		await api.createPost(
+			request,
+			sessionKey,
+			new NodeCreationRequest(undefined, postTitle, randomNodeBody(), undefined, postConfig)
+		)
+	).json()) as FetchResponse & {data: Node};
+
+	await page.goto("/post/" + response.data.id);
+
+	return {postTitle};
+}
+
+export {
+	signUp,
+	signIn,
+	signOut,
+	createPost,
+	createReply,
+	expandConfigCategories,
+	expandNodePath,
+	setupUserWithPostAndOpen,
+};
