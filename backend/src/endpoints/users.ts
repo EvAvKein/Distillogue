@@ -40,6 +40,9 @@ export default function (app: Express, usersDb: Collection<User>) {
 		const session = sessionKey(request);
 		const editRequests = validation.value;
 
+		const mongoUpdateObject = {} as {[key: string]: any};
+		// ^ TODO: a bare minimum type, because idk how declare the type below without actually requiring a type argument (i.e infer T from key and apply it to type of value)
+		//	type mongoUpdateObject<T extends editableUserData> = {[key in `data.${T}`]: UserData[T]};
 		for (let request of editRequests) {
 			if (!arrOfEditableUserData.includes(request.dataName)) {
 				response.status(400).json(new FetchResponse(null, {message: "Invalid data insertion request"}));
@@ -48,16 +51,11 @@ export default function (app: Express, usersDb: Collection<User>) {
 
 			if (request.dataName === "presets" && (request.newValue as PostConfig).access) {
 				delete (request.newValue as PostConfig).access;
+				return;
 			}
-		}
 
-		const mongoUpdateObject = {} as {[key: string]: any};
-		// ^ TODO: a bare minimum type, because idk how declare the type below without actually requiring a type argument (i.e infer T from key and apply it to type of value)
-		//	type mongoUpdateObject<T extends editableUserData> = {[key in `data.${T}`]: UserData[T]};
-
-		editRequests.forEach((request) => {
 			mongoUpdateObject["data." + request.dataName] = request.newValue;
-		});
+		}
 
 		const dbResponse = await usersDb.updateOne({sessions: {$elemMatch: {key: session}}}, {$set: mongoUpdateObject});
 
