@@ -61,6 +61,11 @@ export default function (app: Express, usersDb: Collection<User>) {
 
 		const dbResponse = await usersDb.updateOne({sessions: {$elemMatch: {key: session}}}, {$set: mongoUpdateObject});
 
+		if (dbResponse.matchedCount && !dbResponse.modifiedCount) {
+			response.status(400).json(new FetchResponse(null, {message: "Changes match existing data"}));
+			return;
+		}
+
 		if (!dbResponse.modifiedCount) {
 			response.status(500).json(new FetchResponse(null, {message: "Failed to update database"}));
 			return;
