@@ -32,9 +32,8 @@
 				<editCurrentConfig
 					id="editConfig"
 					:hideUnsavables="true"
-					:presetOverride="currentPreset.config"
-					v-model:config="currentPreset.config"
-					@update:modelValue="updateCurrentPreset"
+					:config="currentPreset.config"
+					@update:config="updateCurrentPreset"
 				/>
 				<button id="deletionButton" class="core_contentButton" @click="deleteCurrentPreset">
 					<img src="../../../assets/trash.svg" alt="Trashcan icon" />
@@ -58,8 +57,6 @@
 	import editCurrentConfig from "../../posts/create/config/editConfig.vue";
 	const user = useUser();
 
-	const reassignToRerenderList = ref(0);
-
 	const maxPresets = userValidation.presets.max;
 
 	const currentPreset = ref({
@@ -73,14 +70,17 @@
 		desirability: null as boolean | null,
 	});
 
+	// const smotherUpdateRequests = ref(false); // because the config component emits the update event twice (therefore triggering the a duplicate API request which pops an error), and using a watcher instead of an @update doesn't work because it doesn't react to deep changes (even with the deep option on)
+	const reassignToRerenderList = ref(0);
+
 	function createPreset() {
-		requestPresetsUpdate([...user.data!.presets, {name: "", config: {}}]).then(() =>
-			selectPreset(user.data!.presets.length - 1)
-		);
+		requestPresetsUpdate([...toRaw(user.data!.presets), {name: "", config: {}}]).then(() => {
+			selectPreset(user.data!.presets.length - 1);
+		});
 	}
 
 	function selectPreset(index: number) {
-		const selectedPreset = user.data!.presets[index];
+		const selectedPreset = toRaw(user.data!.presets[index]);
 
 		currentPreset.value.name = selectedPreset.name;
 		currentPreset.value.config = selectedPreset.config;
@@ -89,20 +89,21 @@
 	}
 
 	function updateCurrentPreset() {
-		debounce(750, () => {
-			const {name, config, index} = currentPreset.value;
+		const newPresetsState = toRaw(user.data!.presets);
+		newPresetsState[currentPreset.value.index!] = {
+			name: toRaw(currentPreset.value.name),
+			config: toRaw(currentPreset.value.config),
+		};
 
-			const newPresetsState = toRaw(user.data!.presets);
-			newPresetsState[index!] = {name: name, config: config};
-
+		debounce(500, () => {
 			requestPresetsUpdate(newPresetsState);
 		});
 	}
 
-	function deleteCurrentPreset() {
+	async function deleteCurrentPreset() {
 		const presetsWithoutCurrent = user.data!.presets.filter((preset, index) => index !== currentPreset.value.index);
-		requestPresetsUpdate(presetsWithoutCurrent);
-		currentPreset.value.index = null;
+		const successfulDeletion = await requestPresetsUpdate(presetsWithoutCurrent);
+		if (successfulDeletion) currentPreset.value.index = null;
 	}
 
 	async function requestPresetsUpdate(newPresetsState: NonNullable<typeof user.data>["presets"]) {
@@ -113,10 +114,11 @@
 		if (response.error) {
 			notif.value.text = response.error.message;
 			notif.value.desirability = false;
-			return;
+			return false;
 		}
 		user.data!.presets = newPresetsState;
 		reassignToRerenderList.value += 1;
+		return true;
 	}
 </script>
 

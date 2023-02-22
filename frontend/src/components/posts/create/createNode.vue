@@ -43,15 +43,29 @@
 				<img src="../../../assets/fileConfig.svg" alt="Icon of file with cogwheel" />
 			</button>
 			<section id="config" :inert="configDrawerExists && !configDrawerOpen">
-				<presets v-model:chosenPreset="presetOverridingConfig" />
-				<editConfig
-					v-model:config="(postConfig as PostConfig)"
-					:presetOverride="presetOverridingConfig?.config"
-					id="editConfig"
-				/>
+				<TransitionGroup name="collapse">
+					<button
+						v-for="(preset, index) in defaultPresets.concat(user.data!.presets)"
+						:key="preset.name + index"
+						class="presetButton"
+						type="button"
+						@click="postConfig = preset.config"
+						data-testClass="customPresetButton"
+					>
+						<img
+							v-if="index < defaultPresets.length"
+							src="../../../assets/defaultConfig.svg"
+							alt="Icon of cogwheel inside a browser window"
+						/>
+						<img v-else src="../../../assets/customConfig.svg" alt="Icon of cogwheel beside a pencil" />
+						<span>{{ preset.name || "[No Title, Edit in Dashboard]" }}</span>
+					</button>
+				</TransitionGroup>
+				<editConfig v-model:config="(postConfig as PostConfig)" id="editConfig" />
 				<button
 					@click="savePreset"
 					type="button"
+					id="savePresetButton"
 					class="core_backgroundButton"
 					:inert="presetsAtCapacity ? true : false"
 				>
@@ -75,7 +89,6 @@
 	import labelledInput from "../../labelledInput.vue";
 	import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
 	import draftsSelection from "../draftSelectionCollapsible.vue";
-	import presets from "./config/presets.vue";
 	import editConfig from "./config/editConfig.vue";
 	import notification from "../../notification.vue";
 	const user = useUser();
@@ -94,7 +107,26 @@
 
 	const postConfig = ref<PostConfig | undefined>(props.reply ? undefined : {});
 	const postInvitedOwners = ref<UserData["id"][] | undefined>(props.reply ? undefined : []);
-	const presetOverridingConfig = ref<UserData["presets"][number] | undefined>(undefined);
+
+	const defaultPresets: UserData["presets"] = [
+		{
+			name: "Reset Selection",
+			config: {},
+		},
+		{
+			name: "Everything",
+			config: {
+				timestamps: {
+					interacted: true,
+				},
+				votes: {
+					up: true,
+					down: true,
+					anon: true,
+				},
+			},
+		},
+	];
 
 	const configDrawerExists = ref<boolean | undefined>(undefined);
 	const configDrawerOpen = ref<boolean | null>(props.reply ? null : false);
@@ -271,6 +303,47 @@
 		right: 0;
 	}
 
+	.presetButton {
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5em;
+		width: 100%;
+		color: var(--textColor);
+		background-color: var(--backgroundSubColor);
+		border-radius: 0.5em;
+		padding: 0.5em 0.75em;
+	}
+	.presetButton:hover,
+	.presetButton:focus {
+		color: var(--highlightSubColor);
+		outline: none;
+	}
+	.presetButton:active {
+		color: var(--highlightColor);
+	}
+
+	.presetButton img {
+		height: 2em;
+	}
+	.presetButton:hover img,
+	.presetButton:focus img {
+		filter: var(--filterToHighlightSubColor);
+		outline: none;
+	}
+	.presetButton:active img {
+		filter: var(--filterToHighlightColor);
+	}
+
+	.presetButton span {
+		font-size: 1.5em;
+	}
+
+	.presetButton + .presetButton {
+		margin-top: 0.5em;
+	}
+
 	#config {
 		display: inline-block;
 		height: 100%;
@@ -289,7 +362,7 @@
 		margin-top: 0.5em;
 	}
 
-	#config button {
+	#config #savePresetButton {
 		display: block;
 		margin: 0.5em auto;
 	}
