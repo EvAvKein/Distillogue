@@ -80,10 +80,13 @@ router.beforeEach(async (to, from, next) => {
 	const sessionKey = localStorage.getItem("sessionKey");
 
 	if (sessionKey && !user.data) {
-		await apiFetch("GET", "/sessions").then((response) => {
-			if (!response.error) {
-				user.data = response.data as UserData;
+		await apiFetch("GET", "/sessions").then(({error, data: body, status}) => {
+			if (!error) {
+				user.data = body as UserData;
+				return;
 			}
+
+			if (status && status >= 400 && status < 500) localStorage.removeItem("sessionKey");
 		});
 	}
 
