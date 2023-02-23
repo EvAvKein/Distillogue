@@ -1,6 +1,10 @@
 import {FetchResponse} from "../../../shared/objects/api";
 
-export async function apiFetch(method: "GET" | "POST" | "PATCH" | "DELETE", address: string, body?: object) {
+export async function apiFetch(
+	method: "GET" | "POST" | "PATCH" | "DELETE",
+	address: string,
+	body?: object
+): Promise<FetchResponse & {status: number | null}> {
 	const sessionKey = localStorage.getItem("sessionKey");
 	const authHeader = sessionKey ? {Authorization: "Bearer " + sessionKey} : null;
 	const requestBody = body ? {body: JSON.stringify(body)} : null;
@@ -13,9 +17,12 @@ export async function apiFetch(method: "GET" | "POST" | "PATCH" | "DELETE", addr
 		method: method,
 		...requestBody, // might as well repeat the above pattern
 	})
-		.then(async (response): Promise<FetchResponse> => {
-			const body = await response.text();
-			return body ? JSON.parse(body) : {};
+		.then(async (response) => {
+			const jsonBody = await response.text();
+			const body = jsonBody ? JSON.parse(jsonBody) : {};
+			return {...body, status: response.status};
 		})
-		.catch(() => new FetchResponse(null, {message: "Failed to contact server"}));
+		.catch(() => {
+			return {...new FetchResponse(null, {message: "Failed to contact server"}), status: null};
+		});
 }
