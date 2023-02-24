@@ -25,6 +25,7 @@
     - drafts.spec.ts
     - presets.spec.ts
   - Write test for dashboard contacts page
+  - Write test for site navigation (URL & UI)
     <hr>
 
 ## Release-worthy
