@@ -1,6 +1,6 @@
 <template>
 	<transition name="notification">
-		<p v-show="text" :class="'notification ' + styleClass">
+		<p v-if="text" :class="'notification ' + styleClass">
 			{{ text }}
 		</p>
 	</transition>
