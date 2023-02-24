@@ -21,7 +21,9 @@
 - ### Ease of Contributing:
   - Dockerized dev setup (see https://github.com/EvAvKein/Distillogue/issues/1)
 - ### Tests:
-  - Finish Playwright tests setup
+  - Rewrite/fix tests that were syntax-translated from previous Cypress counterparts
+    - drafts.spec.ts
+    - presets.spec.ts
   - Write test for dashboard contacts page
     <hr>
 
