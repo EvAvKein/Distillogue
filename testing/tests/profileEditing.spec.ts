@@ -9,7 +9,7 @@ test.describe("Profile editing - UI", () => {
 		let {name, sessionKey} = await createUserAndSession(request);
 		await page.goto("/");
 		await setSessionKey(page, sessionKey);
-		await page.goto("/dashboard");
+		await page.goto("/dashboard/profile");
 		const nameInput = page.getByLabel("Name");
 		await expect(nameInput).toHaveValue(name);
 
@@ -25,7 +25,7 @@ test.describe("Profile editing - UI", () => {
 		const {sessionKey} = await createUserAndSession(request);
 		await page.goto("/");
 		await setSessionKey(page, sessionKey);
-		await page.goto("/dashboard");
+		await page.goto("/dashboard/profile");
 
 		const namesOutsideLimits = ["A".repeat(user.name.min - 1), "A".repeat(user.name.max + 1)];
 		for (const invalidName of namesOutsideLimits) {

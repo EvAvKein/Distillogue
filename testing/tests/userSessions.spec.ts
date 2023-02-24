@@ -49,7 +49,7 @@ test.describe("User sessions - UI", async () => {
 		await signUp(page);
 		for (const pageURL of sessionRequiredPage) {
 			await page.goto(pageURL);
-			await expect(page).toHaveURL(pageURL);
+			expect(page.url().includes(pageURL)).toBe(true);
 		}
 	});
 

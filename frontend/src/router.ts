@@ -12,6 +12,10 @@ import browse from "./pages/Browse.vue";
 import createPost from "./pages/CreatePost.vue";
 import viewPost from "./pages/ViewPost.vue";
 import dashboard from "./pages/Dashboard.vue";
+import dashboard_profile from "./components/users/dashboardSections/profileEditor.vue";
+import dashboard_drafts from "./components/users/dashboardSections/draftsEditor.vue";
+import dashboard_presets from "./components/users/dashboardSections/presetsEditor.vue";
+import dashboard_contacts from "./components/users/dashboardSections/contactsEditor.vue";
 
 const router = createRouter({
 	history: createWebHistory(process.env.BASE_URL),
@@ -62,9 +66,32 @@ const router = createRouter({
 			name: "dashboard",
 			path: "/dashboard",
 			component: dashboard,
+			redirect: "/dashboard/profile",
 			meta: {
 				accountRequired: true,
 			},
+			children: [
+				{
+					name: "dashboard_profile",
+					path: "profile",
+					component: dashboard_profile,
+				},
+				{
+					name: "dashboard_drafts",
+					path: "drafts",
+					component: dashboard_drafts,
+				},
+				{
+					name: "dashboard_presets",
+					path: "presets",
+					component: dashboard_presets,
+				},
+				{
+					name: "dashboard_contacts",
+					path: "contacts",
+					component: dashboard_contacts,
+				},
+			],
 		},
 		{
 			path: "/:pathMatch(.*)*",
