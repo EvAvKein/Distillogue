@@ -23,8 +23,6 @@
 - ### Tests:
   - Finish Playwright tests setup
   - Write test for dashboard contacts page
-- ### Optimization:
-  - Refactor dashboard to serve sections as sub-routes
     <hr>
 
 ## Release-worthy
