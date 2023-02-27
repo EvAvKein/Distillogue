@@ -20,7 +20,7 @@ const config: PlaywrightTestConfig = {
 			},
 		},
 
-		// { // commented-out to reduce text execution time
+		// { // commented-out to reduce test execution time (TODO: uncomment when nearing release-worthy state)
 		// 	name: "firefox",
 		// 	use: {
 		// 		...devices["Desktop Firefox"],
