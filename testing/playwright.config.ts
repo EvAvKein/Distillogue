@@ -9,6 +9,7 @@ const config: PlaywrightTestConfig = {
 	use: {
 		baseURL: `http://${process.env.DOCKERIZED ? "backend" : "localhost"}:3000`,
 		trace: "on",
+		// launchOptions: {slowMo: 500},
 	},
 
 	projects: [
