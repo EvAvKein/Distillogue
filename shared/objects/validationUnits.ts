@@ -8,7 +8,7 @@ const user = {
 	},
 	presets: {
 		max: 3,
-		name: {max: 20},
+		name: {max: 30},
 	},
 } as const;
 
