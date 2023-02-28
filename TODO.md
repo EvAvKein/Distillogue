@@ -7,21 +7,27 @@
 ## Proof-of-concept
 
 - ### Flagship/core features:
-  - Identities system (already planned)
-  - Mindmap layout using D3.js (name TBD), and potentially another? (ideas welcome)
-  - More post config options (many already planned, specifics TBA and/or TBD)
+  - Identities system
+  - More layouts:
+    - Mindmap (using D3)
+    - Horizontal layers
+    - Others? (ideas welcome)
+  - More config options:
+    - Feedback tags (critical & supplemental, default & custom)
+    - Post moderation:
+      - Paradigms (e.g democracy via existing configs, moderators appointed by post-creator)
+      - Functionalities (e.g censoring with warning/explanation, node/branch locking)
+    - Others (ideas welcome)
   - User & user-to-user functionalities (latter added very cautiously)
-  - Others? (ideas welcome)
 - ### Regulation:
   - Platform moderation
-  - User-to-user moderation (post owner & any appointed)
 - ### Resources & Transparency:
-  - Publicly display any and all aggregate data collected e.g weeky/monthly active users, configs by popularity
+  - Publicly display any and all aggregate data collected (e.g monthly active users, configs by popularity)
   - A 'why'/core-principles/core-values/project-philosophy page
 - ### Ease of Contributing:
   - Dockerized dev setup (see https://github.com/EvAvKein/Distillogue/issues/1)
 - ### Tests:
-  - Rewrite/fix tests that were syntax-translated from previous Cypress counterparts
+  - Rewrite/fix tests that were syntax-translated from previous Cypress counterparts:
     - drafts.spec.ts
     - presets.spec.ts
   - Write test for dashboard contacts page
@@ -51,7 +57,7 @@
   - Contact page (e.g feedback/contact form)
   - Other ideas (especially transparency-related) welcome!
 - ### Accessibility:
-  - Aria attributes & accessibility tree checkup (need to find free, toggleable, configurable software for testing. devtools accessibility tree is insufficient)
+  - Aria attributes & accessibility tree checkup (need to find free, toggleable, configurable software for screenreader testing. devtools accessibility tree is insufficient)
 - ### Optimization:
   - Client-side input validation (for preemptive, human-readable errors)
   - Resolve TODO situations noted in various code comments
