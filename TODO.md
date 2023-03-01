@@ -22,7 +22,6 @@
 - ### Regulation:
   - Platform moderation
 - ### Resources & Transparency:
-  - Publicly display any and all aggregate data collected (e.g monthly active users, configs by popularity)
   - A 'why'/core-principles/core-values/project-philosophy page
 - ### Ease of Contributing:
   - Dockerized dev setup (see https://github.com/EvAvKein/Distillogue/issues/1)
@@ -50,14 +49,17 @@
   - Better color palette
   - Long-term logo & icons (possibly commissioned/paid)
 - ### Resources & Transparency:
-  - Proper front page
+  - Proper introduction/advertising page
   - Proper about page
-  - Concise footer
-  - Versioned API
+  - Footer
   - Contact page (e.g feedback/contact form)
+  - Versioned API
+  - Display all aggregate data collected (e.g monthly active users, configs by popularity)
+  - Semantic versioning (probably for entire repo, i.e not per package.json)
   - Other ideas (especially transparency-related) welcome!
 - ### Accessibility:
   - Aria attributes & accessibility tree checkup (need to find free, toggleable, configurable software for screenreader testing. devtools accessibility tree is insufficient)
 - ### Optimization:
   - Client-side input validation (for preemptive, human-readable errors)
+  - Serve posts page as root (for UX)
   - Resolve TODO situations noted in various code comments
