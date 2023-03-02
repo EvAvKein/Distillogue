@@ -13,10 +13,11 @@
     - Horizontal layers
     - Others? (ideas welcome)
   - More config options:
-    - Feedback tags (critical & supplemental, default & custom)
-    - Post moderation:
+    - Feedback tags (critical & supplemental, default & custom, feedback rejection)
+    - Contributions (unrestricted & authorized by author)
+    - Moderation:
       - Paradigms (e.g democracy via existing configs, moderators appointed by post-creator)
-      - Functionalities (e.g censoring with warning/explanation, node/branch locking)
+      - Functionalities (e.g censoring with explanation, node/branch locking)
     - Others (ideas welcome)
   - User & user-to-user functionalities (latter added very cautiously)
 - ### Regulation:
@@ -42,7 +43,7 @@
   - Proper registration/authentication (likely only via third parties)
   - DDoS mitigation & maybe a CDN (consider Cloudflare)
 - ### Regulation:
-  - Comprehensive legal obligations
+  - Comprehensive legal compliance
   - Concise terms-of-service (and potentially code-of-conduct)
 - ### Design:
   - General UI makeover
