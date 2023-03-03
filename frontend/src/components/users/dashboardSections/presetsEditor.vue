@@ -70,7 +70,6 @@
 		desirability: null as boolean | null,
 	});
 
-	// const smotherUpdateRequests = ref(false); // because the config component emits the update event twice (therefore triggering the a duplicate API request which pops an error), and using a watcher instead of an @update doesn't work because it doesn't react to deep changes (even with the deep option on)
 	const reassignToRerenderList = ref(0);
 
 	function createPreset() {
