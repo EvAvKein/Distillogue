@@ -32,8 +32,8 @@
 					{{ draftsAtCapacity ? "Drafts at capacity" : "Save draft" }}
 				</button>
 				<button id="submitButton" type="button" class="core_backgroundButton" @click="submitNode">
-					{{ reply ? "Reply" : "Post"
-					}}{{ typeof currentDraftIndex === "number" ? ` (& delete draft ${currentDraftIndex + 1})` : "" }}
+					{{ reply ? "Reply" : "Post" }}
+					{{ typeof currentDraftIndex === "number" ? ` (& delete draft ${currentDraftIndex + 1})` : "" }}
 				</button>
 			</section>
 		</section>
