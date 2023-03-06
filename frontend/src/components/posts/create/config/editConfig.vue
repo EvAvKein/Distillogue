@@ -12,7 +12,12 @@
 					:id="categoryObj!.prop + '.' + configProp"
 					class="core_crudeInput"
 					type="checkbox"
-					@change="(event) => updateConfig(categoryObj!.prop, configProp as subkeyOfPostConfig, (event.currentTarget as HTMLInputElement).checked)"
+					@change="(event) => {
+						emit(
+							'update:config',
+							configAfterUpdate(categoryObj!.prop, configProp as subkeyOfPostConfig, (event.currentTarget as HTMLInputElement).checked || undefined)
+						)
+					}"
 				/>
 			</label>
 		</category>
@@ -68,23 +73,20 @@
 	// this commented-out generic and test are the closest i got, which may or may not be helpful
 	//		type keyOfPostConfigProp<T extends keyof PostConfig> = keyof Required<PostConfig>[T];
 	//		let test: keyOfPostConfigProp<"votes">;
-	function editConfigProperty(property: keyof PostConfig, subproperty: subkeyOfPostConfig, newValue: true | undefined) {
-		if (subproperty && !props.config[property]) {
-			props.config[property] = {};
-		}
+	function configAfterUpdate(property: keyof PostConfig, subproperty: subkeyOfPostConfig, newValue: true | undefined) {
+		const config = props.config;
+
+		if (!config[property]) config[property] = {};
 
 		newValue
-			? (props.config[property as configProp]![subproperty as configSubprop] = newValue)
-			: delete props.config[property as configProp]![subproperty as configSubprop];
+			? (config[property as configProp]![subproperty as configSubprop] = newValue)
+			: delete config[property as configProp]![subproperty as configSubprop];
 
-		if (typeof props.config[property] === "object" && Object.keys(props.config[property] as object).length == 0) {
-			delete props.config[property];
+		if (Object.keys(config[property] as object).length == 0) {
+			delete config[property];
 		}
-	}
 
-	function updateConfig(property: keyof PostConfig, subProperty: subkeyOfPostConfig, newValue: boolean) {
-		editConfigProperty(property, subProperty, newValue || undefined);
-		emit("update:config", props.config);
+		return config;
 	}
 
 	let inputsAffectedByPresets = [] as HTMLInputElement[];
@@ -106,11 +108,9 @@
 		inputsAffectedByPresets.forEach((input) => {
 			const configProperties = input.id.split(".");
 			const property = configProperties[0] as keyof PostConfig;
-			const subProperty = configProperties[1] as subkeyOfPostConfig | undefined;
+			const subProperty = configProperties[1] as subkeyOfPostConfig;
 
-			subProperty
-				? (input.checked = props.config[property as configProp]?.[subProperty as configSubprop] || false)
-				: (input.checked = (props.config[property] as true | undefined) || false);
+			input.checked = Boolean(props.config[property as configProp]?.[subProperty as configSubprop]);
 		});
 	}
 
