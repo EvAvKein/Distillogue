@@ -82,7 +82,7 @@
 			? (config[property as configProp]![subproperty as configSubprop] = newValue)
 			: delete config[property as configProp]![subproperty as configSubprop];
 
-		if (Object.keys(config[property] as object).length == 0) {
+		if (Object.keys(config[property] as object).length === 0) {
 			delete config[property];
 		}
 

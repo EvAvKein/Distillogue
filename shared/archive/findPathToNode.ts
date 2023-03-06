@@ -14,7 +14,7 @@ export async function findPathToNode(postObject: Node, targetNodeId: Node["id"])
 
 		const ancestryWithCurrentNode = [...ancestryOfCurrent, currentNode.id];
 
-		if (currentNode.id == targetNodeId) {
+		if (currentNode.id === targetNodeId) {
 			ancestry = ancestryWithCurrentNode;
 			return;
 		}
