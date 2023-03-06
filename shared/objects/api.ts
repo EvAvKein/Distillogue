@@ -1,13 +1,13 @@
 import {UserData, editableUserData} from "./user.js";
 import {Node, PostConfig} from "./post.js";
 
-class FetchResponse {
-	data?: unknown;
+class FetchResponse<T = unknown> {
+	data?: T;
 	error?: {
 		message: string;
 	};
 
-	constructor(data?: FetchResponse["data"], error?: FetchResponse["error"]) {
+	constructor(data?: T, error?: FetchResponse["error"]) {
 		data ? (this.data = data) : delete this.data;
 		error ? (this.error = error) : delete this.error;
 	}
