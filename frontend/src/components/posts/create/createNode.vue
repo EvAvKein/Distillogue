@@ -50,7 +50,6 @@
 						class="presetButton"
 						type="button"
 						@click="postConfig = deepCloneFromReactive(preset.config)"
-						data-testClass="customPresetButton"
 					>
 						<img
 							v-if="index < defaultPresets.length"
