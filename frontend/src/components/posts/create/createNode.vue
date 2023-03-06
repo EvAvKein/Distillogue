@@ -49,7 +49,7 @@
 						:key="preset.name + index"
 						class="presetButton"
 						type="button"
-						@click="postConfig = preset.config"
+						@click="postConfig = deepCloneFromReactive(preset.config)"
 						data-testClass="customPresetButton"
 					>
 						<img
