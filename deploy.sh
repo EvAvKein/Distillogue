@@ -1,3 +1,5 @@
+docker-compose down &&
+docker system prune -a -f &&
 docker-compose up --detach &&
 docker-compose -f docker-compose.ssl.yaml up &&
 docker-compose down &&
