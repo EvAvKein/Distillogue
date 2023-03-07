@@ -282,7 +282,6 @@ test.describe("Presets in posting page", () => {
 		const postCreated = await postRequest;
 
 		const postStats = ((await postCreated.json()) as FetchResponse<Node>).data!.stats;
-		console.log(postStats);
 
 		expect(postStats.votes).toEqual({up: [], down: []});
 	});
