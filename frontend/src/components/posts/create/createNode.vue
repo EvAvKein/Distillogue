@@ -138,7 +138,7 @@
 		savePreset = async () => {
 			if (presetsAtCapacity.value) return;
 
-			const newPresetsState = [...user.data!.presets, {name: "", config: postConfig.value!}];
+			const newPresetsState = [...user.data!.presets, {name: "", config: deepCloneFromReactive(postConfig.value)!}];
 
 			const response = await apiFetch("PATCH", "/users", [new UserPatchRequest("presets", newPresetsState)]);
 
