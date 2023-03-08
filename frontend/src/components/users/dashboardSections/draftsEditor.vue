@@ -90,7 +90,7 @@
 	}
 
 	function updateCurrentDraft() {
-		debounce(750, () => {
+		debounce(500, () => {
 			const {title, body, index} = currentDraft.value;
 
 			const newDraftsState = toRaw(user.data!.drafts);

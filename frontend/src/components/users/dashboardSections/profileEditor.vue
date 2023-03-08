@@ -20,7 +20,7 @@
 	});
 
 	watch(nameState, (newName) => {
-		debounce(750, async () => {
+		debounce(500, async () => {
 			nameNotif.value.text = "";
 
 			const response = await apiFetch("PATCH", "/users", [new UserPatchRequest("name", newName)]);
