@@ -2,12 +2,28 @@
 	<form @submit.prevent :id="reply ? 'replyMode' : 'postMode'" v-if="user.data">
 		<section id="writeAndConfirmWrapper">
 			<section id="textsBox">
-				<!-- unmounting when drafts isn't truthy to prevent a console error when logging out while it's mounted -->
-				<draftsSelection
-					v-if="user.data.drafts && user.data.drafts.length > 0"
-					id="draftsSelection"
-					@draftSelected="draftSelected"
-				/>
+				<section v-if="user.data.drafts" id="drafts">
+					<TransitionGroup name="collapse">
+						<button
+							v-for="(draft, index) in user.data.drafts"
+							:key="draft.title + index"
+							type="button"
+							class="core_backgroundButton"
+							@click="selectDraft(index)"
+						>
+							{{ draft.title || "[No Title]" }}
+						</button>
+						<button
+							v-if="typeof currentDraftIndex === 'number'"
+							type="button"
+							id="preserveDraftButton"
+							class="core_backgroundButton"
+							@click="selectDraft(null)"
+						>
+							Preserve draft {{ currentDraftIndex + 1 }}
+						</button>
+					</TransitionGroup>
+				</section>
 				<labelledInput
 					id="title"
 					:label="'Title'"
@@ -87,7 +103,6 @@
 	import {useRouter} from "vue-router";
 	import labelledInput from "../../labelledInput.vue";
 	import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
-	import draftsSelection from "../draftSelectionCollapsible.vue";
 	import editConfig from "./config/editConfig.vue";
 	import notification from "../../notification.vue";
 	const user = useUser();
@@ -99,7 +114,7 @@
 
 	const nodeTitle = ref<Node["title"]>("");
 	const nodeBody = ref<Node["body"]>("");
-	const currentDraftIndex = ref<number | undefined>();
+	const currentDraftIndex = ref<number | null>(null);
 
 	const notifText = ref<string>("");
 	const notifDesirability = ref<boolean>(true);
@@ -166,15 +181,17 @@
 		});
 	}
 
-	function draftSelected(data: {draft: UserData["drafts"][number]; index: number} | null) {
-		if (!data) {
-			currentDraftIndex.value = undefined;
+	function selectDraft(index: number | null) {
+		currentDraftIndex.value = index;
+		if (index === null) {
+			currentDraftIndex.value = null;
 			return;
 		}
 
-		nodeTitle.value = data.draft.title;
-		nodeBody.value = data.draft.body;
-		currentDraftIndex.value = data.index;
+		const {title, body} = deepCloneFromReactive(user.data!.drafts[index]);
+		nodeTitle.value = title;
+		nodeBody.value = body;
+		currentDraftIndex.value = index;
 	}
 
 	const draftsAtCapacity = computed(() => user.data!.drafts?.length >= 3);
@@ -212,7 +229,7 @@
 								[user.data!.id],
 								nodeTitle.value,
 								nodeBody.value,
-								currentDraftIndex.value,
+								currentDraftIndex.value || undefined,
 								undefined,
 								props.reply!.nodePath!
 							)
@@ -227,7 +244,7 @@
 							postInvitedOwners!.value,
 							nodeTitle.value,
 							nodeBody.value,
-							currentDraftIndex.value,
+							currentDraftIndex.value || undefined,
 							postConfig!.value
 						)
 					);
@@ -268,15 +285,31 @@
 	#textsBox {
 		font-size: clamp(1.25em, 2.25vw, 1.5em);
 	}
-	#textsBox #title {
-		font-size: 1.15em;
+
+	#drafts {
+		margin-bottom: 0.5em;
 	}
 
-	#postMode #draftsSelection {
-		background-color: var(--backgroundSubColor);
+	#drafts button {
+		width: 100%;
+		padding: 0.2em;
+		font-weight: bold;
 	}
-	#replyMode #draftsSelection {
-		background-color: var(--backgroundColor);
+
+	#drafts #preserveDraftButton {
+		display: block;
+		width: 90%;
+		margin-inline: auto;
+		font-size: 0.9em;
+		font-weight: normal;
+	}
+
+	#drafts button + button {
+		margin-top: 0.25em;
+	}
+
+	#textsBox #title {
+		font-size: 1.15em;
 	}
 
 	#confirmation {
