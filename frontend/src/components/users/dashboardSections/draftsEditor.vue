@@ -90,14 +90,11 @@
 	}
 
 	function updateCurrentDraft() {
-		debounce(500, () => {
-			const {title, body, index} = currentDraft.value;
+		const {title, body, index} = currentDraft.value;
+		const newDraftsState = toRaw(user.data!.drafts);
+		newDraftsState[index!] = {title: title, body: body, lastEdited: unixStamp()};
 
-			const newDraftsState = toRaw(user.data!.drafts);
-			newDraftsState[index!] = {title: title, body: body, lastEdited: unixStamp()};
-
-			requestDraftsUpdate(newDraftsState);
-		});
+		debounce(500, () => requestDraftsUpdate(newDraftsState));
 	}
 
 	function deleteCurrentDraft() {
