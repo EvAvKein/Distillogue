@@ -94,9 +94,7 @@
 			config: toRaw(currentPreset.value.config),
 		};
 
-		debounce(500, () => {
-			requestPresetsUpdate(newPresetsState);
-		});
+		debounce(500, () => requestPresetsUpdate(newPresetsState));
 	}
 
 	async function deleteCurrentPreset() {
