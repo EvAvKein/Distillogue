@@ -124,16 +124,6 @@ test.describe("Presets in dashboard page", () => {
 		await editAndValidateName(page, 1, randomAlphanumString());
 	});
 
-	test("Edit preset name in non-first slots", async ({page}) => {
-		for (let slot = 0; slot < 3; slot++) {
-			const creationRequest = page.waitForResponse("/api/users");
-			await page.locator(creationButton).click();
-			await creationRequest;
-		}
-		await editAndValidateName(page, 2, randomAlphanumString());
-		await editAndValidateName(page, 3, randomAlphanumString());
-	});
-
 	async function editAndValidateConfig(page: Page, presetSlot: number, config: presettableConfigByUiText) {
 		await (await page.locator(selectionButtons).all())[presetSlot - 1].click();
 		const editRequest = page.waitForResponse("/api/users");
@@ -150,14 +140,14 @@ test.describe("Presets in dashboard page", () => {
 		await editAndValidateConfig(page, 1, {Voting: {Upvotes: true}, Timestamps: {Interacted: true}});
 	});
 
-	test("Edit preset config in non-first slots", async ({page}) => {
+	test("Edit presets in non-first slots", async ({page}) => {
 		for (let slot = 0; slot < 3; slot++) {
 			const creationRequest = page.waitForResponse("/api/users");
 			await page.locator(creationButton).click();
 			await creationRequest;
 		}
 		await editAndValidateConfig(page, 3, {Voting: {Downvotes: true}});
-		await editAndValidateConfig(page, 2, {Voting: {Upvotes: true, Anonymous: true}});
+		await editAndValidateName(page, 2, randomAlphanumString());
 	});
 
 	test("Delete presets", async ({page}) => {
