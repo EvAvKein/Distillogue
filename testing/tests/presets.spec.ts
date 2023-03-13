@@ -282,7 +282,7 @@ test.describe("Presets across dashboard and posting page", () => {
 		await api.signUp(request, page);
 	});
 
-	test("Edit posting page preset in dashboard", async ({page, request}) => {
+	test("Edit posting page preset in dashboard", async ({page}) => {
 		await page.goto("/post/create");
 		let presetConfig: presettableConfigByUiText = {
 			Voting: {Downvotes: true, Upvotes: true},
