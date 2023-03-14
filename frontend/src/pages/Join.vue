@@ -5,12 +5,8 @@
 
 		<button
 			id="signingSwitch"
-			class="core_backgroundButton"
-			@click="
-				() => {
-					signingMode = signingMode === 'Up' ? 'In' : 'Up';
-				}
-			"
+			class="core_contentButton"
+			@click="() => (signingMode = signingMode === 'Up' ? 'In' : 'Up')"
 		>
 			Switch to sign-{{ signingMode === "Up" ? "in" : "up" }}
 		</button>
@@ -35,8 +31,7 @@
 	}
 
 	button {
-		filter: brightness(0.75);
 		display: block;
-		margin: 1.5em auto 0;
+		margin: 1em auto 0;
 	}
 </style>
