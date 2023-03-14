@@ -1,57 +1,44 @@
 <template>
-	<form @submit.prevent :id="reply ? 'replyMode' : 'postMode'" v-if="user.data">
-		<section id="writeAndConfirmWrapper">
-			<section id="textsBox">
-				<section v-if="user.data.drafts" id="drafts">
-					<TransitionGroup name="collapse">
-						<button
-							v-for="(draft, index) in user.data.drafts"
-							:key="draft.title + index"
-							type="button"
-							class="core_backgroundButton"
-							@click="selectDraft(index)"
-						>
-							{{ draft.title || "[No Title]" }}
-						</button>
-						<button
-							v-if="typeof currentDraftIndex === 'number'"
-							type="button"
-							id="preserveDraftButton"
-							class="core_backgroundButton"
-							@click="selectDraft(null)"
-						>
-							Preserve draft {{ currentDraftIndex + 1 }}
-						</button>
-					</TransitionGroup>
-				</section>
-				<labelledInput
-					id="title"
-					:label="'Title'"
-					:type="'text'"
-					:required="true"
-					:inputId="'nodeTitle'"
-					v-model="nodeTitle"
-				/>
-				<labelledInput
-					:label="'Body'"
-					:type="'textarea'"
-					:minLineHeight="15"
-					:required="true"
-					:inputId="'nodeBody'"
-					v-model="nodeBody"
-				/>
+	<form v-if="user.data" @submit.prevent>
+		<section id="texts">
+			<section v-if="user.data.drafts" id="drafts">
+				<TransitionGroup name="collapse">
+					<button
+						v-for="(draft, index) in user.data.drafts"
+						:key="draft.title + index"
+						type="button"
+						class="core_backgroundButton draftButton"
+						@click="selectDraft(index)"
+					>
+						{{ draft.title || "[No Title]" }}
+					</button>
+					<button
+						v-if="typeof currentDraftIndex === 'number'"
+						id="preserveDraftButton"
+						type="button"
+						class="core_backgroundButton"
+						@click="selectDraft(null)"
+					>
+						Preserve draft {{ currentDraftIndex + 1 }}
+					</button>
+				</TransitionGroup>
 			</section>
-
-			<section id="confirmation">
-				<notification v-model:text="notifText" :desirablityStyle="notifDesirability" />
-				<button @click="saveDraft" type="button" class="core_backgroundButton" :inert="draftsAtCapacity ? true : false">
-					{{ draftsAtCapacity ? "Drafts at capacity" : "Save draft" }}
-				</button>
-				<button id="submitButton" type="button" class="core_backgroundButton" @click="submitNode">
-					{{ reply ? "Reply" : "Post" }}
-					{{ typeof currentDraftIndex === "number" ? ` (& delete draft ${currentDraftIndex + 1})` : "" }}
-				</button>
-			</section>
+			<labelledInput
+				id="title"
+				:label="'Title'"
+				:type="'text'"
+				:required="true"
+				:inputId="'nodeTitle'"
+				v-model="nodeTitle"
+			/>
+			<labelledInput
+				:label="'Body'"
+				:type="'textarea'"
+				:minLineHeight="15"
+				:required="true"
+				:inputId="'nodeBody'"
+				v-model="nodeBody"
+			/>
 		</section>
 
 		<section v-if="!reply" id="configDrawer" :class="configDrawerOpen ? 'open' : ''">
@@ -87,6 +74,19 @@
 					{{ presetsAtCapacity ? "Presets at capacity" : "Save preset" }}
 				</button>
 			</section>
+		</section>
+
+		<section id="confirmation">
+			<div>
+				<button id="saveDraft" type="button" class="core_backgroundButton" :inert="draftsAtCapacity" @click="saveDraft">
+					{{ draftsAtCapacity ? "Drafts at capacity" : "Save draft" }}
+				</button>
+				<button id="submitButton" type="button" class="core_backgroundButton" @click="submitNode">
+					{{ reply ? "Reply" : "Post" }}
+					{{ typeof currentDraftIndex === "number" ? ` (& delete draft ${currentDraftIndex + 1})` : "" }}
+				</button>
+			</div>
+			<notification v-model:text="notifText" :desirablityStyle="notifDesirability" />
 		</section>
 	</form>
 </template>
@@ -270,19 +270,23 @@
 
 <style scoped>
 	form {
-		display: block;
+		display: grid;
 		position: relative;
-		margin: auto;
-		width: min(calc(100% - 1.5em), 75em);
-		padding: 0 0.75em 0.5em;
 		overflow: hidden;
+		margin: auto;
+		width: min(calc(100% - 1em), 70em);
+		padding: 0 0.5em 0.5em;
+		grid-template-columns: 1fr 3.25em;
+		grid-template-areas:
+			"texts config"
+			"confirmation .";
+		gap: 0.5em 0.25em;
 	}
 
-	form#postMode #writeAndConfirmWrapper {
-		width: calc(100% - 3em);
-	}
+	/* TEXTS */
 
-	#textsBox {
+	#texts {
+		grid-area: texts;
 		font-size: clamp(1.25em, 2.25vw, 1.5em);
 	}
 
@@ -308,31 +312,24 @@
 		margin-top: 0.25em;
 	}
 
-	#textsBox #title {
+	#texts #title {
 		font-size: 1.15em;
 	}
 
-	#confirmation {
-		display: flex;
-		flex-wrap: nowrap;
-		gap: 0.5em;
-		height: min-content;
-	}
-	#submitButton {
-		flex-grow: 1;
-	}
+	/* CONFIG */
 
 	#configDrawer {
+		grid-area: config;
 		position: absolute;
-		height: 90%;
+		height: 100%;
 		top: 0;
-		right: -17em;
+		right: -17.5em;
 		width: max-content;
 		border-radius: 1em 0 0 1em;
 		transition: right 0.5s;
 	}
 	#configDrawer.open {
-		right: 0;
+		right: -0.5em;
 	}
 
 	.presetButton {
@@ -433,14 +430,35 @@
 		border-color: var(--highlightColor);
 	}
 
+	/* CONFIRMATION */
+
+	#confirmation {
+		grid-area: confirmation;
+	}
+
+	#confirmation div {
+		display: flex;
+		flex-wrap: nowrap;
+		gap: 0.5em;
+	}
+
+	#submitButton {
+		flex-grow: 1;
+	}
+
 	@media (min-width: 55rem) {
-		#postMode {
-			display: flex;
+		form {
+			grid-template-columns: 1fr auto;
+			grid-template-rows: min-content 100%;
+			grid-template-areas:
+				"texts config"
+				"confirmation config";
 			gap: 0.5em;
 		}
 
 		#configDrawer {
 			position: initial;
+			height: max-content;
 		}
 		#drawerToggler {
 			display: none;
@@ -448,7 +466,6 @@
 		#config {
 			padding: 0;
 			border: none;
-			overflow: visible;
 		}
 	}
 </style>
