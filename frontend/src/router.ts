@@ -49,18 +49,24 @@ const router = createRouter({
 			},
 		},
 		{
-			name: "createPost",
-			path: "/post/create",
-			component: createPost,
-			meta: {
-				accountRequired: true,
-			},
-		},
-		{
-			name: "viewPost",
-			path: "/post/:postId",
-			component: viewPost,
-			props: true,
+			path: "/post",
+			redirect: {name: "createPost"},
+			children: [
+				{
+					name: "createPost",
+					path: "create",
+					component: createPost,
+					meta: {
+						accountRequired: true,
+					},
+				},
+				{
+					name: "viewPost",
+					path: ":postId",
+					component: viewPost,
+					props: true,
+				},
+			],
 		},
 		{
 			name: "dashboard",
