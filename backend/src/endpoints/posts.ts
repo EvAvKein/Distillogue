@@ -11,7 +11,6 @@ import {recursivelyModifyNode} from "../helpers/recursivelyModifyNode.js";
 import {Node, PostSummary} from "../../../shared/objects/post.js";
 import {User, UserData} from "../../../shared/objects/user.js";
 import {FetchResponse} from "../../../shared/objects/api.js";
-import {filterByIndex} from "../../../shared/helpers/filterByIndexes.js";
 
 export default function (app: Express, postsDb: Collection<Node>, usersDb: Collection<User>) {
 	app.get("/api/posts:search?", async (request, response) => {
@@ -107,7 +106,7 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 		}
 
 		if (typeof postRequest.deletedDraftIndex === "number") {
-			const newDraftsState = filterByIndex(user.data.drafts, postRequest.deletedDraftIndex);
+			const newDraftsState = user.data.drafts.filter((draft, index) => index !== postRequest.deletedDraftIndex);
 
 			usersDb.updateOne({"data.id": user.data.id}, {$set: {"data.drafts": newDraftsState}});
 		}

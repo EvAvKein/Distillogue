@@ -10,7 +10,6 @@ import {mongoMergeUpdateFilters} from "../helpers/mongo/mongoMergeUpdateFilters.
 import {Node} from "../../../shared/objects/post.js";
 import {User} from "../../../shared/objects/user.js";
 import {FetchResponse, NodeCreationRequest} from "../../../shared/objects/api.js";
-import {filterByIndex} from "../../../shared/helpers/filterByIndexes.js";
 
 export default function (app: Express, postsDb: Collection<Node>, usersDb: Collection<User>) {
 	app.post("/api/posts/interactions", async (request, response) => {
@@ -56,12 +55,12 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 
 				const deletedDraftIndex = replyData.deletedDraftIndex;
 				if (typeof deletedDraftIndex === "number") {
-					const newDraftsState = filterByIndex(user.data.drafts, deletedDraftIndex); // turns out pulling from an array by index has been rejected as a mongodb native feature (and the workaround has bad readability), so i'm just opting to override the drafts value instead. see: https://jira.mongodb.org/browse/SERVER-1014
+					const newDraftsState = user.data.drafts.filter((draft, index) => index !== deletedDraftIndex);
 
 					updateFollowup = async function () {
 						const draftDeletion = await usersDb.findOneAndUpdate(
 							{"data.id": user.data.id},
-							{$set: {"data.drafts": newDraftsState}}
+							{$set: {"data.drafts": newDraftsState}} // turns out pulling from an array by index has been rejected as a mongodb native feature (and the workaround has bad readability), so i'm just opting to override the drafts value instead. see: https://jira.mongodb.org/browse/SERVER-1014
 						);
 
 						return draftDeletion ? true : "Draft deletion failed";

@@ -97,7 +97,6 @@
 	import {Node, PostConfig} from "../../../../../shared/objects/post";
 	import {NodeCreationRequest, NodeInteractionRequest, UserPatchRequest} from "../../../../../shared/objects/api";
 	import {unix} from "../../../../../shared/helpers/timestamps";
-	import {filterByIndex} from "../../../../../shared/helpers/filterByIndexes";
 	import {apiFetch} from "../../../helpers/apiFetch";
 	import {useUser} from "../../../stores/user";
 	import {useRouter} from "vue-router";
@@ -258,7 +257,9 @@
 		}
 
 		if (typeof currentDraftIndex.value === "number") {
-			const newDraftsState = filterByIndex(deepCloneFromReactive(user.data!.drafts), currentDraftIndex.value);
+			const newDraftsState = deepCloneFromReactive(user.data!.drafts).filter(
+				(draft, index) => index !== currentDraftIndex.value
+			);
 			user.data!.drafts = newDraftsState;
 		}
 
