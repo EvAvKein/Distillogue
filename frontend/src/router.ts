@@ -126,8 +126,18 @@ router.beforeEach(async (to, from, next) => {
 
 	const accountRequired = to.matched.some((record) => record.meta.accountRequired);
 	if (accountRequired && !user.data) {
+		sessionStorage.setItem("witheldForSession", to.fullPath);
 		next({path: "/join"});
 		return;
+	}
+
+	if (from.name === "join" && user.data) {
+		const withheldPage = sessionStorage.getItem("witheldForSession");
+		if (withheldPage) {
+			sessionStorage.removeItem("witheldForSession");
+			next({path: withheldPage});
+			return;
+		}
 	}
 
 	next();
