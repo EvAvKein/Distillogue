@@ -93,6 +93,7 @@
 
 <script setup lang="ts">
 	import {ref, computed, ComputedRef, onMounted, onUnmounted} from "vue";
+	import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
 	import {UserData} from "../../../../../shared/objects/user";
 	import {Node, PostConfig} from "../../../../../shared/objects/post";
 	import {NodeCreationRequest, NodeInteractionRequest, UserPatchRequest} from "../../../../../shared/objects/api";
@@ -102,7 +103,6 @@
 	import {useUser} from "../../../stores/user";
 	import {useRouter} from "vue-router";
 	import labelledInput from "../../labelledInput.vue";
-	import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
 	import editConfig from "./config/editConfig.vue";
 	import notification from "../../notification.vue";
 	const user = useUser();
