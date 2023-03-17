@@ -98,6 +98,7 @@
 	import {NodeCreationRequest, NodeInteractionRequest, UserPatchRequest} from "../../../../../shared/objects/api";
 	import {unix} from "../../../../../shared/helpers/timestamps";
 	import {apiFetch} from "../../../helpers/apiFetch";
+	import {user as userCaps} from "../../../../../shared/objects/validationUnits";
 	import {useUser} from "../../../stores/user";
 	import {useRouter} from "vue-router";
 	import labelledInput from "../../labelledInput.vue";
@@ -148,7 +149,7 @@
 
 	let savePreset: () => void;
 	if (!props.reply) {
-		presetsAtCapacity = computed(() => user.data!.presets?.length >= 3);
+		presetsAtCapacity = computed(() => user.data!.presets.length >= userCaps.presets.max);
 		savePreset = async () => {
 			if (presetsAtCapacity.value) return;
 
@@ -193,7 +194,7 @@
 		currentDraftIndex.value = index;
 	}
 
-	const draftsAtCapacity = computed(() => user.data!.drafts?.length >= 3);
+	const draftsAtCapacity = computed(() => user.data!.drafts.length >= userCaps.drafts.max);
 	async function saveDraft() {
 		if (draftsAtCapacity.value) return;
 
