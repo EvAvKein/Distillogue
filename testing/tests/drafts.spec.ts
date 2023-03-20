@@ -1,210 +1,338 @@
 import {test, expect, type Page} from "@playwright/test";
-import {signUp, createPost} from "../helpers/requestsByUi.js";
-import {randomUsername, randomNodeTitle, randomNodeBody} from "../helpers/randomAlphanumString.js";
+import * as api from "../helpers/requestsByApi.js";
+import {randomNodeTitle, randomNodeBody} from "../helpers/randomAlphanumString.js";
+import {FetchResponse, NodeCreationRequest} from "../../shared/objects/api.js";
+import {Node} from "../../shared/objects/post.js";
+import {user} from "../../shared/objects/validationUnits.js";
 
-let draftTitle = "Draft " + randomNodeTitle();
-let draftBody = randomNodeBody();
+const titlePlaceholder = "[No Title]";
 
-test.describe.fixme("Drafts manipulation in dashboard", () => {
-	test("Setup (sign-up & enter drafts page)", async ({page}) => {
-		await signUp(page, "Drafter" + randomUsername());
-		await page.locator("header").getByText("Dashboard").click();
-		await page.getByText("Drafts").click();
+const dashboard = {
+	selectionButtons: "ol button",
+	creationButton: "ol + button",
+	titleInput: "#editDraftTitle",
+	bodyInput: "#editDraftBody",
+	deletionButton: "#deletionButton",
+} as const;
 
-		expect(await page.getByLabel("Title").count()).toBeFalsy();
-		expect(await page.getByLabel("Body").count()).toBeFalsy();
-		expect(await page.getByText("Delete").count()).toBeFalsy();
-		await expect(page.getByText("Save")).not.toBeVisible();
+const postingMode = {
+	titleInput: "#nodeTitle",
+	bodyInput: "#nodeBody",
+	selectButtons: ".draftButton",
+	preserveButton: "#preserveDraftButton",
+	saveButton: "#saveDraft",
+	postButton: "#submitButton",
+} as const;
+
+test.describe("Drafts manipulation in dashboard", () => {
+	const {selectionButtons, creationButton, titleInput, bodyInput, deletionButton} = dashboard;
+
+	test.beforeEach(async ({page, request}) => {
+		await api.signUp(request, page);
+		await page.goto("/dashboard/drafts");
 	});
 
-	async function createAndValidateDraft(page: Page, title: string, body: string) {
-		await page.getByText("New draft").click();
-		await expect(page.getByText("[No Title]")).toContainText("Edited: Now");
-		await expect(page.getByText("Delete")).toBeVisible();
-		await expect(page.getByText("Save")).toBeVisible();
-
-		await page.getByLabel("Title").fill(title);
-		await expect(page.getByText(title)).toBeVisible();
-		await page.getByLabel("Body").fill(body);
-		await page.getByText("Save").click();
-		await expect(page.locator(".notification.positive")).toBeVisible();
-
-		await page.reload();
-		await page.getByText("Drafts").click();
-		await page.getByText(title).click();
-		await expect(page.getByLabel("Title")).toHaveValue(title);
-		await expect(page.getByLabel("Body")).toHaveValue(body);
-	}
-
-	test("Create, write, and save draft", async ({page}) => {
-		await createAndValidateDraft(page, draftTitle, draftBody);
-	});
-
-	test("Edit existing draft", async ({page}) => {
-		draftTitle = "Different " + draftTitle;
-		draftBody = "Different " + draftBody;
-
-		await page.getByLabel("Title").fill(draftTitle);
-		await expect(page.getByText(draftTitle)).toBeVisible();
-		await expect(page.getByText("Save")).toBeVisible();
-
-		await page.getByLabel("Body").fill(draftBody);
-		await page.getByText("Save").click();
-		await expect(page.locator(".notification.positive")).toBeVisible();
-
-		await page.reload();
-		await page.getByText("Drafts").click();
-		await page.getByText(draftTitle).click();
-		await expect(page.getByLabel("Title")).toHaveValue(draftTitle);
-		await expect(page.getByLabel("Body")).toHaveValue(draftBody);
+	test("Validate initial state", async ({page}) => {
+		await expect(page.locator(creationButton)).toBeVisible();
+		for (const element of [selectionButtons, titleInput, bodyInput, deletionButton, ".notification"]) {
+			await expect(page.locator(element)).not.toBeVisible();
+		}
 	});
 
 	test("Create drafts to capacity", async ({page}) => {
-		await createAndValidateDraft(page, "Second " + draftTitle, "Second " + draftBody);
-		await createAndValidateDraft(page, "Third " + draftTitle, "Third " + draftBody);
-		expect(page.getByText("New draft").count()).toBeFalsy();
-		await expect(page.locator(".notification")).toHaveText("Drafts at capacity, consider triage");
+		for (let slot = 1; slot <= user.drafts.max; slot++) {
+			await page.locator(creationButton).click();
+			const draftButtons = await page.locator(selectionButtons).all();
+			expect(draftButtons.length).toBe(slot);
+			const latestDraftButton = draftButtons[draftButtons.length - 1];
+			await expect(latestDraftButton).toContainText(titlePlaceholder);
+			await expect(latestDraftButton).toContainText("Edited: Now");
+		}
+		await expect(page.locator(creationButton)).not.toBeVisible();
+		await expect(page.locator(".notification:not(.positive, .negative)")).toContainText("Drafts at capacity");
+
+		await page.reload();
+		await expect(page.locator(selectionButtons)).toHaveCount(user.drafts.max);
+		await expect(page.locator(creationButton)).not.toBeVisible();
+		await expect(page.locator(".notification:not(.positive, .negative)")).toContainText("Drafts at capacity");
+	});
+
+	test("Edit draft title", async ({page}) => {
+		const title = randomNodeTitle();
+
+		await page.locator(creationButton).click();
+		await page.locator(titleInput).fill(title);
+		const draftButton = page.locator(selectionButtons);
+		await expect(draftButton).toContainText(title);
+		await expect(draftButton).not.toContainText(titlePlaceholder);
+
+		await page.reload();
+		await page.getByText(title).click();
+		await expect(page.locator(titleInput)).toHaveValue(title);
+	});
+
+	test("Edit draft body", async ({page}) => {
+		const body = randomNodeBody();
+
+		await page.locator(creationButton).click();
+		const editRequest = page.waitForResponse("api/users");
+		await page.locator(bodyInput).fill(body);
+		await editRequest;
+		await expect(page.locator(".notification")).not.toBeVisible();
+
+		await page.reload();
+		await page.locator(selectionButtons).click();
+		await expect(page.locator(bodyInput)).toHaveValue(body);
+	});
+
+	test("Edit drafts in non-first slots", async ({page}) => {
+		for (let slot = 1; slot <= 3; slot++) {
+			await page.locator(creationButton).click();
+		}
+
+		const newTitle = randomNodeTitle();
+		await (await page.locator(selectionButtons).all())[1].click();
+		const titleEditRequest = page.waitForResponse("/api/users");
+		await page.locator(titleInput).fill(newTitle);
+		await titleEditRequest;
+
+		const newBody = randomNodeBody();
+		await (await page.locator(selectionButtons).all())[2].click();
+		const bodyEditRequest = page.waitForResponse("/api/users");
+		await page.locator(bodyInput).fill(newBody);
+		await bodyEditRequest;
+
+		await page.reload();
+		await page.locator(selectionButtons, {hasText: newTitle}).click();
+		await expect(page.locator(bodyInput)).toHaveValue("");
+
+		await (await page.locator(selectionButtons).all())[2].click();
+		await expect(page.locator(bodyInput)).toHaveValue(newBody);
 	});
 
 	test("Delete drafts", async ({page}) => {
-		await page.getByText("Second " + draftTitle).click();
-		await page.getByText("Delete").click();
-		expect(await page.getByText("Second " + draftTitle).count()).toBeFalsy();
-		await page.getByText("Save").click();
-		await expect(page.locator(".notification.positive")).toBeVisible();
+		const titles = [randomNodeTitle(), randomNodeTitle(), randomNodeTitle()];
+		for (const title of titles) {
+			const creationRequest = page.waitForResponse("/api/users");
+			await page.locator(creationButton).click();
+			await creationRequest;
+			const renameRequest = page.waitForResponse("/api/users");
+			await page.locator(titleInput).fill(title);
+			await renameRequest;
+		}
+
+		await page.getByText(titles[1]).click();
+		await page.locator(deletionButton).click();
+		for (const element of [titleInput, bodyInput, deletionButton, ".notification"]) {
+			await expect(page.locator(element)).not.toBeVisible();
+		}
+		expect(await page.locator(selectionButtons).all()).toHaveLength(2);
 
 		await page.reload();
-		await page.getByText("Drafts").click();
-		await expect(page.getByText(draftTitle)).toBeVisible();
-		expect(await page.getByText("Second " + draftTitle).count()).toBeFalsy();
+		expect(await page.locator(selectionButtons).all()).toHaveLength(2);
 
-		await page.getByText("Third " + draftTitle).click();
-		await page.getByText("Delete").click();
-		expect(await page.getByText("Third " + draftTitle).count()).toBeFalsy();
-		await page.getByText(draftTitle).click();
-		await page.getByText("Delete").click();
-		expect(await page.getByText(draftTitle).count()).toBeFalsy();
-		await page.getByText("Save").click();
-		await expect(page.locator(".notification.positive")).toBeVisible();
+		for (const title of [titles[0], titles[2]]) {
+			await page.getByText(title).click();
+			const deletionRequest = page.waitForResponse("/api/users");
+			await page.locator(deletionButton).click();
+			await deletionRequest;
+			await new Promise((resolve) => setTimeout(resolve, 500)); // because vue momentarily duplicates a transition item that's taking the spot of a deleted one, which causes playwright to find two elements when not waiting for the transition to end
+		}
+		expect(page.locator(selectionButtons)).not.toBeVisible();
 
 		await page.reload();
-		await page.getByText("Drafts").click();
-		expect(await page.getByText(draftTitle).count()).toBeFalsy();
+		expect(page.locator(selectionButtons)).not.toBeVisible();
 	});
 });
 
-async function saveDraft(page: Page, title: string, body: string) {
-	await page.getByLabel("Title").fill(title);
-	await page.getByLabel("Body").fill(body);
-	await page.getByText("Save draft").click();
-	expect(page.locator("#draftsSelection")).toHaveText(title);
+async function postRefreshRecovery(page: Page) {}
+async function postSubmitRecovery(page: Page) {
+	await page.goto("/post/create");
 }
 
-async function testDraftsFunctionalities(
+async function replyRefreshRecovery(page: Page) {
+	await page.locator(".replyButton").click();
+}
+async function replySubmitRecovery(page: Page) {
+	await page.locator(".replyButton").first().click();
+}
+
+async function testDraftsInPostingMode(
 	submitName: "Post" | "Reply",
 	recoverFromRefresh: (page: Page) => Promise<void>,
 	recoverFromSubmit: (page: Page) => Promise<void>
 ) {
-	test("Save draft", async ({page}) => {
-		await recoverFromRefresh(page);
-		expect(await page.getByText("Drafts").count()).toBeFalsy();
+	const {titleInput, bodyInput, selectButtons, preserveButton, saveButton, postButton} = postingMode;
 
-		await saveDraft(page, "First " + draftTitle, "First " + draftBody);
+	async function saveDraft(page: Page, title: string, body: string) {
+		await page.getByLabel("Title").fill(title);
+		await page.getByLabel("Body").fill(body);
+		const saveRequest = page.waitForResponse("/api/users");
+		await page.getByText("Save draft").click();
+		await saveRequest;
+	}
 
-		await page.reload();
-		await recoverFromRefresh(page);
-		await page.getByText("Drafts").click();
-		await expect(page.getByText("First " + draftTitle)).toBeVisible();
-	});
+	test("Validate initial state", async ({page}) => {
+		for (const element of [selectButtons, preserveButton]) {
+			expect(page.locator(element)).not.toBeVisible();
+		}
 
-	test("Select and preserve saved draft", async ({page}) => {
-		await page.getByText("Drafts").click();
-		await page.getByText("First " + draftTitle).click();
-
-		await expect(page.getByLabel("Title")).toHaveValue("First " + draftTitle);
-		await expect(page.getByLabel("Body")).toHaveValue("First " + draftBody);
-		await expect(page.getByRole("button", {name: submitName})).toHaveText(submitName + " (& delete draft 1)");
-		await page.getByText("Preserve chosen draft").click();
-
-		expect(await page.getByText("Preserve chosen draft").count()).toBeFalsy();
-		await expect(page.getByLabel("Title")).toHaveValue("First " + draftTitle);
-		await expect(page.getByLabel("Body")).toHaveValue("First " + draftBody);
-		await expect(page.getByRole("button", {name: submitName})).toHaveText(submitName);
+		const draftSaveButton = page.locator(saveButton);
+		await expect(draftSaveButton).toHaveText("Save draft");
+		await expect(draftSaveButton).not.toHaveAttribute("inert", "true");
+		await expect(page.locator(postButton)).not.toContainText(["preserve", "draft"]);
 	});
 
 	test("Save drafts to capacity", async ({page}) => {
-		await saveDraft(page, "Second " + draftTitle, "Second " + draftBody);
-		await saveDraft(page, "Third " + draftTitle, "Third " + draftBody);
+		const drafts: {title: string; body: string}[] = [];
 
-		expect(await page.getByText("Save draft").count()).toBeFalsy();
-		await expect(page.getByText("Drafts at capacity")).toHaveAttribute("inert", "true");
+		for (let slot = 1; slot <= user.drafts.max; slot++) {
+			const title = randomNodeTitle();
+			const body = randomNodeBody();
+			drafts.push({title, body});
+			await saveDraft(page, title, body);
+		}
+
+		for (const [index, draft] of drafts.entries()) {
+			// doing this after all drafts are created to verify new saves don't override prior
+			const newDraftButton = (await page.locator(selectButtons).all())[index];
+			await expect(newDraftButton).toHaveText(draft.title);
+		}
+
+		const draftSaveButton = page.locator(saveButton);
+		await expect(draftSaveButton).toHaveText("Drafts at capacity");
+		await expect(draftSaveButton).toHaveAttribute("inert", "");
 
 		await page.reload();
 		await recoverFromRefresh(page);
-		expect(await page.getByText("Save draft").count()).toBeFalsy();
-		await expect(page.getByText("Drafts at capacity")).toHaveAttribute("inert", "true");
+		await expect(draftSaveButton).toHaveText("Drafts at capacity");
+		await expect(draftSaveButton).toHaveAttribute("inert", "");
+	});
+
+	test("Select drafts", async ({page}) => {
+		for (let slot = 2; slot >= 1; slot--) {
+			await saveDraft(page, randomNodeTitle(), randomNodeBody());
+		}
+
+		for (const [index, draftButton] of (await page.locator(selectButtons).all()).entries()) {
+			await draftButton.click();
+			await expect(page.locator(postButton)).toHaveText(submitName + ` (& delete draft ${index + 1})`);
+			await expect(page.locator(preserveButton)).toHaveText(`Preserve draft ${index + 1}`);
+		}
+	});
+
+	test("Select and preserve", async ({page}) => {
+		await saveDraft(page, randomNodeTitle(), randomNodeBody());
+
+		await page.locator(selectButtons).click();
+		await page.locator(preserveButton).click();
+		await expect(page.locator(preserveButton)).not.toBeVisible();
+		await expect(page.locator(postButton)).toHaveText(submitName);
+	});
+
+	test("Select and edit without affecting saved", async ({page}) => {
+		const title = randomNodeTitle();
+		const body = randomNodeBody();
+		await saveDraft(page, title, body);
+
+		const selectButtonElems = page.locator(selectButtons, {hasText: title});
+
+		await selectButtonElems.click();
+		const titleInputElem = page.locator(titleInput);
+		const bodyInputElem = page.locator(bodyInput);
+
+		await expect(titleInputElem).toHaveValue(title);
+		await expect(bodyInputElem).toHaveValue(body);
+		await titleInputElem.fill(randomNodeTitle());
+		await bodyInputElem.fill(randomNodeBody());
+		await expect(selectButtonElems).toHaveText(title);
+
+		await page.reload();
+		await recoverFromRefresh(page);
+		await selectButtonElems.click();
+		await expect(titleInputElem).toHaveValue(title);
+		await expect(bodyInputElem).toHaveValue(body);
 	});
 
 	test("Post and destroy draft", async ({page}) => {
-		await page.getByText("Second " + draftTitle).click();
-		await page.getByText(submitName + " (& delete draft 2)").click();
+		const title = randomNodeTitle();
+		const body = randomNodeBody();
+		await saveDraft(page, title, body);
+		await page.locator(selectButtons).click();
+		await page.locator(postButton).click();
+
+		await expect(page.locator(".node", {hasText: title + body})).toBeVisible();
 
 		await recoverFromSubmit(page);
-		expect(await page.getByText("Second " + draftTitle).count()).toBeFalsy();
+		await expect(page.locator(selectButtons)).not.toBeVisible();
 	});
 
-	test("Post and preserve draft", async ({page}) => {
-		await page.getByText("Third" + draftTitle).click();
-		await page.getByText("Preserve chosen draft").click();
-		await page.getByRole("button", {name: submitName}).click();
+	test("Post but preserve draft", async ({page}) => {
+		const title = randomNodeTitle();
+		const body = randomNodeBody();
+		await saveDraft(page, title, body);
+		await page.locator(selectButtons).click();
+		await page.locator(preserveButton).click();
+		await page.locator(postButton).click();
+
+		await expect(page.locator(".node", {hasText: title + body})).toBeVisible();
 
 		await recoverFromSubmit(page);
-		await expect(page.getByText("Third " + draftTitle)).toBeVisible();
+		await expect(page.locator(selectButtons)).toBeVisible();
 	});
 
-	test("Modify, post, and destroy draft", async ({page}) => {
-		await page.getByText("First " + draftTitle).click();
-		await page.getByLabel("Title").fill(randomNodeTitle());
-		await page.getByLabel("Body").fill(randomNodeBody());
-		await page.getByText(submitName + " (& delete draft 1)").click();
+	test("Post with draft after edits", async ({page}) => {
+		await saveDraft(page, randomNodeTitle(), randomNodeBody());
+		await page.locator(selectButtons).click();
+		const newTitle = randomNodeTitle();
+		const newBody = randomNodeBody();
+		await page.locator(titleInput).fill(newTitle);
+		await page.locator(bodyInput).fill(newBody);
+		await page.locator(postButton).click();
+
+		await expect(page.locator(".node", {hasText: newTitle + newBody})).toBeVisible();
 
 		await recoverFromSubmit(page);
-		expect(await page.getByText("First " + draftTitle).count()).toBeFalsy();
+		await expect(page.locator(selectButtons)).not.toBeVisible();
+	});
+
+	test("Post with preserved draft after edits", async ({page}) => {
+		await saveDraft(page, randomNodeTitle(), randomNodeBody());
+		await page.locator(selectButtons).click();
+		const newTitle = randomNodeTitle();
+		const newBody = randomNodeBody();
+		await page.locator(titleInput).fill(newTitle);
+		await page.locator(bodyInput).fill(newBody);
+		await page.locator(preserveButton).click();
+		await page.locator(postButton).click();
+
+		await expect(page.locator(".node", {hasText: newTitle + newBody})).toBeVisible();
+
+		await recoverFromSubmit(page);
+		await expect(page.locator(selectButtons)).toBeVisible();
 	});
 }
 
-test.describe.fixme("Drafts manipulation in posting page", async () => {
-	test("Navigate to posting page", async ({page}) => {
-		await page.locator("header").getByText("Post").click();
+test.describe("Drafts manipulation in posting page", async () => {
+	test.beforeEach(async ({page, request}) => {
+		await api.signUp(request, page);
+		await page.goto("/post/create");
 	});
 
-	await testDraftsFunctionalities(
-		"Post",
-		async () => {},
-		async (page) => {
-			await page.goBack();
-		}
-	);
+	await testDraftsInPostingMode("Post", postRefreshRecovery, postSubmitRecovery);
 });
 
-test.describe.fixme("Drafts manipulation in replying modal", async () => {
-	let replyDraftTitle = "Reply Draft" + randomNodeTitle();
+test.describe("Drafts manipulation in reply modal", async () => {
+	test.beforeEach(async ({page, request}) => {
+		const {sessionKey} = await api.signUp(request, page);
 
-	test("Setup (new user, submit new post, enter, open reply modal)", async ({page}) => {
-		await page.locator("header").getByText("Logout").click();
-		await signUp(page, "Other" + randomUsername());
+		const responseBody: FetchResponse<Node> = await (
+			await api.createPost(request, sessionKey, new NodeCreationRequest(undefined, randomNodeTitle(), randomNodeBody()))
+		).json();
+		await page.goto("/post/" + responseBody.data!.id);
 
-		await createPost(page, replyDraftTitle, randomNodeBody());
-		await page.getByText(replyDraftTitle).click();
+		await page.locator(".replyButton").click();
 	});
 
-	await testDraftsFunctionalities(
-		"Reply",
-		async (page: Page) => {
-			await page.locator("button[aria-label='Reply']").first().click();
-		},
-		async (page: Page) => {
-			await page.locator("button[aria-label='Reply']").first().click();
-		}
-	);
+	await testDraftsInPostingMode("Reply", replyRefreshRecovery, replySubmitRecovery);
 });
