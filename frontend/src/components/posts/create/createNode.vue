@@ -229,7 +229,7 @@
 								[user.data!.id],
 								nodeTitle.value,
 								nodeBody.value,
-								currentDraftIndex.value || undefined,
+								currentDraftIndex.value ?? undefined,
 								undefined,
 								props.reply!.nodePath!
 							)
@@ -244,7 +244,7 @@
 							postInvitedOwners!.value,
 							nodeTitle.value,
 							nodeBody.value,
-							currentDraftIndex.value || undefined,
+							currentDraftIndex.value ?? undefined,
 							postConfig!.value
 						)
 					);
