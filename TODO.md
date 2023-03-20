@@ -29,7 +29,8 @@
 - ### Tests:
   - Write test for dashboard contacts page
   - Write test for site navigation (URL & UI)
-    <hr>
+
+<hr>
 
 ## Release-worthy
 
@@ -61,3 +62,16 @@
   - Client-side input validation (for preemptive, human-readable errors)
   - Serve posts page as root (for UX)
   - Resolve TODO situations noted in various code comments
+
+<hr>
+
+## Post-release
+
+- ### Features:
+  - PWA support & mobile app distribution
+  - More configs & layouts
+- ### Optimization:
+  - Look into applicable offline-first functionalities
+- ### Tech stack:
+  - Node -> Deno (Better performance, compatibility with web code, and security. Became very compatible with Node setups)
+  - Vue -> Svelte (Whether this happens would depend on _a lot_, we'll see)
