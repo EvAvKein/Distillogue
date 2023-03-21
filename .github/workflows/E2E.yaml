@@ -20,7 +20,7 @@ jobs:
         run: docker-compose up --detach
 
       - name: Launch tests
-        run: docker-compose -f docker-compose.tests.yaml -f docker-compose.tests.githubOverride.yaml up
+        run: docker-compose -f docker-compose.tests.yaml --env-file ./testing/ci.env up
 
       - uses: actions/upload-artifact@v3
         if: always()

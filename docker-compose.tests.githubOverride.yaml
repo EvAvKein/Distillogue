@@ -1,4 +1,0 @@
-version: "3"
-services:
-  playwright:
-    command: npx playwright test --reporter=github

@@ -12,6 +12,8 @@ const config: PlaywrightTestConfig = {
 		// launchOptions: {slowMo: 500},
 	},
 
+	reporter: [[process.env.CI ? "github" : "list"], ["html", {open: process.env.DOCKERIZED ? "never" : "on-failure"}]],
+
 	projects: [
 		{
 			name: "chromium",

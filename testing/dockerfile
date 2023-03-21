@@ -16,4 +16,4 @@ COPY /testing/ /testing
 # RUN
 WORKDIR /testing
 ENV DOCKERIZED=TRUE
-CMD ["npx", "playwright", "test", "--reporter=line"]
+CMD ["npx", "playwright", "test"]
