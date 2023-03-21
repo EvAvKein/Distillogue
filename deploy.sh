@@ -1,6 +1,5 @@
 docker-compose down &&
-docker system prune -a -f &&
-docker-compose up --detach &&
+docker-compose up --detach --build &&
 docker-compose -f docker-compose.ssl.yaml up &&
 docker-compose down &&
-docker-compose -f docker-compose.yaml -f docker-compose.httpsOverride.yaml up
+docker-compose -f docker-compose.yaml -f docker-compose.httpsOverride.yaml up --build
