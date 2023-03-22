@@ -7,7 +7,7 @@ const config: PlaywrightTestConfig = {
 	expect: {timeout: 5 * 1000},
 
 	use: {
-		baseURL: `http://${process.env.DOCKERIZED ? "backend" : "localhost"}:3000`,
+		baseURL: `http://localhost:${process.env.DOCKERIZED ? 80 : 3000}`,
 		trace: "on",
 		// launchOptions: {slowMo: 500},
 	},

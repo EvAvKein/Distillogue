@@ -4,11 +4,6 @@ services:
     build:
       context: ./
       dockerfile: ./testing/dockerfile
+    network_mode: "host" # networking via host to use localhost instead of a container name, because localhost is whitelisted to not error when receiving a particular security header from the backend, see: https://html.spec.whatwg.org/multipage/browsers.html#origin-keyed-agent-clusters (note the "secure context" requirement) & https://w3c.github.io/webappsec-secure-contexts/#is-origin-trustworthy
     volumes:
       - ./testing/playwright-report:/testing/playwright-report
-    networks:
-      - custom_proxyToServer
-
-networks:
-  custom_proxyToServer:
-    external: true
