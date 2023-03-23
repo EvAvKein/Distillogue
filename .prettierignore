@@ -1,2 +1,6 @@
 node_modules
 dist
+
+testing/test-results/
+testing/playwright-report/
+testing/playwright/.cache/
