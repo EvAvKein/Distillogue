@@ -27,7 +27,6 @@
 - ### Ease of Contributing:
   - Dockerized dev setup (see https://github.com/EvAvKein/Distillogue/issues/1)
 - ### Tests:
-  - Write test for dashboard contacts page
   - Write test for site navigation (URL & UI)
 
 <hr>
