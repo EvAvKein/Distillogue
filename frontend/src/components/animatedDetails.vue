@@ -1,5 +1,5 @@
 <template>
-	<section :aria-label="open ? 'Opened category' : 'Closed category'">
+	<section :aria-label="open ? `Opened ${ariaName}` : `Closed ${ariaName}`">
 		<!-- here for ease of testing, and as a substitute for the equivalent <details> attribute -->
 		<button class="core_contentButton" type="button" @click="open = !open">
 			<slot name="summary"></slot>
@@ -14,6 +14,7 @@
 	import {ref} from "vue";
 
 	const props = defineProps<{
+		ariaName: string;
 		openByDefault?: true;
 	}>();
 

@@ -9,7 +9,7 @@
 		<ul>
 			<transition-group name="collapse">
 				<li v-for="(contact, index) of user.data!.contacts">
-					<animatedDetails>
+					<animatedDetails :ariaName="'contact'">
 						<template #summary>
 							{{ contact.name }}
 						</template>
