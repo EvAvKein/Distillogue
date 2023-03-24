@@ -96,7 +96,6 @@
 		right: 0;
 	}
 
-	li:hover .deleteContactButton,
 	li:focus-within .deleteContactButton {
 		display: block;
 	}
