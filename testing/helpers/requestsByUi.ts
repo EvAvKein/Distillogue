@@ -56,7 +56,7 @@ async function createReply(page: Page, nodeTitlesPath: string[], replyTitle: str
 
 async function expandConfigCategories(page: Page) {
 	for (const category of await page.locator(".configCategory").all()) {
-		if ((await category.getAttribute("aria-label")) === "Closed category") {
+		if ((await category.getAttribute("data-collapsible")) === "false") {
 			await category.locator("> button").click();
 		}
 	}
