@@ -132,6 +132,31 @@
 		background-color: var(--textSubColor);
 	}
 
+	.core_borderButton {
+		background-color: transparent;
+		color: var(--textColor);
+		border: 0.15em solid var(--textColor);
+		text-align: center;
+		border-radius: 0.2em;
+		text-decoration: none;
+		padding: 0.5em;
+		border-radius: 0.5em;
+		transition: color 300ms, border-color 300ms;
+	}
+	.core_borderButton:focus,
+	.core_borderButton:hover {
+		color: var(--highlightSubColor);
+		border-color: var(--highlightSubColor);
+	}
+	.core_borderButton:active {
+		color: var(--highlightColor);
+		border-color: var(--highlightColor);
+	}
+	.core_borderButton[inert] {
+		color: var(--textSubColor);
+		border-color: var(--textSubColor);
+	}
+
 	.core_contentButton {
 		color: inherit;
 		text-decoration: none;
