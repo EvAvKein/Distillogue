@@ -23,6 +23,7 @@ jobs:
         run: docker-compose -f docker-compose.tests.yaml --env-file ./testing/ci.env up --exit-code-from playwright
 
       - uses: actions/upload-artifact@v3
+        if: failure()
         with:
           name: playwright-report
           path: ./testing/playwright-report
