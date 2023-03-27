@@ -68,7 +68,7 @@
 					@click="savePreset"
 					type="button"
 					id="savePresetButton"
-					class="core_backgroundButton"
+					class="core_borderButton"
 					:inert="presetsAtCapacity ? true : false"
 				>
 					{{ presetsAtCapacity ? "Presets at capacity" : "Save preset" }}
@@ -78,7 +78,7 @@
 
 		<section id="confirmation">
 			<div>
-				<button id="saveDraft" type="button" class="core_backgroundButton" :inert="draftsAtCapacity" @click="saveDraft">
+				<button id="saveDraft" type="button" class="core_borderButton" :inert="draftsAtCapacity" @click="saveDraft">
 					{{ draftsAtCapacity ? "Drafts at capacity" : "Save draft" }}
 				</button>
 				<button id="submitButton" type="button" class="core_backgroundButton" @click="submitNode">
