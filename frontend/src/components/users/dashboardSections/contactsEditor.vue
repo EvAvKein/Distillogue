@@ -9,14 +9,14 @@
 		<ul>
 			<transition-group name="collapse">
 				<li v-for="(contact, index) of user.data!.contacts">
-					<animatedDetails :ariaName="'contact'">
+					<animatedCollapsible :ariaName="'contact'">
 						<template #summary>
 							{{ contact.name }}
 						</template>
 						<template #content>
 							<div>{{ contact.id }}</div>
 						</template>
-					</animatedDetails>
+					</animatedCollapsible>
 					<button class="deleteContactButton core_contentButton" @click="() => deleteContact(index)">
 						<img src="../../../assets/trash.svg" alt="Trash icon" />
 					</button>
@@ -31,7 +31,7 @@
 	import {apiFetch} from "../../../helpers/apiFetch";
 	import {UserPatchRequest} from "../../../../../shared/objects/api";
 	import {useUser} from "../../../stores/user";
-	import animatedDetails from "../../animatedDetails.vue";
+	import animatedCollapsible from "../../animatedCollapsible.vue";
 	import labelledInput from "../../labelledInput.vue";
 	import notification from "../../notification.vue";
 	const user = useUser();

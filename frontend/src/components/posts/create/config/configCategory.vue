@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-	import customDetails from "../../../animatedDetails.vue";
+	import customDetails from "../../../animatedCollapsible.vue";
 
 	defineProps<{
 		title: string;
