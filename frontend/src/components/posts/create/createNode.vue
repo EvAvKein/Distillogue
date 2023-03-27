@@ -1,5 +1,5 @@
 <template>
-	<form v-if="user.data" @submit.prevent>
+	<form v-if="user.data" @submit.prevent :class="reply ? 'reply' : 'post'">
 		<section id="texts">
 			<section v-if="user.data.drafts" id="drafts">
 				<TransitionGroup name="collapse">
@@ -283,6 +283,11 @@
 			"texts config"
 			"confirmation .";
 		gap: 0.5em 0.25em;
+	}
+
+	form.reply {
+		display: block;
+		padding: 0.25em 0.5em;
 	}
 
 	/* TEXTS */
