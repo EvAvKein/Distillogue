@@ -3,12 +3,12 @@
 		<section id="leftSection">
 			<nav>
 				<div v-if="user.data">
-					<router-link :to="{name: 'browse'}" class="core_backgroundButton">
+					<router-link :to="{name: 'browse'}" class="core_contentButton">
 						<img src="../assets/browse.svg" alt="Globe icon" />
 						<span>Browse</span>
 					</router-link>
-					<router-link :to="{name: 'createPost'}" class="core_backgroundButton">
-						<img src="../assets/post.svg" alt="Pencil icon" />
+					<router-link :to="{name: 'createPost'}" class="core_contentButton">
+						<img src="../assets/post.svg" alt="Pencil icon" style="transform: scaleX(-1)" />
 						<span>Post</span>
 					</router-link>
 				</div>
@@ -19,7 +19,7 @@
 							alt="Distillogue's Logo: A chemistry flask, with bubbling liquids, hung on a stand"
 						/>
 					</router-link>
-					<router-link :to="{name: 'about'}" class="core_backgroundButton">
+					<router-link :to="{name: 'about'}" class="core_contentButton">
 						<img src="../assets/megaphone.svg" alt="Megaphone icon" style="transform: scaleX(-1)" />
 						<span>About</span>
 					</router-link>
@@ -30,16 +30,16 @@
 		<section id="rightSection">
 			<nav>
 				<div v-if="user.data">
-					<router-link :to="{name: 'dashboard'}" class="core_backgroundButton">
+					<router-link :to="{name: 'dashboard'}" class="core_contentButton">
 						<img src="../assets/dashboard.svg" alt="Dashbard guage icon" />
 						<span>Dashboard</span>
 					</router-link>
-					<button @click="logOut" class="core_backgroundButton">
+					<button @click="logOut" class="core_contentButton">
 						<img src="../assets/leave.svg" alt="Exiting icon" />
 						<span>Logout</span>
 					</button>
 				</div>
-				<router-link v-else :to="{name: 'join'}" class="core_backgroundButton">
+				<router-link v-else :to="{name: 'join'}" class="core_contentButton">
 					<img src="../assets/userWithoutPfp.svg" alt="Non-descript person icon" />
 					<span>Join</span>
 				</router-link>
@@ -117,29 +117,27 @@
 		width: fit-content;
 		display: flex;
 		align-items: center;
-		gap: 0.5em;
+		gap: 1em;
 	}
 
-	.core_backgroundButton {
+	.core_contentButton {
 		font-size: 0.9em;
 	}
 
 	img:not(#logoLink img) {
 		height: 1.25em;
-		vertical-align: middle;
-		filter: var(--filterToBackgroundColor);
+		display: block;
+		margin: 0 auto 0.25em;
 	}
 
 	span {
 		font-size: 1.1em;
-		vertical-align: top;
-		margin-left: 0.25em;
 		display: none;
 	}
 
-	@media (min-width: 32rem) {
+	@media (min-width: 25rem) {
 		span {
-			display: inline;
+			display: block;
 		}
 	}
 </style>
