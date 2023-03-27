@@ -7,17 +7,13 @@
 ## Proof-of-concept
 
 - ### Flagship/core features:
-  - Identities system
-  - More layouts:
-    - Mindmap (using D3)
-    - Horizontal layers
-    - Others? (ideas welcome)
   - More config options:
+    - Polls
     - Feedback tags (critical & supplemental, default & custom, feedback rejection)
     - Contributions (unrestricted & authorized by author)
     - Moderation:
       - Paradigms (e.g democracy via existing configs, moderators appointed by post-creator)
-      - Functionalities (e.g censoring with explanation, node/branch locking)
+      - Functionalities (e.g censoring with explanation, node/branch locking, Perspective API public/mod-only flagging)
     - Others (ideas welcome)
   - User & user-to-user functionalities (latter added very cautiously)
 - ### Regulation:
@@ -66,11 +62,18 @@
 
 ## Post-release
 
+- ### All of the above
 - ### Features:
   - PWA support & mobile app distribution
-  - More configs & layouts
+  - Identities system
+  - More configs
+  - More layouts:
+    - Mindmap (using D3)
+    - Horizontal layers
+    - Others? (ideas welcome)
 - ### Optimization:
   - Look into applicable offline-first functionalities
-- ### Tech stack:
+- ### Tech changes:
+  - Joi -> Zod
   - Node -> Deno (Better performance, compatibility with web code, and security. Became very compatible with Node setups)
   - Vue -> Svelte (Whether this happens would depend on _a lot_, we'll see)
