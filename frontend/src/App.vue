@@ -14,25 +14,25 @@
 </script>
 
 <style>
-	/* foundational */
 	:root {
+		/* filters generated via https://evavkein.com/toolbox/cssFilterGenerator */
 		--textColor: #ffffff;
 		--filterToTextColor: brightness(0) invert(1);
 		--textSubColor: #b3b3b3;
 		--filterToTextSubColor: brightness(0) saturate(100%) invert(74%) sepia(0%) saturate(4%) hue-rotate(273deg)
-			brightness(98%) contrast(91%); /* created via https://codepen.io/sosuke/pen/Pjoqqp */
+			brightness(98%) contrast(91%);
 		--backgroundColor: #020c14;
 		--filterToBackgroundColor: brightness(0) saturate(100%) invert(4%) sepia(6%) saturate(6548%) hue-rotate(166deg)
-			brightness(100%) contrast(101%); /* created via https://codepen.io/sosuke/pen/Pjoqqp */
+			brightness(100%) contrast(101%);
 		--backgroundSubColor: #042b43;
 		--filterToBackgroundSubColor: invert(13%) sepia(71%) saturate(783%) hue-rotate(165deg) brightness(92%)
-			contrast(101%); /* created via https://codepen.io/sosuke/pen/Pjoqqp */
+			contrast(101%);
 		--highlightColor: #ecb365;
 		--filterToHighlightColor: brightness(0) saturate(100%) invert(90%) sepia(71%) saturate(5554%) hue-rotate(308deg)
-			brightness(95%) contrast(94%); /* created via https://codepen.io/sosuke/pen/Pjoqqp */
+			brightness(95%) contrast(94%);
 		--highlightSubColor: #c29454;
 		--filterToHighlightSubColor: brightness(0) saturate(100%) invert(65%) sepia(16%) saturate(1265%) hue-rotate(355deg)
-			brightness(92%) contrast(85%); /* created via https://codepen.io/sosuke/pen/Pjoqqp */
+			brightness(92%) contrast(85%);
 	}
 
 	/* .lightMode {
