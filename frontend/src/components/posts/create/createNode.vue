@@ -16,7 +16,7 @@
 						v-if="typeof currentDraftIndex === 'number'"
 						id="preserveDraftButton"
 						type="button"
-						class="core_backgroundButton"
+						class="core_borderButton"
 						@click="selectDraft(null)"
 					>
 						Preserve draft {{ currentDraftIndex + 1 }}
