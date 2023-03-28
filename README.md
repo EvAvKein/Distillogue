@@ -65,7 +65,7 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 
 ## Contributing
 
-Contributions are very welcome! See the TODO.md file or GitHub issues.
+Contributions are very welcome! See the [TODO.md](todo.md) file or GitHub issues.
 
 For any questions, comment under a relevant issue or create a new issue.
 
