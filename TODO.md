@@ -74,6 +74,6 @@
 - ### Optimization:
   - Look into applicable offline-first functionalities
 - ### Tech changes:
-  - Joi -> Zod
-  - Node -> Deno (Better performance, compatibility with web code, and security. Became very compatible with Node setups)
-  - Vue -> Svelte (Whether this happens would depend on _a lot_, we'll see)
+  - Joi -> Zod: Seems very similar to Joi, except Zod'll allow interfaces to be extracted (which I'd then apply to the shared classes, ensuring validation schemas stay consistent with classes/constructors). Also, Zod allows omitting a property from a referenced schema, which resolves a Joi inadequacy I'm facing in the presets schema
+  - Node -> Deno: Better performance, compatibility with web code, and security. Became very compatible with Node setups
+  - Vue -> SvelteKit: Whether this happens would depend on _a lot_, we'll see
