@@ -1,7 +1,6 @@
 import {type Express} from "express";
 import {type Collection} from "mongodb";
-import * as apiSchemas from "../joi/api.js";
-import {validationSettings} from "../joi/_validationSettings.js";
+import * as apiSchemas from "../schemas/api.js";
 import {mongoInsertIfDoesntExist} from "../helpers/mongo/mongoInsertIfDoesntExist.js";
 import {sanitizeForRegex} from "../helpers/sanitizeForRegex.js";
 import {userBySession} from "../helpers/reqHeaders.js";
@@ -10,6 +9,7 @@ import {updateDeepProperty} from "../helpers/updateDeepProperty.js";
 import {recursivelyModifyNode} from "../helpers/recursivelyModifyNode.js";
 import {Node, PostSummary} from "../../../shared/objects/post.js";
 import {User, UserData} from "../../../shared/objects/user.js";
+import {fromZodError} from "zod-validation-error";
 import {FetchResponse} from "../../../shared/objects/api.js";
 
 export default function (app: Express, postsDb: Collection<Node>, usersDb: Collection<User>) {
@@ -78,13 +78,13 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 	});
 
 	app.post("/api/posts", async (request, response) => {
-		const validation = apiSchemas.NodeCreationRequest.validate(request.body, validationSettings);
-		if (validation.error) {
-			response.status(400).json(new FetchResponse(null, {message: validation.error.message}));
+		const validation = apiSchemas.NodeCreationRequest.safeParse(request.body);
+		if (!validation.success) {
+			response.status(400).json(new FetchResponse(null, {message: fromZodError(validation.error).message}));
 			return;
 		}
 
-		const postRequest = validation.value;
+		const postRequest = validation.data;
 
 		const user = await userBySession(request);
 		if (!user) {

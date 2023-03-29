@@ -1,10 +1,10 @@
 import {type Express} from "express";
 import {type Collection} from "mongodb";
-import * as apiSchemas from "../joi/api.js";
-import {validationSettings} from "../joi/_validationSettings.js";
+import * as apiSchemas from "../schemas/api.js";
 import {User, UserSession, UserPayload} from "../../../shared/objects/user.js";
 import {FetchResponse} from "../../../shared/objects/api.js";
 import {sessionKey} from "../helpers/reqHeaders.js";
+import {fromZodError} from "zod-validation-error";
 
 export default function (app: Express, usersDb: Collection<User>) {
 	app.get("/api/sessions", async (request, response) => {
@@ -21,14 +21,14 @@ export default function (app: Express, usersDb: Collection<User>) {
 	});
 
 	app.post("/api/sessions", async (request, response) => {
-		const validation = apiSchemas.UserCreationRequest.validate(request.body, validationSettings); // obviously not a user creation request, but they use the same object (until proper auth)
+		const validation = apiSchemas.UserCreationRequest.safeParse(request.body); // obviously not a user creation request, but they use the same object (until proper auth)
 
-		if (validation.error) {
-			response.status(400).json(new FetchResponse(null, {message: validation.error.message}));
+		if (!validation.success) {
+			response.status(400).json(new FetchResponse(null, {message: fromZodError(validation.error).message}));
 			return;
 		}
 
-		const auth = validation.value;
+		const auth = validation.data;
 		const newSession = new UserSession();
 
 		const dbResponse = await usersDb.findOneAndUpdate(

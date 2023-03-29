@@ -14,9 +14,10 @@
 	"dependencies": {
 		"express": "^4.17.2",
 		"helmet": "^6.0.0",
-		"joi": "^17.5.0",
 		"mongodb": "^4.3.1",
-		"uuid": "^9.0.0"
+		"uuid": "^9.0.0",
+		"zod": "^3.21.4",
+		"zod-validation-error": "^1.1.0"
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.13",

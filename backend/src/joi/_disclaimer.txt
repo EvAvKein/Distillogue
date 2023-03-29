@@ -1,5 +1,0 @@
-npm's "class-validator" is a much better fit for this project (considering the existing classes for the vast majority of incoming data) ...but the class-validator (non-bot) maintainers disappeared for a long time until recently (11.2022) and their comeback doesn't seem too vigorous/lasting...
-
-i'd rather do some extra work (and even have the maintenance burden of distinct classes & validators) if it means using a package that isn't as liable to be vulnerable/buggy (and become more so over time)
-
-links to class-validator's repo and npm, in hopes they ever become actively maintained again: https://github.com/typestack/class-validator https://www.npmjs.com/package/class-validator

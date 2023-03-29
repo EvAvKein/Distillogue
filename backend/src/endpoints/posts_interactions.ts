@@ -1,7 +1,6 @@
 import {type Express} from "express";
 import {type Collection, type UpdateFilter} from "mongodb";
-import * as apiSchemas from "../joi/api.js";
-import {validationSettings} from "../joi/_validationSettings.js";
+import * as apiSchemas from "../schemas/api.js";
 import * as timestamp from "../../../shared/helpers/timestamps.js";
 import {userBySession} from "../helpers/reqHeaders.js";
 import {mongoFilterPostsByAccess} from "../helpers/mongo/mongoFilterPostsByAccess.js";
@@ -9,14 +8,15 @@ import {nodePathAsMongoLocators} from "../helpers/mongo/nodePathAsMongoLocators.
 import {mongoMergeUpdateFilters} from "../helpers/mongo/mongoMergeUpdateFilters.js";
 import {Node} from "../../../shared/objects/post.js";
 import {User} from "../../../shared/objects/user.js";
+import {fromZodError} from "zod-validation-error";
 import {FetchResponse, NodeCreationRequest} from "../../../shared/objects/api.js";
 
 export default function (app: Express, postsDb: Collection<Node>, usersDb: Collection<User>) {
 	app.post("/api/posts/interactions", async (request, response) => {
 		// URI open to RESTfulness improvement suggestions
-		const validation = apiSchemas.NodeInteractionRequest.validate(request.body, validationSettings);
-		if (validation.error) {
-			response.status(400).json(new FetchResponse(null, {message: validation.error.message}));
+		const validation = apiSchemas.NodeInteractionRequest.safeParse(request.body);
+		if (!validation.success) {
+			response.status(400).json(new FetchResponse(null, {message: fromZodError(validation.error).message}));
 			return;
 		}
 
@@ -26,7 +26,7 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 			return;
 		}
 
-		const {nodePath, interactionType, interactionData} = validation.value;
+		const {nodePath, interactionType, interactionData} = validation.data;
 		const postId = nodePath[0] as Node["id"];
 		const mongoPath = nodePathAsMongoLocators(nodePath);
 		const mongoUpdatePathOptions = {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"} as const;

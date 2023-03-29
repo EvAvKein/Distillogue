@@ -1,22 +1,22 @@
 import {type Express} from "express";
 import {type Collection} from "mongodb";
-import * as apiSchemas from "../joi/api.js";
-import {validationSettings} from "../joi/_validationSettings.js";
+import * as apiSchemas from "../schemas/api.js";
 import {mongoInsertIfDoesntExist} from "../helpers/mongo/mongoInsertIfDoesntExist.js";
 import {User, UserData, UserPayload, arrOfEditableUserData} from "../../../shared/objects/user.js";
 import {FetchResponse} from "../../../shared/objects/api.js";
 import {PostConfig} from "../../../shared/objects/post.js";
 import {sessionKey} from "../helpers/reqHeaders.js";
+import {fromZodError} from "zod-validation-error";
 
 export default function (app: Express, usersDb: Collection<User>) {
 	app.post("/api/users", async (request, response) => {
-		const validation = apiSchemas.UserCreationRequest.validate(request.body, validationSettings);
-		if (validation.error) {
-			response.status(400).json(new FetchResponse(null, {message: validation.error.message}));
+		const validation = apiSchemas.UserCreationRequest.safeParse(request.body);
+		if (!validation.success) {
+			response.status(400).json(new FetchResponse(null, {message: fromZodError(validation.error).message}));
 			return;
 		}
 
-		const username = validation.value.username;
+		const username = validation.data.username;
 		const newUser = new User(new UserData(username));
 
 		const dbResponse = await mongoInsertIfDoesntExist(usersDb, newUser, {"data.name": username});
@@ -31,14 +31,14 @@ export default function (app: Express, usersDb: Collection<User>) {
 
 	app.patch("/api/users", async (request, response) => {
 		// TODO: the "PUT" method seems more appropriate, as it's receiving a complete replacement... but this would require changing the endpoint's path as to not indicate complete user-data replacement, probably changing to "/users/[userId]/[property]"
-		const validation = apiSchemas.UserPatchRequestArray.validate(request.body, validationSettings);
-		if (validation.error) {
-			response.status(400).json(new FetchResponse(null, {message: validation.error.message}));
+		const validation = apiSchemas.UserPatchRequestArray.safeParse(request.body);
+		if (!validation.success) {
+			response.status(400).json(new FetchResponse(null, {message: fromZodError(validation.error).message}));
 			return;
 		}
 
 		const session = sessionKey(request);
-		const editRequests = validation.value;
+		const editRequests = validation.data;
 
 		const mongoUpdateObject = {} as {[key: string]: any};
 		// ^ TODO: a bare minimum type, because idk how declare the type below without actually requiring a type argument (i.e infer T from key and apply it to type of value)
