@@ -14,6 +14,8 @@ const config: PlaywrightTestConfig = {
 
 	reporter: [[process.env.CI ? "github" : "list"], ["html", {open: process.env.DOCKERIZED ? "never" : "on-failure"}]],
 
+	retries: process.env.CI ? 1 : 0,
+
 	projects: [
 		{
 			name: "chromium",
