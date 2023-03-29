@@ -54,7 +54,8 @@
 - ### Accessibility:
   - Aria attributes & accessibility tree checkup (need to find free, toggleable, configurable software for screenreader testing. devtools accessibility tree is insufficient)
 - ### Optimization:
-  - Client-side input validation (for preemptive, human-readable errors)
+  - Client-side input validation
+  - Remove zod-validation-error dependency & improve API validation errors' readability (either via custom messages on each validation or through some custom message construction)
   - Serve posts page as root (for UX)
   - Resolve TODO situations noted in various code comments
 
@@ -74,6 +75,5 @@
 - ### Optimization:
   - Look into applicable offline-first functionalities
 - ### Tech changes:
-  - Joi -> Zod: Seems very similar to Joi, except Zod'll allow interfaces to be extracted (which I'd then apply to the shared classes, ensuring validation schemas stay consistent with classes/constructors). Also, Zod allows omitting a property from a referenced schema, which resolves a Joi inadequacy I'm facing in the presets schema
   - Node -> Deno: Better performance, compatibility with web code, and security. Became very compatible with Node setups
   - Vue -> SvelteKit: Whether this happens would depend on _a lot_, we'll see
