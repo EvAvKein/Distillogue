@@ -19,7 +19,7 @@ export default function (app: Express, usersDb: Collection<User>) {
 		const username = validation.data.username;
 		const newUser = new User(new UserData(username));
 
-		const dbResponse = await mongoInsertIfDoesntExist(usersDb, newUser, {"data.name": username});
+		const dbResponse = await mongoInsertIfDoesntExist(usersDb, newUser, {data: {name: username}});
 
 		if (dbResponse.matchedCount) {
 			response.status(403).json(new FetchResponse(null, {message: "User already exists!"}));
