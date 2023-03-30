@@ -5,7 +5,7 @@ export function mongoInsertIfDoesntExist<dbT extends Document>(
 	collection: Collection<dbT>,
 	object: dbT,
 	existenceFilter: DeepPartial<dbT>,
-	extraUpdateOptions?: UpdateOptions
+	extraUpdateOptions?: Omit<UpdateOptions, "upsert">
 ) {
 	return collection.updateOne(existenceFilter, {$setOnInsert: object}, {upsert: true, ...extraUpdateOptions});
 }
