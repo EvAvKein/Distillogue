@@ -5,14 +5,20 @@
 				<h4>{{ summary.title }}</h4>
 				<img v-if="summary.access?.public" src="../../../assets/megaphone.svg" alt="Megaphone icon" />
 			</section>
-			<timestamps :timestamps="summary.stats.timestamps" :inPostSummary="true" class="timestampSection" />
+			<section class="timestamps">
+				<div>Posted: <timestamp :pastUnix="summary.stats.timestamps.posted" /></div>
+				<div v-if="summary.stats.timestamps.interacted">
+					Interacted: <timestamp :pastUnix="summary.stats.timestamps.interacted" />
+				</div>
+			</section>
 		</router-link>
 	</article>
 </template>
 
 <script setup lang="ts">
 	import {PostSummary} from "../../../../../shared/objects/post";
-	import timestamps from "../view/nodeInteractions/timestamps.vue";
+	import timestamp from "../../timestamp.vue";
+
 	defineProps<{
 		summary: PostSummary;
 	}>();
@@ -44,8 +50,16 @@
 		margin-left: 0.4em;
 	}
 
-	.timestampSection {
+	.timestamps {
 		margin-top: 0.45em;
 		font-size: 0.95em;
+		display: flex;
+		flex-direction: row;
+		text-align: center;
+		gap: 1.5em;
+	}
+
+	.timestamps:has(div:nth-child(2)) {
+		justify-content: space-between;
 	}
 </style>

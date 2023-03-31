@@ -1,7 +1,12 @@
 <template>
 	<section class="interactions">
-		<timestamps :timestamps="node.stats.timestamps" class="timestamps" />
-		<div>
+		<section class="timestamps">
+			<div>Posted: <timestamp :pastUnix="node.stats.timestamps.posted" /></div>
+			<div v-if="node.stats.timestamps.interacted">
+				Interacted: <timestamp :pastUnix="node.stats.timestamps.interacted" />
+			</div>
+		</section>
+		<div class="interactable">
 			<votes
 				v-if="node.stats.votes"
 				:interactionPath="nodePath"
@@ -17,8 +22,7 @@
 <script setup lang="ts">
 	import {ref} from "vue";
 	import {Node} from "../../../../../../shared/objects/post";
-	import notification from "../../../notification.vue";
-	import timestamps from "../nodeInteractions/timestamps.vue";
+	import timestamp from "../../../timestamp.vue";
 	import votes from "./vote.vue";
 	import reply from "./replyButton.vue";
 
@@ -35,9 +39,17 @@
 	.timestamps {
 		font-size: 0.9em;
 		margin-bottom: 0.25em;
+		display: flex;
+		flex-direction: row;
+		text-align: center;
+		gap: 1.5em;
 	}
 
-	div {
+	.timestamps:has(div:nth-child(2)) {
+		justify-content: space-between;
+	}
+
+	.interactable {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
