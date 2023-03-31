@@ -6,7 +6,10 @@ import {user} from "../../shared/objects/validationUnits.js";
 
 test.describe("Profile editing - UI", () => {
 	test("Change name", async ({page, request}) => {
-		let {name, sessionKey} = await createUserAndSession(request);
+		let {
+			sessionKey,
+			data: {name},
+		} = await createUserAndSession(request);
 		await page.goto("/");
 		await setSessionKey(page, sessionKey);
 		await page.goto("/dashboard/profile");

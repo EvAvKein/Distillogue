@@ -2,6 +2,7 @@ import {type APIRequestContext, type Page, expect} from "@playwright/test";
 import {randomUsername} from "./randomAlphanumString.js";
 import {setSessionKey} from "./sessionKey.js";
 import {NodeCreationRequest} from "../../shared/objects/api.js";
+import {UserPayload} from "../../shared/objects/user.js";
 type Request = APIRequestContext;
 
 async function createUser(request: Request, name?: string) {
@@ -29,10 +30,11 @@ async function createUserAndSession(request: Request) {
 
 	const sessionCreationResponse = await createSession(request, name);
 	expect(sessionCreationResponse.ok()).toBeTruthy();
-	const sessionKey = (await sessionCreationResponse.json())?.data?.sessionKey;
-	expect(typeof sessionKey).toBe("string");
 
-	return {name: name, sessionKey: sessionKey as string};
+	const user = (await sessionCreationResponse.json())?.data as UserPayload;
+	expect(typeof user.sessionKey).toBe("string");
+
+	return user;
 }
 
 async function signUp(request: Request, page: Page) {

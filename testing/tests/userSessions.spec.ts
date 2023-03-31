@@ -14,7 +14,10 @@ test.describe("User sessions - API", async () => {
 	});
 
 	test("Obtain different key for new session by same user", async ({request}) => {
-		const {name, sessionKey: firstKey} = await createUserAndSession(request);
+		const {
+			data: {name},
+			sessionKey: firstKey,
+		} = await createUserAndSession(request);
 
 		await expect(await deleteSession(request, firstKey)).toBeOK();
 
