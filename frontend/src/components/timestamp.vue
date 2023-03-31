@@ -15,7 +15,7 @@
 	const day = hour * 24;
 	const week = day * 7;
 
-	function dblDigit(number: string | number) {
+	function dblDigit(number: number) {
 		return number < 10 ? "0" + number : number;
 	}
 
