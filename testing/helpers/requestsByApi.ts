@@ -1,8 +1,8 @@
 import {type APIRequestContext, type Page, expect} from "@playwright/test";
 import {randomUsername} from "./randomAlphanumString.js";
-import {setSessionKey} from "./sessionKey.js";
-import {NodeCreationRequest} from "../../shared/objects/api.js";
-import {UserPayload} from "../../shared/objects/user.js";
+import {getSessionKey, setSessionKey} from "./sessionKey.js";
+import {FetchResponse, NodeCreationRequest} from "../../shared/objects/api.js";
+import {UserData, UserPayload} from "../../shared/objects/user.js";
 type Request = APIRequestContext;
 
 async function createUser(request: Request, name?: string) {
@@ -20,6 +20,12 @@ async function deleteSession(request: Request, authKey: string) {
 	return request.delete("/api/sessions", {
 		headers: {authorization: "Bearer " + authKey},
 	});
+}
+
+async function getUserData(request: Request, page: Page) {
+	const response = await getSession(request, (await getSessionKey(page)) ?? "");
+	await expect(response).toBeOK();
+	return (await response.json()) as FetchResponse<UserData>;
 }
 
 async function createUserAndSession(request: Request) {
@@ -52,4 +58,4 @@ async function createPost(request: Request, authKey: string, postRequest: NodeCr
 	});
 }
 
-export {createUser, createSession, getSession, deleteSession, createUserAndSession, signUp, createPost};
+export {createUser, createSession, getSession, deleteSession, getUserData, createUserAndSession, signUp, createPost};
