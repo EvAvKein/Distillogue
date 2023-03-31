@@ -34,8 +34,8 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 
 #### With Node
 
-3. Install the above dependencies (excluding Docker of course)
-4. Run `npm run installAll`
+2. Install the above dependencies (excluding Docker of course)
+3. Run `npm run installAll`
 
 ### Commands
 
