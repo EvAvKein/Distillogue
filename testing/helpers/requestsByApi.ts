@@ -13,7 +13,7 @@ async function createSession(request: Request, name: string) {
 }
 async function getSession(request: Request, authKey: string) {
 	return request.get("/api/sessions", {
-		headers: {authorization: "Bearer" + authKey},
+		headers: {authorization: "Bearer " + authKey},
 	});
 }
 async function deleteSession(request: Request, authKey: string) {
