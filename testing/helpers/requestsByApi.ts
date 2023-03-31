@@ -32,10 +32,10 @@ async function createUserAndSession(request: Request) {
 	const name = randomUsername();
 
 	const userCreationResponse = await createUser(request, name);
-	expect(userCreationResponse.ok()).toBeTruthy();
+	expect(userCreationResponse).toBeOK();
 
 	const sessionCreationResponse = await createSession(request, name);
-	expect(sessionCreationResponse.ok()).toBeTruthy();
+	expect(sessionCreationResponse).toBeOK();
 
 	const user = (await sessionCreationResponse.json())?.data as UserPayload;
 	expect(typeof user.sessionKey).toBe("string");
