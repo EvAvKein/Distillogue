@@ -326,14 +326,14 @@ test.describe("Drafts manipulation in reply modal", async () => {
 	test.beforeEach(async ({page, request}) => {
 		const {
 			sessionKey,
-			data: {id},
+			data: {name, id},
 		} = await api.signUp(request, page);
 
 		const responseBody: FetchResponse<Post> = await (
 			await api.createPost(
 				request,
 				sessionKey,
-				new PostCreationRequest(new NodeCreationRequest(randomNodeTitle(), randomNodeBody()), {}, {users: [id]})
+				new PostCreationRequest(new NodeCreationRequest(randomNodeTitle(), randomNodeBody()), {}, {users: [{name, id}]})
 			)
 		).json();
 		await page.goto("/post/" + responseBody.data!.thread.id);

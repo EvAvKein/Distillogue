@@ -64,6 +64,16 @@ class UserPayload {
 const arrOfEditableUserData = ["name", "drafts", "presets", "contacts"] as const;
 type editableUserData = (typeof arrOfEditableUserData)[number];
 
+class UserEntry {
+	name: UserData["name"];
+	id: UserData["id"];
+
+	constructor(name: UserEntry["name"], id: UserEntry["id"]) {
+		this.name = name;
+		this.id = id;
+	}
+}
+
 // class Log {
 //   timeUnix:number;
 //   userId:UserData["id"];
@@ -88,5 +98,6 @@ export {
 	UserPayload,
 	editableUserData,
 	arrOfEditableUserData,
+	UserEntry,
 	//Log,
 };

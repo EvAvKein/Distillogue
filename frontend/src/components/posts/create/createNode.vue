@@ -240,7 +240,7 @@
 						new PostCreationRequest(
 							new NodeCreationRequest(nodeTitle.value, nodeBody.value, currentDraftIndex.value ?? undefined),
 							postConfig.value!,
-							{users: [user.data!.id], ...postConfig.value!.access}
+							{users: [{name: user.data!.name, id: user.data!.id}], ...postConfig.value!.access}
 						)
 					);
 			  };

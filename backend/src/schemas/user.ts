@@ -35,12 +35,12 @@ const UserPresets = z
 	)
 	.max(user.presets.max);
 
-const UserContacts = z.array(
-	z.object({
-		name: z.string().regex(alphanumRegexWithSpaces).min(1),
-		id: UserId,
-	})
-);
+const UserEntry: ZodSchema<classes.UserEntry> = z.object({
+	name: z.string().nonempty(),
+	id: UserId,
+});
+
+const UserContacts = z.array(UserEntry);
 
 const UserData = z.object({
 	id: UserId,
@@ -57,4 +57,4 @@ const User: ZodSchema<classes.User> = z.object({
 	data: UserData,
 });
 
-export {UserId, UserAuth, UserSession, UserData, UserDrafts, UserPresets, UserContacts, User};
+export {UserId, UserAuth, UserSession, UserData, UserDrafts, UserPresets, UserEntry, UserContacts, User};

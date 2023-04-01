@@ -79,7 +79,7 @@ async function setupUserWithPostAndOpen(
 ) {
 	const {
 		sessionKey,
-		data: {id},
+		data: {name, id},
 	} = await api.signUp(request, page);
 
 	const postTitle = randomNodeTitle();
@@ -91,7 +91,7 @@ async function setupUserWithPostAndOpen(
 			new PostCreationRequest(
 				new NodeCreationRequest(postTitle, randomNodeBody()),
 				postConfig ?? {},
-				postAccess ?? {users: [id]}
+				postAccess ?? {users: [{name, id}]}
 			)
 		)
 	).json()) as FetchResponse<Post>;

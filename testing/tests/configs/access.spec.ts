@@ -12,15 +12,14 @@ test.describe("Access", () => {
 
 	test("Fail to find inaccessible post through browsing", async ({page, request}) => {
 		const postTitle = randomNodeTitle();
+
+		const {name, id} = (await api.getUserData(request, page)).data!;
+
 		await expect(
 			await api.createPost(
 				request,
 				(await getSessionKey(page))!,
-				new PostCreationRequest(
-					new NodeCreationRequest(postTitle, randomNodeBody()),
-					{},
-					{users: [(await api.getUserData(request, page)).data!.id]}
-				)
+				new PostCreationRequest(new NodeCreationRequest(postTitle, randomNodeBody()), {}, {users: [{name, id}]})
 			)
 		).toBeOK();
 
@@ -33,15 +32,13 @@ test.describe("Access", () => {
 	test("Fail to visit inaccessible post through URL", async ({page, request}) => {
 		const postTitle = randomNodeTitle();
 		const postBody = randomNodeBody();
+
+		const {name, id} = (await api.getUserData(request, page)).data!;
 		await expect(
 			await api.createPost(
 				request,
 				(await getSessionKey(page))!,
-				new PostCreationRequest(
-					new NodeCreationRequest(postTitle, postBody),
-					{},
-					{users: [(await api.getUserData(request, page)).data!.id]}
-				)
+				new PostCreationRequest(new NodeCreationRequest(postTitle, postBody), {}, {users: [{name, id}]})
 			)
 		).toBeOK();
 		await page.goto("/browse");

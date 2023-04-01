@@ -4,6 +4,6 @@ import {Filter} from "mongodb";
 
 export function mongoFilterPostsByAccess(userId: UserData["id"] | null | undefined, mongoFilterObject?: Filter<Post>) {
 	return {
-		$and: [{$or: [{"access.public": true}, {"access.users": userId}]}, mongoFilterObject ?? {}],
+		$and: [{$or: [{"access.public": true}, {"access.users.id": userId}]}, mongoFilterObject ?? {}],
 	};
 }

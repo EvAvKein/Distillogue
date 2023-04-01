@@ -1,7 +1,7 @@
 import {v4 as newId} from "uuid";
 import {unix as unixStamp} from "../helpers/timestamps.js";
 import {NodeCreationRequest} from "./api.js";
-import {UserData} from "./user.js";
+import {UserData, UserEntry} from "./user.js";
 
 class PostConfig {
 	access?: {
@@ -58,11 +58,11 @@ class Node extends NodeCreationRequest {
 
 interface PostAccess_Public {
 	public: true;
-	moderators?: UserData["id"][];
+	moderators?: UserEntry[];
 }
 interface PostAccess_Private {
-	users: UserData["id"][];
-	moderators?: UserData["id"][];
+	users: UserEntry[];
+	moderators?: UserEntry[];
 }
 type PostAccess = PostAccess_Public | PostAccess_Private;
 
