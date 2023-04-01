@@ -1,7 +1,7 @@
 <template>
 	<main>
 		<postContainer v-if="post" :postObject="post" />
-		<notification v-else v-model:text="notif.message" :desirablityStyle="notif.desirability" />
+		<notification v-else v-model:text="notif.message" :desirablityStyle="notif.desirability" :customDuration="null" />
 	</main>
 </template>
 
