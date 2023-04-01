@@ -4,6 +4,8 @@ import {user} from "../../../shared/objects/validationUnits.js";
 import {alphanumRegex, alphanumRegexWithSpaces} from "../helpers/alphanumRegex.js";
 import * as classes from "../../../shared/objects/user.js";
 
+const UserId = z.string();
+
 const UserAuth: ZodSchema<classes.UserAuth> = z.object({
 	provider: z.literal("Distillogue"),
 	key: z.string(),
@@ -11,7 +13,7 @@ const UserAuth: ZodSchema<classes.UserAuth> = z.object({
 
 const UserSession: ZodSchema<classes.UserSession> = z.object({
 	name: z.string().regex(alphanumRegex),
-	key: z.string().regex(alphanumRegex),
+	key: z.string(),
 });
 
 const UserDrafts = z
@@ -36,12 +38,12 @@ const UserPresets = z
 const UserContacts = z.array(
 	z.object({
 		name: z.string().regex(alphanumRegexWithSpaces).min(1),
-		id: z.string(),
+		id: UserId,
 	})
 );
 
 const UserData = z.object({
-	id: z.string(),
+	id: UserId,
 	name: z.string().regex(alphanumRegex).min(user.name.min).max(user.name.max),
 	drafts: UserDrafts,
 	presets: UserPresets,
@@ -55,4 +57,4 @@ const User: ZodSchema<classes.User> = z.object({
 	data: UserData,
 });
 
-export {UserAuth, UserSession, UserData, UserDrafts, UserPresets, UserContacts, User};
+export {UserId, UserAuth, UserSession, UserData, UserDrafts, UserPresets, UserContacts, User};
