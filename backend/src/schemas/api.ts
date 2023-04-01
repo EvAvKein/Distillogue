@@ -34,10 +34,10 @@ const NodeCreationRequest: ZodSchema<classes.NodeCreationRequest> = z.object({
 	nodePath: nodePath.optional(),
 });
 
-const PostCreationRequest:ZodSchema<classes.PostCreationRequest> = z.object({
+const PostCreationRequest: ZodSchema<classes.PostCreationRequest> = z.object({
 	rootNode: NodeCreationRequest,
 	config: PostConfig,
-	access: PostAccess
+	access: PostAccess,
 });
 
 const NodeInteractionRequest: ZodSchema<classes.NodeInteractionRequest> = z.intersection(
@@ -58,4 +58,11 @@ const NodeInteractionRequest: ZodSchema<classes.NodeInteractionRequest> = z.inte
 	])
 );
 
-export {UserCreationRequest, UserPatchRequest, UserPatchRequestArray, NodeCreationRequest, PostCreationRequest, NodeInteractionRequest};
+export {
+	UserCreationRequest,
+	UserPatchRequest,
+	UserPatchRequestArray,
+	NodeCreationRequest,
+	PostCreationRequest,
+	NodeInteractionRequest,
+};
