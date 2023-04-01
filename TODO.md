@@ -31,6 +31,7 @@
 
 - ### All of the above
 - ### Basic features:
+  - Config tooltips/info-buttons
   - Session-management dashboard page
 - ### Security:
   - Proper registration/authentication (likely only via third parties)
