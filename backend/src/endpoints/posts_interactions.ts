@@ -6,12 +6,12 @@ import {userBySession} from "../helpers/reqHeaders.js";
 import {mongoFilterPostsByAccess} from "../helpers/mongo/mongoFilterPostsByAccess.js";
 import {nodePathAsMongoLocators} from "../helpers/mongo/nodePathAsMongoLocators.js";
 import {mongoMergeUpdateFilters} from "../helpers/mongo/mongoMergeUpdateFilters.js";
-import {Node} from "../../../shared/objects/post.js";
+import {Post, Node} from "../../../shared/objects/post.js";
 import {User} from "../../../shared/objects/user.js";
 import {fromZodError} from "zod-validation-error";
 import {FetchResponse, NodeCreationRequest} from "../../../shared/objects/api.js";
 
-export default function (app: Express, postsDb: Collection<Node>, usersDb: Collection<User>) {
+export default function (app: Express, postsDb: Collection<Post>, usersDb: Collection<User>) {
 	app.post("/api/posts/interactions", async (request, response) => {
 		// URI open to RESTfulness improvement suggestions
 		const validation = apiSchemas.NodeInteractionRequest.safeParse(request.body);
@@ -31,7 +31,7 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 		const mongoPath = nodePathAsMongoLocators(nodePath);
 		const mongoUpdatePathOptions = {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"} as const;
 
-		const subjectPost = await postsDb.findOne(mongoFilterPostsByAccess(user.data.id, {id: postId})); // implementing this (and the derived validations) as part of an aggregation pipeline with the interaction request would eliminate a race condition, but mongo pipeline operations have various issues (verbosity, technical limitations, low readability) and concurrent usage (& contributor count) is currently too low to merit wrangling with those issues
+		const subjectPost = await postsDb.findOne(mongoFilterPostsByAccess(user.data.id, {"thread.id": postId})); // TODO: implementing this with the subsequent validations as part of an aggregation pipeline with the interaction request would eliminate a race condition, but mongo pipeline operations have various issues (verbosity, technical limitations, low readability) and concurrent usage (& contributor count) is currently too low to merit wrangling with those issues
 		if (!subjectPost) {
 			response.status(404).json(
 				new FetchResponse(null, {
@@ -41,21 +41,18 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 			return;
 		}
 
-		let mongoUpdate: UpdateFilter<Node>;
+		let mongoUpdate: UpdateFilter<Post>;
 		let updateFollowup: undefined | (() => Promise<true | string>);
 		switch (interactionType) {
 			case "reply": {
-				const replyData = interactionData as NodeCreationRequest;
-				replyData.config = subjectPost.config;
+				const replyRequest = interactionData as NodeCreationRequest;
 
-				const newNode = new Node(user.data.id, replyData);
-				delete newNode.config;
+				const newNode = new Node(user.data.id, replyRequest, subjectPost.config);
 
-				mongoUpdate = {$push: {[mongoPath.updatePath + "replies"]: newNode}}; // $addToSet would be preferable to $push... if there was a way to ignore differences in particular properties (id)
+				mongoUpdate = {$push: {[mongoPath.updatePath + ".replies"]: newNode}}; // $addToSet would be preferable to $push... if there was a way to ignore differences in particular properties (id)
 
-				const deletedDraftIndex = replyData.deletedDraftIndex;
-				if (typeof deletedDraftIndex === "number") {
-					const newDraftsState = user.data.drafts.filter((draft, index) => index !== deletedDraftIndex);
+				if (typeof replyRequest.deletedDraftIndex === "number") {
+					const newDraftsState = user.data.drafts.filter((draft, index) => index !== replyRequest.deletedDraftIndex);
 
 					updateFollowup = async function () {
 						const draftDeletion = await usersDb.findOneAndUpdate(
@@ -78,8 +75,8 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 					return;
 				}
 
-				const pathToSubjectVotes = mongoPath.updatePath + "stats.votes." + subjectVote;
-				const pathToOppositeVotes = mongoPath.updatePath + "stats.votes." + oppositeVote;
+				const pathToSubjectVotes = mongoPath.updatePath + ".stats.votes." + subjectVote;
+				const pathToOppositeVotes = mongoPath.updatePath + ".stats.votes." + oppositeVote;
 
 				mongoUpdate = voteData.newVoteStatus
 					? {
@@ -97,11 +94,14 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 		}
 
 		const dbResponse = await postsDb.findOneAndUpdate(
-			mongoFilterPostsByAccess(user.data.id, {id: postId}),
+			mongoFilterPostsByAccess(user.data.id, {"thread.id": postId}),
 			mongoMergeUpdateFilters(
-				{$set: {[mongoPath.updatePath + "stats.timestamps.interacted"]: timestamp.unix()}} as unknown as {
-					$set: {["stats.timestamps.interacted"]: number};
-				}, // if you figure out how to eliminate the need for this type override, the contribution would be appreciated
+				{
+					$set: {
+						["stats.interacted"]: timestamp.unix(),
+						[mongoPath.updatePath + ".stats.timestamps.interacted"]: timestamp.unix(),
+					},
+				} as unknown as {$set: {["stats.timestamps.interacted"]: number}}, // if you figure out how to eliminate the need for this type override, the contribution would be appreciated
 				mongoUpdate
 			),
 			mongoUpdatePathOptions

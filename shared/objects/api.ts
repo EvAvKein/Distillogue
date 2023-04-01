@@ -1,5 +1,5 @@
 import {UserData, editableUserData} from "./user.js";
-import {Node, PostConfig} from "./post.js";
+import {Node, PostAccess, PostConfig} from "./post.js";
 
 class FetchResponse<T = unknown> {
 	data?: T;
@@ -32,29 +32,36 @@ class UserPatchRequest<dataType extends editableUserData> {
 }
 
 class NodeCreationRequest {
-	invitedOwnerIds?: string[];
 	title: string;
 	body: string;
 	deletedDraftIndex?: number;
-	config?: PostConfig;
-	nodePath?: Node["id"][];
 
 	constructor(
-		invitedOwnerIds: NodeCreationRequest["invitedOwnerIds"],
 		title: NodeCreationRequest["title"],
 		body: NodeCreationRequest["body"],
-		deletedDraftIndex?: NodeCreationRequest["deletedDraftIndex"],
-		config?: NodeCreationRequest["config"],
-		nodePath?: NodeCreationRequest["nodePath"]
+		deletedDraftIndex?: NodeCreationRequest["deletedDraftIndex"]
 	) {
-		invitedOwnerIds ? (this.invitedOwnerIds = invitedOwnerIds) : delete this.invitedOwnerIds;
 		this.title = title;
 		this.body = body;
 		typeof deletedDraftIndex === "number"
 			? (this.deletedDraftIndex = deletedDraftIndex)
 			: delete this.deletedDraftIndex;
-		config ? (this.config = config) : delete this.config;
-		nodePath ? (this.nodePath = nodePath) : delete this.nodePath;
+	}
+}
+
+class PostCreationRequest {
+	rootNode: NodeCreationRequest;
+	config: PostConfig;
+	access: PostAccess;
+
+	constructor(
+		rootNode: PostCreationRequest["rootNode"],
+		config: PostCreationRequest["config"],
+		access: PostCreationRequest["access"]
+	) {
+		this.rootNode = rootNode;
+		this.config = config;
+		this.access = access;
 	}
 }
 
@@ -87,6 +94,7 @@ export {
 	UserCreationRequest,
 	UserPatchRequest,
 	NodeCreationRequest,
+	PostCreationRequest,
 	interactionType,
 	arrOfInteractionTypes,
 	NodeInteractionRequest,

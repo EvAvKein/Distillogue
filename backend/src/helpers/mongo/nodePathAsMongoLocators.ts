@@ -8,25 +8,26 @@ interface mongoLocatorsObject {
 }
 
 export function nodePathAsMongoLocators(nodePath: Node["id"][]) {
-	if (nodePath.length < 2) {
+	let pathToNode = "thread";
+
+	if (nodePath.length <= 1) {
 		return {
-			updatePath: "",
+			updatePath: pathToNode,
 			arrayFiltersOption: undefined,
 		} as mongoLocatorsObject;
 	}
 
 	let identifier = "";
-	let mongoPath = "";
-	const filtersArray = [] as {}[];
+	const filtersArray = [] as {[K: string]: string}[];
 
-	nodePath.slice(1).forEach((nodeId) => {
+	for (const nodeId of nodePath.slice(1)) {
 		identifier += "o";
-		mongoPath += `replies.$[${identifier}].`;
+		pathToNode += `.replies.$[${identifier}]`;
 		filtersArray.push({[identifier + ".id"]: nodeId});
-	});
+	}
 
 	return {
-		updatePath: mongoPath,
+		updatePath: pathToNode,
 		arrayFiltersOption: filtersArray,
 	} as mongoLocatorsObject;
 }

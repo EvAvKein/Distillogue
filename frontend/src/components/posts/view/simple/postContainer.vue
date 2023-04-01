@@ -1,15 +1,15 @@
 <template>
 	<section id="nodesContainer">
-		<node :node="postObject" :pathToNode="[]" />
+		<node :node="postObject.thread" :pathToNode="[]" />
 	</section>
 </template>
 
 <script setup lang="ts">
 	import node from "./node.vue";
-	import {Node} from "../../../../../../shared/objects/post";
+	import {Post} from "../../../../../../shared/objects/post";
 
 	const props = defineProps<{
-		postObject: Node;
+		postObject: Post;
 	}>();
 </script>
 

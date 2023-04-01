@@ -8,7 +8,7 @@
 <script setup lang="ts">
 	import {ref} from "vue";
 	import notification from "../components/notification.vue";
-	import {Node} from "../../../shared/objects/post";
+	import {Post} from "../../../shared/objects/post";
 	import {apiFetch} from "../helpers/apiFetch";
 	import postContainer from "../components/posts/view/postContainer_core.vue";
 
@@ -16,7 +16,7 @@
 		postId: string;
 	}>();
 
-	const post = ref<Node | undefined>(undefined);
+	const post = ref<Post | undefined>(undefined);
 	const notif = ref<{message: string; desirability: boolean | null}>({message: "Fetching post...", desirability: null});
 
 	apiFetch("GET", "/posts/" + props.postId).then((response) => {
@@ -24,7 +24,7 @@
 			notif.value = {message: response.error.message, desirability: false};
 			return;
 		}
-		post.value = response.data as Node;
+		post.value = response.data as Post;
 	});
 </script>
 

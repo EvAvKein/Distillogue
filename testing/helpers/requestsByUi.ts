@@ -1,7 +1,7 @@
 import {expect, type Page, type APIRequestContext} from "@playwright/test";
 import {randomUsername, randomNodeTitle, randomNodeBody} from "./randomAlphanumString.js";
-import {NodeCreationRequest} from "../../shared/objects/api.js";
-import {type Node, type PostConfig} from "../../shared/objects/post.js";
+import {NodeCreationRequest, PostCreationRequest} from "../../shared/objects/api.js";
+import {type PostAccess, type PostConfig, type Post} from "../../shared/objects/post.js";
 import {type FetchResponse} from "../../shared/objects/api.js";
 import * as api from "./requestsByApi.js";
 
@@ -71,8 +71,16 @@ async function expandNodePath(page: Page, nodeTitlesPath: string[]) {
 	}
 }
 
-async function setupUserWithPostAndOpen(page: Page, request: APIRequestContext, postConfig?: PostConfig) {
-	const {sessionKey} = await api.signUp(request, page);
+async function setupUserWithPostAndOpen(
+	page: Page,
+	request: APIRequestContext,
+	postConfig?: PostConfig,
+	postAccess?: PostAccess
+) {
+	const {
+		sessionKey,
+		data: {id},
+	} = await api.signUp(request, page);
 
 	const postTitle = randomNodeTitle();
 
@@ -80,11 +88,15 @@ async function setupUserWithPostAndOpen(page: Page, request: APIRequestContext, 
 		await api.createPost(
 			request,
 			sessionKey,
-			new NodeCreationRequest(undefined, postTitle, randomNodeBody(), undefined, postConfig)
+			new PostCreationRequest(
+				new NodeCreationRequest(postTitle, randomNodeBody()),
+				postConfig ?? {},
+				postAccess ?? {users: [id]}
+			)
 		)
-	).json()) as FetchResponse & {data: Node};
+	).json()) as FetchResponse<Post>;
 
-	await page.goto("/post/" + response.data.id);
+	await page.goto("/post/" + response.data!.thread.id);
 
 	return {postTitle};
 }

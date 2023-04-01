@@ -3,7 +3,7 @@ import * as ui from "../../helpers/requestsByUi.js";
 import * as api from "../../helpers/requestsByApi.js";
 import {getSessionKey} from "../../helpers/sessionKey.js";
 import {randomNodeTitle, randomNodeBody} from "../../helpers/randomAlphanumString.js";
-import {NodeCreationRequest} from "../../../shared/objects/api.js";
+import {NodeCreationRequest, PostCreationRequest} from "../../../shared/objects/api.js";
 
 test.describe("Access", () => {
 	test.beforeEach(async ({request, page}) => {
@@ -15,12 +15,16 @@ test.describe("Access", () => {
 		await expect(
 			await api.createPost(
 				request,
-				(await getSessionKey(page)) as string,
-				new NodeCreationRequest(undefined, postTitle, randomNodeBody())
+				(await getSessionKey(page))!,
+				new PostCreationRequest(
+					new NodeCreationRequest(postTitle, randomNodeBody()),
+					{},
+					{users: [(await api.getUserData(request, page)).data!.id]}
+				)
 			)
 		).toBeOK();
 
-		await api.deleteSession(request, (await getSessionKey(page)) as string);
+		await api.deleteSession(request, (await getSessionKey(page))!);
 		await api.signUp(request, page);
 		await page.goto("/browse");
 		await expect(page.locator("ol")).not.toContainText(postTitle);
@@ -32,8 +36,12 @@ test.describe("Access", () => {
 		await expect(
 			await api.createPost(
 				request,
-				(await getSessionKey(page)) as string,
-				new NodeCreationRequest(undefined, postTitle, postBody)
+				(await getSessionKey(page))!,
+				new PostCreationRequest(
+					new NodeCreationRequest(postTitle, postBody),
+					{},
+					{users: [(await api.getUserData(request, page)).data!.id]}
+				)
 			)
 		).toBeOK();
 		await page.goto("/browse");

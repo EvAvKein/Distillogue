@@ -11,14 +11,14 @@
 
 <script setup lang="ts">
 	import {ref, provide} from "vue";
-	import {Node} from "../../../../../shared/objects/post";
+	import {Post, Node} from "../../../../../shared/objects/post";
 	import modalWrapper from "../../modalWrapper.vue";
 	import createReply from "../create/createNode.vue";
 
 	import simpleLayout from "./simple/postContainer.vue";
 
 	const props = defineProps<{
-		postObject: Node;
+		postObject: Post;
 	}>();
 
 	type layout = "simple";

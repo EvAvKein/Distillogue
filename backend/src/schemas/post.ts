@@ -20,11 +20,28 @@ const NodeStats: ZodSchema<classes.NodeStats> = z.object({
 		.optional(),
 });
 
+const PostAccess: ZodSchema<classes.PostAccess> = z.discriminatedUnion("public", [
+	z.object({
+		public: z.undefined(),
+		users: userIdArray,
+		moderators: userIdArray.optional(),
+	}),
+	z.object({
+		public: z.literal(true),
+		moderators: userIdArray.optional(),
+	}),
+]);
+
+const PostStats: ZodSchema<classes.PostStats> = z.object({
+	posted: z.number().int(),
+	interacted: z.number().int().nullish(),
+});
+
 const nodeTitle = z.string().min(nodeVals.title.min).max(nodeVals.title.max);
 const nodeBody = z.string().min(nodeVals.body.min).max(nodeVals.body.max);
 
 const Node: ZodSchema<classes.Node> = z.object({
-	ownerIds: userIdArray,
+	ownerId: UserData.shape.id,
 	id: z.string(),
 	title: nodeTitle,
 	body: nodeBody,
@@ -39,4 +56,11 @@ const Node: ZodSchema<classes.Node> = z.object({
 	),
 });
 
-export {NodeStats, nodeTitle, nodeBody, Node};
+const Post: ZodSchema<classes.Post> = z.object({
+	thread: Node,
+	config: shared.PostConfig,
+	access: PostAccess,
+	stats: PostStats,
+});
+
+export {PostAccess, NodeStats, nodeTitle, nodeBody, Node, Post};

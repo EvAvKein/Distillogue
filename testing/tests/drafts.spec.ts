@@ -1,8 +1,8 @@
 import {test, expect, type Page} from "@playwright/test";
 import * as api from "../helpers/requestsByApi.js";
 import {randomNodeTitle, randomNodeBody} from "../helpers/randomAlphanumString.js";
-import {FetchResponse, NodeCreationRequest} from "../../shared/objects/api.js";
-import {Node} from "../../shared/objects/post.js";
+import {FetchResponse, NodeCreationRequest, PostCreationRequest} from "../../shared/objects/api.js";
+import {Post} from "../../shared/objects/post.js";
 import {user} from "../../shared/objects/validationUnits.js";
 
 const titlePlaceholder = "[No Title]";
@@ -324,12 +324,19 @@ test.describe("Drafts manipulation in posting page", async () => {
 
 test.describe("Drafts manipulation in reply modal", async () => {
 	test.beforeEach(async ({page, request}) => {
-		const {sessionKey} = await api.signUp(request, page);
+		const {
+			sessionKey,
+			data: {id},
+		} = await api.signUp(request, page);
 
-		const responseBody: FetchResponse<Node> = await (
-			await api.createPost(request, sessionKey, new NodeCreationRequest(undefined, randomNodeTitle(), randomNodeBody()))
+		const responseBody: FetchResponse<Post> = await (
+			await api.createPost(
+				request,
+				sessionKey,
+				new PostCreationRequest(new NodeCreationRequest(randomNodeTitle(), randomNodeBody()), {}, {users: [id]})
+			)
 		).json();
-		await page.goto("/post/" + responseBody.data!.id);
+		await page.goto("/post/" + responseBody.data!.thread.id);
 
 		await page.locator(".replyButton").click();
 	});

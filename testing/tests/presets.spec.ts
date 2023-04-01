@@ -2,7 +2,7 @@ import {test, expect, type Page} from "@playwright/test";
 import * as api from "../helpers/requestsByApi.js";
 import * as ui from "../helpers/requestsByUi.js";
 import {user} from "../../shared/objects/validationUnits.js";
-import {Node} from "../../shared/objects/post.js";
+import {Post} from "../../shared/objects/post.js";
 import {FetchResponse} from "../../shared/objects/api.js";
 import {randomAlphanumString, randomNodeBody, randomNodeTitle} from "../helpers/randomAlphanumString.js";
 
@@ -271,7 +271,7 @@ test.describe("Presets in posting page", () => {
 		await page.locator(postingPage.submitPostButton).click();
 		const postCreated = await postRequest;
 
-		const postStats = ((await postCreated.json()) as FetchResponse<Node>).data!.stats;
+		const postStats = ((await postCreated.json()) as FetchResponse<Post>).data!.thread.stats;
 
 		expect(postStats.votes).toEqual({up: [], down: []});
 	});
@@ -330,8 +330,8 @@ test.describe("Presets across dashboard and posting page", () => {
 		});
 		const postCreated = await postCreationRequest;
 
-		const postStats = ((await postCreated.json()) as FetchResponse<Node>).data!.stats;
+		const post = (await postCreated.json()) as FetchResponse<Post>;
 
-		expect(postStats.votes).toEqual({down: []});
+		expect(post.data!.thread.stats.votes).toEqual({down: []});
 	});
 });

@@ -7,12 +7,12 @@ import {userBySession} from "../helpers/reqHeaders.js";
 import {mongoFilterPostsByAccess} from "../helpers/mongo/mongoFilterPostsByAccess.js";
 import {updateDeepProperty} from "../helpers/updateDeepProperty.js";
 import {recursivelyModifyNode} from "../helpers/recursivelyModifyNode.js";
-import {Node, PostSummary} from "../../../shared/objects/post.js";
+import {Post, Node, PostSummary} from "../../../shared/objects/post.js";
 import {User, UserData} from "../../../shared/objects/user.js";
 import {fromZodError} from "zod-validation-error";
 import {FetchResponse} from "../../../shared/objects/api.js";
 
-export default function (app: Express, postsDb: Collection<Node>, usersDb: Collection<User>) {
+export default function (app: Express, postsDb: Collection<Post>, usersDb: Collection<User>) {
 	app.get("/api/posts:search?", async (request, response) => {
 		const searchString = request.query.search || "";
 
@@ -24,16 +24,16 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 		const regexFilter = new RegExp(sanitizeForRegex(searchString), "i");
 		const user = await userBySession(request);
 
-		const topNodesOfPosts = await postsDb
-			.find<Omit<Node, "replies">>(
-				mongoFilterPostsByAccess(user?.data.id, {$or: [{title: regexFilter}, {body: regexFilter}]}),
+		const posts = await postsDb
+			.find(
+				mongoFilterPostsByAccess(user?.data.id, {$or: [{"thread.title": regexFilter}, {"thread.body": regexFilter}]}),
 				{projection: {replies: false}}
 			)
 			.sort({"stats.posted": -1})
 			.toArray();
 
-		const postSummaries = topNodesOfPosts.map((post) => {
-			return new PostSummary({...post, replies: []});
+		const postSummaries = posts.map((post) => {
+			return new PostSummary(post);
 		});
 
 		response.status(200).json(new FetchResponse(postSummaries));
@@ -43,7 +43,7 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 		const postId = request.params.id as Node["id"];
 		const user = await userBySession(request);
 
-		const dbResponse = await postsDb.findOne<Node | null>(mongoFilterPostsByAccess(user?.data.id, {id: postId}));
+		const dbResponse = await postsDb.findOne(mongoFilterPostsByAccess(user?.data.id, {"thread.id": postId}));
 		if (!dbResponse) {
 			response.status(404).json(
 				new FetchResponse(null, {
@@ -63,7 +63,7 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 			});
 
 			enabledVoteTypes.forEach((voteTypeName) => {
-				post = recursivelyModifyNode(post, (node) => {
+				post.thread = recursivelyModifyNode(post.thread, (node) => {
 					updateDeepProperty(node, "stats.votes." + voteTypeName, (votesArray: UserData["id"][]) => {
 						return votesArray.map((vote) => {
 							return vote === user?.data.id ? user.data.id : "redacted";
@@ -78,7 +78,7 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 	});
 
 	app.post("/api/posts", async (request, response) => {
-		const validation = apiSchemas.NodeCreationRequest.safeParse(request.body);
+		const validation = apiSchemas.PostCreationRequest.safeParse(request.body);
 		if (!validation.success) {
 			response.status(400).json(new FetchResponse(null, {message: fromZodError(validation.error).message}));
 			return;
@@ -92,12 +92,13 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 			return;
 		}
 
-		const newPost = new Node(user.data.id, postRequest);
+		const newPost = new Post(new Node(user.data.id, postRequest.rootNode, postRequest.config), postRequest.config, {
+			users: [user.data.id],
+		});
 		const dbResponse = await mongoInsertIfDoesntExist(postsDb, newPost, {
-			ownerIds: [user.data.id].concat(postRequest.invitedOwnerIds || []),
-			title: postRequest.title,
-			body: postRequest.body,
+			thread: {title: postRequest.rootNode.title, body: postRequest.rootNode.body},
 			config: postRequest.config,
+			access: postRequest.access,
 		});
 
 		if (dbResponse.matchedCount) {
@@ -105,8 +106,10 @@ export default function (app: Express, postsDb: Collection<Node>, usersDb: Colle
 			return;
 		}
 
-		if (typeof postRequest.deletedDraftIndex === "number") {
-			const newDraftsState = user.data.drafts.filter((draft, index) => index !== postRequest.deletedDraftIndex);
+		if (typeof postRequest.rootNode.deletedDraftIndex === "number") {
+			const newDraftsState = user.data.drafts.filter(
+				(draft, index) => index !== postRequest.rootNode.deletedDraftIndex
+			);
 
 			usersDb.updateOne({"data.id": user.data.id}, {$set: {"data.drafts": newDraftsState}});
 		}

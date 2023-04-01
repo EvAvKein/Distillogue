@@ -1,7 +1,7 @@
 import {type APIRequestContext, type Page, expect} from "@playwright/test";
 import {randomUsername} from "./randomAlphanumString.js";
 import {getSessionKey, setSessionKey} from "./sessionKey.js";
-import {FetchResponse, NodeCreationRequest} from "../../shared/objects/api.js";
+import {FetchResponse, PostCreationRequest} from "../../shared/objects/api.js";
 import {UserData, UserPayload} from "../../shared/objects/user.js";
 type Request = APIRequestContext;
 
@@ -51,7 +51,7 @@ async function signUp(request: Request, page: Page) {
 	return data;
 }
 
-async function createPost(request: Request, authKey: string, postRequest: NodeCreationRequest) {
+async function createPost(request: Request, authKey: string, postRequest: PostCreationRequest) {
 	return request.post("/api/posts", {
 		headers: {authorization: "Bearer " + authKey},
 		data: postRequest,

@@ -95,8 +95,13 @@
 	import {ref, computed, ComputedRef, onMounted, onUnmounted} from "vue";
 	import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
 	import {UserData} from "../../../../../shared/objects/user";
-	import {Node, PostConfig} from "../../../../../shared/objects/post";
-	import {NodeCreationRequest, NodeInteractionRequest, UserPatchRequest} from "../../../../../shared/objects/api";
+	import {Node, Post, PostConfig} from "../../../../../shared/objects/post";
+	import {
+		NodeCreationRequest,
+		NodeInteractionRequest,
+		PostCreationRequest,
+		UserPatchRequest,
+	} from "../../../../../shared/objects/api";
 	import {unix} from "../../../../../shared/helpers/timestamps";
 	import {apiFetch} from "../../../helpers/apiFetch";
 	import {user as userCaps} from "../../../../../shared/objects/validationUnits";
@@ -120,7 +125,6 @@
 	const notifDesirability = ref<boolean>(true);
 
 	const postConfig = ref<PostConfig | undefined>(props.reply ? undefined : {});
-	const postInvitedOwners = ref<UserData["id"][] | undefined>(props.reply ? undefined : []);
 
 	const defaultPresets: UserData["presets"] = [
 		{
@@ -225,14 +229,7 @@
 						new NodeInteractionRequest(
 							props.reply!.nodePath!,
 							"reply",
-							new NodeCreationRequest(
-								[user.data!.id],
-								nodeTitle.value,
-								nodeBody.value,
-								currentDraftIndex.value ?? undefined,
-								undefined,
-								props.reply!.nodePath!
-							)
+							new NodeCreationRequest(nodeTitle.value, nodeBody.value, currentDraftIndex.value ?? undefined)
 						)
 					);
 			  }
@@ -240,12 +237,10 @@
 					return apiFetch(
 						"POST",
 						"/posts",
-						new NodeCreationRequest(
-							postInvitedOwners!.value,
-							nodeTitle.value,
-							nodeBody.value,
-							currentDraftIndex.value ?? undefined,
-							postConfig!.value
+						new PostCreationRequest(
+							new NodeCreationRequest(nodeTitle.value, nodeBody.value, currentDraftIndex.value ?? undefined),
+							postConfig.value!,
+							{users: [user.data!.id], ...postConfig.value!.access}
 						)
 					);
 			  };
@@ -266,7 +261,7 @@
 
 		props.reply
 			? router.go(0)
-			: router.push(router.currentRoute.value.fullPath.replace("create", (response.data as Node).id));
+			: router.push(router.currentRoute.value.fullPath.replace("create", (response.data as Post).thread.id));
 	}
 </script>
 

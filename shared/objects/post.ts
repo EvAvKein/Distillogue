@@ -38,48 +38,73 @@ class NodeStats {
 }
 
 class Node extends NodeCreationRequest {
-	ownerIds: UserData["id"][];
+	ownerId: UserData["id"];
 	id: string;
+	stats: NodeStats;
 	replies: Node[];
-	stats: NodeStats;
 	locked?: true;
-	past?: {title: Node["title"]; body: Node["body"]}[];
+	past: {title: Node["title"]; body: Node["body"]}[];
 
-	constructor(ownerId: UserData["id"], request: NodeCreationRequest) {
-		super(undefined, request.title, request.body, undefined, request.config);
-		this.ownerIds = [ownerId].concat(request.invitedOwnerIds || []);
+	constructor(ownerId: UserData["id"], request: NodeCreationRequest, postConfig: PostConfig) {
+		super(request.title, request.body, undefined);
+		this.ownerId = ownerId;
 		this.id = newId();
+		this.stats = new NodeStats(postConfig);
 		this.replies = [];
-		this.stats = new NodeStats(request.config || {});
-		request.config ? (this.config = request.config) : delete this.config;
 		delete this.locked;
-		delete this.past;
+		this.past = [];
 	}
 }
 
-class NodeSummary {
+interface PostAccess_Public {
+	public: true;
+	moderators?: UserData["id"][];
+}
+interface PostAccess_Private {
+	users: UserData["id"][];
+	moderators?: UserData["id"][];
+}
+type PostAccess = PostAccess_Public | PostAccess_Private;
+
+class PostStats {
+	posted: number;
+	interacted?: number | null;
+
+	constructor(config: PostConfig) {
+		this.posted = unixStamp();
+		config.timestamps?.interacted ? (this.interacted = null) : delete this.interacted;
+	}
+}
+
+class Post {
+	/* using ID of root node */
+	thread: Node;
+	config: PostConfig;
+	access: PostAccess;
+	stats: PostStats;
+
+	constructor(thread: Post["thread"], config: Post["config"], access: Post["access"]) {
+		this.thread = thread;
+		this.config = config;
+		this.access = access;
+		this.stats = new PostStats(config);
+	}
+}
+
+class PostSummary {
 	id: Node["id"];
-	ownerIds: Node["ownerIds"];
 	title: Node["title"];
-	locked: Node["locked"];
-	stats: NodeStats;
+	config: Post["config"];
+	access: Post["access"];
+	stats: Post["stats"];
 
-	constructor(node: Node) {
-		this.id = node.id;
-		this.ownerIds = node.ownerIds;
-		this.title = node.title;
-		this.locked = node.locked;
-		this.stats = node.stats;
+	constructor(post: Post) {
+		this.id = post.thread.id;
+		this.title = post.thread.title;
+		this.config = post.config;
+		this.access = post.access;
+		this.stats = post.stats;
 	}
 }
 
-class PostSummary extends NodeSummary {
-	access: PostConfig["access"];
-
-	constructor(post: Node) {
-		super(post);
-		post.config?.access ? (this.access = post.config?.access) : delete this.access;
-	}
-}
-
-export {PostConfig, NodeStats, Node, NodeSummary, PostSummary};
+export {PostConfig, NodeStats, Node, PostAccess, PostStats, Post, PostSummary};

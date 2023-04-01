@@ -3,13 +3,11 @@
 		<router-link :to="{name: 'viewPost', params: {postId: summary.id}}">
 			<section class="topSection">
 				<h4>{{ summary.title }}</h4>
-				<img v-if="summary.access?.public" src="../../../assets/megaphone.svg" alt="Megaphone icon" />
+				<img v-if="'public' in summary.access" src="../../../assets/megaphone.svg" alt="Megaphone icon" />
 			</section>
 			<section class="timestamps">
-				<div>Posted: <timestamp :pastUnix="summary.stats.timestamps.posted" /></div>
-				<div v-if="summary.stats.timestamps.interacted">
-					Interacted: <timestamp :pastUnix="summary.stats.timestamps.interacted" />
-				</div>
+				<div>Posted: <timestamp :pastUnix="summary.stats.posted" /></div>
+				<div v-if="summary.stats.interacted">Interacted: <timestamp :pastUnix="summary.stats.interacted" /></div>
 			</section>
 		</router-link>
 	</article>

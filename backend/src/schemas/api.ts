@@ -2,7 +2,7 @@ import {z, ZodSchema} from "zod";
 import * as classes from "../../../shared/objects/api.js";
 import {UserData} from "./user.js";
 import {PostConfig} from "./_shared.js";
-import {nodeBody, nodeTitle} from "./post.js";
+import {nodeBody, nodeTitle, PostAccess} from "./post.js";
 import {editableUserData} from "../../../shared/objects/user.js";
 import {user} from "../../../shared/objects/validationUnits.js";
 
@@ -34,6 +34,12 @@ const NodeCreationRequest: ZodSchema<classes.NodeCreationRequest> = z.object({
 	nodePath: nodePath.optional(),
 });
 
+const PostCreationRequest:ZodSchema<classes.PostCreationRequest> = z.object({
+	rootNode: NodeCreationRequest,
+	config: PostConfig,
+	access: PostAccess
+});
+
 const NodeInteractionRequest: ZodSchema<classes.NodeInteractionRequest> = z.intersection(
 	z
 		.object({
@@ -52,4 +58,4 @@ const NodeInteractionRequest: ZodSchema<classes.NodeInteractionRequest> = z.inte
 	])
 );
 
-export {UserCreationRequest, UserPatchRequest, UserPatchRequestArray, NodeCreationRequest, NodeInteractionRequest};
+export {UserCreationRequest, UserPatchRequest, UserPatchRequestArray, NodeCreationRequest, PostCreationRequest, NodeInteractionRequest};
