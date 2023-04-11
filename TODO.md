@@ -8,29 +8,31 @@
 
 - ### Flagship/core features:
   - More config options:
-    - Polls
-    - Feedback tags (critical & supplemental, default & custom, feedback rejection)
+    - Node editing & history
+    - Poll posts
+    - Reply title (always/optional/none)
+    - Min/max character count
+    - Feedback tags (critical & supplemental, default & custom)
     - Contributions (unrestricted & authorized by author)
     - Moderation:
       - Paradigms (e.g democracy via existing configs, moderators appointed by post-creator)
       - Functionalities (e.g censoring with explanation, node/branch locking, Perspective API public/mod-only flagging)
     - Others (ideas welcome)
+  - More scalable config & access layouts in post-creation
   - User & user-to-user functionalities (latter added very cautiously)
 - ### Regulation:
   - Platform moderation
-- ### Resources & Transparency:
-  - A 'why'/core-principles/core-values/project-philosophy page
 - ### Ease of Contributing:
   - Dockerized dev setup (see https://github.com/EvAvKein/Distillogue/issues/1)
 - ### Tests:
-  - Write test for site navigation (URL & UI)
+  - Test post creation and list
 
 <hr>
 
 ## Release-worthy
 
 - ### All of the above
-- ### Basic features:
+- ### Basic/core features:
   - Config tooltips/info-buttons
   - Session-management dashboard page
 - ### Security:
@@ -47,6 +49,7 @@
   - Proper introduction/advertising page
   - Proper about page
   - Footer
+  - Project values/principles/philosophy page
   - Contact page (e.g feedback/contact form)
   - Versioned API
   - Display all aggregate data collected (e.g monthly active users, configs by popularity)
@@ -57,7 +60,7 @@
 - ### Optimization:
   - Client-side input validation
   - Remove zod-validation-error dependency & improve API validation errors' readability (either via custom messages on each validation or through some custom message construction)
-  - Serve posts page as root (for UX)
+  - Serve posts page as root
   - Resolve TODO situations noted in various code comments
 
 <hr>
@@ -66,8 +69,8 @@
 
 - ### All of the above
 - ### Features:
+  - Groups
   - PWA support & mobile app distribution
-  - Identities system
   - More configs
   - More layouts:
     - Mindmap (using D3)
