@@ -27,12 +27,12 @@
 		--backgroundSubColor: #042b43;
 		--filterToBackgroundSubColor: invert(13%) sepia(71%) saturate(783%) hue-rotate(165deg) brightness(92%)
 			contrast(101%);
-		--highlightColor: #ecb365;
-		--filterToHighlightColor: brightness(0) saturate(100%) invert(90%) sepia(71%) saturate(5554%) hue-rotate(308deg)
-			brightness(95%) contrast(94%);
-		--highlightSubColor: #c29454;
-		--filterToHighlightSubColor: brightness(0) saturate(100%) invert(65%) sepia(16%) saturate(1265%) hue-rotate(355deg)
-			brightness(92%) contrast(85%);
+		--highlightColor: #f5cb32;
+		--filterToHighlightColor: brightness(0) saturate(100%) invert(91%) sepia(83%) saturate(7499%) hue-rotate(325deg)
+			brightness(101%) contrast(98%);
+		--highlightSubColor: #d8b434;
+		--filterToHighlightSubColor: brightness(0) saturate(100%) invert(62%) sepia(76%) saturate(412%) hue-rotate(9deg)
+			brightness(102%) contrast(84%);
 	}
 
 	/* .lightMode {
