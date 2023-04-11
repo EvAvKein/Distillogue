@@ -95,15 +95,15 @@
 	}
 
 	#logoLink {
-		height: 2.75em;
-	} /* without explictly declaring this, the button is annoying higher (not taller) than its box-shadow (at least on chrome 99) */
+		height: 2.75em; /* without explictly declaring this, the button is annoyingly higher (not taller) than its box-shadow (at least on chrome 99) */
+		border-radius: 10em;
+	}
 	#logoLink img {
 		height: 2.75em;
 	}
 	#logoLink:focus,
 	#logoLink:hover {
 		outline: none;
-		border-radius: 10em;
 		box-shadow: 0em 0em 0.35em 0.35em var(--highlightSubColor);
 	}
 	#logoLink:active {
