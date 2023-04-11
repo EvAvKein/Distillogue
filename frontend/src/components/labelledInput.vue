@@ -96,7 +96,4 @@
 		transform: translateY(-1.2em);
 		transition: transform 150ms;
 	}
-	.notification {
-		font-size: 0.65em;
-	}
 </style>
