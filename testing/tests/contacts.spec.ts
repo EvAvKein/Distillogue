@@ -6,7 +6,7 @@ const dashboard = {
 	nameInput: "#newContactName",
 	idInput: "#newContactId",
 	creationButton: "#newContactButton",
-	selectionButtons: "li section button",
+	selectionButtons: "li section > button",
 	deletionButton: ".deleteContactButton",
 } as const;
 

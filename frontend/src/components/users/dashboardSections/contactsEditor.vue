@@ -9,17 +9,19 @@
 		<ul>
 			<transition-group name="collapse">
 				<li v-for="(contact, index) of user.data!.contacts">
-					<animatedCollapsible :ariaName="'contact'">
+					<animatedCollapsible>
 						<template #summary>
 							{{ contact.name }}
 						</template>
 						<template #content>
-							<div>{{ contact.id }}</div>
+							<div>
+								{{ contact.id }}
+								<button class="deleteContactButton core_contentButton" @click="() => deleteContact(index)">
+									<img src="../../../assets/trash.svg" alt="Trash icon" />
+								</button>
+							</div>
 						</template>
 					</animatedCollapsible>
-					<button class="deleteContactButton core_contentButton" @click="() => deleteContact(index)">
-						<img src="../../../assets/trash.svg" alt="Trash icon" />
-					</button>
 				</li>
 			</transition-group>
 		</ul>
@@ -83,27 +85,22 @@
 	}
 
 	li {
-		position: relative;
 		font-size: 1.25em;
 		padding-right: 1em;
 	}
 
-	.deleteContactButton {
-		display: none;
-		position: absolute;
-		height: 1em;
-		top: 0;
-		right: 0;
-	}
-
-	li:focus-within .deleteContactButton {
-		display: block;
-	}
-
 	li div {
+		position: relative;
 		font-size: 0.8em;
 		color: var(--textSubColor);
 		user-select: all;
+	}
+
+	.deleteContactButton {
+		position: absolute;
+		height: 1.1em;
+		bottom: 0;
+		right: 0;
 	}
 
 	li + li {
