@@ -27,7 +27,7 @@ export default function (app: Express, postsDb: Collection<Post>, usersDb: Colle
 		const posts = await postsDb
 			.find(
 				mongoFilterPostsByAccess(user?.data.id, {$or: [{"thread.title": regexFilter}, {"thread.body": regexFilter}]}),
-				{projection: {replies: false}}
+				{projection: {["thread.replies"]: false}}
 			)
 			.sort({"stats.posted": -1})
 			.toArray();
