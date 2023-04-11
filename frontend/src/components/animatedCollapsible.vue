@@ -1,6 +1,5 @@
 <template>
-	<section :aria-label="open ? `Opened ${ariaName}` : `Closed ${ariaName}`" :data-collapsible="open">
-		<!-- here for ease of testing, and as a substitute for the equivalent <details> attribute -->
+	<section :aria-expanded="open">
 		<button class="core_contentButton" type="button" @click="open = !open">
 			<slot name="summary"></slot>
 		</button>
@@ -14,7 +13,6 @@
 	import {ref} from "vue";
 
 	const props = defineProps<{
-		ariaName: string;
 		openByDefault?: true;
 	}>();
 

@@ -1,5 +1,5 @@
 <template>
-	<customDetails :ariaName="'config category'" :openByDefault="openByDefault" class="configCategory">
+	<customDetails :openByDefault="openByDefault" class="configCategory">
 		<template v-slot:summary>
 			<span>{{ title }}</span>
 		</template>
