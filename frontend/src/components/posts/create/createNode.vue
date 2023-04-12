@@ -1,45 +1,6 @@
 <template>
 	<form v-if="user.data" @submit.prevent :class="reply ? 'reply' : 'post'">
-		<section id="texts">
-			<section v-if="user.data.drafts" id="drafts">
-				<TransitionGroup name="collapse">
-					<button
-						v-for="(draft, index) in user.data.drafts"
-						:key="draft.title + index"
-						type="button"
-						class="core_backgroundButton draftButton"
-						@click="selectDraft(index)"
-					>
-						{{ draft.title || "[No Title]" }}
-					</button>
-					<button
-						v-if="typeof currentDraftIndex === 'number'"
-						id="preserveDraftButton"
-						type="button"
-						class="core_borderButton"
-						@click="selectDraft(null)"
-					>
-						Preserve draft {{ currentDraftIndex + 1 }}
-					</button>
-				</TransitionGroup>
-			</section>
-			<labelledInput
-				id="title"
-				:label="'Title'"
-				:type="'text'"
-				:required="true"
-				:inputId="'nodeTitle'"
-				v-model="nodeTitle"
-			/>
-			<labelledInput
-				:label="'Body'"
-				:type="'textarea'"
-				:minLineHeight="15"
-				:required="true"
-				:inputId="'nodeBody'"
-				v-model="nodeBody"
-			/>
-		</section>
+		<editNode v-model:data="nodeData" id="texts" @error="displayError" />
 
 		<section v-if="!reply" id="configDrawer" :class="configDrawerOpen ? 'open' : ''">
 			<button id="drawerToggler" type="button" @click="() => (configDrawerOpen = !configDrawerOpen)">
@@ -77,15 +38,12 @@
 		</section>
 
 		<section id="confirmation">
-			<div>
-				<button id="saveDraft" type="button" class="core_borderButton" :inert="draftsAtCapacity" @click="saveDraft">
-					{{ draftsAtCapacity ? "Drafts at capacity" : "Save draft" }}
-				</button>
-				<button id="submitButton" type="button" class="core_backgroundButton" @click="submitNode">
-					{{ reply ? "Reply" : "Post" }}
-					{{ typeof currentDraftIndex === "number" ? ` (& delete draft ${currentDraftIndex + 1})` : "" }}
-				</button>
-			</div>
+			<button id="submitButton" type="button" class="core_backgroundButton" @click="submitNode">
+				{{ reply ? "Reply" : "Post" }}
+				{{
+					typeof nodeData.deletedDraftIndex === "number" ? ` (& delete draft ${nodeData.deletedDraftIndex + 1})` : ""
+				}}
+			</button>
 			<notification v-model:text="notifText" :desirablityStyle="notifDesirability" />
 		</section>
 	</form>
@@ -97,17 +55,17 @@
 	import {UserData} from "../../../../../shared/objects/user";
 	import {Node, Post, PostConfig} from "../../../../../shared/objects/post";
 	import {
+		FetchResponse,
 		NodeCreationRequest,
 		NodeInteractionRequest,
 		PostCreationRequest,
 		UserPatchRequest,
 	} from "../../../../../shared/objects/api";
-	import {unix} from "../../../../../shared/helpers/timestamps";
 	import {apiFetch} from "../../../helpers/apiFetch";
 	import {user as userCaps} from "../../../../../shared/objects/validationUnits";
 	import {useUser} from "../../../stores/user";
 	import {useRouter} from "vue-router";
-	import labelledInput from "../../labelledInput.vue";
+	import editNode from "./editNode.vue";
 	import editConfig from "./config/editConfig.vue";
 	import notification from "../../notification.vue";
 	const user = useUser();
@@ -117,14 +75,19 @@
 		reply?: {nodePath: Node["id"][] | null};
 	}>();
 
-	const nodeTitle = ref<Node["title"]>("");
-	const nodeBody = ref<Node["body"]>("");
-	const currentDraftIndex = ref<number | null>(null);
+	const nodeData = ref<NodeCreationRequest>({
+		title: "",
+		body: "",
+		deletedDraftIndex: undefined,
+	});
+	const postConfig = ref<PostConfig | undefined>(props.reply ? undefined : {});
 
 	const notifText = ref<string>("");
 	const notifDesirability = ref<boolean>(true);
-
-	const postConfig = ref<PostConfig | undefined>(props.reply ? undefined : {});
+	function displayError(error: NonNullable<FetchResponse["error"]>) {
+		notifText.value = error.message;
+		notifDesirability.value = false;
+	}
 
 	const defaultPresets: UserData["presets"] = [
 		{
@@ -185,39 +148,6 @@
 		});
 	}
 
-	function selectDraft(index: number | null) {
-		currentDraftIndex.value = index;
-		if (index === null) {
-			currentDraftIndex.value = null;
-			return;
-		}
-
-		const {title, body} = deepCloneFromReactive(user.data!.drafts[index]);
-		nodeTitle.value = title;
-		nodeBody.value = body;
-		currentDraftIndex.value = index;
-	}
-
-	const draftsAtCapacity = computed(() => user.data!.drafts.length >= userCaps.drafts.max);
-	async function saveDraft() {
-		if (draftsAtCapacity.value) return;
-
-		const newDraftsState = [
-			...deepCloneFromReactive(user.data!.drafts),
-			{title: nodeTitle.value, body: nodeBody.value, lastEdited: unix()},
-		];
-
-		const response = await apiFetch("PATCH", "/users", [new UserPatchRequest("drafts", newDraftsState)]);
-
-		if (response.error) {
-			notifText.value = response.error.message;
-			notifDesirability.value = false;
-			return;
-		}
-
-		user.data!.drafts = newDraftsState;
-	}
-
 	async function submitNode() {
 		notifText.value = "";
 
@@ -229,7 +159,7 @@
 						new NodeInteractionRequest(
 							props.reply!.nodePath!,
 							"reply",
-							new NodeCreationRequest(nodeTitle.value, nodeBody.value, currentDraftIndex.value ?? undefined)
+							new NodeCreationRequest(nodeData.value.title, nodeData.value.body, nodeData.value.deletedDraftIndex)
 						)
 					);
 			  }
@@ -238,7 +168,7 @@
 						"POST",
 						"/posts",
 						new PostCreationRequest(
-							new NodeCreationRequest(nodeTitle.value, nodeBody.value, currentDraftIndex.value ?? undefined),
+							new NodeCreationRequest(nodeData.value.title, nodeData.value.body, nodeData.value.deletedDraftIndex),
 							postConfig.value!,
 							{users: [{name: user.data!.name, id: user.data!.id}], ...postConfig.value!.access}
 						)
@@ -252,9 +182,9 @@
 			return;
 		}
 
-		if (typeof currentDraftIndex.value === "number") {
+		if (typeof nodeData.value.deletedDraftIndex === "number") {
 			const newDraftsState = deepCloneFromReactive(user.data!.drafts).filter(
-				(draft, index) => index !== currentDraftIndex.value
+				(draft, index) => index !== nodeData.value.deletedDraftIndex
 			);
 			user.data!.drafts = newDraftsState;
 		}
@@ -289,33 +219,6 @@
 
 	#texts {
 		grid-area: texts;
-		font-size: clamp(1.25em, 2.25vw, 1.5em);
-	}
-
-	#drafts {
-		margin-bottom: 0.5em;
-	}
-
-	#drafts button {
-		width: 100%;
-		padding: 0.2em;
-		font-weight: bold;
-	}
-
-	#drafts #preserveDraftButton {
-		display: block;
-		width: 90%;
-		margin-inline: auto;
-		font-size: 0.9em;
-		font-weight: normal;
-	}
-
-	#drafts button + button {
-		margin-top: 0.25em;
-	}
-
-	#texts #title {
-		font-size: 1.15em;
 	}
 
 	/* CONFIG */
@@ -438,14 +341,8 @@
 		grid-area: confirmation;
 	}
 
-	#confirmation div {
-		display: flex;
-		flex-wrap: nowrap;
-		gap: 0.5em;
-	}
-
 	#submitButton {
-		flex-grow: 1;
+		width: 100%;
 	}
 
 	@media (min-width: 55rem) {
