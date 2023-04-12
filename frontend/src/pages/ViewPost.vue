@@ -10,7 +10,7 @@
 	import notification from "../components/notification.vue";
 	import {Post} from "../../../shared/objects/post";
 	import {apiFetch} from "../helpers/apiFetch";
-	import postContainer from "../components/posts/view/postContainer_core.vue";
+	import postContainer from "../components/posts/view/postContainerPicker.vue";
 
 	const props = defineProps<{
 		postId: string;
