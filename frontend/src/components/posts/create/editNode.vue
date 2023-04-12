@@ -118,8 +118,11 @@
 	#drafts div {
 		font-size: 0.8em;
 		display: flex;
-		margin-top: 0.5em;
 		gap: 0.5em;
+	}
+
+	#drafts button + div {
+		margin-top: 0.5em;
 	}
 
 	#drafts div #saveDraft {
