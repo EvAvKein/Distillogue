@@ -107,4 +107,4 @@ class PostSummary {
 	}
 }
 
-export {PostConfig, NodeStats, Node, PostAccess, PostStats, Post, PostSummary};
+export {PostConfig, NodeStats, NodeCreationRequest, Node, PostAccess, PostStats, Post, PostSummary};
