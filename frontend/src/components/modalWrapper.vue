@@ -1,7 +1,7 @@
 <template>
 	<Teleport :to="'body'">
 		<transition name="modal">
-			<div v-show="activeByTruthiness" id="backdrop" @mousedown="emitDeactivateIfClicked">
+			<div v-show="activeByTruthiness" aria-live="assertive" id="backdrop" @mousedown="emitDeactivateIfClicked">
 				<dialog open>
 					<slot></slot>
 				</dialog>
