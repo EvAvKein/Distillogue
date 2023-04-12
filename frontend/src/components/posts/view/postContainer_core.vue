@@ -1,7 +1,7 @@
 <template>
-	<modalWrapper :activeByTruthiness="replyData.nodePath" @deactivate="() => (replyData.nodePath = null)">
+	<modalWrapper :activeByTruthiness="replyPath.nodePath" @deactivate="() => (replyPath.nodePath = null)">
 		<div>
-			<createReply :reply="replyData" />
+			<createReply :reply="replyPath" />
 		</div>
 	</modalWrapper>
 
@@ -24,8 +24,8 @@
 	type layout = "simple";
 	const currentLayout = ref<layout>("simple");
 
-	const replyData = ref<{nodePath: Node["id"][] | null}>({nodePath: null});
-	provide("replyData", replyData);
+	const replyPath = ref<{nodePath: Node["id"][] | null}>({nodePath: null});
+	provide("replyPath", replyPath);
 </script>
 
 <style scoped>

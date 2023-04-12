@@ -17,7 +17,7 @@
 		locked?: true;
 	}>();
 	const emit = defineEmits(["interactionError", "replyToNode"]);
-	const replyData = inject("replyData") as Ref<{nodePath: Node["id"][] | null}>;
+	const replyPath = inject("replyPath") as Ref<{nodePath: Node["id"][] | null}>;
 
 	function reply() {
 		if (props.locked) {
@@ -30,7 +30,7 @@
 			return;
 		}
 
-		replyData.value.nodePath = props.interactionPath;
+		replyPath.value.nodePath = props.interactionPath;
 	}
 </script>
 
