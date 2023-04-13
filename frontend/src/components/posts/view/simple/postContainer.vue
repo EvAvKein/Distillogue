@@ -24,7 +24,7 @@
 	import {apiFetch} from "../../../../helpers/apiFetch";
 	import node from "./node.vue";
 	import modalWrapper from "../../../modalWrapper.vue";
-	import editNode from "../../create/editNode.vue";
+	import editNode from "../../edit/editNode.vue";
 	import notification from "../../../notification.vue";
 	import {useRouter} from "vue-router";
 	const router = useRouter();

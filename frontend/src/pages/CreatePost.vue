@@ -61,8 +61,8 @@
 	import {user as userCaps} from "../../../shared/objects/validationUnits";
 	import {useUser} from "../stores/user";
 	import {useRouter} from "vue-router";
-	import editNode from "../components/posts/create/editNode.vue";
-	import editConfig from "../components/posts/create/config/editConfig.vue";
+	import editNode from "../components/posts/edit/editNode.vue";
+	import editConfig from "../components/posts/edit/config/editConfig.vue";
 	import notification from "../components/notification.vue";
 	const user = useUser();
 	const router = useRouter();

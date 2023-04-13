@@ -54,7 +54,7 @@
 	import {debounce} from "../../../helpers/debounce";
 	import notification from "../../notification.vue";
 	import labelledInput from "../../labelledInput.vue";
-	import editCurrentConfig from "../../posts/create/config/editConfig.vue";
+	import editCurrentConfig from "../../posts/edit/config/editConfig.vue";
 	const user = useUser();
 
 	const maxPresets = userValidation.presets.max;
