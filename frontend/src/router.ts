@@ -7,15 +7,15 @@ import notFound from "./pages/NotFound.vue";
 import home from "./pages/Home.vue";
 import about from "./pages/About.vue";
 import terms from "./pages/Terms.vue";
-import join from "./pages/Join.vue";
-import browse from "./pages/Browse.vue";
-import createPost from "./pages/CreatePost.vue";
-import viewPost from "./pages/ViewPost.vue";
-import dashboard from "./pages/Dashboard.vue";
-import dashboard_profile from "./components/users/dashboardSections/profileEditor.vue";
-import dashboard_drafts from "./components/users/dashboardSections/draftsEditor.vue";
-import dashboard_presets from "./components/users/dashboardSections/presetsEditor.vue";
-import dashboard_contacts from "./components/users/dashboardSections/contactsEditor.vue";
+import join from "./pages/User/Join.vue";
+import browse from "./pages/Post/Browse.vue";
+import createPost from "./pages/Post/Create.vue";
+import viewPost from "./pages/Post/View.vue";
+import dashboard from "./pages/User/Dashboard.vue";
+import dashboard_profile from "./pages/User/dashboardSections/Profile.vue";
+import dashboard_drafts from "./pages/User/dashboardSections/Drafts.vue";
+import dashboard_presets from "./pages/User/dashboardSections/Presets.vue";
+import dashboard_contacts from "./pages/User/dashboardSections/Contacts.vue";
 
 const router = createRouter({
 	history: createWebHistory(process.env.BASE_URL),

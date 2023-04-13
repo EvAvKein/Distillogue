@@ -53,9 +53,9 @@
 	import {useUser} from "../../../stores/user";
 	import {UserPatchRequest} from "../../../../../shared/objects/api";
 	import {unix as unixStamp} from "../../../../../shared/helpers/timestamps";
-	import timestamp from "../../timestamp.vue";
-	import notification from "../../notification.vue";
-	import labelledInput from "../../labelledInput.vue";
+	import timestamp from "../../../components/timestamp.vue";
+	import notification from "../../../components/notification.vue";
+	import labelledInput from "../../../components/labelledInput.vue";
 	import {debounce} from "../../../helpers/debounce";
 	const user = useUser();
 

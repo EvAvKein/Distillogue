@@ -9,8 +9,8 @@
 	import {apiFetch} from "../../../helpers/apiFetch";
 	import {useUser} from "../../../stores/user";
 	import {UserPatchRequest} from "../../../../../shared/objects/api";
-	import labelledInput from "../../labelledInput.vue";
-	import notification from "../../notification.vue";
+	import labelledInput from "../../../components/labelledInput.vue";
+	import notification from "../../../components/notification.vue";
 	const user = useUser();
 
 	const nameState = ref(toRaw(user.data!.name));

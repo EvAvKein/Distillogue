@@ -52,9 +52,9 @@
 	import {UserPatchRequest} from "../../../../../shared/objects/api";
 	import {UserData} from "../../../../../shared/objects/user";
 	import {debounce} from "../../../helpers/debounce";
-	import notification from "../../notification.vue";
-	import labelledInput from "../../labelledInput.vue";
-	import editCurrentConfig from "../../posts/edit/config/editConfig.vue";
+	import notification from "../../../components/notification.vue";
+	import labelledInput from "../../../components/labelledInput.vue";
+	import editCurrentConfig from "../../../components/posts/edit/config/editConfig.vue";
 	const user = useUser();
 
 	const maxPresets = userValidation.presets.max;

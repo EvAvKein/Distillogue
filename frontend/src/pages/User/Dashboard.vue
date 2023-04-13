@@ -7,10 +7,10 @@
 				:inert="route.path.includes(page)"
 				class="core_contentButton"
 			>
-				<img v-if="page === 'profile'" src="../assets/userWithoutPfp.svg" alt="Non-descript person icon" />
-				<img v-else-if="page === 'drafts'" src="../assets/drafts.svg" alt="Paper tray icon" />
-				<img v-else-if="page === 'presets'" src="../assets/presets.svg" alt="Icon of stacked tabs with cogwheels" />
-				<img v-else-if="page === 'contacts'" src="../assets/contacts.svg" alt="Address book icon" />
+				<img v-if="page === 'profile'" src="../../assets/userWithoutPfp.svg" alt="Non-descript person icon" />
+				<img v-else-if="page === 'drafts'" src="../../assets/drafts.svg" alt="Paper tray icon" />
+				<img v-else-if="page === 'presets'" src="../../assets/presets.svg" alt="Icon of stacked tabs with cogwheels" />
+				<img v-else-if="page === 'contacts'" src="../../assets/contacts.svg" alt="Address book icon" />
 				<!-- v-ifs instead of dynamic values due to vite limitations with dynamic src -->
 				<span>{{ page }}</span>
 			</router-link>

@@ -15,8 +15,8 @@
 
 <script setup lang="ts">
 	import {ref} from "vue";
-	import signIn from "../components/users/signing/signIn.vue";
-	import signUp from "../components/users/signing/signUp.vue";
+	import signIn from "../../components/users/signing/signIn.vue";
+	import signUp from "../../components/users/signing/signUp.vue";
 
 	const signingMode = ref<"In" | "Up">("Up");
 </script>

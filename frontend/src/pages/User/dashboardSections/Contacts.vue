@@ -33,9 +33,9 @@
 	import {apiFetch} from "../../../helpers/apiFetch";
 	import {UserPatchRequest} from "../../../../../shared/objects/api";
 	import {useUser} from "../../../stores/user";
-	import animatedCollapsible from "../../animatedCollapsible.vue";
-	import labelledInput from "../../labelledInput.vue";
-	import notification from "../../notification.vue";
+	import animatedCollapsible from "../../../components/animatedCollapsible.vue";
+	import labelledInput from "../../../components/labelledInput.vue";
+	import notification from "../../../components/notification.vue";
 	const user = useUser();
 
 	const newContactName = ref("");

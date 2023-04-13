@@ -5,7 +5,7 @@
 
 			<section id="configDrawer" :class="configDrawerOpen ? 'open' : ''">
 				<button id="drawerToggler" type="button" @click="() => (configDrawerOpen = !configDrawerOpen)">
-					<img src="../assets/fileConfig.svg" alt="Icon of file with cogwheel" />
+					<img src="../../assets/fileConfig.svg" alt="Icon of file with cogwheel" />
 				</button>
 				<section id="config" :inert="configDrawerExists && !configDrawerOpen">
 					<TransitionGroup name="collapse">
@@ -18,10 +18,10 @@
 						>
 							<img
 								v-if="index < defaultPresets.length"
-								src="../assets/defaultConfig.svg"
+								src="../../assets/defaultConfig.svg"
 								alt="Icon of cogwheel inside a browser window"
 							/>
-							<img v-else src="../assets/customConfig.svg" alt="Icon of cogwheel beside a pencil" />
+							<img v-else src="../../assets/customConfig.svg" alt="Icon of cogwheel beside a pencil" />
 							<span>{{ preset.name || "[No Title, Edit in Dashboard]" }}</span>
 						</button>
 					</TransitionGroup>
@@ -53,17 +53,22 @@
 
 <script setup lang="ts">
 	import {ref, computed, onMounted, onUnmounted} from "vue";
-	import {deepCloneFromReactive} from "../helpers/deepCloneFromReactive";
-	import {UserData} from "../../../shared/objects/user";
-	import {Post, PostConfig} from "../../../shared/objects/post";
-	import {FetchResponse, NodeCreationRequest, PostCreationRequest, UserPatchRequest} from "../../../shared/objects/api";
-	import {apiFetch} from "../helpers/apiFetch";
-	import {user as userCaps} from "../../../shared/objects/validationUnits";
-	import {useUser} from "../stores/user";
+	import {deepCloneFromReactive} from "../../helpers/deepCloneFromReactive";
+	import {UserData} from "../../../../shared/objects/user";
+	import {Post, PostConfig} from "../../../../shared/objects/post";
+	import {
+		FetchResponse,
+		NodeCreationRequest,
+		PostCreationRequest,
+		UserPatchRequest,
+	} from "../../../../shared/objects/api";
+	import {apiFetch} from "../../helpers/apiFetch";
+	import {user as userCaps} from "../../../../shared/objects/validationUnits";
+	import {useUser} from "../../stores/user";
 	import {useRouter} from "vue-router";
-	import editNode from "../components/posts/edit/editNode.vue";
-	import editConfig from "../components/posts/edit/config/editConfig.vue";
-	import notification from "../components/notification.vue";
+	import editNode from "../../components/posts/edit/editNode.vue";
+	import editConfig from "../../components/posts/edit/config/editConfig.vue";
+	import notification from "../../components/notification.vue";
 	const user = useUser();
 	const router = useRouter();
 
