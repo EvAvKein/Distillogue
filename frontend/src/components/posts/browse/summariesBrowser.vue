@@ -5,9 +5,9 @@
 			:fetchAllOnMount="true"
 			@fetchedSummaries="(response:PostSummary[]) => {summariesArray = response}"
 		/>
-		<hr class="inbetweener" />
-		<summariesContainer v-if="summariesArray" :summariesArray="summariesArray" />
-		<hr />
+		<div>
+			<summariesContainer v-if="summariesArray && summariesArray.length" :summariesArray="summariesArray" />
+		</div>
 	</section>
 </template>
 
@@ -26,12 +26,12 @@
 		padding: 0.5em;
 	}
 
-	#summariesSearch {
-		font-size: 1.5em;
-		margin-bottom: 0.25em;
+	div {
+		padding-inline: 0.5em;
 	}
 
-	hr {
-		margin: 0;
+	#summariesSearch {
+		font-size: 1.5em;
+		border-bottom: 0.1em solid var(--textColor);
 	}
 </style>

@@ -19,13 +19,13 @@
 
 <style scoped>
 	#summariesList {
-		margin: 0 0.25em;
+		margin: 0;
 		padding: 0;
 		list-style: none;
 	}
 
 	#summariesList li + li {
-		border-top: 0.25em solid var(--textSubColor);
+		border-top: 0.15em solid var(--textColor);
 	}
 
 	.posts-enter-from,
