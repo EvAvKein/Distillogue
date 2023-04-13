@@ -6,7 +6,7 @@
 			@fetchedSummaries="(response:PostSummary[]) => {summariesArray = response}"
 		/>
 		<div>
-			<summariesContainer v-if="summariesArray && summariesArray.length" :summariesArray="summariesArray" />
+			<summariesContainer :summariesArray="summariesArray" />
 		</div>
 	</section>
 </template>
@@ -16,7 +16,7 @@
 	import {PostSummary} from "../../../../../shared/objects/post";
 	import summariesContainer from "./summariesContainer.vue";
 	import summariesSearch from "./summariesSearch.vue";
-	const summariesArray = ref<PostSummary[] | undefined>(undefined);
+	const summariesArray = ref<PostSummary[]>([]);
 </script>
 
 <style scoped>
