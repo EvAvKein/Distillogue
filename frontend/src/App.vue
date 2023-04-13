@@ -1,6 +1,5 @@
 <template>
 	<layout />
-	<noscriptWarn />
 	<router-view v-slot="{Component}">
 		<transition name="swap" mode="out-in">
 			<component :is="Component" />
@@ -9,7 +8,6 @@
 </template>
 
 <script setup lang="ts">
-	import noscriptWarn from "./components/noscript.vue";
 	import layout from "./components/layout.vue";
 </script>
 
