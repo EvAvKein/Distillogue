@@ -80,4 +80,4 @@
   - Look into applicable offline-first functionalities
 - ### Tech changes:
   - Node -> Deno: Better performance, compatibility with web code, and security. Became very compatible with Node setups
-  - Vue -> SvelteKit: Whether this happens would depend on _a lot_, we'll see
+  - Vue -> Nuxt/SvelteKit: This project's gimmick of feature configurability/selection (with layout selection in future) is prone to tons of conditionally-unused code, so code-splitting/SSR might seriously improve load times (I'd need to look into whether Nuxt/SvelteKit code-split based on such in-route/page conditionals). Nuxt/SvelteKit also have some neat DX benefits, but I _probably_ won't bother migrating just for those
