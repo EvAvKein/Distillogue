@@ -60,7 +60,6 @@
 - ### Optimization:
   - Client-side input validation
   - Remove zod-validation-error dependency & improve API validation errors' readability (either via custom messages on each validation or through some custom message construction)
-  - Serve posts page as root
   - Resolve TODO situations noted in various code comments
 
 <hr>
