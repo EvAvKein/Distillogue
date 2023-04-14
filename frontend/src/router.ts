@@ -24,6 +24,10 @@ const router = createRouter({
 			name: "home",
 			path: "/",
 			component: home,
+			beforeEnter(to, from, next) {
+				const user = useUser();
+				user.data ? next({name: "browse"}) : next();
+			},
 		},
 		{
 			name: "about",
