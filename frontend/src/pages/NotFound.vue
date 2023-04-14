@@ -1,7 +1,7 @@
 <template>
 	<main>
 		<h3>Page Not Found!</h3>
-		<router-link to="/">Return to Home page</router-link>
+		<router-link to="/" class="core_borderButton">Return to Home page</router-link>
 	</main>
 </template>
 
@@ -12,12 +12,8 @@
 		text-align: center;
 	}
 
-	a {
-		border: none;
-		color: var(--backgroundColor);
-		text-decoration: none;
-		background-color: var(--textColor);
-		padding: 0.3em;
-		border-radius: 0.2em;
+	h3 {
+		font-size: 3em;
+		margin-bottom: 0.25em;
 	}
 </style>
