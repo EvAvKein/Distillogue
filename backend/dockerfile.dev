@@ -19,4 +19,4 @@ COPY /backend /backend/
 # HOST
 EXPOSE 3000
 ENV DOCKERIZED=TRUE
-CMD ["npm", "run", "dockerTest"]
+CMD ["npm", "run", "buildAndServerDev"]
