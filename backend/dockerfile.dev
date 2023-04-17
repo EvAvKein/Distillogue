@@ -1,0 +1,22 @@
+FROM node:16-alpine as setup
+
+# INSTALL
+WORKDIR /shared
+COPY /shared/package*.json /shared/
+RUN npm install
+
+WORKDIR /backend
+COPY /backend/package*.json /backend/
+RUN npm install
+
+# BUILD
+WORKDIR /shared
+COPY /shared /shared/
+
+WORKDIR /backend
+COPY /backend /backend/
+
+# HOST
+EXPOSE 3000
+ENV DOCKERIZED=TRUE
+CMD ["npm", "run", "dockerTest"]
