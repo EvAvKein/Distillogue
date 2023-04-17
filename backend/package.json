@@ -6,6 +6,7 @@
 		"buildDev": "tsc --watch",
 		"server": "node dist/backend/src/server.js",
 		"serverDev": "nodemon dist/backend/src/server.js",
+		"dockerTest": "npm run buildDev & npm run serverDev",
 		"host": "npm run database && npm run server",
 		"hostDev": "npm run database && npm run serverDev",
 		"serve": "npm run build && npm run host",
