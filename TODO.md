@@ -22,8 +22,6 @@
   - User & user-to-user functionalities (latter added very cautiously)
 - ### Regulation:
   - Platform moderation
-- ### Ease of Contributing:
-  - Dockerized dev setup (see https://github.com/EvAvKein/Distillogue/issues/1)
 - ### Tests:
   - Test post creation and list
 
