@@ -5,7 +5,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./backend/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./backend/nginx/devAndCert.nginx.conf:/etc/nginx/nginx.conf
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - /tmp/acme_challenge:/tmp/acme_challenge
     networks:
