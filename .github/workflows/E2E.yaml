@@ -20,7 +20,7 @@ jobs:
         run: docker-compose up --detach
 
       - name: Launch tests
-        run: docker-compose -f docker-compose.tests.yaml --env-file ./testing/ci.env up --exit-code-from playwright
+        run: docker-compose -f compose.tests.yaml --env-file ./testing/ci.env up --exit-code-from playwright
 
       - uses: actions/upload-artifact@v3
         if: failure()
