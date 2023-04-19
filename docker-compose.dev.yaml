@@ -9,10 +9,10 @@ services:
       - serverToDb
     restart: unless-stopped
 
-  backend_dev:
+  backend:
     depends_on:
       - mongodb
-      - frontend_dev
+      - frontend
     build:
       context: ./
       dockerfile: ./backend/dockerfile.dev
@@ -26,7 +26,7 @@ services:
       - 3000:3000
     restart: unless-stopped
 
-  frontend_dev:
+  frontend:
     build:
       context: ./
       dockerfile: ./frontend/dockerfile.dev

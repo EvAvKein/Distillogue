@@ -58,8 +58,6 @@
 - ### Optimization:
   - Client-side input validation
   - Remove zod-validation-error dependency & improve API validation errors' readability (either via custom messages on each validation or through some custom message construction)
-  - Restructure docker-related (and possibly nginx) files for DRYness (possibly with a 'stable' build for tests. I've seen vague notions about how running tests on dev/reactive builds is bad because they're technically different than prod behavior, but I'd need to look into concrete/relevant/applicable examples).
-    For DX's sake I'd wanna keep file count and command length at a minimum, which seemingly means unified files with env conditionals rather than a base docker-compose with override files
   - Resolve TODO situations noted in various code comments
 
 <hr>

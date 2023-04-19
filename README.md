@@ -23,22 +23,27 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 - MongoDB [(Instructions for enabling "mongo" command on Windows 10)](https://stackoverflow.com/a/41507803)
 - Windows, for `start` in some of the `npm run` commands: If not using Windows, replace with your equivalent for execution in new/background terminal
 
-### Steps
+### Prerequisites
 
 1. Clone this project via Git/download
 
 #### With Docker
 
 2. Install & launch Docker
-3. Run `docker-compose -f docker-compose.dev.yaml up` (relaunch with `--build --force-recreate` flags after modifying files outside `src`/`shared`)
-4. Test by running `docker-compose -f docker-compose.tests.yaml up` (relaunch with above flags after test edits)
 
 #### With Node
 
-2. Install above software dependencies (excluding Docker of course)
+2. Install the above dependencies (excluding Docker of course)
 3. Run `npm run installAll`
-4. Run `npm run serveDev`
-5. Test by running `npm run playwright`
+
+### Commands
+
+| Outcome              | With Docker                                                                                               | With Node            |
+| -------------------- | --------------------------------------------------------------------------------------------------------- | -------------------- |
+| Serve (Build & Host) | `docker-compose up`                                                                                       | `npm run serve`      |
+| Serve Dev Mode       | `docker-compose -f docker-compose.dev.yaml up` <br> OR <br> `npm run dockerDev`                           | `npm run serveDev`   |
+| Launch Playwright    | `docker-compose -f docker-compose.tests.yaml up` <br> OR <br> `npm run dockerPlaywright`                  | `npm run playwright` |
+| Serve & Playwright   | `docker-compose -f docker-compose.yaml -f docker-compose.tests.yaml up` <br> OR <br> `npm run dockerTest` | `npm run test`       |
 
 (For more discrete Node commands, see `package.json` and its counterparts in the `frontend` and `backend` folders)
 
