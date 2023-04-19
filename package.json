@@ -14,7 +14,7 @@
 		"playwright": "cd testing && npm run playwright",
 		"test": "npm run serve && npm run playwright",
 		"docker": "docker-compose up",
-		"dockerDev": "docker-compose -f compose.dev.yaml up",
+		"dockerDev": "docker-compose -f compose.yaml -f compose.devOverride.yaml up",
 		"dockerPlaywright": "docker-compose -f compose.tests.yaml up",
 		"dockerTest": "docker-compose up --detach && docker-compose -f compose.tests.yaml up",
 		"prettier": "npx prettier --write ."

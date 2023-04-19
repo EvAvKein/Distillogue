@@ -38,12 +38,12 @@ A tool for conducting dialogue in the distilled format of your choice; currently
 
 ### Commands
 
-| Outcome              | With Docker                                                                                 | With Node            |
-| -------------------- | ------------------------------------------------------------------------------------------- | -------------------- |
-| Serve (Build & Host) | `docker-compose up`                                                                         | `npm run serve`      |
-| Serve Dev Mode       | `docker-compose -f compose.dev.yaml up` <br> OR <br> `npm run dockerDev`                    | `npm run serveDev`   |
-| Launch Playwright    | `docker-compose -f compose.tests.yaml up` <br> OR <br> `npm run dockerPlaywright`           | `npm run playwright` |
-| Serve & Playwright   | `docker-compose -f compose.yaml -f compose.tests.yaml up` <br> OR <br> `npm run dockerTest` | `npm run test`       |
+| Outcome              | With Docker                                                                                      | With Node            |
+| -------------------- | ------------------------------------------------------------------------------------------------ | -------------------- |
+| Serve (Build & Host) | `docker-compose up`                                                                              | `npm run serve`      |
+| Serve Dev Mode       | `docker-compose -f compose.yaml -f compose.devOverride.yaml up` <br> OR <br> `npm run dockerDev` | `npm run serveDev`   |
+| Launch Playwright    | `docker-compose -f compose.tests.yaml up` <br> OR <br> `npm run dockerPlaywright`                | `npm run playwright` |
+| Serve & Playwright   | `docker-compose -f compose.yaml -f compose.tests.yaml up` <br> OR <br> `npm run dockerTest`      | `npm run test`       |
 
 (For more discrete Node commands, see `package.json` and its counterparts in the `frontend` and `backend` folders)
 
