@@ -1,9 +1,7 @@
 version: "3"
 services:
   nginx:
-    build:
-      context: .
-      dockerfile: ./backend/nginx/prod.dockerfile
+    image: nginx:1.21.1-alpine
     ports:
       - 80:80
       - 443:443
