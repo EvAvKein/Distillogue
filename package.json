@@ -13,7 +13,6 @@
 		"serveDev": "npm run buildDev && npm run hostDev",
 		"playwright": "cd testing && npm run playwright",
 		"test": "npm run serve && npm run playwright",
-		"docker": "docker-compose up",
 		"dockerDev": "docker-compose -f docker-compose.dev.yaml up",
 		"dockerPlaywright": "docker-compose -f docker-compose.tests.yaml up",
 		"dockerTest": "docker-compose up --detach && docker-compose -f docker-compose.tests.yaml up",

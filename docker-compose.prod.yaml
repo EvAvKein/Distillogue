@@ -1,13 +1,12 @@
 version: "3"
 services:
   nginx:
-    build:
-      context: ./
-      dockerfile: ./backend/nginx/dev.dockerfile
+    image: nginx:1.21.1-alpine
     ports:
       - 80:80
+      - 443:443
     volumes:
-      - ./backend/nginx/dev.nginx.conf:/etc/nginx/nginx.conf
+      - ./backend/nginx/prod.nginx.conf:/etc/nginx/nginx.conf
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - /tmp/acme_challenge:/tmp/acme_challenge
     networks:
@@ -29,7 +28,7 @@ services:
       - frontend
     build:
       context: ./
-      dockerfile: ./backend/dockerfile
+      dockerfile: ./backend/dockerfile.prod
     volumes:
       - webfiles:/frontend
     networks:
@@ -40,7 +39,7 @@ services:
   frontend:
     build:
       context: ./
-      dockerfile: ./frontend/dockerfile
+      dockerfile: ./frontend/dockerfile.prod
     volumes:
       - webfiles:/frontend
 
