@@ -1,6 +1,6 @@
 <template>
 	<customDetails :openByDefault="openByDefault" class="configCategory">
-		<template v-slot:summary>
+		<template #summary>
 			<span>{{ title }}</span>
 		</template>
 
