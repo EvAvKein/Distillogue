@@ -49,8 +49,7 @@
 <script setup lang="ts">
 	import {computed} from "vue";
 	import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
-	import {NodeCreationRequest} from "../../../../../shared/objects/post";
-	import {UserPatchRequest} from "../../../../../shared/objects/api";
+	import {UserPatchRequest, NodeCreationRequest} from "../../../../../shared/objects/api";
 	import {user as userLimits} from "../../../../../shared/objects/validationUnits";
 	import {unix} from "../../../../../shared/helpers/timestamps";
 	import {apiFetch} from "../../../helpers/apiFetch";
