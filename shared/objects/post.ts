@@ -3,7 +3,7 @@ import {unix as unixStamp} from "../helpers/timestamps.js";
 import {NodeCreationRequest} from "./api.js";
 import {UserData, UserEntry} from "./user.js";
 
-class PostConfig {
+interface PostConfig {
 	access?: {
 		public?: true;
 	};
@@ -37,6 +37,16 @@ class NodeStats {
 	}
 }
 
+interface PostAccess_Public {
+	public: true;
+	moderators?: UserEntry[];
+}
+interface PostAccess_Private {
+	users: UserEntry[];
+	moderators?: UserEntry[];
+}
+type PostAccess = PostAccess_Public | PostAccess_Private;
+
 class Node extends NodeCreationRequest {
 	ownerId: UserData["id"];
 	id: string;
@@ -55,16 +65,6 @@ class Node extends NodeCreationRequest {
 		this.past = [];
 	}
 }
-
-interface PostAccess_Public {
-	public: true;
-	moderators?: UserEntry[];
-}
-interface PostAccess_Private {
-	users: UserEntry[];
-	moderators?: UserEntry[];
-}
-type PostAccess = PostAccess_Public | PostAccess_Private;
 
 class PostStats {
 	posted: number;
@@ -107,4 +107,4 @@ class PostSummary {
 	}
 }
 
-export {PostConfig, NodeStats, NodeCreationRequest, Node, PostAccess, PostStats, Post, PostSummary};
+export {PostConfig, NodeStats, PostAccess, Node, PostStats, Post, PostSummary};
