@@ -1,42 +1,57 @@
+<!-- TODO: the collapsible transitions are a bit disorienting, consider implementing a custom collapsible -->
+
 <template>
 	<main>
-		<form v-if="user.data" @submit.prevent>
-			<editNode v-model:data="nodeData" id="texts" @error="displayError" />
+		<form id="createPost" v-if="user.data" @submit.prevent>
+			<animatedCollapsible :forcedState="{state: currentTab === 'text'}" @toggle="currentTab = 'text'" class="section">
+				<template #summary>
+					<div class="sectionTab">Text</div>
+				</template>
+				<template #content>
+					<editNode v-model:data="nodeData" id="texts" @error="displayError" />
+				</template>
+			</animatedCollapsible>
 
-			<section id="configDrawer" :class="configDrawerOpen ? 'open' : ''">
-				<button id="drawerToggler" type="button" @click="() => (configDrawerOpen = !configDrawerOpen)">
-					<img src="../../assets/fileConfig.svg" alt="Icon of file with cogwheel" />
-				</button>
-				<section id="config" :inert="configDrawerExists && !configDrawerOpen">
-					<TransitionGroup name="collapse">
+			<animatedCollapsible
+				:forcedState="{state: currentTab === 'config'}"
+				@toggle="currentTab = 'config'"
+				class="section"
+			>
+				<template #summary>
+					<div class="sectionTab">Configuration</div>
+				</template>
+				<template #content>
+					<div id="config">
+						<TransitionGroup name="collapse">
+							<button
+								v-for="(preset, index) in defaultPresets.concat(user.data!.presets)"
+								:key="preset.name + index"
+								class="presetButton"
+								type="button"
+								@click="postConfig = deepCloneFromReactive(preset.config)"
+							>
+								<img
+									v-if="index < defaultPresets.length"
+									src="../../assets/defaultConfig.svg"
+									alt="Icon of cogwheel inside a browser window"
+								/>
+								<img v-else src="../../assets/customConfig.svg" alt="Icon of cogwheel beside a pencil" />
+								<span>{{ preset.name || "[No Title, Edit in Dashboard]" }}</span>
+							</button>
+						</TransitionGroup>
+						<editConfig v-model:config="(postConfig as PostConfig)" id="editConfig" />
 						<button
-							v-for="(preset, index) in defaultPresets.concat(user.data!.presets)"
-							:key="preset.name + index"
-							class="presetButton"
+							@click="savePreset"
 							type="button"
-							@click="postConfig = deepCloneFromReactive(preset.config)"
+							id="savePresetButton"
+							class="core_borderButton"
+							:inert="presetsAtCapacity ? true : false"
 						>
-							<img
-								v-if="index < defaultPresets.length"
-								src="../../assets/defaultConfig.svg"
-								alt="Icon of cogwheel inside a browser window"
-							/>
-							<img v-else src="../../assets/customConfig.svg" alt="Icon of cogwheel beside a pencil" />
-							<span>{{ preset.name || "[No Title, Edit in Dashboard]" }}</span>
+							{{ presetsAtCapacity ? "Presets at capacity" : "Save preset" }}
 						</button>
-					</TransitionGroup>
-					<editConfig v-model:config="(postConfig as PostConfig)" id="editConfig" />
-					<button
-						@click="savePreset"
-						type="button"
-						id="savePresetButton"
-						class="core_borderButton"
-						:inert="presetsAtCapacity ? true : false"
-					>
-						{{ presetsAtCapacity ? "Presets at capacity" : "Save preset" }}
-					</button>
-				</section>
-			</section>
+					</div>
+				</template>
+			</animatedCollapsible>
 
 			<section id="confirmation">
 				<button id="submitButton" type="button" class="core_backgroundButton" @click="submitNode">
@@ -52,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-	import {ref, computed, onMounted, onUnmounted} from "vue";
+	import {ref, computed} from "vue";
 	import {deepCloneFromReactive} from "../../helpers/deepCloneFromReactive";
 	import {UserData} from "../../../../shared/objects/user";
 	import {Post, PostConfig} from "../../../../shared/objects/post";
@@ -66,11 +81,14 @@
 	import {user as userCaps} from "../../../../shared/objects/validationUnits";
 	import {useUser} from "../../stores/user";
 	import {useRouter} from "vue-router";
+	import animatedCollapsible from "../../components/animatedCollapsible.vue";
 	import editNode from "../../components/posts/edit/editNode.vue";
 	import editConfig from "../../components/posts/edit/config/editConfig.vue";
 	import notification from "../../components/notification.vue";
 	const user = useUser();
 	const router = useRouter();
+
+	const currentTab = ref<"text" | "config">("text");
 
 	const nodeData = ref<NodeCreationRequest>({
 		title: "",
@@ -104,9 +122,6 @@
 		},
 	];
 
-	const configDrawerExists = ref<boolean | undefined>(undefined);
-	const configDrawerOpen = ref<boolean>(false);
-
 	const presetsAtCapacity = computed(() => user.data!.presets.length >= userCaps.presets.max);
 
 	async function savePreset() {
@@ -124,24 +139,10 @@
 		user.data!.presets = newPresetsState;
 	}
 
-	const body = document.getElementsByTagName("body")[0];
-	function configInertByScreenWidth() {
-		const pxFontSize = Number.parseInt(window.getComputedStyle(body).fontSize);
-		configDrawerExists.value = body.clientWidth < pxFontSize * 55;
-	}
-	onMounted(() => {
-		configInertByScreenWidth();
-		const bodyObserver = new ResizeObserver(configInertByScreenWidth);
-		bodyObserver.observe(body);
-		onUnmounted(() => {
-			bodyObserver.disconnect();
-		});
-	});
-
 	async function submitNode() {
 		notifText.value = "";
 
-		const response = await apiFetch(
+		const response = await apiFetch<Post>(
 			"POST",
 			"/posts",
 			new PostCreationRequest(
@@ -163,47 +164,47 @@
 			user.data!.drafts = newDraftsState;
 		}
 
-		router.push(router.currentRoute.value.fullPath.replace("create", (response.data as Post).thread.id));
+		router.push(router.currentRoute.value.fullPath.replace("create", response.data!.thread.id));
 	}
 </script>
 
 <style scoped>
 	form {
-		display: grid;
-		position: relative;
-		overflow: hidden;
+		width: min(calc(100% - 1em), 55em);
 		margin: auto;
-		width: min(calc(100% - 1em), 70em);
 		padding: 0 0.5em 0.5em;
-		grid-template-columns: 1fr 3.25em;
-		grid-template-areas:
-			"texts config"
-			"confirmation .";
-		gap: 0.5em 0.25em;
 	}
 
-	/* TEXTS */
+	.section {
+		margin-bottom: 0.25em;
+	}
 
-	#texts {
-		grid-area: texts;
+	.section + .section {
+		border-top: 0.1em solid var(--textSubColor);
+	}
+
+	.sectionTab {
+		font-size: 1.5em;
+		margin-top: 0.2em;
+		transition: font-size 300ms;
+	}
+
+	.sectionTab::after {
+		content: "v";
+		float: right;
+		transition: rotate 300ms;
+	}
+
+	.section[aria-expanded="true"] .sectionTab::after {
+		rotate: 90deg;
+	}
+
+	.section[aria-expanded="true"] .sectionTab {
+		font-size: 2.25em;
+		margin-bottom: 0.2em;
 	}
 
 	/* CONFIG */
-
-	#configDrawer {
-		grid-area: config;
-		position: absolute;
-		height: 100%;
-		top: 0;
-		right: -17.5em;
-		width: max-content;
-		border-radius: 1em 0 0 1em;
-		transition: right 0.5s;
-	}
-	#configDrawer.open {
-		right: -0.5em;
-	}
-
 	.presetButton {
 		display: flex;
 		flex-wrap: nowrap;
@@ -245,20 +246,6 @@
 		margin-top: 0.5em;
 	}
 
-	#config {
-		display: inline-block;
-		height: 100%;
-		width: 17em;
-		padding: 0.5em;
-		box-sizing: border-box;
-		scrollbar-gutter: stable;
-		padding-right: 0.25em;
-		border-width: 0.25em 0;
-		border-style: solid;
-		border-color: var(--textColor);
-		overflow: auto;
-		background-color: var(--backgroundColor);
-	}
 	#config > * + * {
 		margin-top: 0.5em;
 	}
@@ -268,70 +255,49 @@
 		margin: 0.5em auto;
 	}
 
-	#drawerToggler {
-		background-color: var(--textColor);
-		height: 100%;
-		width: 3.25em;
-		padding: 0;
-		margin-right: 0;
-		border-radius: 1em 0 0 1em;
-		vertical-align: top;
-	}
-	#drawerToggler img {
-		width: 2.75em;
-		filter: var(--filterToBackgroundColor);
-	}
-
-	#drawerToggler,
-	#config {
-		transition: all 300ms;
-	}
-	#drawerToggler:hover,
-	#drawerToggler:focus {
-		outline: none;
-		background-color: var(--highlightSubColor);
-	}
-	#drawerToggler:hover + #config,
-	#drawerToggler:focus + #config {
-		border-color: var(--highlightSubColor);
-	}
-	#drawerToggler:active {
-		background-color: var(--highlightColor);
-	}
-	#drawerToggler:active + #config {
-		border-color: var(--highlightColor);
-	}
-
 	/* CONFIRMATION */
-
-	#confirmation {
-		grid-area: confirmation;
-	}
 
 	#submitButton {
 		width: 100%;
 	}
 
-	@media (min-width: 55rem) {
+	@media (min-width: 75em) {
 		form {
-			grid-template-columns: 1fr auto;
-			grid-template-rows: min-content 100%;
+			width: auto;
+			max-width: 95em;
+			display: grid;
+			grid-template-columns: 2.5fr 1fr;
 			grid-template-areas:
 				"texts config"
-				"confirmation config";
-			gap: 0.5em;
+				"confirmation confirmation";
+			gap: 1em;
 		}
 
-		#configDrawer {
-			position: initial;
-			height: max-content;
+		.section + .section {
+			border: none;
 		}
-		#drawerToggler {
-			display: none;
+
+		#texts,
+		#config {
+			display: block !important;
+		}
+
+		#texts {
+			grid-area: texts;
 		}
 		#config {
-			padding: 0;
-			border: none;
+			grid-area: config;
+		}
+		#confirmation {
+			grid-area: confirmation;
+		}
+	}
+</style>
+
+<style>
+	@media (min-width: 75em) {
+		#createPost .section > button {
+			display: none;
 		}
 	}
 </style>
