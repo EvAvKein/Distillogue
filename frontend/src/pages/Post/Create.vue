@@ -52,7 +52,7 @@
 								<span>{{ preset.name || "[No Title, Edit in Dashboard]" }}</span>
 							</button>
 						</TransitionGroup>
-						<editConfig v-model:config="(postConfig as PostConfig)" id="editConfig" />
+						<editConfig v-model:config="postConfig" id="editConfig" />
 						<button
 							@click="savePreset"
 							type="button"
@@ -109,7 +109,7 @@
 		body: "",
 		deletedDraftIndex: undefined,
 	});
-	const postConfig = ref<PostConfig | undefined>({});
+	const postConfig = ref<PostConfig>({});
 	const postAccess = ref<PostAccess>({users: [{name: user.data!.name, id: user.data!.id}]});
 
 	const notifText = ref<string>("");
@@ -162,7 +162,7 @@
 			"/posts",
 			new PostCreationRequest(
 				new NodeCreationRequest(nodeData.value.title, nodeData.value.body, nodeData.value.deletedDraftIndex),
-				postConfig.value!,
+				postConfig.value,
 				postAccess.value
 			)
 		);
