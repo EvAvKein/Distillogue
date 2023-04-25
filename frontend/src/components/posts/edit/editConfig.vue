@@ -1,28 +1,36 @@
 <template>
 	<section id="editConfig">
-		<category v-for="(categoryObj, categoryName) of configLayout" class="category" :title="(categoryName as string)">
-			<label v-for="configProp, configName in categoryObj!.config">
-				{{ configName }}:
-				<input
-					:id="categoryObj!.prop + '.' + configProp"
-					class="core_crudeInput"
-					type="checkbox"
-					@change="(event) => {
+		<animatedCollapsible v-for="(categoryObj, categoryName) of configLayout" class="category">
+			<template #summary>
+				<span>{{ categoryName }}</span>
+			</template>
+
+			<template #content>
+				<div>
+					<label v-for="configProp, configName in categoryObj!.config">
+						{{ configName }}:
+						<input
+							:id="categoryObj!.prop + '.' + configProp"
+							class="core_crudeInput"
+							type="checkbox"
+							@change="(event) => {
 						emit(
 							'update:config',
 							configAfterUpdate(categoryObj!.prop, configProp as subkeyOfPostConfig, (event.currentTarget as HTMLInputElement).checked || undefined)
 						)
 					}"
-				/>
-			</label>
-		</category>
+						/>
+					</label>
+				</div>
+			</template>
+		</animatedCollapsible>
 	</section>
 </template>
 
 <script setup lang="ts">
 	import {toRef, watch, onMounted} from "vue";
-	import {PostConfig} from "../../../../../../shared/objects/post";
-	import category from "./configCategory.vue";
+	import {PostConfig} from "../../../../../shared/objects/post";
+	import animatedCollapsible from "../../animatedCollapsible.vue";
 
 	const props = defineProps<{
 		config: PostConfig;
@@ -102,14 +110,38 @@
 </script>
 
 <style scoped>
+	#editConfig {
+		display: block;
+	}
+
+	.category {
+		height: fit-content;
+		width: 100%;
+		white-space: nowrap;
+		background-color: var(--backgroundSubColor);
+		border-radius: 0.5em;
+	}
+	.category + .category {
+		margin-top: 0.5em;
+	}
+
 	label {
 		width: max-content;
 	}
 
-	section {
+	span {
 		display: block;
+		text-align: center;
+		font-size: 1.5em;
+		padding: 0.25em 0.5em;
 	}
-	.category + .category {
-		margin-top: 0.5em;
+
+	div {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 0.5em 1em;
+		gap: 0.5em 1.25em;
+		border-top: 0.15em solid var(--textSubColor);
 	}
 </style>

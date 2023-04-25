@@ -96,7 +96,7 @@
 	import {useRouter} from "vue-router";
 	import animatedCollapsible from "../../components/animatedCollapsible.vue";
 	import editNode from "../../components/posts/edit/editNode.vue";
-	import editConfig from "../../components/posts/edit/config/editConfig.vue";
+	import editConfig from "../../components/posts/edit/editConfig.vue";
 	import editAccess from "../../components/posts/edit/editAccess.vue";
 	import notification from "../../components/notification.vue";
 	const user = useUser();

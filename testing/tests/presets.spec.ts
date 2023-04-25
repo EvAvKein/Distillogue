@@ -23,7 +23,7 @@ async function forPresettableConfigs(
 ) {
 	await ui.expandConfigCategories(page);
 
-	for (const categoryElem of await page.locator(".configCategory").all()) {
+	for (const categoryElem of await page.locator("#editConfig .category").all()) {
 		const categoryName = await categoryElem.locator("button").innerText();
 		if (categoryName === "Access") continue;
 

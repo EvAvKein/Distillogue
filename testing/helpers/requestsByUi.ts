@@ -55,7 +55,7 @@ async function createReply(page: Page, nodeTitlesPath: string[], replyTitle: str
 }
 
 async function expandConfigCategories(page: Page) {
-	for (const category of await page.locator(".configCategory").all()) {
+	for (const category of await page.locator("#editConfig .category").all()) {
 		if ((await category.getAttribute("aria-expanded")) === "false") {
 			await category.locator("> button").click();
 		}
