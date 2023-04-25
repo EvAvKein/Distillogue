@@ -30,7 +30,7 @@ const UserPresets = z
 	.array(
 		z.object({
 			name: z.string().regex(alphanumRegexWithSpaces).max(user.presets.name.max),
-			config: PostConfig.omit({access: true}),
+			config: PostConfig,
 		})
 	)
 	.max(user.presets.max);

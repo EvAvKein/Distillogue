@@ -4,7 +4,6 @@ import * as apiSchemas from "../schemas/api.js";
 import {mongoInsertIfDoesntExist} from "../helpers/mongo/mongoInsertIfDoesntExist.js";
 import {User, UserData, UserPayload, arrOfEditableUserData} from "../../../shared/objects/user.js";
 import {FetchResponse} from "../../../shared/objects/api.js";
-import {PostConfig} from "../../../shared/objects/post.js";
 import {sessionKey} from "../helpers/reqHeaders.js";
 import {fromZodError} from "zod-validation-error";
 
@@ -46,11 +45,6 @@ export default function (app: Express, usersDb: Collection<User>) {
 		for (let request of editRequests) {
 			if (!arrOfEditableUserData.includes(request.dataName)) {
 				response.status(400).json(new FetchResponse(null, {message: "Invalid data insertion request"}));
-				return;
-			}
-
-			if (request.dataName === "presets" && (request.newValue as PostConfig).access) {
-				delete (request.newValue as PostConfig).access;
 				return;
 			}
 
