@@ -1,11 +1,6 @@
 <template>
 	<section id="editConfig">
-		<category
-			v-for="(categoryObj, categoryName) of configLayout"
-			class="category"
-			:title="(categoryName as string)"
-			:openByDefault="categoryName === 'Access' || undefined"
-		>
+		<category v-for="(categoryObj, categoryName) of configLayout" class="category" :title="(categoryName as string)">
 			<label v-for="configProp, configName in categoryObj!.config">
 				{{ configName }}:
 				<input
@@ -31,20 +26,11 @@
 
 	const props = defineProps<{
 		config: PostConfig;
-		hideUnsavables?: true;
 	}>();
 
 	const configLayout: {
 		[key: string]: {prop: keyof PostConfig; config: {[key: string]: subkeyOfPostConfig}} | undefined;
 	} = {
-		Access: props.hideUnsavables
-			? undefined
-			: {
-					prop: "access",
-					config: {
-						Public: "public",
-					},
-			  },
 		Timestamps: {
 			prop: "timestamps",
 			config: {
@@ -60,7 +46,6 @@
 			},
 		},
 	};
-	if (props.hideUnsavables) delete configLayout.Access;
 
 	const emit = defineEmits(["update:config"]);
 
@@ -93,9 +78,7 @@
 	onMounted(() => {
 		const presettableCateogryElements = Array.from(
 			document.querySelectorAll<HTMLElement>("#editConfig section[aria-expanded]")
-		).filter((detailsElement) => {
-			return detailsElement.querySelector("button")!.innerText === "Access" ? false : detailsElement;
-		});
+		);
 		presettableCateogryElements.forEach((category) => {
 			const inputsInCategory = Array.from(category.querySelectorAll<HTMLInputElement>("input"));
 			inputsAffectedByPresets = inputsAffectedByPresets.concat(inputsInCategory);

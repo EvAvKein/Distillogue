@@ -3,6 +3,19 @@
 <template>
 	<main>
 		<form id="createPost" v-if="user.data" @submit.prevent>
+			<animatedCollapsible
+				:forcedState="{state: currentTab === 'access'}"
+				@toggle="currentTab = 'access'"
+				class="section"
+			>
+				<template #summary>
+					<div class="sectionTab">Access</div>
+				</template>
+				<template #content>
+					<editAccess v-model:access="postAccess" id="access" @error="displayError" />
+				</template>
+			</animatedCollapsible>
+
 			<animatedCollapsible :forcedState="{state: currentTab === 'text'}" @toggle="currentTab = 'text'" class="section">
 				<template #summary>
 					<div class="sectionTab">Text</div>
@@ -70,7 +83,7 @@
 	import {ref, computed} from "vue";
 	import {deepCloneFromReactive} from "../../helpers/deepCloneFromReactive";
 	import {UserData} from "../../../../shared/objects/user";
-	import {Post, PostConfig} from "../../../../shared/objects/post";
+	import {Post, PostConfig, PostAccess} from "../../../../shared/objects/post";
 	import {
 		FetchResponse,
 		NodeCreationRequest,
@@ -84,11 +97,12 @@
 	import animatedCollapsible from "../../components/animatedCollapsible.vue";
 	import editNode from "../../components/posts/edit/editNode.vue";
 	import editConfig from "../../components/posts/edit/config/editConfig.vue";
+	import editAccess from "../../components/posts/edit/editAccess.vue";
 	import notification from "../../components/notification.vue";
 	const user = useUser();
 	const router = useRouter();
 
-	const currentTab = ref<"text" | "config">("text");
+	const currentTab = ref<"access" | "text" | "config">("access");
 
 	const nodeData = ref<NodeCreationRequest>({
 		title: "",
@@ -96,6 +110,7 @@
 		deletedDraftIndex: undefined,
 	});
 	const postConfig = ref<PostConfig | undefined>({});
+	const postAccess = ref<PostAccess>({users: [{name: user.data!.name, id: user.data!.id}]});
 
 	const notifText = ref<string>("");
 	function displayError(error: NonNullable<FetchResponse["error"]>) {
@@ -148,7 +163,7 @@
 			new PostCreationRequest(
 				new NodeCreationRequest(nodeData.value.title, nodeData.value.body, nodeData.value.deletedDraftIndex),
 				postConfig.value!,
-				{users: [{name: user.data!.name, id: user.data!.id}], ...postConfig.value!.access}
+				postAccess.value
 			)
 		);
 
@@ -264,12 +279,12 @@
 	@media (min-width: 75em) {
 		form {
 			width: auto;
-			max-width: 95em;
+			max-width: 100em;
 			display: grid;
-			grid-template-columns: 2.5fr 1fr;
+			grid-template-columns: 1fr 2.5fr 1fr;
 			grid-template-areas:
-				"texts config"
-				"confirmation confirmation";
+				"access texts config"
+				"access confirmation config";
 			gap: 1em;
 		}
 
@@ -277,6 +292,7 @@
 			border: none;
 		}
 
+		#access,
 		#texts,
 		#config {
 			display: block !important;
@@ -287,6 +303,9 @@
 		}
 		#config {
 			grid-area: config;
+		}
+		#access {
+			grid-area: access;
 		}
 		#confirmation {
 			grid-area: confirmation;

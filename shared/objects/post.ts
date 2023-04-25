@@ -4,9 +4,6 @@ import {NodeCreationRequest} from "./api.js";
 import {UserData, UserEntry} from "./user.js";
 
 interface PostConfig {
-	access?: {
-		public?: true;
-	};
 	timestamps?: {
 		interacted?: true;
 	};
@@ -37,15 +34,11 @@ class NodeStats {
 	}
 }
 
-interface PostAccess_Public {
-	public: true;
+interface PostAccess {
+	public?: true;
+	users?: UserEntry[];
 	moderators?: UserEntry[];
 }
-interface PostAccess_Private {
-	users: UserEntry[];
-	moderators?: UserEntry[];
-}
-type PostAccess = PostAccess_Public | PostAccess_Private;
 
 class Node extends NodeCreationRequest {
 	ownerId: UserData["id"];
