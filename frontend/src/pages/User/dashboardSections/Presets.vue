@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<ol>
+		<ul>
 			<TransitionGroup name="collapse">
 				<li v-for="(preset, index) in user.data!.presets">
 					<button type="button" class="core_backgroundButton" @click="selectPreset(index)">
@@ -8,7 +8,7 @@
 					</button>
 				</li>
 			</TransitionGroup>
-		</ol>
+		</ul>
 
 		<transition name="collapse">
 			<button v-if="user.data!.presets.length < maxPresets" class="core_backgroundButton" @click="createPreset">
@@ -121,18 +121,18 @@
 
 <style scoped>
 	li + li,
-	ol + button {
+	ul + button {
 		margin-top: 0.5em;
 	}
 	li button {
 		font-size: 1.1em;
 	}
 	li button,
-	ol + button {
+	ul + button {
 		padding: 0.3em;
 		width: 100%;
 	}
-	ol + button {
+	ul + button {
 		font-size: 0.9em;
 		display: block;
 		width: 90%;
@@ -142,7 +142,7 @@
 	button p {
 		margin: 0;
 	}
-	ol button p {
+	ul button p {
 		font-weight: bold;
 	}
 

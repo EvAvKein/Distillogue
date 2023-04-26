@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<ol>
+		<ul>
 			<TransitionGroup name="collapse">
 				<li v-for="(draft, index) in user.data!.drafts">
 					<button type="button" class="core_backgroundButton" @click="selectDraft(index)">
@@ -9,7 +9,7 @@
 					</button>
 				</li>
 			</TransitionGroup>
-		</ol>
+		</ul>
 
 		<transition>
 			<button v-if="user.data!.drafts.length < maxDrafts" class="core_backgroundButton" @click="createDraft">
@@ -120,16 +120,16 @@
 
 <style scoped>
 	li + li,
-	ol + button {
+	ul + button {
 		margin-top: 0.5em;
 	}
 	li button,
-	ol + button {
+	ul + button {
 		font-size: 0.9em;
 		padding: 0.3em;
 		width: 100%;
 	}
-	ol + button {
+	ul + button {
 		display: block;
 		width: 90%;
 		margin-inline: auto;
@@ -138,10 +138,10 @@
 	button p {
 		margin: 0;
 	}
-	ol button p {
+	ul button p {
 		font-weight: bold;
 	}
-	ol button div {
+	ul button div {
 		font-size: 0.7em;
 	}
 
