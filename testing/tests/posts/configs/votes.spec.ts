@@ -1,5 +1,5 @@
 import {test, expect, type Page} from "@playwright/test";
-import {setupUserWithPostAndOpen} from "../../helpers/requestsByUi.js";
+import {setupUserWithPostAndOpen} from "../../../helpers/requestsByUi.js";
 
 test.describe("Votes", async () => {
 	const upvoteSelector = 'button[aria-label="Upvote"]';

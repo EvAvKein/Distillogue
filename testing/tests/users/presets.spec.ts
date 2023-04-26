@@ -1,10 +1,10 @@
 import {test, expect, type Page} from "@playwright/test";
-import * as api from "../helpers/requestsByApi.js";
-import * as ui from "../helpers/requestsByUi.js";
-import {user} from "../../shared/objects/validationUnits.js";
-import {Post} from "../../shared/objects/post.js";
-import {FetchResponse} from "../../shared/objects/api.js";
-import {randomAlphanumString, randomNodeBody, randomNodeTitle} from "../helpers/randomAlphanumString.js";
+import * as api from "../../helpers/requestsByApi.js";
+import * as ui from "../../helpers/requestsByUi.js";
+import {user} from "../../../shared/objects/validationUnits.js";
+import {Post} from "../../../shared/objects/post.js";
+import {FetchResponse} from "../../../shared/objects/api.js";
+import {randomAlphanumString, randomNodeBody, randomNodeTitle} from "../../helpers/randomAlphanumString.js";
 
 interface presettableConfigByUiText {
 	Timestamps?: {

@@ -1,8 +1,8 @@
 import {test, expect} from "@playwright/test";
-import {createUserAndSession} from "../helpers/requestsByApi.js";
-import {setSessionKey} from "../helpers/sessionKey.js";
-import {randomUsername} from "../helpers/randomAlphanumString.js";
-import {user} from "../../shared/objects/validationUnits.js";
+import {createUserAndSession} from "../../helpers/requestsByApi.js";
+import {setSessionKey} from "../../helpers/sessionKey.js";
+import {randomUsername} from "../../helpers/randomAlphanumString.js";
+import {user} from "../../../shared/objects/validationUnits.js";
 
 test.describe("Profile editing - UI", () => {
 	test("Change name", async ({page, request}) => {

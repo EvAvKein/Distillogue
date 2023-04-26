@@ -1,6 +1,6 @@
 import {test, expect, type Page} from "@playwright/test";
-import {signUp} from "../helpers/requestsByApi.js";
-import {randomAlphanumString} from "../helpers/randomAlphanumString.js";
+import {signUp} from "../../helpers/requestsByApi.js";
+import {randomAlphanumString} from "../../helpers/randomAlphanumString.js";
 
 const dashboard = {
 	nameInput: "#newContactName",

@@ -1,7 +1,7 @@
 import {test, expect, type Page} from "@playwright/test";
-import * as ui from "../helpers/requestsByUi.js";
-import {randomNodeTitle, randomNodeBody} from "../helpers/randomAlphanumString.js";
-import {setupUserWithPostAndOpen} from "../helpers/requestsByUi.js";
+import * as ui from "../../helpers/requestsByUi.js";
+import {randomNodeTitle, randomNodeBody} from "../../helpers/randomAlphanumString.js";
+import {setupUserWithPostAndOpen} from "../../helpers/requestsByUi.js";
 
 test.describe("Replies & deep interaction", () => {
 	// testing deep interactions through one interaction is enough, as it's a test for the deep-node paths' construction and translation back and forth across the app; individual interactions are functionally depth/path-agnostic in implementation (and exceptions, e.g branch-locking, will/should be tested accordingly)

@@ -1,9 +1,9 @@
 import {test, expect, type Page} from "@playwright/test";
-import * as api from "../helpers/requestsByApi.js";
-import {randomNodeTitle, randomNodeBody} from "../helpers/randomAlphanumString.js";
-import {FetchResponse, NodeCreationRequest, PostCreationRequest} from "../../shared/objects/api.js";
-import {Post} from "../../shared/objects/post.js";
-import {user} from "../../shared/objects/validationUnits.js";
+import * as api from "../../helpers/requestsByApi.js";
+import {randomNodeTitle, randomNodeBody} from "../../helpers/randomAlphanumString.js";
+import {FetchResponse, NodeCreationRequest, PostCreationRequest} from "../../../shared/objects/api.js";
+import {Post} from "../../../shared/objects/post.js";
+import {user} from "../../../shared/objects/validationUnits.js";
 
 const titlePlaceholder = "[No Title]";
 

@@ -1,7 +1,7 @@
 import {test, expect} from "@playwright/test";
-import {createSession, getSession, deleteSession, createUserAndSession} from "../helpers/requestsByApi.js";
-import {getSessionKey, setSessionKey} from "../helpers/sessionKey.js";
-import {signUp} from "../helpers/requestsByUi.js";
+import {createSession, getSession, deleteSession, createUserAndSession} from "../../helpers/requestsByApi.js";
+import {getSessionKey, setSessionKey} from "../../helpers/sessionKey.js";
+import {signUp} from "../../helpers/requestsByUi.js";
 
 test.describe("User sessions - API", async () => {
 	test("Fail to reuse key after session deletion", async ({request}) => {
