@@ -8,8 +8,8 @@ import {user} from "../../../shared/objects/validationUnits.js";
 const titlePlaceholder = "[No Title]";
 
 const dashboard = {
-	selectionButtons: "ol button",
-	creationButton: "ol + button",
+	selectionButtons: "ul button",
+	creationButton: "ul + button",
 	titleInput: "#editDraftTitle",
 	bodyInput: "#editDraftBody",
 	deletionButton: "#deletionButton",

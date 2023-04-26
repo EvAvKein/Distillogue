@@ -53,8 +53,8 @@ async function validateConfig(page: Page, targetConfig: presettableConfigByUiTex
 const editConfig = "#editConfig";
 
 const dashboard = {
-	selectionButtons: "ol button",
-	creationButton: "ol + button",
+	selectionButtons: "ul button",
+	creationButton: "ul + button",
 	nameInput: "#editPresetName",
 	deletionButton: "#deletionButton",
 } as const;
