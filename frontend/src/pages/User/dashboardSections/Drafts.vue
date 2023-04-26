@@ -119,12 +119,6 @@
 </script>
 
 <style scoped>
-	ol {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-
 	li + li,
 	ol + button {
 		margin-top: 0.5em;

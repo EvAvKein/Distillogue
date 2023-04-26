@@ -88,6 +88,13 @@
 		border: none;
 	}
 
+	ol,
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
 	::-webkit-scrollbar {
 		width: 1rem;
 		height: 1rem;

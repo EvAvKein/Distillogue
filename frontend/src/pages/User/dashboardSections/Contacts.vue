@@ -80,8 +80,7 @@
 	}
 
 	ul {
-		list-style-type: none;
-		padding: 0;
+		margin-top: 0.5em;
 	}
 
 	li {

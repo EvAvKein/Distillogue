@@ -1,5 +1,5 @@
 <template>
-	<ol id="summariesList">
+	<ol>
 		<TransitionGroup name="posts">
 			<li v-for="(summaryObject, i) in summariesArray" :key="summaryObject.id">
 				<postSummary :summary="summaryObject" />
@@ -18,13 +18,7 @@
 </script>
 
 <style scoped>
-	#summariesList {
-		margin: 0;
-		padding: 0;
-		list-style: none;
-	}
-
-	#summariesList li + li {
+	li + li {
 		border-top: 0.15em solid var(--textColor);
 	}
 
