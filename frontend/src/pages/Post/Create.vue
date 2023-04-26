@@ -35,23 +35,26 @@
 				</template>
 				<template #content>
 					<div id="config">
-						<TransitionGroup name="collapse">
-							<button
-								v-for="(preset, index) in defaultPresets.concat(user.data!.presets)"
-								:key="preset.name + index"
-								class="presetButton"
-								type="button"
-								@click="postConfig = deepCloneFromReactive(preset.config)"
-							>
-								<img
-									v-if="index < defaultPresets.length"
-									src="../../assets/defaultConfig.svg"
-									alt="Icon of cogwheel inside a browser window"
-								/>
-								<img v-else src="../../assets/customConfig.svg" alt="Icon of cogwheel beside a pencil" />
-								<span>{{ preset.name || "[No Title, Edit in Dashboard]" }}</span>
-							</button>
-						</TransitionGroup>
+						<button class="presetButton" type="button" @click="postConfig = {}">
+							<img src="../../assets/reset.svg" alt="Arrow looping back towards itself, forming a circle" />
+							<span>Reset Selection</span>
+						</button>
+						<ul>
+							<TransitionGroup name="collapse">
+								<li>
+									<button
+										v-for="(preset, index) in user.data!.presets"
+										:key="preset.name + index"
+										class="presetButton"
+										type="button"
+										@click="postConfig = deepCloneFromReactive(preset.config)"
+									>
+										<img src="../../assets/fileConfig.svg" alt="Icon of a paper with a cogwheel" />
+										<span>{{ preset.name || "[No Title, Edit in Dashboard]" }}</span>
+									</button>
+								</li>
+							</TransitionGroup>
+						</ul>
 						<editConfig v-model:config="postConfig" id="editConfig" />
 						<button
 							@click="savePreset"
@@ -116,26 +119,6 @@
 	function displayError(error: NonNullable<FetchResponse["error"]>) {
 		notifText.value = error.message;
 	}
-
-	const defaultPresets: UserData["presets"] = [
-		{
-			name: "Reset Selection",
-			config: {},
-		},
-		{
-			name: "Everything",
-			config: {
-				timestamps: {
-					interacted: true,
-				},
-				votes: {
-					up: true,
-					down: true,
-					anon: true,
-				},
-			},
-		},
-	];
 
 	const presetsAtCapacity = computed(() => user.data!.presets.length >= userCaps.presets.max);
 
