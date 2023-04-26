@@ -18,7 +18,6 @@
       - Paradigms (e.g democracy via existing configs, moderators appointed by post-creator)
       - Functionalities (e.g censoring with explanation, node/branch locking, Perspective API public/mod-only flagging)
     - Others (ideas welcome)
-  - More scalable config & access layouts in post-creation
   - User & user-to-user functionalities (latter added very cautiously)
 - ### Regulation:
   - Platform moderation
