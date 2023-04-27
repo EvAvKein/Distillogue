@@ -54,6 +54,11 @@ const User: ZodSchema<classes.User> = z.object({
 	auths: z.array(UserAuth).min(1),
 	sessions: z.array(UserSession),
 	banned: z.literal(true).optional(),
+	admin: z.object({
+		id: UserData.shape.id,
+		name: z.string(),
+		joined: z.number(),
+	}),
 	data: UserData,
 });
 

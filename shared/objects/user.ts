@@ -5,12 +5,14 @@ class User {
 	auths: UserAuth[];
 	sessions: UserSession[];
 	banned?: true;
+	admin?: {id: UserData["id"]; name: string; joined: number};
 	data: UserData;
 
 	constructor(data: UserData) {
 		this.auths = [];
 		this.sessions = [new UserSession()];
 		delete this.banned;
+		delete this.admin;
 		this.data = data;
 	}
 }
