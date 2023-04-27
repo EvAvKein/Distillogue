@@ -1,3 +1,5 @@
+#!/bin/bash
+
 docker-compose down &&
 docker-compose -f compose.cert.yaml up --build --force-recreate &&
 docker-compose down &&
