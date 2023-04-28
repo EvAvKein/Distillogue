@@ -4,15 +4,11 @@ import {PostConfig, Node} from "./post.js";
 class User {
 	auths: UserAuth[];
 	sessions: UserSession[];
-	banned?: true;
-	admin?: {id: UserData["id"]; name: string; joined: number};
 	data: UserData;
 
 	constructor(data: UserData) {
 		this.auths = [];
 		this.sessions = [new UserSession()];
-		delete this.banned;
-		delete this.admin;
 		this.data = data;
 	}
 }
@@ -39,6 +35,7 @@ class UserSession {
 
 class UserData {
 	id: string;
+	permissions: {banned?: true; admin?: {id: UserData["id"]; name: string; joined: number}};
 	name: string;
 	drafts: {title: Node["title"]; body: Node["body"]; lastEdited: number}[];
 	presets: {name: string; config: Omit<PostConfig, "access">}[];
@@ -46,6 +43,7 @@ class UserData {
 
 	constructor(name: UserData["name"]) {
 		this.id = newId();
+		this.permissions = {};
 		this.name = name;
 		this.drafts = [];
 		this.presets = [];

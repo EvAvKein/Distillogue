@@ -44,6 +44,14 @@ const UserContacts = z.array(UserEntry);
 
 const UserData = z.object({
 	id: UserId,
+	permissions: z.object({
+		banned: z.literal(true).optional(),
+		admin: z.object({
+			id: UserId,
+			name: z.string(),
+			joined: z.number(),
+		}),
+	}),
 	name: z.string().regex(alphanumRegex).min(user.name.min).max(user.name.max),
 	drafts: UserDrafts,
 	presets: UserPresets,
@@ -53,12 +61,6 @@ const UserData = z.object({
 const User: ZodSchema<classes.User> = z.object({
 	auths: z.array(UserAuth).min(1),
 	sessions: z.array(UserSession),
-	banned: z.literal(true).optional(),
-	admin: z.object({
-		id: UserData.shape.id,
-		name: z.string(),
-		joined: z.number(),
-	}),
 	data: UserData,
 });
 
