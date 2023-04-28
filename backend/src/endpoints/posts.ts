@@ -14,19 +14,25 @@ import {FetchResponse} from "../../../shared/objects/api.js";
 
 export default function (app: Express, postsDb: Collection<Post>, usersDb: Collection<User>) {
 	app.get("/api/posts:search?", async (request, response) => {
-		const searchString = request.query.search || "";
+		let searchRequest = request.query.search as string | string[];
 
-		if (searchString && typeof searchString !== "string") {
-			response.status(400).json(new FetchResponse(null, {message: "Search value must be a string"}));
-			return;
+		let preppedSearchRequest: RegExp;
+		if (Array.isArray(searchRequest)) {
+			const sanitizedSearchArgs = searchRequest.map((string) => sanitizeForRegex(string));
+			const combinedSearchArgs = sanitizedSearchArgs.reduce(
+				(total, current, index) => total + (index ? "|" + current : current)
+			);
+			preppedSearchRequest = new RegExp(sanitizeForRegex(combinedSearchArgs), "i");
+		} else {
+			preppedSearchRequest = new RegExp(sanitizeForRegex(searchRequest), "i");
 		}
 
-		const regexFilter = new RegExp(sanitizeForRegex(searchString), "i");
 		const user = await userBySession(request);
-
 		const posts = await postsDb
 			.find(
-				mongoFilterPostsByAccess(user?.data.id, {$or: [{"thread.title": regexFilter}, {"thread.body": regexFilter}]}),
+				mongoFilterPostsByAccess(user?.data.id, {
+					$or: [{"thread.title": preppedSearchRequest}, {"thread.body": preppedSearchRequest}],
+				}),
 				{projection: {["thread.replies"]: false}}
 			)
 			.sort({"stats.posted": -1})
