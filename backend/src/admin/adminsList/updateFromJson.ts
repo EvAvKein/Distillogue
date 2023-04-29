@@ -6,7 +6,10 @@ const newAdminsList: {id: UserData["id"]; name: string}[] = JSON.parse(await fs.
 const newAdminIdsList = newAdminsList.map((admin) => admin.id);
 
 const currentAdmins = await users
-	.find({admin: {}}, {projection: {["data.drafts"]: false, ["data.presets"]: false, ["data.contacts"]: false}})
+	.find(
+		{"data.permissions.admin": {}},
+		{projection: {["data.drafts"]: false, ["data.presets"]: false, ["data.contacts"]: false}}
+	)
 	.toArray();
 const currentAdminIds = currentAdmins.map((admin) => admin.data.id);
 

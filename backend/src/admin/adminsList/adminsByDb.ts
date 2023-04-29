@@ -5,7 +5,7 @@ const admins = await users
 	.toArray();
 
 const conciseAdmins = admins.map((adminUser) => {
-	return adminUser.admin!;
+	return adminUser.data.permissions.admin;
 });
 
 console.table(conciseAdmins);
