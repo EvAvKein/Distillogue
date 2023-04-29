@@ -20,7 +20,7 @@
 	import {debounce} from "../../../helpers/debounce";
 	import labelledInput from "../../labelledInput.vue";
 
-	const props = defineProps<{fetchAllOnMount?: true}>();
+	const props = defineProps<{fetchAllOnMount?: true; adminEndpoint?: true}>();
 	const emit = defineEmits(["fetchedSummaries"]);
 
 	const searchValue = ref<string>("");
@@ -29,7 +29,10 @@
 	async function fetchAndEmitPosts() {
 		summariesDescription.value = "Fetching Posts...";
 
-		const fetchResponse = await apiFetch("GET", "/posts?search=" + searchValue.value);
+		const fetchResponse = await apiFetch(
+			"GET",
+			(props.adminEndpoint ? "/admin" : "") + "/posts?search=" + searchValue.value
+		);
 		if (fetchResponse.error) {
 			summariesDescription.value = fetchResponse.error.message;
 			return;
