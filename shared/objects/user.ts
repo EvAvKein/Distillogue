@@ -1,5 +1,6 @@
 import {v4 as newId} from "uuid";
 import {PostConfig, Node} from "./post.js";
+import {unix} from "../helpers/timestamps.js";
 
 class User {
 	auths: UserAuth[];
@@ -33,9 +34,21 @@ class UserSession {
 	}
 }
 
+class AdminEntry {
+	id: UserData["id"];
+	name: string;
+	joined: number;
+
+	constructor(id: AdminEntry["id"], name: AdminEntry["name"]) {
+		this.id = id;
+		this.name = name;
+		this.joined = unix();
+	}
+}
+
 class UserData {
 	id: string;
-	permissions: {banned?: true; admin?: {id: UserData["id"]; name: string; joined: number}};
+	permissions: {banned?: true; admin?: AdminEntry};
 	name: string;
 	drafts: {title: Node["title"]; body: Node["body"]; lastEdited: number}[];
 	presets: {name: string; config: Omit<PostConfig, "access">}[];
@@ -94,6 +107,7 @@ export {
 	User,
 	UserAuth,
 	UserSession,
+	AdminEntry,
 	UserData,
 	UserPayload,
 	editableUserData,
