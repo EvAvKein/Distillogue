@@ -31,7 +31,7 @@ export default function (app: Express, postsDb: Collection<Post>, usersDb: Colle
 		const mongoPath = nodePathAsMongoLocators(nodePath);
 		const mongoUpdatePathOptions = {arrayFilters: mongoPath.arrayFiltersOption, returnDocument: "after"} as const;
 
-		const subjectPost = await postsDb.findOne(mongoFilterPostsByAccess(user.data.id, {"thread.id": postId})); // TODO: implementing this with the subsequent validations as part of an aggregation pipeline with the interaction request would eliminate a race condition, but mongo pipeline operations have various issues (verbosity, technical limitations, low readability) and concurrent usage (& contributor count) is currently too low to merit wrangling with those issues
+		const subjectPost = await postsDb.findOne(mongoFilterPostsByAccess(user.data, {"thread.id": postId})); // TODO: implementing this with the subsequent validations as part of an aggregation pipeline with the interaction request would eliminate a race condition, but mongo pipeline operations have various issues (verbosity, technical limitations, low readability) and concurrent usage (& contributor count) is currently too low to merit wrangling with those issues
 		if (!subjectPost) {
 			response.status(404).json(
 				new FetchResponse(null, {
@@ -94,7 +94,7 @@ export default function (app: Express, postsDb: Collection<Post>, usersDb: Colle
 		}
 
 		const dbResponse = await postsDb.findOneAndUpdate(
-			mongoFilterPostsByAccess(user.data.id, {"thread.id": postId}),
+			mongoFilterPostsByAccess(user.data, {"thread.id": postId}),
 			mongoMergeUpdateFilters(
 				{
 					$set: {

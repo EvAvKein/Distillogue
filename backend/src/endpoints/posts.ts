@@ -30,7 +30,7 @@ export default function (app: Express, postsDb: Collection<Post>, usersDb: Colle
 		const user = await userBySession(request);
 		const posts = await postsDb
 			.find(
-				mongoFilterPostsByAccess(user?.data.id, {
+				mongoFilterPostsByAccess(user?.data, {
 					$or: [{"thread.title": preppedSearchRequest}, {"thread.body": preppedSearchRequest}],
 				}),
 				{projection: {["thread.replies"]: false}}
@@ -49,7 +49,7 @@ export default function (app: Express, postsDb: Collection<Post>, usersDb: Colle
 		const postId = request.params.id as Node["id"];
 		const user = await userBySession(request);
 
-		const dbResponse = await postsDb.findOne(mongoFilterPostsByAccess(user?.data.id, {"thread.id": postId}));
+		const dbResponse = await postsDb.findOne(mongoFilterPostsByAccess(user?.data, {"thread.id": postId}));
 		if (!dbResponse) {
 			response.status(404).json(
 				new FetchResponse(null, {
