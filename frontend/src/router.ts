@@ -16,6 +16,8 @@ import dashboard_profile from "./pages/User/dashboardSections/Profile.vue";
 import dashboard_drafts from "./pages/User/dashboardSections/Drafts.vue";
 import dashboard_presets from "./pages/User/dashboardSections/Presets.vue";
 import dashboard_contacts from "./pages/User/dashboardSections/Contacts.vue";
+import admin from "./pages/Admin/Admin.vue";
+import admin_feeds from "./pages/Admin/adminSections/Feeds.vue";
 
 const router = createRouter({
 	history: createWebHistory(process.env.BASE_URL),
@@ -100,6 +102,19 @@ const router = createRouter({
 					name: "dashboard_contacts",
 					path: "contacts",
 					component: dashboard_contacts,
+				},
+			],
+		},
+		{
+			name: "admin",
+			path: "/admin",
+			component: admin,
+			redirect: "/admin/feeds",
+			children: [
+				{
+					name: "admin_feeds",
+					path: "feeds",
+					component: admin_feeds,
 				},
 			],
 		},

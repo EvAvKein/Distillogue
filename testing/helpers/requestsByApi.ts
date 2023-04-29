@@ -51,6 +51,16 @@ async function signUp(request: Request, page: Page) {
 	return data;
 }
 
+async function setAdmin(request: Request, authKey: string, newAdminStatus: boolean) {
+	return newAdminStatus
+		? request.post("/api/tests/admin", {
+				headers: {authorization: "Bearer " + authKey},
+		  })
+		: request.delete("/api/tests/admin", {
+				headers: {authorization: "Bearer " + authKey},
+		  });
+}
+
 async function createPost(request: Request, authKey: string, postRequest: PostCreationRequest) {
 	return request.post("/api/posts", {
 		headers: {authorization: "Bearer " + authKey},
@@ -58,4 +68,14 @@ async function createPost(request: Request, authKey: string, postRequest: PostCr
 	});
 }
 
-export {createUser, createSession, getSession, deleteSession, getUserData, createUserAndSession, signUp, createPost};
+export {
+	createUser,
+	createSession,
+	getSession,
+	deleteSession,
+	getUserData,
+	createUserAndSession,
+	signUp,
+	setAdmin,
+	createPost,
+};
