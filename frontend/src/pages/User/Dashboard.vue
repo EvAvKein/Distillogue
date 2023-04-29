@@ -25,7 +25,7 @@
 	import {useRoute} from "vue-router";
 	const route = useRoute();
 
-	const pages = ["profile", "drafts", "presets", "contacts"];
+	const pages = ["profile", "drafts", "presets", "contacts"] as const;
 </script>
 
 <style scoped>
