@@ -1,6 +1,6 @@
 import {promises as fs} from "node:fs";
-import {UserData} from "../../../objects/user";
-import {users} from "../../mongo";
+import {UserData} from "../../../shared/objects/user.js";
+import {users} from "../../src/mongo.js";
 
 const newAdminsList: {id: UserData["id"]; name: string}[] = JSON.parse(await fs.readFile("../admins.json", "utf-8"));
 const newAdminIdsList = newAdminsList.map((admin) => admin.id);
