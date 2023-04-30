@@ -17,8 +17,8 @@ WORKDIR /backend
 COPY /backend /backend/
 RUN npm run build
 
-# CLEAN
-FROM node:16-alpine
+# CLEAN (using bullseye for adminning with bash)
+FROM node:16-bullseye-slim
 WORKDIR /backend
 COPY --from=setup /backend/package.json ./
 RUN npm install --omit=dev
