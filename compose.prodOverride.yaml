@@ -15,6 +15,6 @@ services:
 
   backend:
     volumes:
-      - ./backend/admin/admins.json:dist/backend/admin/admins.json
+      - ./backend/admin/admins.json:/backend/dist/backend/admin/admins.json
     env_file:
       - ./prod.env
