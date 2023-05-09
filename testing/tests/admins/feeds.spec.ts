@@ -24,8 +24,6 @@ test.describe("Posts feed", async () => {
 
 		const adminUserPayload = await createUserAndSession(request);
 
-		console.log(adminUserPayload.sessionKey);
-
 		await expect(await setAdmin(request, adminUserPayload.sessionKey, true)).toBeOK();
 
 		await page.goto("/");
