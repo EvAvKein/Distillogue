@@ -1,4 +1,4 @@
-const user = {
+export const user = {
 	name: {
 		min: 3,
 		max: 20,
@@ -12,7 +12,7 @@ const user = {
 	},
 } as const;
 
-const node = {
+export const node = {
 	title: {
 		min: 8,
 		max: 100,
@@ -22,5 +22,3 @@ const node = {
 		max: 2500,
 	},
 } as const;
-
-export {user, node};

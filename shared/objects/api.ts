@@ -1,7 +1,7 @@
 import {UserData, editableUserData} from "./user.js";
 import {Node, PostAccess, PostConfig} from "./post.js";
 
-class FetchResponse<T = unknown> {
+export class FetchResponse<T = unknown> {
 	data?: T;
 	error?: {
 		message: string;
@@ -13,7 +13,7 @@ class FetchResponse<T = unknown> {
 	}
 }
 
-class UserCreationRequest {
+export class UserCreationRequest {
 	username: UserData["name"];
 
 	constructor(username: UserCreationRequest["username"]) {
@@ -21,7 +21,7 @@ class UserCreationRequest {
 	}
 }
 
-class UserPatchRequest<dataType extends editableUserData> {
+export class UserPatchRequest<dataType extends editableUserData> {
 	dataName: dataType;
 	newValue: UserData[dataType];
 
@@ -31,7 +31,7 @@ class UserPatchRequest<dataType extends editableUserData> {
 	}
 }
 
-class NodeCreationRequest {
+export class NodeCreationRequest {
 	title: string;
 	body: string;
 	deletedDraftIndex?: number;
@@ -49,7 +49,7 @@ class NodeCreationRequest {
 	}
 }
 
-class PostCreationRequest {
+export class PostCreationRequest {
 	rootNode: NodeCreationRequest;
 	config: PostConfig;
 	access: PostAccess;
@@ -65,10 +65,10 @@ class PostCreationRequest {
 	}
 }
 
-const arrOfInteractionTypes = ["reply", "vote"] as const;
-type interactionType = (typeof arrOfInteractionTypes)[number];
+export const arrOfInteractionTypes = ["reply", "vote"] as const;
+export type interactionType = (typeof arrOfInteractionTypes)[number];
 
-class NodeInteractionRequest {
+export class NodeInteractionRequest {
 	nodePath: Node["id"][];
 	interactionType: interactionType;
 	interactionData:
@@ -88,14 +88,3 @@ class NodeInteractionRequest {
 		this.interactionData = interactionData;
 	}
 }
-
-export {
-	FetchResponse,
-	UserCreationRequest,
-	UserPatchRequest,
-	NodeCreationRequest,
-	PostCreationRequest,
-	interactionType,
-	arrOfInteractionTypes,
-	NodeInteractionRequest,
-};

@@ -2,7 +2,7 @@ import {v4 as newId} from "uuid";
 import {PostConfig, Node} from "./post.js";
 import {unix} from "../helpers/timestamps.js";
 
-class User {
+export class User {
 	auths: UserAuth[];
 	sessions: UserSession[];
 	data: UserData;
@@ -14,7 +14,7 @@ class User {
 	}
 }
 
-class UserAuth {
+export class UserAuth {
 	provider: "Distillogue";
 	key: string;
 
@@ -24,7 +24,7 @@ class UserAuth {
 	}
 }
 
-class UserSession {
+export class UserSession {
 	name?: string;
 	key: string;
 
@@ -34,7 +34,7 @@ class UserSession {
 	}
 }
 
-class AdminEntry {
+export class AdminEntry {
 	id: UserData["id"];
 	name: string;
 	joined: number;
@@ -46,7 +46,7 @@ class AdminEntry {
 	}
 }
 
-class UserData {
+export class UserData {
 	id: string;
 	permissions: {banned?: true; admin?: AdminEntry};
 	name: string;
@@ -64,7 +64,7 @@ class UserData {
 	}
 }
 
-class UserPayload {
+export class UserPayload {
 	sessionKey: UserSession["key"];
 	data: UserData;
 
@@ -74,10 +74,10 @@ class UserPayload {
 	}
 }
 
-const arrOfEditableUserData = ["name", "drafts", "presets", "contacts"] as const;
-type editableUserData = (typeof arrOfEditableUserData)[number];
+export const arrOfEditableUserData = ["name", "drafts", "presets", "contacts"] as const;
+export type editableUserData = (typeof arrOfEditableUserData)[number];
 
-class UserEntry {
+export class UserEntry {
 	name: UserData["name"];
 	id: UserData["id"];
 
@@ -102,16 +102,3 @@ class UserEntry {
 //     extraData ? this.extraData = extraData : delete this.extraData;
 //   };
 // };
-
-export {
-	User,
-	UserAuth,
-	UserSession,
-	AdminEntry,
-	UserData,
-	UserPayload,
-	editableUserData,
-	arrOfEditableUserData,
-	UserEntry,
-	//Log,
-};

@@ -1,11 +1,11 @@
 import {Request} from "express";
 import {users} from "../mongo.js";
 
-function sessionKey(apiRequest: Request) {
+export function sessionKey(apiRequest: Request) {
 	return apiRequest.headers.authorization?.replace("Bearer ", "") || "";
 }
 
-async function userBySession(apiRequest: Request) {
+export async function userBySession(apiRequest: Request) {
 	const authKey = sessionKey(apiRequest);
 
 	if (!authKey) return null;
@@ -14,5 +14,3 @@ async function userBySession(apiRequest: Request) {
 
 	return user;
 }
-
-export {sessionKey, userBySession};

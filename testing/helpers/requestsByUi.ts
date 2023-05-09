@@ -5,7 +5,7 @@ import {type PostAccess, type PostConfig, type Post} from "../../shared/objects/
 import {type FetchResponse} from "../../shared/objects/api.js";
 import * as api from "./requestsByApi.js";
 
-async function signUp(page: Page, name?: string) {
+export async function signUp(page: Page, name?: string) {
 	await page.goto("/join");
 
 	await expect(page.getByText("Sign Up")).toBeVisible();
@@ -15,7 +15,7 @@ async function signUp(page: Page, name?: string) {
 	await expect(page).toHaveURL(/.*browse/);
 }
 
-async function signIn(page: Page, name: string) {
+export async function signIn(page: Page, name: string) {
 	await page.goto("/join");
 	await page.getByRole("button", {name: "Switch to sign-in"}).click();
 
@@ -26,11 +26,16 @@ async function signIn(page: Page, name: string) {
 	await expect(page).toHaveURL(/.*browse/);
 }
 
-async function signOut(page: Page) {
+export async function signOut(page: Page) {
 	await page.locator("header").getByText("Logout").click();
 }
 
-async function createPost(page: Page, title: string, body: string, extraConfiguration?: (page: Page) => Promise<void>) {
+export async function createPost(
+	page: Page,
+	title: string,
+	body: string,
+	extraConfiguration?: (page: Page) => Promise<void>
+) {
 	await page.goto("/post/create");
 
 	await page.getByLabel("Title").fill(title);
@@ -42,7 +47,7 @@ async function createPost(page: Page, title: string, body: string, extraConfigur
 	await expect(page.locator(".notification.negative")).not.toBeVisible();
 }
 
-async function createReply(page: Page, nodeTitlesPath: string[], replyTitle: string, replyBody?: string) {
+export async function createReply(page: Page, nodeTitlesPath: string[], replyTitle: string, replyBody?: string) {
 	await expandNodePath(page, nodeTitlesPath);
 
 	const parentNode = page.locator(".node", {has: page.getByText(nodeTitlesPath[nodeTitlesPath.length - 1])});
@@ -54,7 +59,7 @@ async function createReply(page: Page, nodeTitlesPath: string[], replyTitle: str
 	await replyForm.getByRole("button", {name: "Reply"}).click();
 }
 
-async function expandConfigCategories(page: Page) {
+export async function expandConfigCategories(page: Page) {
 	for (const category of await page.locator("#editConfig .category").all()) {
 		if ((await category.getAttribute("aria-expanded")) === "false") {
 			await category.locator("> button").click();
@@ -62,7 +67,7 @@ async function expandConfigCategories(page: Page) {
 	}
 }
 
-async function expandNodePath(page: Page, nodeTitlesPath: string[]) {
+export async function expandNodePath(page: Page, nodeTitlesPath: string[]) {
 	for (const replyTitle of nodeTitlesPath.slice(1)) {
 		const node = page.locator(".node", {has: page.locator(`text="${replyTitle}"`)});
 		if ((await node.getAttribute("id")) === "central") continue;
@@ -71,7 +76,7 @@ async function expandNodePath(page: Page, nodeTitlesPath: string[]) {
 	}
 }
 
-async function setupUserWithPostAndOpen(
+export async function setupUserWithPostAndOpen(
 	page: Page,
 	request: APIRequestContext,
 	postConfig?: PostConfig,
@@ -100,14 +105,3 @@ async function setupUserWithPostAndOpen(
 
 	return {postTitle};
 }
-
-export {
-	signUp,
-	signIn,
-	signOut,
-	createPost,
-	createReply,
-	expandConfigCategories,
-	expandNodePath,
-	setupUserWithPostAndOpen,
-};

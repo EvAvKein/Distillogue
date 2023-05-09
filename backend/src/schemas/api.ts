@@ -6,21 +6,25 @@ import {nodeBody, nodeTitle, PostAccess} from "./post.js";
 import {editableUserData} from "../../../shared/objects/user.js";
 import {user} from "../../../shared/objects/validationUnits.js";
 
-const UserCreationRequest: ZodSchema<classes.UserCreationRequest> = z.object({
+export const UserCreationRequest: ZodSchema<classes.UserCreationRequest> = z.object({
 	username: UserData.shape.name,
 });
-const UserPatchRequest: ZodSchema<classes.UserPatchRequest<editableUserData>> = z.discriminatedUnion("dataName", [
-	// TODO: there must be some way to generate these based on arrOfEditableUserData, but i kept facing type issues when attempting it
-	z.object({dataName: z.literal("name"), newValue: UserData.shape.name}),
-	z.object({dataName: z.literal("drafts"), newValue: UserData.shape.drafts}),
-	z.object({dataName: z.literal("presets"), newValue: UserData.shape.presets}),
-	z.object({dataName: z.literal("contacts"), newValue: UserData.shape.contacts}),
-]);
-const UserPatchRequestArray: ZodSchema<classes.UserPatchRequest<editableUserData>[]> = UserPatchRequest.array().min(1);
+export const UserPatchRequest: ZodSchema<classes.UserPatchRequest<editableUserData>> = z.discriminatedUnion(
+	"dataName",
+	[
+		// TODO: there must be some way to generate these based on arrOfEditableUserData, but i kept facing type issues when attempting it
+		z.object({dataName: z.literal("name"), newValue: UserData.shape.name}),
+		z.object({dataName: z.literal("drafts"), newValue: UserData.shape.drafts}),
+		z.object({dataName: z.literal("presets"), newValue: UserData.shape.presets}),
+		z.object({dataName: z.literal("contacts"), newValue: UserData.shape.contacts}),
+	]
+);
+export const UserPatchRequestArray: ZodSchema<classes.UserPatchRequest<editableUserData>[]> =
+	UserPatchRequest.array().min(1);
 
 const nodePath = z.array(UserData.shape.id).min(1).optional();
 
-const NodeCreationRequest: ZodSchema<classes.NodeCreationRequest> = z.object({
+export const NodeCreationRequest: ZodSchema<classes.NodeCreationRequest> = z.object({
 	invitedOwnerIds: z.array(z.string()).optional(),
 	title: nodeTitle,
 	body: nodeBody,
@@ -34,13 +38,13 @@ const NodeCreationRequest: ZodSchema<classes.NodeCreationRequest> = z.object({
 	nodePath: nodePath.optional(),
 });
 
-const PostCreationRequest: ZodSchema<classes.PostCreationRequest> = z.object({
+export const PostCreationRequest: ZodSchema<classes.PostCreationRequest> = z.object({
 	rootNode: NodeCreationRequest,
 	config: PostConfig,
 	access: PostAccess,
 });
 
-const NodeInteractionRequest: ZodSchema<classes.NodeInteractionRequest> = z.intersection(
+export const NodeInteractionRequest: ZodSchema<classes.NodeInteractionRequest> = z.intersection(
 	z
 		.object({
 			nodePath: nodePath,
@@ -57,12 +61,3 @@ const NodeInteractionRequest: ZodSchema<classes.NodeInteractionRequest> = z.inte
 		}),
 	])
 );
-
-export {
-	UserCreationRequest,
-	UserPatchRequest,
-	UserPatchRequestArray,
-	NodeCreationRequest,
-	PostCreationRequest,
-	NodeInteractionRequest,
-};

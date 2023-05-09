@@ -7,7 +7,7 @@ import * as classes from "../../../shared/objects/post.js";
 const userIdArray = z.array(UserData.shape.id);
 const UserEntryArray = z.array(UserEntry);
 
-const NodeStats: ZodSchema<classes.NodeStats> = z.object({
+export const NodeStats: ZodSchema<classes.NodeStats> = z.object({
 	timestamps: z.object({
 		posted: z.number().int(),
 		interacted: z.number().int().optional(),
@@ -21,7 +21,7 @@ const NodeStats: ZodSchema<classes.NodeStats> = z.object({
 		.optional(),
 });
 
-const PostAccess: ZodSchema<classes.PostAccess> = z.discriminatedUnion("public", [
+export const PostAccess: ZodSchema<classes.PostAccess> = z.discriminatedUnion("public", [
 	z.object({
 		public: z.undefined(),
 		users: UserEntryArray,
@@ -33,15 +33,15 @@ const PostAccess: ZodSchema<classes.PostAccess> = z.discriminatedUnion("public",
 	}),
 ]);
 
-const PostStats: ZodSchema<classes.PostStats> = z.object({
+export const PostStats: ZodSchema<classes.PostStats> = z.object({
 	posted: z.number().int(),
 	interacted: z.number().int().nullish(),
 });
 
-const nodeTitle = z.string().min(nodeVals.title.min).max(nodeVals.title.max);
-const nodeBody = z.string().min(nodeVals.body.min).max(nodeVals.body.max);
+export const nodeTitle = z.string().min(nodeVals.title.min).max(nodeVals.title.max);
+export const nodeBody = z.string().min(nodeVals.body.min).max(nodeVals.body.max);
 
-const Node: ZodSchema<classes.Node> = z.object({
+export const Node: ZodSchema<classes.Node> = z.object({
 	ownerId: UserData.shape.id,
 	id: z.string(),
 	title: nodeTitle,
@@ -57,11 +57,9 @@ const Node: ZodSchema<classes.Node> = z.object({
 	),
 });
 
-const Post: ZodSchema<classes.Post> = z.object({
+export const Post: ZodSchema<classes.Post> = z.object({
 	thread: Node,
 	config: shared.PostConfig,
 	access: PostAccess,
 	stats: PostStats,
 });
-
-export {PostAccess, NodeStats, nodeTitle, nodeBody, Node, Post};

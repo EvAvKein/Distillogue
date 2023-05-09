@@ -3,9 +3,9 @@ import {z} from "zod";
 import {zodObjer} from "../helpers/zod/zodObjer.js";
 import * as postClasses from "../../../shared/objects/post";
 
-const trueOrNone = z.literal(true).optional();
+export const trueOrNone = z.literal(true).optional();
 
-const PostConfig = z.object<zodObjer<postClasses.PostConfig>>({
+export const PostConfig = z.object<zodObjer<postClasses.PostConfig>>({
 	timestamps: z
 		.object({
 			interacted: trueOrNone,
@@ -19,5 +19,3 @@ const PostConfig = z.object<zodObjer<postClasses.PostConfig>>({
 		})
 		.optional(),
 });
-
-export {PostConfig, trueOrNone};

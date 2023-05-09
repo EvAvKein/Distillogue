@@ -4,19 +4,19 @@ import {user} from "../../../shared/objects/validationUnits.js";
 import {alphanumRegex, alphanumRegexWithSpaces} from "../helpers/alphanumRegex.js";
 import * as classes from "../../../shared/objects/user.js";
 
-const UserId = z.string();
+export const UserId = z.string();
 
-const UserAuth: ZodSchema<classes.UserAuth> = z.object({
+export const UserAuth: ZodSchema<classes.UserAuth> = z.object({
 	provider: z.literal("Distillogue"),
 	key: z.string(),
 });
 
-const UserSession: ZodSchema<classes.UserSession> = z.object({
+export const UserSession: ZodSchema<classes.UserSession> = z.object({
 	name: z.string().regex(alphanumRegex),
 	key: z.string(),
 });
 
-const UserDrafts = z
+export const UserDrafts = z
 	.array(
 		z.object({
 			title: z.string().regex(alphanumRegexWithSpaces),
@@ -26,7 +26,7 @@ const UserDrafts = z
 	)
 	.max(user.drafts.max);
 
-const UserPresets = z
+export const UserPresets = z
 	.array(
 		z.object({
 			name: z.string().regex(alphanumRegexWithSpaces).max(user.presets.name.max),
@@ -35,14 +35,14 @@ const UserPresets = z
 	)
 	.max(user.presets.max);
 
-const UserEntry: ZodSchema<classes.UserEntry> = z.object({
+export const UserEntry: ZodSchema<classes.UserEntry> = z.object({
 	name: z.string().nonempty(),
 	id: UserId,
 });
 
-const UserContacts = z.array(UserEntry);
+export const UserContacts = z.array(UserEntry);
 
-const UserData = z.object({
+export const UserData = z.object({
 	id: UserId,
 	permissions: z.object({
 		banned: z.literal(true).optional(),
@@ -58,10 +58,8 @@ const UserData = z.object({
 	contacts: UserContacts,
 });
 
-const User: ZodSchema<classes.User> = z.object({
+export const User: ZodSchema<classes.User> = z.object({
 	auths: z.array(UserAuth).min(1),
 	sessions: z.array(UserSession),
 	data: UserData,
 });
-
-export {UserId, UserAuth, UserSession, UserData, UserDrafts, UserPresets, UserEntry, UserContacts, User};

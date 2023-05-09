@@ -3,7 +3,7 @@ import {unix as unixStamp} from "../helpers/timestamps.js";
 import {NodeCreationRequest} from "./api.js";
 import {UserData, UserEntry} from "./user.js";
 
-interface PostConfig {
+export interface PostConfig {
 	timestamps?: {
 		interacted?: true;
 	};
@@ -14,7 +14,7 @@ interface PostConfig {
 	};
 }
 
-class NodeStats {
+export class NodeStats {
 	timestamps: {
 		posted: number;
 		interacted?: number;
@@ -34,13 +34,13 @@ class NodeStats {
 	}
 }
 
-interface PostAccess {
+export interface PostAccess {
 	public?: true;
 	users?: UserEntry[];
 	moderators?: UserEntry[];
 }
 
-class Node extends NodeCreationRequest {
+export class Node extends NodeCreationRequest {
 	ownerId: UserData["id"];
 	id: string;
 	stats: NodeStats;
@@ -59,7 +59,7 @@ class Node extends NodeCreationRequest {
 	}
 }
 
-class PostStats {
+export class PostStats {
 	posted: number;
 	interacted?: number | null;
 
@@ -69,7 +69,7 @@ class PostStats {
 	}
 }
 
-class Post {
+export class Post {
 	/* using ID of root node */
 	thread: Node;
 	config: PostConfig;
@@ -84,7 +84,7 @@ class Post {
 	}
 }
 
-class PostSummary {
+export class PostSummary {
 	id: Node["id"];
 	title: Node["title"];
 	config: Post["config"];
@@ -99,5 +99,3 @@ class PostSummary {
 		this.stats = post.stats;
 	}
 }
-
-export {PostConfig, NodeStats, PostAccess, Node, PostStats, Post, PostSummary};
