@@ -7,6 +7,8 @@
 ## Proof-of-concept
 
 - ### Flagship/core features:
+  - User invites during private post creation
+  - Data expandable in post-viewing page (access & config)
   - More config options:
     - Node editing & history
     - Poll posts
@@ -16,12 +18,11 @@
     - Contributions (unrestricted & authorized by author)
     - Moderation:
       - Paradigms (e.g democracy via existing configs, moderators appointed by post-creator)
-      - Functionalities (e.g censoring with explanation, node/branch locking, Perspective API public/mod-only flagging)
+      - Functionalities (e.g invite/remove users, censoring with explanation, node/branch locking, Perspective API public/mod-only flagging)
     - Others (ideas welcome)
-  - User & user-to-user functionalities (latter added very cautiously)
 - ### Regulation:
   - Platform moderation
-- ### Tests:
+- ### Automated Tests:
   - Test post creation and list
 
 <hr>
@@ -30,6 +31,7 @@
 
 - ### All of the above
 - ### Basic/core features:
+  - Remove public post option
   - Config tooltips/info-buttons
   - Session-management dashboard page
 - ### Security:
@@ -43,7 +45,7 @@
   - Better color palette
   - Long-term logo & icons (possibly commissioned/paid)
 - ### Resources & Transparency:
-  - Proper introduction/advertising page
+  - Proper front/introduction/advertising page
   - Proper about page
   - Footer
   - Project values/principles/philosophy page
@@ -56,6 +58,7 @@
   - Aria attributes & accessibility tree checkup (need to find free, toggleable, configurable software for screenreader testing. devtools accessibility tree is insufficient)
 - ### Optimization:
   - Client-side input validation
+  - Performance pass (e.g asset size, fetch priority)
   - Remove zod-validation-error dependency & improve API validation errors' readability (either via custom messages on each validation or through some custom message construction)
   - Resolve TODO situations noted in various code comments
 
