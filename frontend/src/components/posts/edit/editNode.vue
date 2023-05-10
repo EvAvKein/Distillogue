@@ -36,6 +36,7 @@
 			v-model="data.title"
 		/>
 		<labelledInput
+			id="body"
 			:label="'Body'"
 			:type="'textarea'"
 			:minLineHeight="15"
@@ -133,5 +134,9 @@
 
 	#title {
 		font-size: 1.15em;
+	}
+
+	#body {
+		margin-top: 0.5em;
 	}
 </style>

@@ -23,6 +23,7 @@
 		<transition name="collapse">
 			<section v-if="typeof currentDraft.index === 'number'">
 				<labelledInput
+					class="draftTextBox"
 					:inputId="'editDraftTitle'"
 					:type="'text'"
 					:label="'Title'"
@@ -30,6 +31,7 @@
 					@update:modelValue="updateCurrentDraft"
 				/>
 				<labelledInput
+					class="draftTextBox"
 					:inputId="'editDraftBody'"
 					:type="'textarea'"
 					:label="'Body'"
@@ -143,6 +145,10 @@
 	}
 	ul button div {
 		font-size: 0.7em;
+	}
+
+	.draftTextBox {
+		margin-top: 0.5em;
 	}
 
 	#deletionButton {

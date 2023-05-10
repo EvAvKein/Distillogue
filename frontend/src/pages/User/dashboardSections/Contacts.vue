@@ -2,7 +2,13 @@
 	<section>
 		<section>
 			<labelledInput :label="'Name'" :inputId="'newContactName'" :type="'text'" v-model="newContactName" />
-			<labelledInput :label="'ID'" :inputId="'newContactId'" :type="'text'" v-model="newContactId" />
+			<labelledInput
+				id="newContactIdWrapper"
+				:label="'ID'"
+				:inputId="'newContactId'"
+				:type="'text'"
+				v-model="newContactId"
+			/>
 			<button id="newContactButton" class="core_backgroundButton" @click="createNewContact">New contact</button>
 			<notification :text="notif.text" :desirablityStyle="notif.desirability" />
 		</section>
@@ -71,6 +77,10 @@
 </script>
 
 <style scoped>
+	#newContactIdWrapper {
+		margin-top: 0.5em;
+	}
+
 	#newContactButton {
 		display: block;
 		font-size: 0.9em;

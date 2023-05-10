@@ -50,24 +50,24 @@
 
 	label {
 		position: absolute;
-		top: 1.35em;
-		left: 0;
+		top: 0.2em;
+		left: 0.35em;
+		font-size: 1.25em;
 		color: var(--textSubColor);
-		margin-left: 0.5em;
 		cursor: text;
-		transition: transform 250ms;
+		transition: all 250ms;
 	}
 
 	input,
 	textarea {
 		background-color: var(--backgroundColor);
 		color: var(--textColor);
-		margin-top: 1.3em;
+		padding-top: 0.65em;
 		box-sizing: border-box;
 		padding-left: 0.2em;
 		width: 100%;
 		border: none;
-		border-left: 0.225em solid var(--textSubColor);
+		border-left: 0.2em solid var(--textSubColor);
 		min-height: v-bind("(minLineHeight || 1) * 1.15 + 'em'");
 	}
 	textarea {
@@ -91,9 +91,10 @@
 	input:not(:placeholder-shown) + label,
 	textarea:focus + label,
 	textarea:not(:placeholder-shown) + label {
+		top: 0;
+		left: 0.6em;
 		cursor: default;
-		text-decoration: underline;
-		transform: translateY(-1.2em);
-		transition: transform 150ms;
+		font-size: 0.65em;
+		transition: all 150ms;
 	}
 </style>

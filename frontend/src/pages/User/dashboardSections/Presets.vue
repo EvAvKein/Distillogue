@@ -147,7 +147,8 @@
 	}
 
 	#presetNameInput {
-		font-size: 1.3em;
+		font-size: 1.1em;
+		margin-top: 0.5em;
 	}
 	#editConfig {
 		margin-block: 1em 0.5em;
