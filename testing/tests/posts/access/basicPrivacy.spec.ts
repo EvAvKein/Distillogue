@@ -1,9 +1,9 @@
 import {test, expect} from "@playwright/test";
-import * as ui from "../../helpers/requestsByUi.js";
-import * as api from "../../helpers/requestsByApi.js";
-import {getSessionKey} from "../../helpers/sessionKey.js";
-import {randomNodeTitle, randomNodeBody} from "../../helpers/randomAlphanumString.js";
-import {NodeCreationRequest, PostCreationRequest} from "../../../shared/objects/api.js";
+import * as ui from "../../../helpers/requestsByUi.js";
+import * as api from "../../../helpers/requestsByApi.js";
+import {getSessionKey} from "../../../helpers/sessionKey.js";
+import {randomNodeTitle, randomNodeBody} from "../../../helpers/randomAlphanumString.js";
+import {NodeCreationRequest, PostCreationRequest} from "../../../../shared/objects/api.js";
 
 test.describe("Access", () => {
 	test.beforeEach(async ({request, page}) => {
