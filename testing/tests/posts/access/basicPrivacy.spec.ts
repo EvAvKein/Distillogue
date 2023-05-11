@@ -5,7 +5,7 @@ import {getSessionKey} from "../../../helpers/sessionKey.js";
 import {randomNodeTitle, randomNodeBody} from "../../../helpers/randomAlphanumString.js";
 import {NodeCreationRequest, PostCreationRequest} from "../../../../shared/objects/api.js";
 
-test.describe("Access", () => {
+test.describe("Basic inability to access private posts", () => {
 	test.beforeEach(async ({request, page}) => {
 		await api.signUp(request, page);
 	});
