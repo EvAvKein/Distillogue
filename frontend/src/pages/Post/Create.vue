@@ -190,11 +190,12 @@
 	.sectionTab::after {
 		content: "v";
 		float: right;
-		transition: rotate 300ms;
+		transition: rotate 300ms, transform 100ms;
 	}
 
 	.section[aria-expanded="true"] .sectionTab::after {
 		rotate: 90deg;
+		transform: translateY(0.1em); /* prevents rightward overflow (and therefore scrollbar) on thin enough viewports */
 	}
 
 	.section[aria-expanded="true"] .sectionTab {
