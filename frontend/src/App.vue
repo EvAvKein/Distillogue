@@ -75,7 +75,8 @@
 
 	button,
 	a,
-	summary {
+	summary,
+	input[type="checkbox"] {
 		cursor: pointer;
 	}
 	button,
