@@ -1,6 +1,10 @@
 <template>
 	<labelledInput :label="'Name'" :inputId="'editUserName'" :type="'text'" v-model="nameState" />
 	<notification v-model:text="nameNotif.text" :desirablityStyle="nameNotif.desirability" />
+	<div>
+		<h5>User ID</h5>
+		<span id="userId">{{ user.data?.id }}</span>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -35,4 +39,19 @@
 	});
 </script>
 
-<style scoped></style>
+<style scoped>
+	div {
+		font-size: 0.9em;
+		margin-top: 0.25em;
+		text-align: center;
+	}
+
+	h5 {
+		color: var(--textSubColor);
+		font-weight: normal;
+	}
+
+	#userId {
+		user-select: all;
+	}
+</style>
