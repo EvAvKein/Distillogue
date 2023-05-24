@@ -10,7 +10,8 @@
 				:desirablityStyle="false"
 				:customDuration="null"
 			/>
-			<router-link class="core_backgroundButton" :to="{name: 'terms'}">For more info</router-link>
+			<router-link class="core_backgroundButton" :to="{name: 'about'}">About the project</router-link>
+			<router-link class="core_contentButton" :to="{name: 'terms'}">Terms</router-link>
 		</section>
 	</main>
 </template>
@@ -43,5 +44,11 @@
 	}
 	a {
 		display: block;
+	}
+
+	a + a {
+		font-size: 0.8em;
+		margin-top: 0.5em;
+		text-align: center;
 	}
 </style>
