@@ -23,6 +23,10 @@
 						<img src="../assets/megaphone.svg" alt="Megaphone icon" style="transform: scaleX(-1)" />
 						<span>About</span>
 					</router-link>
+					<router-link :to="{name: 'terms'}" class="core_contentButton">
+						<img src="../assets/scale.svg" alt="Scales icon" />
+						<span>Terms</span>
+					</router-link>
 				</div>
 			</nav>
 		</section>
