@@ -35,12 +35,24 @@ export const UserPresets = z
 	)
 	.max(user.presets.max);
 
+function validateIdUniqueness(objects: {id: string}[]) {
+	const IDs = new Set<string>();
+	objects.forEach((object) => IDs.add(object.id));
+	return objects.length === IDs.size;
+}
+
 export const UserEntry: ZodSchema<classes.UserEntry> = z.object({
 	name: z.string().nonempty(),
 	id: UserId,
 });
+export const UserEntries = z.array(UserEntry).refine(validateIdUniqueness, "User entries contain duplicate IDs");
 
-export const UserContacts = z.array(UserEntry);
+export const PostUserEntry: ZodSchema<classes.PostUserEntry> = UserEntry.and(
+	z.object({roles: z.array(z.union([z.literal("mod"), z.literal("readOnly")]))})
+);
+export const PostUserEntries = z
+	.array(PostUserEntry)
+	.refine(validateIdUniqueness, "User entries contain duplicate IDs");
 
 export const UserData = z.object({
 	id: UserId,
@@ -55,7 +67,7 @@ export const UserData = z.object({
 	name: z.string().regex(alphanumRegex).min(user.name.min).max(user.name.max),
 	drafts: UserDrafts,
 	presets: UserPresets,
-	contacts: UserContacts,
+	contacts: UserEntries,
 });
 
 export const User: ZodSchema<classes.User> = z.object({

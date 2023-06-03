@@ -5,6 +5,7 @@ import {user} from "../../../shared/objects/validationUnits.js";
 import {Post} from "../../../shared/objects/post.js";
 import {FetchResponse} from "../../../shared/objects/api.js";
 import {randomAlphanumString, randomNodeBody, randomNodeTitle} from "../../helpers/randomAlphanumString.js";
+import {setScreenSize} from "../../helpers/setScreenSize.js";
 
 interface presettableConfigByUiText {
 	Timestamps?: {
@@ -199,6 +200,8 @@ test.describe("Presets in posting page", () => {
 		await api.signUp(request, page);
 		await page.goto("/post/create");
 
+		await setScreenSize(page, "desktop");
+
 		defaultPresetsCount = (await page.locator(postingPage.presetButtons).all()).length;
 	});
 
@@ -280,6 +283,8 @@ test.describe("Presets in posting page", () => {
 test.describe("Presets across dashboard and posting page", () => {
 	test.beforeEach(async ({page, request}) => {
 		await api.signUp(request, page);
+
+		await setScreenSize(page, "desktop");
 	});
 
 	test("Edit posting page preset in dashboard", async ({page}) => {

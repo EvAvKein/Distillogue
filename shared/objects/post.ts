@@ -1,7 +1,7 @@
 import {v4 as newId} from "uuid";
 import {unix as unixStamp} from "../helpers/timestamps.js";
 import {NodeCreationRequest} from "./api.js";
-import {UserData, UserEntry} from "./user.js";
+import {UserData, PostUserEntry} from "./user.js";
 
 export interface PostConfig {
 	timestamps?: {
@@ -36,8 +36,7 @@ export class NodeStats {
 
 export interface PostAccess {
 	public?: true;
-	users?: UserEntry[];
-	moderators?: UserEntry[];
+	users: PostUserEntry[];
 }
 
 export class Node extends NodeCreationRequest {

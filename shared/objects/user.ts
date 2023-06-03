@@ -51,7 +51,7 @@ export class UserData {
 	permissions: {banned?: true; admin?: AdminEntry};
 	name: string;
 	drafts: {title: Node["title"]; body: Node["body"]; lastEdited: number}[];
-	presets: {name: string; config: Omit<PostConfig, "access">}[];
+	presets: {name: string; config: PostConfig}[];
 	contacts: {id: UserData["id"]; name: UserData["name"]}[];
 
 	constructor(name: UserData["name"]) {
@@ -78,12 +78,24 @@ export const arrOfEditableUserData = ["name", "drafts", "presets", "contacts"] a
 export type editableUserData = (typeof arrOfEditableUserData)[number];
 
 export class UserEntry {
-	name: UserData["name"];
+	name: string;
 	id: UserData["id"];
 
 	constructor(name: UserEntry["name"], id: UserEntry["id"]) {
 		this.name = name;
 		this.id = id;
+	}
+}
+
+export const arrOfPostUserRoles = ["mod", "readOnly"] as const;
+export type PostUserRole = (typeof arrOfPostUserRoles)[number];
+
+export class PostUserEntry extends UserEntry {
+	roles: PostUserRole[];
+
+	constructor(name: UserEntry["name"], id: UserEntry["id"], roles?: PostUserEntry["roles"]) {
+		super(name, id);
+		this.roles = roles ?? [];
 	}
 }
 

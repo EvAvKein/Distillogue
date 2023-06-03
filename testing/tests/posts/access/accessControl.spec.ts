@@ -5,7 +5,13 @@ import {getSessionKey} from "../../../helpers/sessionKey.js";
 import {randomNodeTitle, randomNodeBody} from "../../../helpers/randomAlphanumString.js";
 import {NodeCreationRequest, PostCreationRequest} from "../../../../shared/objects/api.js";
 
-test.describe("Basic inability to access private posts", () => {
+// currently doesn't include tests for allowing authorized access to private posts, because:
+// 1. it gets tested during other tests (e.g configs)
+// 2. i'm was unable to conceive of a way to mess with applicable code in a way that would:
+//  	- pass the aforementioned tests but not allow non-creator users to access the post
+//		- not be immediately & glaringly obvious upon even an inattentive review of the prospective changes
+
+test.describe("Prevent unauthorized access to private posts", () => {
 	test.beforeEach(async ({request, page}) => {
 		await api.signUp(request, page);
 	});
@@ -19,7 +25,11 @@ test.describe("Basic inability to access private posts", () => {
 			await api.createPost(
 				request,
 				(await getSessionKey(page))!,
-				new PostCreationRequest(new NodeCreationRequest(postTitle, randomNodeBody()), {}, {users: [{name, id}]})
+				new PostCreationRequest(
+					new NodeCreationRequest(postTitle, randomNodeBody()),
+					{},
+					{users: [{name, id, roles: []}]}
+				)
 			)
 		).toBeOK();
 
@@ -38,7 +48,7 @@ test.describe("Basic inability to access private posts", () => {
 			await api.createPost(
 				request,
 				(await getSessionKey(page))!,
-				new PostCreationRequest(new NodeCreationRequest(postTitle, postBody), {}, {users: [{name, id}]})
+				new PostCreationRequest(new NodeCreationRequest(postTitle, postBody), {}, {users: [{name, id, roles: []}]})
 			)
 		).toBeOK();
 		await page.goto("/browse");

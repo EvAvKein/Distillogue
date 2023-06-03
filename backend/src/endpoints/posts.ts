@@ -98,9 +98,11 @@ export default function (app: Express, postsDb: Collection<Post>, usersDb: Colle
 			return;
 		}
 
-		const newPost = new Post(new Node(user.data.id, postRequest.rootNode, postRequest.config), postRequest.config, {
-			users: [{name: user.data.name, id: user.data.id}],
-		});
+		const newPost = new Post(
+			new Node(user.data.id, postRequest.rootNode, postRequest.config),
+			postRequest.config,
+			postRequest.access
+		);
 		const dbResponse = await mongoInsertIfDoesntExist(postsDb, newPost, {
 			thread: {title: postRequest.rootNode.title, body: postRequest.rootNode.body},
 			config: postRequest.config,

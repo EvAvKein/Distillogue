@@ -17,7 +17,7 @@ test.describe("Posts feed", async () => {
 				new PostCreationRequest(
 					new NodeCreationRequest(postText.title, postText.body),
 					{},
-					{users: [{id: privateUserPayload.data.id, name: privateUserPayload.data.name}]}
+					{users: [{id: privateUserPayload.data.id, name: privateUserPayload.data.name, roles: []}]}
 				)
 			)
 		).toBeOK();

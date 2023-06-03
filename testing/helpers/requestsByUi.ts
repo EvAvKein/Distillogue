@@ -96,7 +96,7 @@ export async function setupUserWithPostAndOpen(
 			new PostCreationRequest(
 				new NodeCreationRequest(postTitle, randomNodeBody()),
 				postConfig ?? {},
-				postAccess ?? {users: [{name, id}]}
+				postAccess ?? {users: [{name, id, roles: []}]}
 			)
 		)
 	).json()) as FetchResponse<Post>;

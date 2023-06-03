@@ -85,7 +85,6 @@
 <script setup lang="ts">
 	import {ref, computed} from "vue";
 	import {deepCloneFromReactive} from "../../helpers/deepCloneFromReactive";
-	import {UserData} from "../../../../shared/objects/user";
 	import {Post, PostConfig, PostAccess} from "../../../../shared/objects/post";
 	import {
 		FetchResponse,
@@ -113,7 +112,9 @@
 		deletedDraftIndex: undefined,
 	});
 	const postConfig = ref<PostConfig>({});
-	const postAccess = ref<PostAccess>({users: [{name: user.data!.name, id: user.data!.id}]});
+	const postAccess = ref<PostAccess>({
+		users: [{name: user.data!.name, id: user.data!.id, roles: []}],
+	});
 
 	const notifText = ref<string>("");
 	function displayError(error: NonNullable<FetchResponse["error"]>) {
@@ -260,10 +261,10 @@
 		width: 100%;
 	}
 
-	@media (min-width: 75em) {
+	@media (min-width: 90em) {
 		form {
 			width: auto;
-			max-width: 100em;
+			max-width: 110em;
 			display: grid;
 			grid-template-columns: 1fr 2.5fr 1fr;
 			grid-template-areas:
@@ -284,6 +285,8 @@
 
 		#texts {
 			grid-area: texts;
+			border-inline: 0.01em solid var(--textSubColor);
+			padding-inline: 0.5em;
 		}
 		#config {
 			grid-area: config;
@@ -298,7 +301,7 @@
 </style>
 
 <style>
-	@media (min-width: 75em) {
+	@media (min-width: 90em) {
 		#createPost .section > button {
 			display: none;
 		}

@@ -2,6 +2,7 @@ import {test, expect, type Page} from "@playwright/test";
 import * as api from "../../helpers/requestsByApi.js";
 import {randomNodeTitle, randomNodeBody} from "../../helpers/randomAlphanumString.js";
 import {FetchResponse, NodeCreationRequest, PostCreationRequest} from "../../../shared/objects/api.js";
+import {setScreenSize} from "../../helpers/setScreenSize.js";
 import {Post} from "../../../shared/objects/post.js";
 import {user} from "../../../shared/objects/validationUnits.js";
 
@@ -317,6 +318,8 @@ test.describe("Drafts manipulation in posting page", async () => {
 	test.beforeEach(async ({page, request}) => {
 		await api.signUp(request, page);
 		await page.goto("/post/create");
+
+		await setScreenSize(page, "desktop"); // to avoid the need to expand the mobile layout's collapsible upon every visit and refresh
 	});
 
 	await testDraftsInPostingMode("Post", postRefreshRecovery, postSubmitRecovery);
@@ -333,7 +336,11 @@ test.describe("Drafts manipulation in reply modal", async () => {
 			await api.createPost(
 				request,
 				sessionKey,
-				new PostCreationRequest(new NodeCreationRequest(randomNodeTitle(), randomNodeBody()), {}, {users: [{name, id}]})
+				new PostCreationRequest(
+					new NodeCreationRequest(randomNodeTitle(), randomNodeBody()),
+					{},
+					{users: [{name, id, roles: []}]}
+				)
 			)
 		).json();
 		await page.goto("/post/" + responseBody.data!.thread.id);

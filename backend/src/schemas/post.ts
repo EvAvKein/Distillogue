@@ -1,11 +1,10 @@
 import {z, type ZodSchema} from "zod";
-import {UserData, UserEntry} from "./user.js";
+import {UserData, PostUserEntry} from "./user.js";
 import {node as nodeVals} from "../../../shared/objects/validationUnits.js";
 import * as shared from "./_shared.js";
 import * as classes from "../../../shared/objects/post.js";
 
 const userIdArray = z.array(UserData.shape.id);
-const UserEntryArray = z.array(UserEntry);
 
 export const NodeStats: ZodSchema<classes.NodeStats> = z.object({
 	timestamps: z.object({
@@ -21,17 +20,12 @@ export const NodeStats: ZodSchema<classes.NodeStats> = z.object({
 		.optional(),
 });
 
-export const PostAccess: ZodSchema<classes.PostAccess> = z.discriminatedUnion("public", [
-	z.object({
-		public: z.undefined(),
-		users: UserEntryArray,
-		moderators: UserEntryArray.optional(),
-	}),
-	z.object({
-		public: z.literal(true),
-		moderators: UserEntryArray.optional(),
-	}),
-]);
+const PostUserArray = z.array(PostUserEntry);
+
+export const PostAccess: ZodSchema<classes.PostAccess> = z.object({
+	public: z.literal(true).optional(),
+	users: PostUserArray,
+});
 
 export const PostStats: ZodSchema<classes.PostStats> = z.object({
 	posted: z.number().int(),
