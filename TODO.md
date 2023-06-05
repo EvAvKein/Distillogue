@@ -7,7 +7,6 @@
 ## Proof-of-concept
 
 - ### Flagship/core features:
-  - User invites during private post creation
   - Data expandable in post-viewing page (access & config)
   - More config options:
     - Node editing & history
