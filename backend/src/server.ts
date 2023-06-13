@@ -39,6 +39,6 @@ app.get("*", function (request, response) {
 
 const port = 3000;
 app.listen(port, () => {
-	console.log(`Server Online at http://localhost${process.env.DOCKERIZED ? "" : ":" + port}
+	console.log(`Server Online at http://localhost:80
   Date: ${timestamp.iso()}`);
 });

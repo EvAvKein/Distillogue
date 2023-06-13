@@ -17,35 +17,23 @@ The configurable discussion platform; currently in very early development, with 
 
 ### Software Requirements
 
-- Docker  
-  -- OR --
-- Node.js
-- MongoDB [(Instructions for enabling "mongo" command on Windows 10)](https://stackoverflow.com/a/41507803)
-- Windows, for `start` in some of the `npm run` commands: If not using Windows, replace with your equivalent for execution in new/background terminal
+- Docker
+- Node.js (development only, for package intellisense)
 
 ### Prerequisites
 
-1. Clone this project via Git/download
-
-#### With Docker
-
-2. Install & launch Docker
-
-#### With Node
-
-2. Install the above dependencies (excluding Docker of course)
-3. Run `npm run installAll`
+1. Clone this project via Git/download  
+   (If using intellisense, run `npm run installAll` in project's root)
+2. Launch Docker
 
 ### Commands
 
-| Outcome              | With Docker                                                                                      | With Node            |
-| -------------------- | ------------------------------------------------------------------------------------------------ | -------------------- |
-| Serve (Build & Host) | `docker-compose up`                                                                              | `npm run serve`      |
-| Serve Dev Mode       | `docker-compose -f compose.yaml -f compose.devOverride.yaml up` <br> OR <br> `npm run dockerDev` | `npm run serveDev`   |
-| Launch Playwright    | `docker-compose -f compose.tests.yaml up` <br> OR <br> `npm run dockerPlaywright`                | `npm run playwright` |
-| Serve & Playwright   | `docker-compose -f compose.yaml -f compose.tests.yaml up` <br> OR <br> `npm run dockerTest`      | `npm run test`       |
+- Serve (build & host): `docker-compose up`
+- Serve in dev mode: `docker-compose -f compose.yaml -f compose.devOverride.yaml up`
+- Run automated tests: `docker-compose -f compose.test.yaml up`
+- Run code styler: `docker-compose -f compose.style.yaml up`
 
-(For more discrete Node commands, see `package.json` and its counterparts in the `frontend` and `backend` folders)
+(When switching between serve dev modes or rewriting tests, append ` --build --force-recreate` to the command)
 
 ## Contributing
 

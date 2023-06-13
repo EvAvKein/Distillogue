@@ -1,16 +1,11 @@
 {
 	"type": "module",
 	"scripts": {
-		"database": "start mongod",
 		"build": "tsc",
 		"buildDev": "tsc --watch",
 		"server": "node dist/backend/src/server.js",
 		"serverDev": "nodemon dist/backend/src/server.js",
-		"buildAndServerDev": "npm run buildDev & npm run serverDev",
-		"host": "npm run database && npm run server",
-		"hostDev": "npm run database && npm run serverDev",
-		"serve": "npm run build && npm run host",
-		"serveDev": "start npm run buildDev && npm run hostDev"
+		"buildDevAndServerDev": "npm run buildDev & npm run serverDev"
 	},
 	"dependencies": {
 		"express": "^4.17.2",

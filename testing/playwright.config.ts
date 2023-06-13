@@ -7,12 +7,12 @@ const config: PlaywrightTestConfig = {
 	expect: {timeout: 5 * 1000},
 
 	use: {
-		baseURL: `http://localhost:${process.env.DOCKERIZED ? 80 : 3000}`,
+		baseURL: "http://localhost:80",
 		trace: "on",
 		// launchOptions: {slowMo: 500},
 	},
 
-	reporter: [[process.env.CI ? "github" : "list"], ["html", {open: process.env.DOCKERIZED ? "never" : "on-failure"}]],
+	reporter: [[process.env.CI ? "github" : "list"], ["html", {open: "never"}]],
 
 	retries: process.env.CI ? 2 : 0, // i suspect the flakiness that's making this necessary is due to node and/or vue, a single retry might be sufficient after migrating to deno and/or nuxt/sveltekit
 
