@@ -22,7 +22,8 @@
 - ### Regulation:
   - Platform moderation
 - ### Automated Tests:
-  - Test post creation and list
+  - Test configs' off/absent states
+  - Test "interacted" timestamp config
 
 <hr>
 
