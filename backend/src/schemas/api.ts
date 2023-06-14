@@ -45,13 +45,12 @@ export const PostCreationRequest: ZodSchema<classes.PostCreationRequest> = z.obj
 });
 
 export const NodeInteractionRequest: ZodSchema<classes.NodeInteractionRequest> = z.intersection(
-	z
-		.object({
-			nodePath: nodePath,
-		})
-		.required(),
+	z.object({nodePath: nodePath}).required(),
 	z.discriminatedUnion("interactionType", [
-		z.object({interactionType: z.literal("reply"), interactionData: NodeCreationRequest}),
+		z.object({
+			interactionType: z.literal("reply"),
+			interactionData: NodeCreationRequest,
+		}),
 		z.object({
 			interactionType: z.literal("vote"),
 			interactionData: z.object({
