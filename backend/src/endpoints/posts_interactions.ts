@@ -93,17 +93,18 @@ export default function (app: Express, postsDb: Collection<Post>, usersDb: Colle
 			}
 		}
 
-		const dbResponse = await postsDb.findOneAndUpdate(
-			mongoFilterPostsByAccess(user.data, {"thread.id": postId}),
-			mongoMergeUpdateFilters(
-				{
+		const interactionTimestampUpdates = subjectPost.config.timestamps?.interacted
+			? {
 					$set: {
 						["stats.interacted"]: timestamp.unix(),
 						[mongoPath.updatePath + ".stats.timestamps.interacted"]: timestamp.unix(),
 					},
-				} as unknown as {$set: {["stats.timestamps.interacted"]: number}}, // if you figure out how to eliminate the need for this type override, the contribution would be appreciated
-				mongoUpdate
-			),
+			  }
+			: {};
+
+		const dbResponse = await postsDb.findOneAndUpdate(
+			mongoFilterPostsByAccess(user.data, {"thread.id": postId}),
+			mongoMergeUpdateFilters(mongoUpdate, interactionTimestampUpdates),
 			mongoUpdatePathOptions
 		);
 
