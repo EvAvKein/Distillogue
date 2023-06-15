@@ -3,6 +3,7 @@ import {devices} from "@playwright/test";
 
 const config: PlaywrightTestConfig = {
 	testDir: "./tests",
+	// testMatch: [],
 
 	expect: {timeout: 5 * 1000},
 
