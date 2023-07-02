@@ -24,7 +24,6 @@
 - ### Automated Tests:
   - Test configs' off/absent states
   - Test "interacted" timestamp config
-  - Finish votes spec to include anonymous voting (and off/absent)
 
 <hr>
 
