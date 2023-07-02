@@ -33,6 +33,7 @@ export class NodeStats {
 		config.votes?.down ? (this.votes!.down = []) : delete this.votes?.down;
 	}
 }
+export const redactedVoteString = "redacted";
 
 export interface PostAccess {
 	public?: true;

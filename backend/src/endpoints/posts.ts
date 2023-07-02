@@ -7,7 +7,7 @@ import {userBySession} from "../helpers/reqHeaders.js";
 import {mongoFilterPostsByAccess} from "../helpers/mongo/mongoFilterPostsByAccess.js";
 import {updateDeepProperty} from "../helpers/updateDeepProperty.js";
 import {recursivelyModifyNode} from "../helpers/recursivelyModifyNode.js";
-import {Post, Node, PostSummary} from "../../../shared/objects/post.js";
+import {Post, Node, PostSummary, redactedVoteString} from "../../../shared/objects/post.js";
 import {User, UserData} from "../../../shared/objects/user.js";
 import {fromZodError} from "zod-validation-error";
 import {FetchResponse} from "../../../shared/objects/api.js";
@@ -67,7 +67,7 @@ export default function (app: Express, postsDb: Collection<Post>, usersDb: Colle
 				post.thread = recursivelyModifyNode(post.thread, (node) => {
 					updateDeepProperty(node, "stats.votes." + voteTypeName, (votesArray: UserData["id"][]) => {
 						return votesArray.map((vote) => {
-							return vote === user?.data.id ? user.data.id : "redacted";
+							return vote === user?.data.id ? user.data.id : redactedVoteString;
 						});
 					});
 					return node;
