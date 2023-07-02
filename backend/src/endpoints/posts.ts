@@ -60,15 +60,10 @@ export default function (app: Express, postsDb: Collection<Post>, usersDb: Colle
 		}
 
 		let post = dbResponse;
-		if (post.config?.votes?.anon) {
-			const enabledVoteTypes = [] as ("up" | "down")[];
-			(["up", "down"] as const).forEach((voteType) => {
-				if (post.config!.votes![voteType]) {
-					enabledVoteTypes.push(voteType);
-				}
-			});
 
-			enabledVoteTypes.forEach((voteTypeName) => {
+		if (post.config.votes?.anon) {
+			(["up", "down"] as const).forEach((voteTypeName) => {
+				if (!post.config.votes![voteTypeName]) return;
 				post.thread = recursivelyModifyNode(post.thread, (node) => {
 					updateDeepProperty(node, "stats.votes." + voteTypeName, (votesArray: UserData["id"][]) => {
 						return votesArray.map((vote) => {
