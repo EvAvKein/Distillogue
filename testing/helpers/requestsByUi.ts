@@ -82,26 +82,23 @@ export async function setupUserWithPostAndOpen(
 	postConfig?: PostConfig,
 	postAccess?: PostAccess
 ) {
-	const {
-		sessionKey,
-		data: {name, id},
-	} = await api.signUp(request, page);
+	const user = await api.signUp(request, page);
 
-	const postTitle = randomNodeTitle();
-
-	const response = (await (
-		await api.createPost(
-			request,
-			sessionKey,
-			new PostCreationRequest(
-				new NodeCreationRequest(postTitle, randomNodeBody()),
-				postConfig ?? {},
-				postAccess ?? {users: [{name, id, roles: []}]}
+	const post: Post = (
+		await (
+			await api.createPost(
+				request,
+				user.sessionKey,
+				new PostCreationRequest(
+					new NodeCreationRequest(randomNodeTitle(), randomNodeBody()),
+					postConfig ?? {},
+					postAccess ?? {users: [{name: user.data.name, id: user.data.id, roles: []}]}
+				)
 			)
-		)
-	).json()) as FetchResponse<Post>;
+		).json()
+	).data;
 
-	await page.goto("/post/" + response.data!.thread.id);
+	await page.goto("/post/" + post.thread.id);
 
-	return {postTitle};
+	return {user, post};
 }

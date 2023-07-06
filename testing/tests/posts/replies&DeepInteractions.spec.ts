@@ -20,25 +20,25 @@ test.describe("Replies & deep interaction", () => {
 	}
 
 	test("Reply to central node", async ({page, request}) => {
-		const {postTitle} = await setupUserWithPostAndOpen(page, request);
+		const postTitle = (await setupUserWithPostAndOpen(page, request)).post.thread.title;
 		await replyAndValidateNode(page, [postTitle], "Reply to central");
 	});
 
 	test("Reply to central node twice", async ({page, request}) => {
-		const {postTitle} = await setupUserWithPostAndOpen(page, request);
+		const postTitle = (await setupUserWithPostAndOpen(page, request)).post.thread.title;
 		await ui.createReply(page, [postTitle], "1st reply to central");
 		await replyAndValidateNode(page, [postTitle], "2nd reply to central");
 	});
 
 	test("Reply to reply", async ({page, request}) => {
-		const {postTitle} = await setupUserWithPostAndOpen(page, request);
+		const postTitle = (await setupUserWithPostAndOpen(page, request)).post.thread.title;
 		const replyTitle = "Reply to central";
 		await ui.createReply(page, [postTitle], replyTitle);
 		await replyAndValidateNode(page, [postTitle, replyTitle], "Reply to 1st reply of central");
 	});
 
 	test("Reply to second reply", async ({page, request}) => {
-		const {postTitle} = await setupUserWithPostAndOpen(page, request);
+		const postTitle = (await setupUserWithPostAndOpen(page, request)).post.thread.title;
 		await ui.createReply(page, [postTitle], randomNodeTitle());
 		const replyTitle = "2nd reply to central";
 		await ui.createReply(page, [postTitle], replyTitle);
@@ -46,7 +46,7 @@ test.describe("Replies & deep interaction", () => {
 	});
 
 	test("Reply to reply of reply", async ({page, request}) => {
-		const {postTitle} = await setupUserWithPostAndOpen(page, request);
+		const postTitle = (await setupUserWithPostAndOpen(page, request)).post.thread.title;
 		await ui.createReply(page, [postTitle], randomNodeTitle());
 		const replyTitle = "Reply to central";
 		await ui.createReply(page, [postTitle], replyTitle);
@@ -57,7 +57,7 @@ test.describe("Replies & deep interaction", () => {
 	});
 
 	test("Reply to second reply of reply", async ({page, request}) => {
-		const {postTitle} = await setupUserWithPostAndOpen(page, request);
+		const postTitle = (await setupUserWithPostAndOpen(page, request)).post.thread.title;
 		await ui.createReply(page, [postTitle], randomNodeTitle());
 		const replyTitle = "Reply to central";
 		await ui.createReply(page, [postTitle], replyTitle);
