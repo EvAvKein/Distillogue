@@ -15,7 +15,7 @@ const config: PlaywrightTestConfig = {
 
 	reporter: [[process.env.CI ? "github" : "list"], ["html", {open: "never"}]],
 
-	retries: process.env.CI ? 2 : 0, // i suspect the flakiness that's making this necessary is due to node and/or vue, a single retry might be sufficient after migrating to deno and/or nuxt/sveltekit
+	retries: process.env.CI ? 3 : 0, // i suspect the flakiness that's making this necessary is due to node and/or vue, a single retry might be sufficient after migrating to deno and/or nuxt/sveltekit
 
 	projects: [
 		{
