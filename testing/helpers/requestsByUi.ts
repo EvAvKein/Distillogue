@@ -47,14 +47,14 @@ export async function createPost(
 	await expect(page.locator(".notification.negative")).not.toBeVisible();
 }
 
-export async function createReply(page: Page, nodeTitlesPath: string[], replyTitle: string, replyBody?: string) {
+export async function createReply(page: Page, nodeTitlesPath: string[], replyTitle?: string, replyBody?: string) {
 	await expandNodePath(page, nodeTitlesPath);
 
 	const parentNode = page.locator(".node", {has: page.getByText(nodeTitlesPath[nodeTitlesPath.length - 1])});
 	await parentNode.locator(".replyButton").click();
 
 	const replyForm = page.locator("dialog");
-	await replyForm.getByLabel("Title").fill(replyTitle);
+	await replyForm.getByLabel("Title").fill(replyTitle || randomNodeTitle());
 	await replyForm.getByLabel("Body").fill(replyBody || randomNodeBody());
 	await replyForm.getByRole("button", {name: "Reply"}).click();
 }
