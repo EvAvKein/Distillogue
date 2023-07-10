@@ -1,9 +1,9 @@
 <template>
 	<section ref="nodeBranch" :class="'nodeBranch' + (central ? ' central' : '')">
-		<section class="node" :id="central ? 'central' : undefined">
-			<h2 v-if="central">{{ node.title }}</h2>
+		<section :id="central ? 'central' : undefined" :class="'node' + (expanded ? ' expanded' : '')">
+			<h2 v-if="central" class="title">{{ node.title }}</h2>
 			<button v-else class="core_contentButton titleButton" @click="() => (expanded = !expanded)">
-				<h3>{{ node.title }}</h3>
+				<h3 class="title">{{ node.title }}</h3>
 			</button>
 			<transition name="collapse">
 				<section v-show="expanded" class="body">
