@@ -61,11 +61,11 @@ export class Node extends NodeCreationRequest {
 
 export class PostStats {
 	posted: number;
-	interacted?: number | null;
+	interacted?: number;
 
 	constructor(config: PostConfig) {
 		this.posted = unixStamp();
-		config.timestamps?.interacted ? (this.interacted = null) : delete this.interacted;
+		delete this.interacted;
 	}
 }
 

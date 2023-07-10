@@ -29,7 +29,7 @@ export const PostAccess: ZodSchema<classes.PostAccess> = z.object({
 
 export const PostStats: ZodSchema<classes.PostStats> = z.object({
 	posted: z.number().int(),
-	interacted: z.number().int().nullish(),
+	interacted: z.number().int().optional(),
 });
 
 export const nodeTitle = z.string().min(nodeVals.title.min).max(nodeVals.title.max);
