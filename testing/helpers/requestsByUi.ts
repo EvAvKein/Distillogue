@@ -102,3 +102,7 @@ export async function setupUserWithPostAndOpen(
 
 	return {user, post};
 }
+
+export function idOfPostByPage(page: Page) {
+	return page.url().replace(/^(.*)posts\//, "");
+}
