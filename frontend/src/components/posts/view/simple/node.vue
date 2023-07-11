@@ -40,7 +40,7 @@
 	const central = !props.pathToNode.length;
 	const nodePath = [...props.pathToNode, props.node.id];
 
-	const expanded = ref(central) as Ref<boolean>;
+	const expanded = ref(central);
 
 	const nodeBranch = ref<HTMLElement | null>(null);
 	watch(expanded, () => {
