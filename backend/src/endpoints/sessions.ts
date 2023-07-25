@@ -3,21 +3,16 @@ import {type Collection} from "mongodb";
 import * as apiSchemas from "../schemas/api.js";
 import {User, UserSession, UserPayload} from "../../../shared/objects/user.js";
 import {FetchResponse} from "../../../shared/objects/api.js";
-import {sessionKey} from "../helpers/reqHeaders.js";
+import {sessionKey, userBySession} from "../helpers/reqHeaders.js";
 import {fromZodError} from "zod-validation-error";
 
 export default function (app: Express, usersDb: Collection<User>) {
 	app.get("/api/sessions", async (request, response) => {
-		const sessionkey = sessionKey(request);
+		const user = await userBySession(request);
 
-		const user = await usersDb.findOne({sessions: {$elemMatch: {key: sessionkey}}});
-
-		if (!user) {
-			response.status(404).json(new FetchResponse(null, {message: "User session not found"}));
-			return;
-		}
-
-		response.status(200).json(new FetchResponse(user.data));
+		user
+			? response.status(200).json(new FetchResponse(user.data))
+			: response.status(404).json(new FetchResponse(null, {message: "User session not found"}));
 	});
 
 	app.post("/api/sessions", async (request, response) => {
