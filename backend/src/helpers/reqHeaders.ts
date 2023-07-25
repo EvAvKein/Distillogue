@@ -7,10 +7,5 @@ export function sessionKey(apiRequest: Request) {
 
 export async function userBySession(apiRequest: Request) {
 	const authKey = sessionKey(apiRequest);
-
-	if (!authKey) return null;
-
-	const user = await users.findOne({sessions: {key: authKey}});
-
-	return user;
+	return authKey ? await users.findOne({sessions: {key: authKey}}) : null;
 }
