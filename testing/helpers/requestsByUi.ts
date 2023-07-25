@@ -2,7 +2,6 @@ import {expect, type Page, type APIRequestContext} from "@playwright/test";
 import {randomUsername, randomNodeTitle, randomNodeBody} from "./randomAlphanumString.js";
 import {NodeCreationRequest, PostCreationRequest} from "../../shared/objects/api.js";
 import {type PostAccess, type PostConfig, type Post} from "../../shared/objects/post.js";
-import {type FetchResponse} from "../../shared/objects/api.js";
 import * as api from "./requestsByApi.js";
 
 export async function signUp(page: Page, name?: string) {
@@ -82,21 +81,19 @@ export async function setupUserWithPostAndOpen(
 	postConfig?: PostConfig,
 	postAccess?: PostAccess
 ) {
-	const user = await api.signUp(request, page);
+	const user = (await api.signUp(request, page))!;
 
-	const post: Post = (
-		await (
-			await api.createPost(
-				request,
-				user.sessionKey,
-				new PostCreationRequest(
-					new NodeCreationRequest(randomNodeTitle(), randomNodeBody()),
-					postConfig ?? {},
-					postAccess ?? {users: [{name: user.data.name, id: user.data.id, roles: []}]}
-				)
+	const post = (
+		await api.createPost(
+			request,
+			user.sessionKey,
+			new PostCreationRequest(
+				new NodeCreationRequest(randomNodeTitle(), randomNodeBody()),
+				postConfig ?? {},
+				postAccess ?? {users: [{name: user.data.name, id: user.data.id, roles: []}]}
 			)
-		).json()
-	).data;
+		)
+	).data!;
 
 	await page.goto("/post/" + post.thread.id);
 

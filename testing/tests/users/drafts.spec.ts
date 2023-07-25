@@ -330,9 +330,9 @@ test.describe("Drafts manipulation in reply modal", async () => {
 		const {
 			sessionKey,
 			data: {name, id},
-		} = await api.signUp(request, page);
+		} = (await api.signUp(request, page))!;
 
-		const responseBody: FetchResponse<Post> = await (
+		const post = (
 			await api.createPost(
 				request,
 				sessionKey,
@@ -342,8 +342,8 @@ test.describe("Drafts manipulation in reply modal", async () => {
 					{users: [{name, id, roles: []}]}
 				)
 			)
-		).json();
-		await page.goto("/post/" + responseBody.data!.thread.id);
+		).data!;
+		await page.goto("/post/" + post.thread.id);
 
 		await page.locator(".replyButton").click();
 	});

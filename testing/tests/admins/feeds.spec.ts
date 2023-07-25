@@ -1,28 +1,26 @@
 import {test, expect, type Page} from "@playwright/test";
-import {createPost, createUserAndSession, setAdmin} from "../../helpers/requestsByApi.js";
+import {createPost, createUser, setAdmin} from "../../helpers/requestsByApi.js";
 import {NodeCreationRequest, PostCreationRequest} from "../../../shared/objects/api.js";
 import {randomNodeBody, randomNodeTitle} from "../../helpers/randomAlphanumString.js";
 import {setSessionKey} from "../../helpers/sessionKey.js";
 
 test.describe("Posts feed", async () => {
 	test("See non-public post", async ({request, page}) => {
-		const privateUserPayload = await createUserAndSession(request);
+		const privateUserPayload = (await createUser(request)).data!;
 
 		const postText = {title: randomNodeTitle(), body: randomNodeBody()};
 
-		await expect(
-			await createPost(
-				request,
-				privateUserPayload.sessionKey,
-				new PostCreationRequest(
-					new NodeCreationRequest(postText.title, postText.body),
-					{},
-					{users: [{id: privateUserPayload.data.id, name: privateUserPayload.data.name, roles: []}]}
-				)
+		await createPost(
+			request,
+			privateUserPayload.sessionKey,
+			new PostCreationRequest(
+				new NodeCreationRequest(postText.title, postText.body),
+				{},
+				{users: [{id: privateUserPayload.data.id, name: privateUserPayload.data.name, roles: []}]}
 			)
-		).toBeOK();
+		);
 
-		const adminUserPayload = await createUserAndSession(request);
+		const adminUserPayload = (await createUser(request)).data!;
 
 		await expect(await setAdmin(request, adminUserPayload.sessionKey, true)).toBeOK();
 

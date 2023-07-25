@@ -76,7 +76,7 @@ test.describe("Voting: Up & Down", async () => {
 
 		const users: UserPayload[] = [];
 		for (let i = 0; i < 3; i++) {
-			users.push(await api.createUserAndSession(request));
+			users.push((await api.createUser(request)).data!);
 		}
 
 		const operationsByUserIndex = [
@@ -98,23 +98,21 @@ test.describe("Voting: Up & Down", async () => {
 			throw `Mismatch between user and operations quantities (users: ${users.length}, operations: ${operationsByUserIndex.length})`;
 		}
 
-		const post: Post = (
-			await (
-				await api.createPost(
-					request,
-					users[0].sessionKey,
-					new PostCreationRequest(
-						new NodeCreationRequest(randomNodeTitle(), randomNodeBody()),
-						{votes: {up: true, down: true}},
-						{
-							users: users.map((user) => {
-								return {name: user.data.name, id: user.data.id, roles: []};
-							}),
-						}
-					)
+		const post = (
+			await api.createPost(
+				request,
+				users[0].sessionKey,
+				new PostCreationRequest(
+					new NodeCreationRequest(randomNodeTitle(), randomNodeBody()),
+					{votes: {up: true, down: true}},
+					{
+						users: users.map((user) => {
+							return {name: user.data.name, id: user.data.id, roles: []};
+						}),
+					}
 				)
-			).json()
-		).data;
+			)
+		).data!;
 
 		await page.goto("/");
 		for (const [index, userSteps] of operationsByUserIndex.entries()) {
@@ -144,27 +142,25 @@ test.describe("Voting: Anonymous", async () => {
 	});
 
 	test("Anon: Up (config: both directions)", async ({page, request}) => {
-		const poster = await api.createUserAndSession(request);
-		const voter = await api.createUserAndSession(request);
+		const poster = (await api.createUser(request)).data!;
+		const voter = (await api.createUser(request)).data!;
 
-		const post: Post = (
-			await (
-				await api.createPost(
-					request,
-					poster.sessionKey,
-					new PostCreationRequest(
-						{title: randomNodeTitle(), body: randomNodeBody()},
-						{votes: {up: true, down: true, anon: true}},
-						{
-							users: [
-								{name: poster.data.name, id: poster.data.id, roles: []},
-								{name: voter.data.id, id: voter.data.id, roles: []},
-							],
-						}
-					)
+		const post = (
+			await api.createPost(
+				request,
+				poster.sessionKey,
+				new PostCreationRequest(
+					{title: randomNodeTitle(), body: randomNodeBody()},
+					{votes: {up: true, down: true, anon: true}},
+					{
+						users: [
+							{name: poster.data.name, id: poster.data.id, roles: []},
+							{name: voter.data.id, id: voter.data.id, roles: []},
+						],
+					}
 				)
-			).json()
-		).data;
+			)
+		).data!;
 
 		await ui.signIn(page, voter.data.name);
 		await page.goto("/post/" + post.thread.id);
@@ -182,27 +178,25 @@ test.describe("Voting: Anonymous", async () => {
 	});
 
 	test("Anon: Down (config: single direction)", async ({page, request}) => {
-		const poster = await api.createUserAndSession(request);
-		const voter = await api.createUserAndSession(request);
+		const poster = (await api.createUser(request)).data!;
+		const voter = (await api.createUser(request)).data!;
 
-		const post: Post = (
-			await (
-				await api.createPost(
-					request,
-					poster.sessionKey,
-					new PostCreationRequest(
-						{title: randomNodeTitle(), body: randomNodeBody()},
-						{votes: {down: true, anon: true}},
-						{
-							users: [
-								{name: poster.data.name, id: poster.data.id, roles: []},
-								{name: voter.data.id, id: voter.data.id, roles: []},
-							],
-						}
-					)
+		const post = (
+			await api.createPost(
+				request,
+				poster.sessionKey,
+				new PostCreationRequest(
+					{title: randomNodeTitle(), body: randomNodeBody()},
+					{votes: {down: true, anon: true}},
+					{
+						users: [
+							{name: poster.data.name, id: poster.data.id, roles: []},
+							{name: voter.data.id, id: voter.data.id, roles: []},
+						],
+					}
 				)
-			).json()
-		).data;
+			)
+		).data!;
 
 		await ui.signIn(page, voter.data.name);
 		await page.goto("/post/" + post.thread.id);

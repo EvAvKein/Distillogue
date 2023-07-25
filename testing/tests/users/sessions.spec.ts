@@ -1,31 +1,29 @@
 import {test, expect} from "@playwright/test";
-import {createSession, getSession, deleteSession, createUserAndSession} from "../../helpers/requestsByApi.js";
+import {createSession, getSession, deleteSession, createUser} from "../../helpers/requestsByApi.js";
 import {getSessionKey, setSessionKey} from "../../helpers/sessionKey.js";
 import {signUp} from "../../helpers/requestsByUi.js";
 
 test.describe("User sessions - API", async () => {
 	test("Fail to reuse key after session deletion", async ({request}) => {
-		const {sessionKey} = await createUserAndSession(request);
+		const {sessionKey} = (await createUser(request)).data!;
 
 		await expect(await deleteSession(request, sessionKey)).toBeOK();
 
 		const invalidSessionRequest = await getSession(request, sessionKey);
-		expect((await invalidSessionRequest.json()).data).toBeFalsy();
+		expect(invalidSessionRequest.error).toBeTruthy();
 	});
 
 	test("Obtain different key for new session by same user", async ({request}) => {
 		const {
 			data: {name},
 			sessionKey: firstKey,
-		} = await createUserAndSession(request);
+		} = (await createUser(request)).data!;
 
 		await expect(await deleteSession(request, firstKey)).toBeOK();
 
-		const secondSessionResponse = await createSession(request, name);
-		await expect(secondSessionResponse).toBeOK();
-		const secondKey = (await secondSessionResponse.json())?.data?.sessionKey;
+		const secondKey = (await createSession(request, name)).data?.sessionKey;
 		expect(typeof secondKey).toBe("string");
-		expect(secondKey as string).not.toEqual(firstKey);
+		expect(secondKey).not.toEqual(firstKey);
 	});
 
 	// test("get sessions list & update (TODO pending endpoint, which is pending dashboard section)", async () => {});

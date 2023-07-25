@@ -1,5 +1,5 @@
 import {test, expect} from "@playwright/test";
-import {createUserAndSession} from "../../helpers/requestsByApi.js";
+import {createUser} from "../../helpers/requestsByApi.js";
 import {setSessionKey} from "../../helpers/sessionKey.js";
 import {randomUsername} from "../../helpers/randomAlphanumString.js";
 import {user} from "../../../shared/objects/validationUnits.js";
@@ -9,7 +9,7 @@ test.describe("Profile editing - UI", () => {
 		let {
 			sessionKey,
 			data: {name},
-		} = await createUserAndSession(request);
+		} = (await createUser(request)).data!;
 		await page.goto("/");
 		await setSessionKey(page, sessionKey);
 		await page.goto("/dashboard/profile");
@@ -25,7 +25,7 @@ test.describe("Profile editing - UI", () => {
 	});
 
 	test("Fail to change name outside character limits", async ({page, request}) => {
-		const {sessionKey} = await createUserAndSession(request);
+		const {sessionKey} = (await createUser(request)).data!;
 		await page.goto("/");
 		await setSessionKey(page, sessionKey);
 		await page.goto("/dashboard/profile");

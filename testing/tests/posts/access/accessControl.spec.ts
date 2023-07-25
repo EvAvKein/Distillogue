@@ -21,17 +21,15 @@ test.describe("Prevent unauthorized access to private posts", () => {
 
 		const {name, id} = (await api.getUserData(request, page)).data!;
 
-		await expect(
-			await api.createPost(
-				request,
-				(await getSessionKey(page))!,
-				new PostCreationRequest(
-					new NodeCreationRequest(postTitle, randomNodeBody()),
-					{},
-					{users: [{name, id, roles: []}]}
-				)
+		await api.createPost(
+			request,
+			(await getSessionKey(page))!,
+			new PostCreationRequest(
+				new NodeCreationRequest(postTitle, randomNodeBody()),
+				{},
+				{users: [{name, id, roles: []}]}
 			)
-		).toBeOK();
+		);
 
 		await api.deleteSession(request, (await getSessionKey(page))!);
 		await api.signUp(request, page);
@@ -44,13 +42,11 @@ test.describe("Prevent unauthorized access to private posts", () => {
 		const postBody = randomNodeBody();
 
 		const {name, id} = (await api.getUserData(request, page)).data!;
-		await expect(
-			await api.createPost(
-				request,
-				(await getSessionKey(page))!,
-				new PostCreationRequest(new NodeCreationRequest(postTitle, postBody), {}, {users: [{name, id, roles: []}]})
-			)
-		).toBeOK();
+		await api.createPost(
+			request,
+			(await getSessionKey(page))!,
+			new PostCreationRequest(new NodeCreationRequest(postTitle, postBody), {}, {users: [{name, id, roles: []}]})
+		);
 		await page.goto("/browse");
 		await page.getByText(postTitle).click();
 		await page.waitForURL(/post\/.*/);

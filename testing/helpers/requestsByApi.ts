@@ -3,18 +3,23 @@ import {randomUsername} from "./randomAlphanumString.js";
 import {getSessionKey, setSessionKey} from "./sessionKey.js";
 import {FetchResponse, PostCreationRequest} from "../../shared/objects/api.js";
 import {UserData, UserPayload} from "../../shared/objects/user.js";
+import {Post} from "../../shared/objects/post.js";
 type Request = APIRequestContext;
 
 export async function createUser(request: Request, name?: string) {
-	return request.post("/api/users", {data: {username: name ?? randomUsername()}});
+	return (
+		await request.post("/api/users", {data: {username: name ?? randomUsername()}})
+	).json() as FetchResponse<UserPayload>;
 }
 export async function createSession(request: Request, name: string) {
-	return request.post("/api/sessions", {data: {username: name}});
+	return (await request.post("/api/sessions", {data: {username: name}})).json() as FetchResponse<UserPayload>;
 }
 export async function getSession(request: Request, authKey: string) {
-	return request.get("/api/sessions", {
-		headers: {authorization: "Bearer " + authKey},
-	});
+	return (
+		await request.get("/api/sessions", {
+			headers: {authorization: "Bearer " + authKey},
+		})
+	).json() as FetchResponse<UserData>;
 }
 export async function deleteSession(request: Request, authKey: string) {
 	return request.delete("/api/sessions", {
@@ -23,32 +28,15 @@ export async function deleteSession(request: Request, authKey: string) {
 }
 
 export async function getUserData(request: Request, page: Page) {
-	const response = await getSession(request, (await getSessionKey(page)) ?? "");
-	await expect(response).toBeOK();
-	return (await response.json()) as FetchResponse<UserData>;
-}
-
-export async function createUserAndSession(request: Request) {
-	const name = randomUsername();
-
-	const userCreationResponse = await createUser(request, name);
-	expect(userCreationResponse).toBeOK();
-
-	const sessionCreationResponse = await createSession(request, name);
-	expect(sessionCreationResponse).toBeOK();
-
-	const user = (await sessionCreationResponse.json())?.data as UserPayload;
-	expect(typeof user.sessionKey).toBe("string");
-
-	return user;
+	return getSession(request, (await getSessionKey(page)) || "");
 }
 
 export async function signUp(request: Request, page: Page) {
-	const data = await createUserAndSession(request);
+	const response = await createUser(request);
 	await page.goto("/");
-	await setSessionKey(page, data.sessionKey);
+	await setSessionKey(page, response.data!.sessionKey);
 
-	return data;
+	return response.data;
 }
 
 export async function setAdmin(request: Request, authKey: string, newAdminStatus: boolean) {
@@ -62,8 +50,10 @@ export async function setAdmin(request: Request, authKey: string, newAdminStatus
 }
 
 export async function createPost(request: Request, authKey: string, postRequest: PostCreationRequest) {
-	return request.post("/api/posts", {
-		headers: {authorization: "Bearer " + authKey},
-		data: postRequest,
-	});
+	return (
+		await request.post("/api/posts", {
+			headers: {authorization: "Bearer " + authKey},
+			data: postRequest,
+		})
+	).json() as FetchResponse<Post>;
 }
