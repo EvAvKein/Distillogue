@@ -1,7 +1,7 @@
 import {type APIRequestContext, type Page, expect} from "@playwright/test";
 import {randomUsername} from "./randomAlphanumString.js";
 import {getSessionKey, setSessionKey} from "./sessionKey.js";
-import {FetchResponse, PostCreationRequest} from "../../shared/objects/api.js";
+import {FetchResponse, NodeInteractionRequest, PostCreationRequest} from "../../shared/objects/api.js";
 import {UserData, UserPayload} from "../../shared/objects/user.js";
 import {Post} from "../../shared/objects/post.js";
 type Request = APIRequestContext;
@@ -56,4 +56,23 @@ export async function createPost(request: Request, authKey: string, postRequest:
 			data: postRequest,
 		})
 	).json() as FetchResponse<Post>;
+}
+
+export async function getPost(request: Request, authKey: string, postId:string) {
+	return (
+		await request.get("/api/posts/" + postId, {
+			headers: {authorization: "Bearer " + authKey}
+		})
+	).json() as FetchResponse<Post>;
+}
+
+export async function nodeInteraction(request: Request, authKey: string, interactionRequest: NodeInteractionRequest) {
+	const response = await request.post("/api/posts/interactions", {
+		headers: {authorization: "Bearer " + authKey},
+		data: interactionRequest,
+	});
+
+	return response.ok()
+		? new FetchResponse<void>()
+		: await response.json() as FetchResponse<void>;
 }
