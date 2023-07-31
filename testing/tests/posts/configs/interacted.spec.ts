@@ -48,13 +48,15 @@ test.describe("Interacted", async () => {
 			request,
 			user.sessionKey,
 			new NodeInteractionRequest([post.thread.id], "vote", {voteDirection: "up", newVoteStatus: true})
-		)
+		);
 		const postAfter1st = (await api.getPost(request, user.sessionKey, post.thread.id)).data!;
 
 		await ui.createReply(page, [post.thread.title], randomNodeTitle());
 		const postAfter2nd = (await api.getPost(request, user.sessionKey, post.thread.id)).data!;
 
 		expect(postAfter1st.stats.interacted).not.toEqual(postAfter2nd.stats.interacted);
-		expect(postAfter1st.thread.stats.timestamps.interacted).not.toEqual(postAfter2nd.thread.stats.timestamps.interacted);
+		expect(postAfter1st.thread.stats.timestamps.interacted).not.toEqual(
+			postAfter2nd.thread.stats.timestamps.interacted
+		);
 	});
 });

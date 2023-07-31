@@ -58,10 +58,10 @@ export async function createPost(request: Request, authKey: string, postRequest:
 	).json() as FetchResponse<Post>;
 }
 
-export async function getPost(request: Request, authKey: string, postId:string) {
+export async function getPost(request: Request, authKey: string, postId: string) {
 	return (
 		await request.get("/api/posts/" + postId, {
-			headers: {authorization: "Bearer " + authKey}
+			headers: {authorization: "Bearer " + authKey},
 		})
 	).json() as FetchResponse<Post>;
 }
@@ -72,7 +72,5 @@ export async function nodeInteraction(request: Request, authKey: string, interac
 		data: interactionRequest,
 	});
 
-	return response.ok()
-		? new FetchResponse<void>()
-		: await response.json() as FetchResponse<void>;
+	return response.ok() ? new FetchResponse<void>() : ((await response.json()) as FetchResponse<void>);
 }
