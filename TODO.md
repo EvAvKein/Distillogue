@@ -23,7 +23,6 @@
   - Platform moderation
 - ### Automated Tests:
   - Test configs' off/absent states
-  - Test "interacted" timestamp config
 
 <hr>
 
