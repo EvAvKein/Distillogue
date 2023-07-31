@@ -1,4 +1,4 @@
-import {type APIRequestContext, type Page, expect} from "@playwright/test";
+import {type APIRequestContext, type Page} from "@playwright/test";
 import {randomUsername} from "./randomAlphanumString.js";
 import {getSessionKey, setSessionKey} from "./sessionKey.js";
 import {FetchResponse, NodeInteractionRequest, PostCreationRequest} from "../../shared/objects/api.js";
