@@ -18,7 +18,7 @@ The configurable discussion platform; currently in very early development, with 
 ### Software Requirements
 
 - Docker
-- Node.js (development only, for package intellisense)
+- Node.js (development only, dependency intellisense)
 
 ### Prerequisites
 
