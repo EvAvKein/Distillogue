@@ -20,13 +20,18 @@
 	import {debounce} from "../../../helpers/debounce";
 	import labelledInput from "../../labelledInput.vue";
 
-	const props = defineProps<{fetchAllOnMount?: true; adminEndpoint?: true}>();
-	const emit = defineEmits(["fetchedSummaries"]);
+	const props = defineProps<{
+		searchValue?: string;
+		fetchAllOnMount?: true;
+		adminEndpoint?: true;
+	}>();
+	const emit = defineEmits(["update:searchValue", "fetchedSummaries"]);
 
-	const searchValue = ref<string>("");
+	const searchValue = ref<string>(props.searchValue ?? "");
 	const summariesDescription = ref<string>("");
 
 	async function fetchAndEmitPosts() {
+		emit("update:searchValue", searchValue.value);
 		summariesDescription.value = "Fetching Posts...";
 
 		const fetchResponse = await apiFetch(
