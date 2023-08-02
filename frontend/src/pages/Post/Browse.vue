@@ -2,6 +2,7 @@
 	<main>
 		<summariesSearch
 			id="summariesSearch"
+			v-model:searchValue="searchValue"
 			:fetchAllOnMount="true"
 			@fetchedSummaries="(response:PostSummary[]) => {summariesArray = response}"
 		/>
@@ -12,10 +13,19 @@
 </template>
 
 <script setup lang="ts">
-	import {ref} from "vue";
+	import {ref, watch} from "vue";
+	import {useRouter, useRoute} from "vue-router";
 	import {PostSummary} from "../../../../shared/objects/post";
 	import summariesContainer from "../../components/posts/browse/summariesContainer.vue";
 	import summariesSearch from "../../components/posts/browse/summariesSearch.vue";
+	const router = useRouter();
+	const route = useRoute();
+
+	const searchValue = ref<string>(
+		Array.isArray(route.query.search) ? route.query.search[0] ?? "" : route.query.search ?? ""
+	);
+	watch(searchValue, (newValue) => router.push({query: {search: newValue}}));
+
 	const summariesArray = ref<PostSummary[]>([]);
 </script>
 
