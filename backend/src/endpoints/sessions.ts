@@ -11,7 +11,7 @@ export default function (app: Express, usersDb: Collection<User>) {
 		const user = await userBySession(request);
 
 		user
-			? response.status(200).json(new FetchResponse(user.data))
+			? response.status(200).json(new FetchResponse(user.sessions))
 			: response.status(404).json(new FetchResponse(null, {message: "User session not found"}));
 	});
 

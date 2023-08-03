@@ -1,8 +1,8 @@
 import {type APIRequestContext, type Page} from "@playwright/test";
 import {randomUsername} from "./randomAlphanumString.js";
-import {getSessionKey, setSessionKey} from "./sessionKey.js";
+import {setSessionKey} from "./sessionKey.js";
 import {FetchResponse, NodeInteractionRequest, PostCreationRequest} from "../../shared/objects/api.js";
-import {UserData, UserPayload} from "../../shared/objects/user.js";
+import {UserData, UserPayload, UserSession} from "../../shared/objects/user.js";
 import {Post} from "../../shared/objects/post.js";
 type Request = APIRequestContext;
 
@@ -14,12 +14,12 @@ export async function createUser(request: Request, name?: string) {
 export async function createSession(request: Request, name: string) {
 	return (await request.post("/api/sessions", {data: {username: name}})).json() as FetchResponse<UserPayload>;
 }
-export async function getSession(request: Request, authKey: string) {
+export async function getSessions(request: Request, authKey: string) {
 	return (
 		await request.get("/api/sessions", {
 			headers: {authorization: "Bearer " + authKey},
 		})
-	).json() as FetchResponse<UserData>;
+	).json() as FetchResponse<UserSession[]>;
 }
 export async function deleteSession(request: Request, authKey: string) {
 	return request.delete("/api/sessions", {
@@ -27,8 +27,12 @@ export async function deleteSession(request: Request, authKey: string) {
 	});
 }
 
-export async function getUserData(request: Request, page: Page) {
-	return getSession(request, (await getSessionKey(page)) || "");
+export async function getUserData(request: Request, authKey: string) {
+	return (
+		await request.get("/api/users", {
+			headers: {authorization: "Bearer " + authKey},
+		})
+	).json() as FetchResponse<UserData>;
 }
 
 export async function signUp(request: Request, page: Page) {

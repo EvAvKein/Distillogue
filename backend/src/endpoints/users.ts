@@ -4,10 +4,24 @@ import * as apiSchemas from "../schemas/api.js";
 import {mongoInsertIfDoesntExist} from "../helpers/mongo/mongoInsertIfDoesntExist.js";
 import {User, UserData, UserPayload, arrOfEditableUserData} from "../../../shared/objects/user.js";
 import {FetchResponse} from "../../../shared/objects/api.js";
-import {sessionKey} from "../helpers/reqHeaders.js";
+import {sessionKey, userBySession} from "../helpers/reqHeaders.js";
 import {fromZodError} from "zod-validation-error";
 
 export default function (app: Express, usersDb: Collection<User>) {
+	app.get("/api/users", async (request, response) => {
+		const key = sessionKey(request);
+		const user = await userBySession(request);
+
+		user
+			? response.status(200).json(new FetchResponse(user.data))
+			: response.status(404).json(new FetchResponse(null, {message: "User session not found"}));
+
+		// admittedly not a RESTful URI for this use-case, but:
+		// 1. i have no plans to every allow people to just query for the entire userbase (except probably admin, but they have their own endpoints)
+		// 2. the RESTful way to do this would probably be "/users:id".... but that requires storing the user ID on the client and handling it (both frontend and backend), which currently seems excessive.
+		// TODO: before 1.0, consider whether to favor RESTfulness by making the change in list item 2, even as it creates code & perf bloat
+	});
+
 	app.post("/api/users", async (request, response) => {
 		const validation = apiSchemas.UserCreationRequest.safeParse(request.body);
 		if (!validation.success) {

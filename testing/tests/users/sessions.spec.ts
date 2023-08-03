@@ -1,5 +1,5 @@
 import {test, expect} from "@playwright/test";
-import {createSession, getSession, deleteSession, createUser} from "../../helpers/requestsByApi.js";
+import {createSession, getUserData, deleteSession, createUser} from "../../helpers/requestsByApi.js";
 import {getSessionKey, setSessionKey} from "../../helpers/sessionKey.js";
 import {signUp} from "../../helpers/requestsByUi.js";
 
@@ -9,8 +9,8 @@ test.describe("User sessions - API", async () => {
 
 		await expect(await deleteSession(request, sessionKey)).toBeOK();
 
-		const invalidSessionRequest = await getSession(request, sessionKey);
-		expect(invalidSessionRequest.error).toBeTruthy();
+		const failedAuthRequest = await getUserData(request, sessionKey);
+		expect(failedAuthRequest.error).toBeTruthy();
 	});
 
 	test("Obtain different key for new session by same user", async ({request}) => {

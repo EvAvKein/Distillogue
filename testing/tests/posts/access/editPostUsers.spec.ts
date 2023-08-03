@@ -45,14 +45,13 @@ async function postAndValidate(page: Page, validation: (post: Post) => Promise<v
 }
 
 test.describe("Edit post access", async () => {
-	test.beforeEach(async ({request, page}) => {
+	test.beforeEach(async ({page}) => {
 		await setScreenSize(page, "desktop");
-		await api.signUp(request, page);
-		await page.goto("/post/create");
 	});
 
 	test("Validate initial state", async ({request, page}) => {
-		const ownUser = (await api.getUserData(request, page)).data!;
+		const ownUser = (await api.signUp(request, page))!.data;
+		await page.goto("/post/create");
 
 		for (const element of [access.nameInput, access.idInput, access.userAdditionButton, "tbody tr"]) {
 			await expect(page.locator(element)).toBeVisible();
@@ -74,7 +73,8 @@ test.describe("Edit post access", async () => {
 	});
 
 	test("Add user", async ({request, page}) => {
-		const ownUser = (await api.getUserData(request, page)).data!;
+		const ownUser = (await api.signUp(request, page))!.data;
+		await page.goto("/post/create");
 
 		const newUserName = randomUsername();
 		const newUserId = randomAlphanumString();
@@ -95,8 +95,6 @@ test.describe("Edit post access", async () => {
 	});
 
 	test.describe("Contacts", () => {
-		test.beforeEach(async ({page}) => await page.goto("/dashboard/contacts"));
-
 		async function addContact(page: Page, name: string, id: string) {
 			await page.getByLabel("Name").fill(name);
 			await page.getByLabel("ID").fill(id);
@@ -104,7 +102,8 @@ test.describe("Edit post access", async () => {
 		}
 
 		test("Add user by contact", async ({request, page}) => {
-			const ownUser = (await api.getUserData(request, page)).data!;
+			const ownUser = (await api.signUp(request, page))!.data;
+			await page.goto("/dashboard/contacts");
 
 			const contactName = randomUsername();
 			const contactId = randomAlphanumString();
@@ -129,7 +128,8 @@ test.describe("Edit post access", async () => {
 		});
 
 		test("Add user by non-first contact", async ({request, page}) => {
-			const ownUser = (await api.getUserData(request, page)).data!;
+			const ownUser = (await api.signUp(request, page))!.data;
+			await page.goto("/dashboard/contacts");
 
 			const firstContactName = randomUsername();
 			const firstContactId = randomAlphanumString();
@@ -159,7 +159,8 @@ test.describe("Edit post access", async () => {
 		});
 
 		test("Add user by contact & add another by typing", async ({request, page}) => {
-			const ownUser = (await api.getUserData(request, page)).data!;
+			const ownUser = (await api.signUp(request, page))!.data;
+			await page.goto("/dashboard/contacts");
 
 			const contactName = randomUsername();
 			const contactId = randomAlphanumString();
@@ -193,7 +194,8 @@ test.describe("Edit post access", async () => {
 
 	test.describe("Mod permission", () => {
 		test("Mod user", async ({request, page}) => {
-			const ownUser = (await api.getUserData(request, page)).data!;
+			const ownUser = (await api.signUp(request, page))!.data;
+			await page.goto("/post/create");
 
 			const modUserName = "modUser";
 			const modUserId = randomAlphanumString();
@@ -210,7 +212,8 @@ test.describe("Edit post access", async () => {
 		});
 
 		test("Unmod user", async ({request, page}) => {
-			const ownUser = (await api.getUserData(request, page)).data!;
+			const ownUser = (await api.signUp(request, page))!.data;
+			await page.goto("/post/create");
 
 			const unmodUserName = "modUser";
 			const unmodUserId = randomAlphanumString();
@@ -229,7 +232,8 @@ test.describe("Edit post access", async () => {
 
 	test.describe("Same-ID replacement", () => {
 		test("Auto-replace added user with duplicate ID", async ({request, page}) => {
-			const ownUser = (await api.getUserData(request, page)).data!;
+			const ownUser = (await api.signUp(request, page))!.data;
+			await page.goto("/post/create");
 
 			const tempUserName = "temporary";
 			const newUserId = randomAlphanumString();
@@ -257,7 +261,8 @@ test.describe("Edit post access", async () => {
 		});
 
 		test("Auto-replace added user with own ID", async ({request, page}) => {
-			const ownUser = (await api.getUserData(request, page)).data!;
+			const ownUser = (await api.signUp(request, page))!.data;
+			await page.goto("/post/create");
 
 			const otherUserName = "other";
 			const otherUserId = randomAlphanumString();
@@ -286,7 +291,8 @@ test.describe("Edit post access", async () => {
 
 	test.describe("Deletion", () => {
 		test("Delete user", async ({request, page}) => {
-			const ownUser = (await api.getUserData(request, page)).data!;
+			const ownUser = (await api.signUp(request, page))!.data;
+			await page.goto("/post/create");
 
 			const deletionUserName = "toBeDeleted";
 			const deletionUserId = randomAlphanumString();
@@ -312,7 +318,8 @@ test.describe("Edit post access", async () => {
 		});
 
 		test("Delete first user after owner same-ID replacement", async ({request, page}) => {
-			const ownUser = (await api.getUserData(request, page)).data!;
+			const ownUser = (await api.signUp(request, page))!.data;
+			await page.goto("/post/create");
 
 			const otherUserName = "other";
 			const otherUserId = randomAlphanumString();
@@ -333,7 +340,8 @@ test.describe("Edit post access", async () => {
 		});
 
 		test("Perserve roles on deletion (and checkboxes on list re-render)", async ({request, page}) => {
-			const ownUser = (await api.getUserData(request, page)).data!;
+			const ownUser = (await api.signUp(request, page))!.data;
+			await page.goto("/post/create");
 
 			const deletionUserName = "toBeDeleted";
 			const deletionUserId = randomAlphanumString();

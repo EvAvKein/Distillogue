@@ -130,7 +130,7 @@ router.beforeEach(async (to, from, next) => {
 	const sessionKey = localStorage.getItem("sessionKey");
 
 	if (sessionKey && !user.data) {
-		await apiFetch("GET", "/sessions").then(({error, data: body, status}) => {
+		await apiFetch("GET", "/users").then(({error, data: body, status}) => {
 			if (!error) {
 				user.data = body as UserData;
 				return;

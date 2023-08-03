@@ -12,14 +12,10 @@ import {NodeCreationRequest, PostCreationRequest} from "../../../../shared/objec
 //		- not be immediately & glaringly obvious upon even an inattentive review of the prospective changes
 
 test.describe("Prevent unauthorized access to private posts", () => {
-	test.beforeEach(async ({request, page}) => {
-		await api.signUp(request, page);
-	});
-
 	test("Fail to find inaccessible post through browsing", async ({page, request}) => {
-		const postTitle = randomNodeTitle();
+		const {name, id} = (await api.signUp(request, page))!.data;
 
-		const {name, id} = (await api.getUserData(request, page)).data!;
+		const postTitle = randomNodeTitle();
 
 		await api.createPost(
 			request,
@@ -38,10 +34,11 @@ test.describe("Prevent unauthorized access to private posts", () => {
 	});
 
 	test("Fail to visit inaccessible post through URL", async ({page, request}) => {
+		const {name, id} = (await api.signUp(request, page))!.data;
+
 		const postTitle = randomNodeTitle();
 		const postBody = randomNodeBody();
 
-		const {name, id} = (await api.getUserData(request, page)).data!;
 		await api.createPost(
 			request,
 			(await getSessionKey(page))!,

@@ -125,11 +125,10 @@ test.describe("Voting: Up & Down", async () => {
 
 test.describe("Voting: Anonymous", async () => {
 	test("Self not anonymous", async ({page, request}) => {
-		await ui.setupUserWithPostAndOpen(page, request, {
+		const {user} = await ui.setupUserWithPostAndOpen(page, request, {
 			votes: {up: true, down: true, anon: true},
 		});
 
-		const ownId = (await api.getUserData(request, page)).data!.id;
 		await page.locator(upvoteSelector).click();
 
 		const postObject = page.waitForResponse(/posts\/*/);
@@ -138,7 +137,7 @@ test.describe("Voting: Anonymous", async () => {
 		const upvotes = post.thread.stats.votes!.up!;
 
 		expect(upvotes.length).toBe(1);
-		expect(upvotes[0]).toBe(ownId);
+		expect(upvotes[0]).toBe(user.data.id);
 	});
 
 	test("Anon: Up (config: both directions)", async ({page, request}) => {
