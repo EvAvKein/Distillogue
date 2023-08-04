@@ -1,4 +1,4 @@
-import {test, expect, type Page} from "@playwright/test";
+import {test, expect} from "@playwright/test";
 import * as api from "../../../helpers/requestsByApi.js";
 import * as ui from "../../../helpers/requestsByUi.js";
 import {randomNodeTitle} from "../../../helpers/randomAlphanumString.js";
@@ -7,7 +7,22 @@ import {NodeInteractionRequest} from "../../../../shared/objects/api.js";
 const interactedText = "Interacted: Now";
 
 test.describe("Interacted", async () => {
-	// testing with every single possible interaction would create inordinate maintainability costs long-term, seems best to test using using two interaction types and trust that this means the interactions are being applied regardless of interaction type
+	test("Off", async ({request, page}) => {
+		const {user, post} = await ui.setupUserWithPostAndOpen(page, request);
+
+		await expect(page.locator("body")).not.toContainText(interactedText);
+		expect(post.stats.interacted).toBeUndefined();
+		expect(post.thread.stats.timestamps.interacted).toBeUndefined();
+
+		await ui.createReply(page, [post.thread.title], randomNodeTitle());
+		await expect(page.locator("body")).not.toContainText(interactedText);
+		const postAfterReply = (await api.getPost(request, user.sessionKey, post.thread.id)).data!;
+		expect(postAfterReply.stats.interacted).toBeUndefined();
+		expect(postAfterReply.thread.stats.timestamps.interacted).toBeUndefined();
+		expect(postAfterReply.thread.replies[0].stats.timestamps.interacted).toBeUndefined();
+	});
+
+	// testing with every single possible interaction would create inordinate maintainability costs long-term, seems best to test using two interaction types and trust that it means the interactions are being applied regardless of interaction type
 
 	test("No interaction timestamps until interaction (Reply)", async ({request, page}) => {
 		const {user, post} = await ui.setupUserWithPostAndOpen(page, request, {timestamps: {interacted: true}});
