@@ -36,7 +36,6 @@ export class NodeStats {
 export const redactedVoteString = "redacted";
 
 export interface PostAccess {
-	public?: true;
 	users: PostUserEntry[];
 }
 

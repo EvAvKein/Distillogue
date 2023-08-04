@@ -42,8 +42,7 @@
 			<li>
 				<p>
 					<strong>User-moderated</strong>: To avoid the time-sinks and drama of platform moderation, I want to hand over
-					moderation to the users as much as legally/ethically viable (which is much more sensible alongside plans to
-					remove public posts)
+					moderation to the users as much as legally/ethically viable
 				</p>
 				<p>
 					I plan on implementing robust configurations for moderation paradigms (e.g direct/representative-democracy,

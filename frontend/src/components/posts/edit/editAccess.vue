@@ -1,14 +1,5 @@
 <template>
 	<section id="editAccessWrapper">
-		<label>
-			Public:
-			<input
-				type="checkbox"
-				class="core_crudeInput"
-				@change="(event) => {updateAccess('public', (event.currentTarget as HTMLInputElement).checked || undefined)}"
-			/>
-		</label>
-
 		<div id="userAdditionSection">
 			<labelledInput :inputId="'userAdditionName'" :type="'text'" :label="'Name'" v-model="newUser.name" />
 			<labelledInput :inputId="'userAdditionId'" :type="'text'" :label="'ID'" v-model="newUser.id" />

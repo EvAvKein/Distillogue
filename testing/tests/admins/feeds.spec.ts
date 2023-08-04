@@ -5,7 +5,7 @@ import {randomNodeBody, randomNodeTitle} from "../../helpers/randomAlphanumStrin
 import {setSessionKey} from "../../helpers/sessionKey.js";
 
 test.describe("Posts feed", async () => {
-	test("See non-public post", async ({request, page}) => {
+	test("See non-invited post", async ({request, page}) => {
 		const privateUserPayload = (await createUser(request)).data!;
 
 		const postText = {title: randomNodeTitle(), body: randomNodeBody()};

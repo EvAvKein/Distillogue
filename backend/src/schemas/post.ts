@@ -23,7 +23,6 @@ export const NodeStats: ZodSchema<classes.NodeStats> = z.object({
 const PostUserArray = z.array(PostUserEntry);
 
 export const PostAccess: ZodSchema<classes.PostAccess> = z.object({
-	public: z.literal(true).optional(),
 	users: PostUserArray,
 });
 

@@ -3,7 +3,6 @@
 		<router-link :to="{name: 'viewPost', params: {postId: summary.id}}">
 			<section class="topSection">
 				<h4>{{ summary.title }}</h4>
-				<img v-if="'public' in summary.access" src="../../../assets/megaphone.svg" alt="Megaphone icon" />
 			</section>
 			<section class="timestamps">
 				<div>Posted: <timestamp :pastUnix="summary.stats.posted" /></div>
@@ -40,12 +39,6 @@
 	h4 {
 		margin: 0;
 		font-size: 1.2em;
-	}
-
-	img {
-		height: 1.5em;
-		filter: var(--filterToTextColor);
-		margin-left: 0.4em;
 	}
 
 	.timestamps {
