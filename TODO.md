@@ -1,42 +1,35 @@
-# Remaining tasks for each stage of the project
+### Flagship/core features:
+
+###### Some liable to be added post-release
+
+- Groups
+- Config info buttons
+- Post specs (access & config) expandable in post-viewing page
+- More config options:
+  - Node editing & history
+  - Poll posts
+  - Reply title (always/optional/none)
+  - Min/max character counts
+  - Feedback tags (critical & supplemental, default & custom)
+  - Contributions (unrestricted & authorized by author)
+  - Moderation:
+    - Paradigms (e.g democracy via existing configs, moderators appointed by post-creator)
+    - Functionalities (e.g invite/remove users, censoring with explanation, node/branch locking, Perspective API public/mod-only flagging)
+  - Others (ideas welcome)
 
 <hr>
 
-## ~~Minimal initial deployment~~ COMPLETE
+## Pre-release
 
-## Proof-of-concept
-
-- ### Flagship/core features:
-  - Data expandable in post-viewing page (access & config)
-  - More config options:
-    - Node editing & history
-    - Poll posts
-    - Reply title (always/optional/none)
-    - Min/max character count
-    - Feedback tags (critical & supplemental, default & custom)
-    - Contributions (unrestricted & authorized by author)
-    - Moderation:
-      - Paradigms (e.g democracy via existing configs, moderators appointed by post-creator)
-      - Functionalities (e.g invite/remove users, censoring with explanation, node/branch locking, Perspective API public/mod-only flagging)
-    - Others (ideas welcome)
-- ### Regulation:
-  - Platform moderation
-- ### Automated Tests:
-  - Test configs' off/absent states
-
-<hr>
-
-## Release-worthy
-
-- ### All of the above
 - ### Basic/core features:
-  - Remove public post option
-  - Config tooltips/info-buttons
+  - Post-browsing sorting & advanced filters
   - Session-management dashboard page
+  - Account data (export/delete) dashboard page
 - ### Security:
-  - Proper registration/authentication (likely only via third parties)
+  - Proper user registration and authentication (likely only via third parties)
   - DDoS mitigation & maybe a CDN (consider Cloudflare)
 - ### Regulation:
+  - Platform moderation
   - Comprehensive legal compliance
   - Concise terms-of-service (and potentially code-of-conduct)
 - ### Design:
@@ -44,17 +37,20 @@
   - Better color palette
   - Long-term logo & icons (possibly commissioned/paid)
 - ### Resources & Transparency:
-  - Proper front/introduction/advertising page
+  - Proper front/introduction page
   - Proper about page
   - Footer
   - Project values/principles/philosophy page
   - Contact page (e.g feedback/contact form)
   - Versioned API
-  - Display all aggregate data collected (e.g monthly active users, configs by popularity)
+  - Display all aggregate data collected (e.g. monthly active users, configs by popularity)
   - Semantic versioning (probably for entire repo, i.e not per package.json)
   - Other ideas (especially transparency-related) welcome!
 - ### Accessibility:
   - Aria attributes & accessibility tree checkup (need to find free, toggleable, configurable software for screenreader testing. devtools accessibility tree is insufficient)
+- ### Deployment:
+  - Kubernetes (updates without downtime & client-side update prompts)
+  - Automated database backups
 - ### Optimization:
   - Client-side input validation
   - Performance pass (e.g asset size, fetch priority)
@@ -65,17 +61,16 @@
 
 ## Post-release
 
-- ### All of the above
+- ### All pre-release tasks
 - ### Features:
-  - Groups
   - PWA support & mobile app distribution
   - More configs
-  - More layouts:
+  - More post layouts:
     - Mindmap (using D3)
     - Horizontal layers
-    - Others? (ideas welcome)
+    - Deep customization (with user-provided CSS)
 - ### Optimization:
   - Look into applicable offline-first functionalities
 - ### Tech changes:
   - Node -> Deno: Better performance, compatibility with web code, and security. Became very compatible with Node setups, but currently (13.4.23) doesn't work with Playwright (https://github.com/denoland/deno/issues/16899)
-  - Vue -> Nuxt/SvelteKit: As this project's selection of configurable features expands, with Vue that's liable to cause noticeable slowdowns even on non-applicable pages. A meta-framework's code-splitting/SSR might seriously improve client cold-load speed. Nuxt/SvelteKit also have some neat DX benefits, but I _probably_ won't bother migrating just for those
+  - Vue -> Nuxt/SvelteKit: As this project's selection of configurable features expands, with Vue that's liable to cause noticeable slowdowns even on non-applicable pages. A meta-framework's code-splitting/SSR might seriously improve client cold-load speed. Nuxt/SvelteKit also have some neat developer-experience benefits, but I _probably_ won't bother migrating just for those
