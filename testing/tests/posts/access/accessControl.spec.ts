@@ -6,7 +6,7 @@ import {randomNodeTitle, randomNodeBody} from "../../../helpers/randomAlphanumSt
 import {NodeCreationRequest, PostCreationRequest} from "../../../../shared/objects/api.js";
 
 // currently doesn't include tests for allowing authorized access to private posts, because:
-// 1. it gets tested during other tests (e.g configs)
+// 1. it gets tested during other tests (e.g. configs)
 // 2. i'm was unable to conceive of a way to mess with applicable code in a way that would:
 //  	- pass the aforementioned tests but not allow non-creator users to access the post
 //		- not be immediately & glaringly obvious upon even an inattentive review of the prospective changes

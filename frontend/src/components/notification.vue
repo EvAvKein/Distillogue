@@ -3,7 +3,7 @@
 		<p v-if="text" :class="'notification ' + styleClass" role="alert">
 			<!--
 				TODO - resolve accessibility issue: according to MDN, aria-live (which is implicit in role="alert") doesn't trigger when the element is added to the DOM.
-				the solution that immediately came to mind was v-show, but that results in unintuitive test results (e.g playwright counts the element as visible even when v-show makes them not, attempting to find and read a single notif results in the test failing due to locating multiple elements due to unshown ones)
+				the solution that immediately came to mind was v-show, but that results in unintuitive test results (e.g. playwright counts the element as visible even when v-show makes them not, attempting to find and read a single notif results in the test failing due to locating multiple elements due to unshown ones)
 			-->
 			{{ text }}
 		</p>

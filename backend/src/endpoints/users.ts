@@ -54,7 +54,7 @@ export default function (app: Express, usersDb: Collection<User>) {
 		const editRequests = validation.data;
 
 		const mongoUpdateObject = {} as {[key: string]: any};
-		// ^ TODO: a bare minimum type, because idk how declare the type below without actually requiring a type argument (i.e infer T from key and apply it to type of value)
+		// ^ TODO: a bare minimum type, because idk how declare the type below without actually requiring a type argument (i.e. infer T from key and apply it to type of value)
 		//	type mongoUpdateObject<T extends editableUserData> = {[key in `data.${T}`]: UserData[T]};
 		for (let request of editRequests) {
 			if (!arrOfEditableUserData.includes(request.dataName)) {

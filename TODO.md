@@ -13,8 +13,8 @@
   - Feedback tags (critical & supplemental, default & custom)
   - Contributions (unrestricted & authorized by author)
   - Moderation:
-    - Paradigms (e.g democracy via existing configs, moderators appointed by post-creator)
-    - Functionalities (e.g invite/remove users, censoring with explanation, node/branch locking, Perspective API public/mod-only flagging)
+    - Paradigms (e.g. democracy via existing configs, moderators appointed by post-creator)
+    - Functionalities (e.g. invite/remove users, censoring with explanation, node/branch locking, Perspective API public/mod-only flagging)
   - Others (ideas welcome)
 
 <hr>
@@ -41,10 +41,10 @@
   - Proper about page
   - Footer
   - Project values/principles/philosophy page
-  - Contact page (e.g feedback/contact form)
+  - Contact page (e.g. feedback/contact form)
   - Versioned API
   - Display all aggregate data collected (e.g. monthly active users, configs by popularity)
-  - Semantic versioning (probably for entire repo, i.e not per package.json)
+  - Semantic versioning (probably for entire repo, i.e. not per package.json)
   - Other ideas (especially transparency-related) welcome!
 - ### Accessibility:
   - Aria attributes & accessibility tree checkup (need to find free, toggleable, configurable software for screenreader testing. devtools accessibility tree is insufficient)
@@ -53,7 +53,7 @@
   - Automated database backups
 - ### Optimization:
   - Client-side input validation
-  - Performance pass (e.g asset size, fetch priority)
+  - Performance pass (e.g. asset size, fetch priority)
   - Remove zod-validation-error dependency & improve API validation errors' readability (either via custom messages on each validation or through some custom message construction)
   - Resolve TODO situations noted in various code comments
 

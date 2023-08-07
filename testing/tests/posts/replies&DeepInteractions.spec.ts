@@ -4,7 +4,7 @@ import {randomNodeTitle, randomNodeBody} from "../../helpers/randomAlphanumStrin
 import {setupUserWithPostAndOpen} from "../../helpers/requestsByUi.js";
 
 test.describe("Replies & deep interaction", () => {
-	// testing deep interactions through one interaction is enough, as it's a test for the deep-node paths' construction and translation back and forth across the app; individual interactions are functionally depth/path-agnostic in implementation (and exceptions, e.g branch-locking, will/should be tested accordingly)
+	// testing deep interactions through one interaction is enough, as it's a test for the deep-node paths' construction and translation back and forth across the app; individual interactions are functionally depth/path-agnostic in implementation (and exceptions, e.g. branch-locking, will/should be tested accordingly)
 	async function replyAndValidateNode(page: Page, repliedNodeByTitlesPath: string[], replyTitle: string) {
 		const replyBody = randomNodeBody();
 		await ui.createReply(page, repliedNodeByTitlesPath, replyTitle, replyBody);

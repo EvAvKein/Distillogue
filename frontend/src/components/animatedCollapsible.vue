@@ -23,7 +23,7 @@
 	const emit = defineEmits(["toggle"]);
 	function clicked() {
 		emit("toggle");
-		// ^ because sometimes a parent component needs to force this component's state while still toggling it upon summary clicks (e.g at single-select accordions).
+		// ^ because sometimes a parent component needs to force this component's state while still toggling it upon summary clicks (e.g. at single-select accordions).
 		// assigning the toggling function to a click event on the slotted elem isn't compatible with keyboard interactions, as the focus is on this button when the handler is on the slotted elem.
 		// emitting this event allows the parent component to assign the handler to the toggle event instead (and this doesn't require an extra keyboard handler on this component's button because keyboard interactions on button trigger the click event)
 

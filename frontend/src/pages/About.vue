@@ -35,7 +35,7 @@
 				</p>
 				<p>
 					I'm open to the idea of allowing user-created plugins for various configurations/layouts (and/or maybe even
-					robust support for forking e.g Mastodon), but that's far off in the future if/when the project matures and/or
+					robust support for forking e.g. Mastodon), but that's far off in the future if/when the project matures and/or
 					gains a userbase
 				</p>
 			</li>
@@ -45,7 +45,7 @@
 					moderation to the users as much as legally/ethically viable
 				</p>
 				<p>
-					I plan on implementing robust configurations for moderation paradigms (e.g direct/representative-democracy,
+					I plan on implementing robust configurations for moderation paradigms (e.g. direct/representative-democracy,
 					creator-approved moderators) and functionalities, alongside carefully-conceived optional and/or obligatory
 					countermeasures (likely just for the less-democratic ones) to mitigate abuse
 				</p>
