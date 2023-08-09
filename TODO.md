@@ -51,6 +51,7 @@
 - ### Deployment:
   - Kubernetes (updates without downtime & client-side update prompts)
   - Automated database backups
+  - Caching
 - ### Optimization:
   - Client-side input validation
   - Performance pass (e.g. asset size, fetch priority)
@@ -71,6 +72,11 @@
     - Deep customization (with user-provided CSS)
 - ### Optimization:
   - Look into applicable offline-first functionalities
-- ### Tech changes:
-  - Node -> Deno: Better performance, compatibility with web code, and security. Became very compatible with Node setups, but currently (13.4.23) doesn't work with Playwright (https://github.com/denoland/deno/issues/16899)
-  - Vue -> Nuxt/SvelteKit: As this project's selection of configurable features expands, with Vue that's liable to cause noticeable slowdowns even on non-applicable pages. A meta-framework's code-splitting/SSR might seriously improve client cold-load speed. Nuxt/SvelteKit also have some neat developer-experience benefits, but I _probably_ won't bother migrating just for those
+
+<hr>
+
+## Possible tech migrations
+
+- Node -> Deno: Better performance, compatibility with web code, and security. Became very compatible with Node setups, but currently (13.4.23) doesn't work with Playwright (https://github.com/denoland/deno/issues/16899)
+- Vue -> Nuxt/SvelteKit: As this project's selection of configurable features expands, with Vue that's liable to cause noticeable slowdowns even on non-applicable pages. A meta-framework's code-splitting/SSR might seriously improve client cold-load speed. Nuxt/SvelteKit also have some neat developer-experience benefits, but I _probably_ won't bother migrating just for those
+- Docker -> Podman: More secure, better developer experience, and allegedly seamless to migrate. Need to evaluate container orchestration & CI
