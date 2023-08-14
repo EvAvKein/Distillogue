@@ -1,13 +1,13 @@
 import {type Express} from "express";
 import {type Collection} from "mongodb";
 import {sanitizeForRegex} from "../helpers/sanitizeForRegex.js";
-import {userBySession} from "../helpers/reqHeaders.js";
+import {authUser} from "../helpers/authUser.js";
 import {type Post, PostSummary} from "../../../shared/objects/post.js";
 import {FetchResponse} from "../../../shared/objects/api.js";
 
 export default function (app: Express, postsDb: Collection<Post>) {
 	app.get("/api/admin/posts:search?", async (request, response) => {
-		const user = await userBySession(request);
+		const user = await authUser(request);
 		if (!user?.data.permissions?.admin) {
 			user?.data
 				? response.status(403).json(new FetchResponse(null, {message: "User is not an admin"}))

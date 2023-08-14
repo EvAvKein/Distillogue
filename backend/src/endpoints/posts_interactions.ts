@@ -2,7 +2,7 @@ import {type Express} from "express";
 import {type Collection, type UpdateFilter} from "mongodb";
 import * as apiSchemas from "../schemas/api.js";
 import * as timestamp from "../../../shared/helpers/timestamps.js";
-import {userBySession} from "../helpers/reqHeaders.js";
+import {authUser} from "../helpers/authUser.js";
 import {mongoFilterPostsByAccess} from "../helpers/mongo/mongoFilterPostsByAccess.js";
 import {nodePathAsMongoLocators} from "../helpers/mongo/nodePathAsMongoLocators.js";
 import {mongoMergeUpdateFilters} from "../helpers/mongo/mongoMergeUpdateFilters.js";
@@ -20,7 +20,7 @@ export default function (app: Express, postsDb: Collection<Post>, usersDb: Colle
 			return;
 		}
 
-		const user = await userBySession(request);
+		const user = await authUser(request);
 		if (!user) {
 			response.status(401).json(new FetchResponse(null, {message: "User authentication failed"}));
 			return;

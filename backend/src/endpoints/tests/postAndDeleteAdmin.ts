@@ -1,12 +1,12 @@
 import {type Express} from "express";
 import {type Collection} from "mongodb";
-import {userBySession} from "../../helpers/reqHeaders.js";
+import {authUser} from "../../helpers/authUser.js";
 import {AdminEntry, type User} from "../../../../shared/objects/user.js";
 import {FetchResponse} from "../../../../shared/objects/api.js";
 
 export default function (app: Express, usersDb: Collection<User>) {
 	app.post("/api/tests/admin", async (request, response) => {
-		const user = await userBySession(request);
+		const user = await authUser(request);
 
 		if (!user) {
 			response.status(400).json(new FetchResponse(null, {message: "User doesn't exist"}));
@@ -27,7 +27,7 @@ export default function (app: Express, usersDb: Collection<User>) {
 	});
 
 	app.delete("/api/tests/admin", async (request, response) => {
-		const user = await userBySession(request);
+		const user = await authUser(request);
 		if (!user) {
 			response.status(400).json(new FetchResponse(null, {message: "User doesn't exist"}));
 			return;

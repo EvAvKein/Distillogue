@@ -4,13 +4,13 @@ import * as apiSchemas from "../schemas/api.js";
 import {mongoInsertIfDoesntExist} from "../helpers/mongo/mongoInsertIfDoesntExist.js";
 import {User, UserData, UserPayload, arrOfEditableUserData} from "../../../shared/objects/user.js";
 import {FetchResponse} from "../../../shared/objects/api.js";
-import {sessionKey, userBySession} from "../helpers/reqHeaders.js";
+import {sessionKey} from "../helpers/reqHeaders.js";
+import {authUser} from "../helpers/authUser.js";
 import {fromZodError} from "zod-validation-error";
 
 export default function (app: Express, usersDb: Collection<User>) {
 	app.get("/api/users", async (request, response) => {
-		const key = sessionKey(request);
-		const user = await userBySession(request);
+		const user = await authUser(request);
 
 		user
 			? response.status(200).json(new FetchResponse(user.data))
@@ -65,7 +65,7 @@ export default function (app: Express, usersDb: Collection<User>) {
 			mongoUpdateObject["data." + request.dataName] = request.newValue;
 		}
 
-		const dbResponse = await usersDb.updateOne({sessions: {$elemMatch: {key: session}}}, {$set: mongoUpdateObject});
+		const dbResponse = await usersDb.updateOne({sessions: {key: session}}, {$set: mongoUpdateObject});
 
 		if (!dbResponse.acknowledged || !dbResponse.matchedCount) {
 			response.status(500).json(new FetchResponse(null, {message: "Failed to update database"}));

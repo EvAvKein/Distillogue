@@ -3,7 +3,7 @@ import {type Collection} from "mongodb";
 import * as apiSchemas from "../schemas/api.js";
 import {mongoInsertIfDoesntExist} from "../helpers/mongo/mongoInsertIfDoesntExist.js";
 import {sanitizeForRegex} from "../helpers/sanitizeForRegex.js";
-import {userBySession} from "../helpers/reqHeaders.js";
+import {authUser} from "../helpers/authUser.js";
 import {mongoFilterPostsByAccess} from "../helpers/mongo/mongoFilterPostsByAccess.js";
 import {updateDeepProperty} from "../helpers/updateDeepProperty.js";
 import {recursivelyModifyNode} from "../helpers/recursivelyModifyNode.js";
@@ -27,7 +27,7 @@ export default function (app: Express, postsDb: Collection<Post>, usersDb: Colle
 			preppedSearchRequest = new RegExp(sanitizeForRegex(searchRequest), "i");
 		}
 
-		const user = await userBySession(request);
+		const user = await authUser(request);
 		const posts = await postsDb
 			.find(
 				mongoFilterPostsByAccess(user?.data, {
@@ -47,7 +47,7 @@ export default function (app: Express, postsDb: Collection<Post>, usersDb: Colle
 
 	app.get("/api/posts/:id", async (request, response) => {
 		const postId = request.params.id as Node["id"];
-		const user = await userBySession(request);
+		const user = await authUser(request);
 
 		const dbResponse = await postsDb.findOne(mongoFilterPostsByAccess(user?.data, {"thread.id": postId}));
 		if (!dbResponse) {
@@ -87,7 +87,7 @@ export default function (app: Express, postsDb: Collection<Post>, usersDb: Colle
 
 		const postRequest = validation.data;
 
-		const user = await userBySession(request);
+		const user = await authUser(request);
 		if (!user) {
 			response.status(401).json(new FetchResponse(null, {message: "User authentication failed"}));
 			return;
