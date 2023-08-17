@@ -4,7 +4,11 @@
 	"license": "MIT",
 	"scripts": {
 		"installAll": "npm install && cd shared && npm install && cd ../backend && npm install && cd ../frontend && npm install && cd ../testing && npm install",
-		"prettier": "npx prettier --write ."
+		"prettier": "npx prettier --write .",
+		"docker": "docker-compose up --build --force-recreate",
+		"dockerDev": "docker-compose -f compose.yaml -f compose.devOverride.yaml up --build --force-recreate",
+		"dockerTest": "docker-compose -f compose.test.yaml up --build --force-recreate",
+		"dockerStyle": "docker-compose -f compose.style.yaml up --build --force-recreate"
 	},
 	"homepage": "https://github.com/EvAvKein/Distillogue#readme",
 	"repository": {
