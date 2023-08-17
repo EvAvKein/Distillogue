@@ -18,7 +18,7 @@ The configurable discussion platform; currently in very early development, with 
 ### Software Requirements
 
 - Docker
-- Node.js (development only, dependency intellisense)
+- Node.js (dependency intellisense, package.json script aliases for below docker commands)
 
 ### Prerequisites
 
@@ -33,7 +33,7 @@ The configurable discussion platform; currently in very early development, with 
 - Run automated tests: `docker-compose -f compose.test.yaml up`
 - Run code styler: `docker-compose -f compose.style.yaml up`
 
-(When switching between serve dev modes or rewriting tests, append ` --build --force-recreate` to the command)
+(When switching between serve modes or rewriting tests, append ` --build --force-recreate` to the command)
 
 ## Contributing
 
