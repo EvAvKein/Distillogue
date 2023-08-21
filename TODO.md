@@ -50,6 +50,7 @@
   - Aria attributes & accessibility tree checkup (need to find free, toggleable, configurable software for screenreader testing. devtools accessibility tree is insufficient)
 - ### Deployment:
   - Kubernetes (updates without downtime & client-side update prompts)
+  - Auto-cloud-uploaded error logs (endpoints, server, frontend via endpoint)
   - Automated database backups
   - Caching
 - ### Optimization:
