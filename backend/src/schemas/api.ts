@@ -1,30 +1,30 @@
-import {z, ZodSchema} from "zod";
-import * as classes from "../../../shared/objects/api.js";
+import {z, type ZodSchema} from "zod";
+import type * as classes from "../../../shared/objects/api.js";
 import {UserData} from "./user.js";
 import {PostConfig} from "./_shared.js";
 import {nodeBody, nodeTitle, PostAccess} from "./post.js";
-import {editableUserData} from "../../../shared/objects/user.js";
+import type {editableUserData} from "../../../shared/objects/user.js";
 import {user} from "../../../shared/objects/validationUnits.js";
 
-export const UserCreationRequest: ZodSchema<classes.UserCreationRequest> = z.object({
+export const UserCreationRequest = z.object({
 	username: UserData.shape.name,
-});
-export const UserPatchRequest: ZodSchema<classes.UserPatchRequest<editableUserData>> = z.discriminatedUnion(
-	"dataName",
-	[
-		// TODO: there must be some way to generate these based on arrOfEditableUserData, but i kept facing type issues when attempting it
-		z.object({dataName: z.literal("name"), newValue: UserData.shape.name}),
-		z.object({dataName: z.literal("drafts"), newValue: UserData.shape.drafts}),
-		z.object({dataName: z.literal("presets"), newValue: UserData.shape.presets}),
-		z.object({dataName: z.literal("contacts"), newValue: UserData.shape.contacts}),
-	]
-);
-export const UserPatchRequestArray: ZodSchema<classes.UserPatchRequest<editableUserData>[]> =
-	UserPatchRequest.array().min(1);
+}) satisfies ZodSchema<classes.UserCreationRequest>;
+
+export const UserPatchRequest = z.discriminatedUnion("dataName", [
+	// TODO: there must be some way to generate these based on arrOfEditableUserData, but i kept facing type issues when attempting it
+	z.object({dataName: z.literal("name"), newValue: UserData.shape.name}),
+	z.object({dataName: z.literal("drafts"), newValue: UserData.shape.drafts}),
+	z.object({dataName: z.literal("presets"), newValue: UserData.shape.presets}),
+	z.object({dataName: z.literal("contacts"), newValue: UserData.shape.contacts}),
+]) satisfies ZodSchema<classes.UserPatchRequest<editableUserData>>;
+
+export const UserPatchRequestArray = UserPatchRequest.array().min(1) satisfies ZodSchema<
+	classes.UserPatchRequest<editableUserData>[]
+>;
 
 const nodePath = z.array(UserData.shape.id).min(1).optional();
 
-export const NodeCreationRequest: ZodSchema<classes.NodeCreationRequest> = z.object({
+export const NodeCreationRequest = z.object({
 	invitedOwnerIds: z.array(z.string()).optional(),
 	title: nodeTitle,
 	body: nodeBody,
@@ -36,15 +36,15 @@ export const NodeCreationRequest: ZodSchema<classes.NodeCreationRequest> = z.obj
 		.optional(),
 	config: PostConfig.optional(),
 	nodePath: nodePath.optional(),
-});
+}) satisfies ZodSchema<classes.NodeCreationRequest>;
 
-export const PostCreationRequest: ZodSchema<classes.PostCreationRequest> = z.object({
+export const PostCreationRequest = z.object({
 	rootNode: NodeCreationRequest,
 	config: PostConfig,
 	access: PostAccess,
-});
+}) satisfies ZodSchema<classes.PostCreationRequest>;
 
-export const NodeInteractionRequest: ZodSchema<classes.NodeInteractionRequest> = z.intersection(
+export const NodeInteractionRequest = z.intersection(
 	z.object({nodePath: nodePath}).required(),
 	z.discriminatedUnion("interactionType", [
 		z.object({
@@ -59,4 +59,4 @@ export const NodeInteractionRequest: ZodSchema<classes.NodeInteractionRequest> =
 			}),
 		}),
 	])
-);
+) satisfies ZodSchema<classes.NodeInteractionRequest>;

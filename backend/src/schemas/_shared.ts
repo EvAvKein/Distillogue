@@ -1,11 +1,10 @@
 // file created to resolve circular-reference errors
-import {z} from "zod";
-import {zodObjer} from "../helpers/zod/zodObjer.js";
-import * as postClasses from "../../../shared/objects/post";
+import {z, type ZodSchema} from "zod";
+import type * as postClasses from "../../../shared/objects/post";
 
 export const trueOrNone = z.literal(true).optional();
 
-export const PostConfig = z.object<zodObjer<postClasses.PostConfig>>({
+export const PostConfig = z.object({
 	timestamps: z
 		.object({
 			interacted: trueOrNone,
@@ -18,4 +17,4 @@ export const PostConfig = z.object<zodObjer<postClasses.PostConfig>>({
 			anon: trueOrNone,
 		})
 		.optional(),
-});
+}) satisfies ZodSchema<postClasses.PostConfig>;
