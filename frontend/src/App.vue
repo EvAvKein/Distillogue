@@ -231,9 +231,9 @@
 		opacity: 1;
 	}
 	.collapse-enter-active {
-		transition: opacity 300ms ease-out, max-height 350ms ease-in;
+		transition: opacity 250ms ease-out, max-height 300ms ease-in;
 	}
 	.collapse-leave-active {
-		transition: opacity 250ms ease-in, max-height 300ms ease-out;
+		transition: opacity 200ms ease-in, max-height 250ms ease-out;
 	}
 </style>
