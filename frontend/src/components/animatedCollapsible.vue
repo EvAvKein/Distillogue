@@ -13,11 +13,11 @@
 	import {ref, computed} from "vue";
 
 	const props = defineProps<{
-		openByDefault?: true;
+		openByDefault?: boolean;
 		forcedState?: {state: boolean}; // workaround to an 'unintuitive' vue ruling: https://github.com/vuejs/vue/issues/4792#issue-203322901
 	}>();
 
-	const toggled = ref(props.openByDefault || false);
+	const toggled = ref(props.openByDefault ?? false);
 	const open = computed(() => props.forcedState?.state ?? toggled.value);
 
 	const emit = defineEmits(["toggle"]);
