@@ -11,6 +11,7 @@
 				<img v-else-if="page === 'drafts'" src="../../assets/drafts.svg" alt="Paper tray icon" />
 				<img v-else-if="page === 'presets'" src="../../assets/presets.svg" alt="Icon of stacked tabs with cogwheels" />
 				<img v-else-if="page === 'contacts'" src="../../assets/contacts.svg" alt="Address book icon" />
+				<img v-else-if="page === 'sessions'" src="../../assets/key.svg" alt="Key icon" />
 				<!-- v-ifs instead of dynamic values due to vite limitations with dynamic src -->
 				<span>{{ page }}</span>
 			</router-link>
@@ -25,7 +26,7 @@
 	import {useRoute} from "vue-router";
 	const route = useRoute();
 
-	const pages = ["profile", "drafts", "presets", "contacts"] as const;
+	const pages = ["profile", "drafts", "presets", "contacts", "sessions"] as const;
 </script>
 
 <style scoped>

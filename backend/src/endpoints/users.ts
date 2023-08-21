@@ -65,7 +65,7 @@ export default function (app: Express, usersDb: Collection<User>) {
 			mongoUpdateObject["data." + request.dataName] = request.newValue;
 		}
 
-		const dbResponse = await usersDb.updateOne({sessions: {key: session}}, {$set: mongoUpdateObject});
+		const dbResponse = await usersDb.updateOne({"sessions.key": session}, {$set: mongoUpdateObject});
 
 		if (!dbResponse.acknowledged || !dbResponse.matchedCount) {
 			response.status(500).json(new FetchResponse(null, {message: "Failed to update database"}));

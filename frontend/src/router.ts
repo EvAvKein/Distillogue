@@ -16,6 +16,7 @@ import dashboard_profile from "./pages/User/dashboardSections/Profile.vue";
 import dashboard_drafts from "./pages/User/dashboardSections/Drafts.vue";
 import dashboard_presets from "./pages/User/dashboardSections/Presets.vue";
 import dashboard_contacts from "./pages/User/dashboardSections/Contacts.vue";
+import dashboard_sessions from "./pages/User/dashboardSections/Sessions.vue";
 import admin from "./pages/Admin/Admin.vue";
 import admin_feeds from "./pages/Admin/adminSections/Feeds.vue";
 
@@ -102,6 +103,11 @@ const router = createRouter({
 					name: "dashboard_contacts",
 					path: "contacts",
 					component: dashboard_contacts,
+				},
+				{
+					name: "dashboard_sessions",
+					path: "sessions",
+					component: dashboard_sessions,
 				},
 			],
 		},

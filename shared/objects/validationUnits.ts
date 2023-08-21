@@ -10,6 +10,9 @@ export const user = {
 		max: 3,
 		name: {max: 30},
 	},
+	sessions: {
+		name: {min: 2, max: 15},
+	},
 } as const;
 
 export const node = {

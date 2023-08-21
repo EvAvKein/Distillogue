@@ -9,7 +9,7 @@ export class User {
 
 	constructor(data: UserData) {
 		this.auths = [];
-		this.sessions = [new UserSession()];
+		this.sessions = [new UserSession("Session 1")];
 		this.data = data;
 	}
 }
@@ -25,12 +25,14 @@ export class UserAuth {
 }
 
 export class UserSession {
-	name?: string;
+	name: string;
 	key: string;
+	latestUsed: number;
 
-	constructor(name?: UserSession["name"]) {
-		name ? (this.name = name) : delete this.name;
+	constructor(name: UserSession["name"]) {
+		this.name = name;
 		this.key = newId() + newId() + newId();
+		this.latestUsed = unix();
 	}
 }
 
@@ -48,7 +50,7 @@ export class AdminEntry {
 
 export class UserData {
 	id: string;
-	permissions: {banned?: true; admin?: AdminEntry};
+	permissions: {banned?: true; admin?: true};
 	name: string;
 	drafts: {title: Node["title"]; body: Node["body"]; lastEdited: number}[];
 	presets: {name: string; config: PostConfig}[];

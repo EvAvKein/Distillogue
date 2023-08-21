@@ -21,9 +21,10 @@ export async function getSessions(request: Request, authKey: string) {
 		})
 	).json() as FetchResponse<UserSession[]>;
 }
-export async function deleteSession(request: Request, authKey: string) {
+export async function deleteSession(request: Request, authKey: string, otherSessionForDeletion?: {key: string}) {
 	return request.delete("/api/sessions", {
 		headers: {authorization: "Bearer " + authKey},
+		data: otherSessionForDeletion,
 	});
 }
 

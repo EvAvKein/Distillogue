@@ -11,10 +11,11 @@ export const UserAuth: ZodSchema<classes.UserAuth> = z.object({
 	key: z.string(),
 });
 
-export const UserSession: ZodSchema<classes.UserSession> = z.object({
-	name: z.string().regex(alphanumRegex),
+export const UserSession = z.object({
+	name: z.string().min(user.sessions.name.min).max(user.sessions.name.max),
 	key: z.string(),
-});
+	latestUsed: z.number(),
+}) satisfies ZodSchema<classes.UserSession>;
 
 export const UserDrafts = z
 	.array(
@@ -58,11 +59,7 @@ export const UserData = z.object({
 	id: UserId,
 	permissions: z.object({
 		banned: z.literal(true).optional(),
-		admin: z.object({
-			id: UserId,
-			name: z.string(),
-			joined: z.number(),
-		}),
+		admin: z.literal(true).optional(),
 	}),
 	name: z.string().regex(alphanumRegex).min(user.name.min).max(user.name.max),
 	drafts: UserDrafts,
