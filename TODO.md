@@ -57,6 +57,7 @@
   - Client-side input validation
   - Performance pass (e.g. asset size, fetch priority)
   - Remove zod-validation-error dependency & improve API validation errors' readability (either via custom messages on each validation or through some custom message construction)
+  - SEO checkup (& consider migrating to meta-framework)
   - Resolve TODO situations noted in various code comments
 
 <hr>
