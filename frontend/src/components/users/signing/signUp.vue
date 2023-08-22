@@ -7,6 +7,7 @@
 			id="usernameInput"
 			:inputId="'loginUsernameField'"
 			v-model="username"
+			:enterKey="signingByInput"
 		/>
 		<notification v-model:text="signingMessage" :desirablityStyle="signingStatus" />
 		<button @click="signingByInput" type="button" class="core_backgroundButton">Continue</button>
