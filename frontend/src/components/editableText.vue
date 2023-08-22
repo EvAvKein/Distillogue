@@ -7,6 +7,7 @@
 		:placeholder="placeholder"
 		required="true"
 		@input="debouncedValueEmit"
+		@keyup.enter="enterKey"
 		ref="editable"
 	></textarea>
 	<input
@@ -16,8 +17,9 @@
 		:maxLength="maxLength"
 		:placeholder="placeholder"
 		required="true"
-		ref="editable"
 		@input="debouncedValueEmit"
+		@keyup.enter="enterKey"
+		ref="editable"
 	/>
 </template>
 
@@ -33,6 +35,7 @@
 		minLineHeight?: number;
 		placeholder?: string;
 		customDebounce?: number;
+		enterKey?: () => void;
 	}>();
 
 	const editable = ref<null | HTMLInputElement>(null);

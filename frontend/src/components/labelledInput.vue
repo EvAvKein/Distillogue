@@ -9,6 +9,7 @@
 			:required="required"
 			placeholder=" "
 			@input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+			@keyup.enter="enterKey"
 		></textarea>
 		<input
 			v-else
@@ -20,6 +21,7 @@
 			:required="required"
 			placeholder=" "
 			@input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+			@keyup.enter="enterKey"
 		/>
 		<label :for="inputId">{{ label || type }}</label>
 	</div>
@@ -35,6 +37,7 @@
 		minLength?: number;
 		maxLength?: number;
 		minLineHeight?: number;
+		enterKey?: () => void;
 	}>();
 
 	const emit = defineEmits(["update:modelValue"]);
