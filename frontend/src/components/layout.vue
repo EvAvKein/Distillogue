@@ -30,7 +30,6 @@
 				</div>
 			</nav>
 		</section>
-		<notification v-model:text="notifText" :desirablityStyle="notifDesirability" />
 		<section id="rightSection">
 			<nav>
 				<div v-if="user.data">
@@ -50,29 +49,42 @@
 			</nav>
 		</section>
 	</header>
+
+	<div id="notificationsWrapper">
+		<TransitionGroup name="notification">
+			<div
+				v-for="notif in notifications.list"
+				:key="notif.id"
+				role="alert"
+				:class="
+					'notification ' + (notif.desirability === true ? 'positive' : notif.desirability === false ? 'negative' : '')
+				"
+			>
+				<p>
+					{{ notif.text }}
+					<!-- TODO - resolve accessibility issue: according to MDN, aria-live (which is implicit in role="alert") doesn't trigger when the element is added to the DOM -->
+				</p>
+				<button v-if="notif.manualDismiss" @click="notifications.delete(notif.id)">X</button>
+			</div>
+		</TransitionGroup>
+		<div id="notifScrollAnchor"></div>
+	</div>
 </template>
 
 <script setup lang="ts">
-	import {ref} from "vue";
 	import {useRouter} from "vue-router";
 	import {useUser} from "../stores/user";
 	import {apiFetch} from "../helpers/apiFetch";
-	import notification from "./notification.vue";
+	import {useNotifications} from "../stores/notification";
 	const user = useUser();
 	const router = useRouter();
-
-	const notifText = ref("");
-	const notifDesirability = ref<boolean | null>(null);
+	const notifications = useNotifications();
 
 	async function logOut() {
-		notifText.value = "";
-		notifDesirability.value = null;
-
 		const logoutRequest = await apiFetch("DELETE", "/sessions");
 
 		if (logoutRequest.error) {
-			notifText.value = logoutRequest.error.message;
-			notifDesirability.value = false;
+			notifications.create(logoutRequest.error.message, false, true);
 			return;
 		}
 
@@ -80,6 +92,17 @@
 		localStorage.removeItem("sessionKey");
 		router.push({name: "join"});
 	}
+
+	function genType() {
+		const numb = Math.random();
+		if (numb > 0.66) return true;
+		if (numb > 0.33) return false;
+		return null;
+	}
+	let numb = 0;
+	setInterval(() => {
+		notifications.create("notif " + numb++, genType(), true);
+	}, 2000);
 </script>
 
 <style scoped>
@@ -137,6 +160,99 @@
 	span {
 		font-size: 1.1em;
 		display: none;
+	}
+
+	#notificationsWrapper {
+		font-size: 1.2em;
+		position: fixed;
+		padding: 0;
+		right: 0;
+		bottom: 0;
+		max-height: 100vh;
+		max-width: 100vw;
+		padding: 0.25em;
+		z-index: 999;
+		overflow: auto;
+	}
+
+	#notificationsWrapper::-webkit-scrollbar {
+		display: none; /* because the vue enter transition was causing the scrollbar to pop and in and out every time a notif was created (under the overflow limit. when notifs overflowed the scrollbar would act as expected) */
+	}
+
+	.notification {
+		color: var(--textColor);
+		background-color: #666666;
+		border-inline: 0.2em solid #aaaaaa;
+		width: fit-content;
+		padding: 0.3em;
+		margin: 0 0 0.25em auto;
+		overflow-anchor: none;
+		display: flex;
+		gap: 0.25em;
+	}
+	.notification.negative {
+		background-color: #880000;
+		border-color: #ff0000;
+	}
+	.notification.positive {
+		background-color: #008800;
+		border-color: #00ff00;
+	}
+
+	.notification p {
+		display: inline;
+		margin-bottom: 0;
+	}
+
+	.notification button {
+		padding: 0.1em 0.2em 0.05em;
+		border-radius: 0.25em;
+		user-select: none;
+		background-color: #aaa;
+		transition: background-color 0.2s;
+	}
+	.notification.negative button {
+		background-color: #ff0000;
+	}
+	.notification.positive button {
+		background-color: #00ff00;
+	}
+
+	.notification button:hover,
+	.notification button:focus {
+		background-color: var(--highlightSubColor);
+	}
+
+	.notification button:active {
+		background-color: var(--highlightColor);
+	}
+
+	.notification-enter-from {
+		max-height: 0em;
+		opacity: 0;
+	}
+	.notification-enter-to {
+		max-height: 15em;
+		opacity: 1;
+	}
+	.notification-enter-active {
+		transition: all 300ms ease-in;
+	}
+	.notification-leave-from {
+		max-height: 15em;
+		opacity: 1;
+	}
+	.notification-leave-to {
+		max-height: 0em;
+		opacity: 0;
+	}
+	.notification-leave-active {
+		transition: all 200ms ease-in;
+	}
+
+	#notifScrollAnchor {
+		overflow-anchor: auto;
+		height: 1px;
 	}
 
 	@media (min-width: 25rem) {
