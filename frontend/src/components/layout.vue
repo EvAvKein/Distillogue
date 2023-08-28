@@ -92,17 +92,6 @@
 		localStorage.removeItem("sessionKey");
 		router.push({name: "join"});
 	}
-
-	function genType() {
-		const numb = Math.random();
-		if (numb > 0.66) return true;
-		if (numb > 0.33) return false;
-		return null;
-	}
-	let numb = 0;
-	setInterval(() => {
-		notifications.create("notif " + numb++, genType(), true);
-	}, 2000);
 </script>
 
 <style scoped>
