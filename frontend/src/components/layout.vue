@@ -75,7 +75,7 @@
 	import {useRouter} from "vue-router";
 	import {useUser} from "../stores/user";
 	import {apiFetch} from "../helpers/apiFetch";
-	import {useNotifications} from "../stores/notification";
+	import {useNotifications} from "../stores/notifications";
 	const user = useUser();
 	const router = useRouter();
 	const notifications = useNotifications();
