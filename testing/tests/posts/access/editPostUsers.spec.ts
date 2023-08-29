@@ -175,8 +175,6 @@ test.describe("Edit post access", async () => {
 			const manualId = randomAlphanumString();
 			await addUser(page, manualName, manualId);
 
-			expect(page.locator(access.contactSelect)).toHaveProperty;
-
 			const userRows = page.locator("tbody tr td:nth-child(1)");
 			await expandAllUserInfos(page);
 			await expect(userRows.nth(1)).toHaveText(contactName + contactId);
