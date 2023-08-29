@@ -104,6 +104,6 @@ test.describe("Post summary contents", async () => {
 
 		await page.goto("/browse");
 		await page.waitForSelector("article"); // added because CI perf otherwise causes subsequent check to timeout
-		expect(page.locator("article .timestamps")).toHaveText("Posted: Now");
+		await expect(page.locator("article .timestamps")).toHaveText("Posted: Now");
 	});
 });

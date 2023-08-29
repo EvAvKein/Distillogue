@@ -88,7 +88,7 @@ test.describe("User sessions - UI", async () => {
 			await expect(page.locator(".notification.negative")).not.toBeVisible();
 
 			await page.reload();
-			expect(page.locator(selector.sName)).toHaveValue(newSessionName);
+			await expect(page.locator(selector.sName)).toHaveValue(newSessionName);
 		});
 
 		// TODO: consider adding a "rename non-first session" test

@@ -74,17 +74,17 @@ test.describe("Voting: Up & Down", async () => {
 
 		test("Votes without up", async ({page, request}) => {
 			const {user, post} = await ui.setupUserWithPostAndOpen(page, request, {votes: {down: true, anon: true}});
-			expect(page.locator(selector.upvote)).not.toBeVisible();
-			expect(page.locator(selector.voteNumb)).toBeVisible();
-			expect(page.locator(selector.downvote)).toBeVisible();
+			await expect(page.locator(selector.upvote)).not.toBeVisible();
+			await expect(page.locator(selector.voteNumb)).toBeVisible();
+			await expect(page.locator(selector.downvote)).toBeVisible();
 			expect((await apiVoteAttempt(request, user.sessionKey, [post.thread.title], "up")).error).toBeTruthy();
 		});
 
 		test("Votes without down", async ({page, request}) => {
 			const {user, post} = await ui.setupUserWithPostAndOpen(page, request, {votes: {up: true, anon: true}});
-			expect(page.locator(selector.upvote)).toBeVisible();
-			expect(page.locator(selector.voteNumb)).toBeVisible();
-			expect(page.locator(selector.downvote)).not.toBeVisible();
+			await expect(page.locator(selector.upvote)).toBeVisible();
+			await expect(page.locator(selector.voteNumb)).toBeVisible();
+			await expect(page.locator(selector.downvote)).not.toBeVisible();
 			expect((await apiVoteAttempt(request, user.sessionKey, [post.thread.title], "down")).error).toBeTruthy();
 		});
 	});
