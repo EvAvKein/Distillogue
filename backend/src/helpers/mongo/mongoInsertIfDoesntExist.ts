@@ -1,10 +1,9 @@
-import type {Collection, Document, UpdateOptions} from "mongodb";
-import type {DeepPartial} from "../deepPartial";
+import type {Collection, Document, Filter, UpdateOptions} from "mongodb";
 
 export function mongoInsertIfDoesntExist<dbT extends Document>(
 	collection: Collection<dbT>,
 	object: dbT,
-	existenceFilter: DeepPartial<dbT>,
+	existenceFilter: Filter<dbT>,
 	extraUpdateOptions?: Omit<UpdateOptions, "upsert">
 ) {
 	return collection.updateOne(existenceFilter, {$setOnInsert: object}, {upsert: true, ...extraUpdateOptions});
