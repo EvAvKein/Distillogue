@@ -3,7 +3,6 @@
 ###### Some liable to be added post-release
 
 - Groups
-- Config info buttons
 - Post specs (access & config) expandable in post-viewing page
 - More config options:
   - Node editing & history
@@ -23,7 +22,6 @@
 
 - ### Basic/core features:
   - Post-browsing sorting & advanced filters
-  - Session-management dashboard page
   - Account data (export/delete) dashboard page
 - ### Security:
   - Proper user registration and authentication (likely only via third parties)
@@ -38,9 +36,9 @@
   - Long-term logo & icons (possibly commissioned/paid)
 - ### Resources & Transparency:
   - Proper front/introduction page
-  - Proper about page
+  - Proper About page
   - Footer
-  - Project values/principles/philosophy page
+  - Project values/philosophy page
   - Contact page (e.g. feedback/contact form)
   - Versioned API
   - Display all aggregate data collected (e.g. monthly active users, configs by popularity)
