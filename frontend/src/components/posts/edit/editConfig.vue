@@ -1,22 +1,22 @@
 <template>
 	<section id="editConfig">
-		<animatedCollapsible v-for="(categoryObj, categoryName) of configLayout" class="category">
+		<animatedCollapsible v-for="(categoryObj, categoryKey) of postConfigReadable" class="category">
 			<template #summary>
-				<span>{{ categoryName }}</span>
+				<span>{{ postConfigReadable[categoryKey].name }}</span>
 			</template>
 
 			<template #content>
 				<div>
-					<label v-for="configProp, configName in categoryObj!.config">
+					<label v-for="({name: configName}, configKey) of (categoryObj.props as mappedConfigCategory)">
 						{{ configName }}:
 						<input
-							:id="categoryObj!.prop + '.' + configProp"
+							:id="categoryKey + '.' + configKey"
 							class="core_crudeInput"
 							type="checkbox"
 							@change="(event) => {
 						emit(
 							'update:config',
-							configAfterUpdate(categoryObj!.prop, configProp as subkeyOfPostConfig, (event.currentTarget as HTMLInputElement).checked || undefined)
+							configAfterUpdate(categoryKey, configKey, (event.currentTarget as HTMLInputElement).checked || undefined)
 						)
 					}"
 						/>
@@ -30,35 +30,18 @@
 <script setup lang="ts">
 	import {toRef, watch, onMounted} from "vue";
 	import {PostConfig} from "../../../../../shared/objects/post";
+	import {
+		postConfigReadable,
+		type subkeyOfPostConfig,
+		type mappedConfigCategory,
+	} from "../../../helpers/postConfigReadable";
 	import animatedCollapsible from "../../animatedCollapsible.vue";
 
 	const props = defineProps<{
 		config: PostConfig;
 	}>();
 
-	const configLayout: {
-		[key: string]: {prop: keyof PostConfig; config: {[key: string]: subkeyOfPostConfig}} | undefined;
-	} = {
-		Timestamps: {
-			prop: "timestamps",
-			config: {
-				Interacted: "interacted",
-			},
-		},
-		Voting: {
-			prop: "votes",
-			config: {
-				Upvotes: "up",
-				Downvotes: "down",
-				Anonymous: "anon",
-			},
-		},
-	};
-
 	const emit = defineEmits(["update:config"]);
-
-	type keysFromAllObjects<T> = T extends object ? keyof T : never;
-	type subkeyOfPostConfig = keysFromAllObjects<PostConfig[keyof PostConfig]>; // don't ask me why this works, but `keyof PostConfig[keyof PostConfig]` doesnt
 
 	type configProp = "votes";
 	type configSubprop = "up";
