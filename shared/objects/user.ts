@@ -89,7 +89,7 @@ export class UserEntry {
 	}
 }
 
-export const arrOfPostUserRoles = ["mod", "readOnly"] as const;
+export const arrOfPostUserRoles = ["Moderator", "Spectator"] as const;
 export type PostUserRole = (typeof arrOfPostUserRoles)[number];
 
 export class PostUserEntry extends UserEntry {

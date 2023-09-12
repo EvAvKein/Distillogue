@@ -57,15 +57,15 @@
 								:key="id + index + 'checkbox'"
 								type="checkbox"
 								class="core_crudeInput userModCheckbox"
-								:checked="access.users[index].roles.includes('mod')"
+								:checked="access.users[index].roles.includes('Moderator')"
 								@click="(event) => {
 									updateAccess(
 										'users',
 										usersAfterRoleEdit(
 											index,
 											(event.currentTarget as HTMLInputElement).checked
-												? access.users[index].roles.concat(['mod'])
-												: access.users[index].roles.filter((role) => role !== 'mod')
+												? access.users[index].roles.concat(['Moderator'])
+												: access.users[index].roles.filter((role) => role !== 'Moderator')
 										)
 									)
 								}"

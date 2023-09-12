@@ -49,7 +49,7 @@ export const UserEntry = z.object({
 export const UserEntries = z.array(UserEntry).refine(validateIdUniqueness, "User entries contain duplicate IDs");
 
 export const PostUserEntry = UserEntry.and(
-	z.object({roles: z.array(z.union([z.literal("mod"), z.literal("readOnly")]))})
+	z.object({roles: z.array(z.union([z.literal("Moderator"), z.literal("Spectator")]))})
 ) satisfies ZodSchema<classes.PostUserEntry>;
 
 export const PostUserEntries = z

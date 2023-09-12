@@ -204,7 +204,7 @@ test.describe("Edit post access", async () => {
 			await postAndValidate(page, async (post: Post) => {
 				expect(post.access.users).toEqual([
 					{id: ownUser.id, name: ownUser.name, roles: []},
-					{id: modUserId, name: modUserName, roles: ["mod"]},
+					{id: modUserId, name: modUserName, roles: ["Moderator"]},
 				]);
 			});
 		});
@@ -310,7 +310,7 @@ test.describe("Edit post access", async () => {
 			await postAndValidate(page, async (post: Post) => {
 				expect(post.access.users).toEqual([
 					{id: ownUser.id, name: ownUser.name, roles: []},
-					{id: rolesUserId, name: rolesUserName, roles: ["mod"]},
+					{id: rolesUserId, name: rolesUserName, roles: ["Moderator"]},
 				]);
 			});
 		});
@@ -359,7 +359,7 @@ test.describe("Edit post access", async () => {
 			await postAndValidate(page, async (post: Post) => {
 				expect(post.access.users).toEqual([
 					{id: ownUser.id, name: ownUser.name, roles: []},
-					{id: rolesUserId, name: rolesUserName, roles: ["mod"]},
+					{id: rolesUserId, name: rolesUserName, roles: ["Moderator"]},
 				]);
 			});
 		});
