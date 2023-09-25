@@ -1,8 +1,7 @@
 import {z, type ZodSchema} from "zod";
 import type * as classes from "../../../shared/objects/api.js";
 import {UserData} from "./user.js";
-import {PostConfig} from "./_shared.js";
-import {nodeBody, nodeTitle, PostAccess} from "./post.js";
+import * as shared from "./_shared.js";
 import type {editableUserData} from "../../../shared/objects/user.js";
 import {user} from "../../../shared/objects/validationUnits.js";
 
@@ -26,22 +25,22 @@ const nodePath = z.array(UserData.shape.id).min(1).optional();
 
 export const NodeCreationRequest = z.object({
 	invitedOwnerIds: z.array(z.string()).optional(),
-	title: nodeTitle,
-	body: nodeBody,
+	title: shared.nodeTitle,
+	body: shared.nodeBody,
 	deletedDraftIndex: z
 		.number()
 		.int()
 		.gte(0)
 		.lt(user.drafts.max - 1)
 		.optional(),
-	config: PostConfig.optional(),
+	config: shared.PostConfig.optional(),
 	nodePath: nodePath.optional(),
 }) satisfies ZodSchema<classes.NodeCreationRequest>;
 
 export const PostCreationRequest = z.object({
 	rootNode: NodeCreationRequest,
-	config: PostConfig,
-	access: PostAccess,
+	config: shared.PostConfig,
+	access: shared.PostAccess,
 }) satisfies ZodSchema<classes.PostCreationRequest>;
 
 export const NodeInteractionRequest = z.intersection(

@@ -1,10 +1,8 @@
 import {z, type ZodSchema} from "zod";
-import {PostConfig} from "./_shared.js";
+import {PostConfig, UserId, UserEntries} from "./_shared.js";
 import {user} from "../../../shared/objects/validationUnits.js";
 import {alphanumRegex, alphanumRegexWithSpaces} from "../helpers/alphanumRegex.js";
 import type * as classes from "../../../shared/objects/user.js";
-
-export const UserId = z.string();
 
 export const UserAuth = z.object({
 	provider: z.literal("Distillogue"),
@@ -35,26 +33,6 @@ export const UserPresets = z
 		})
 	)
 	.max(user.presets.max);
-
-function validateIdUniqueness(objects: {id: string}[]) {
-	const IDs = new Set<string>();
-	objects.forEach((object) => IDs.add(object.id));
-	return objects.length === IDs.size;
-}
-
-export const UserEntry = z.object({
-	name: z.string().nonempty(),
-	id: UserId,
-}) satisfies ZodSchema<classes.UserEntry>;
-export const UserEntries = z.array(UserEntry).refine(validateIdUniqueness, "User entries contain duplicate IDs");
-
-export const PostUserEntry = UserEntry.and(
-	z.object({roles: z.array(z.union([z.literal("Moderator"), z.literal("Spectator")]))})
-) satisfies ZodSchema<classes.PostUserEntry>;
-
-export const PostUserEntries = z
-	.array(PostUserEntry)
-	.refine(validateIdUniqueness, "User entries contain duplicate IDs");
 
 export const UserData = z.object({
 	id: UserId,
