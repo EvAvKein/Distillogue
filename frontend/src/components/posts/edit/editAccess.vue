@@ -177,6 +177,7 @@
 
 	#accessTableWrapper {
 		overflow-x: auto;
+		overflow-y: hidden;
 	}
 
 	table {
