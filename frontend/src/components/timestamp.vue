@@ -19,10 +19,10 @@
 		return number < 10 ? "0" + number : number;
 	}
 
-	const da = new Date(props.pastUnix * 1000);
+	const date = new Date(props.pastUnix * 1000);
 	const absoluteTimestamp =
-		`${dblDigit(da.getHours())}:${dblDigit(da.getMinutes())}, ` +
-		`${dblDigit(da.getDate())}.${dblDigit(da.getMonth() + 1)}.${da.getFullYear().toString().slice(-2)}`;
+		`${dblDigit(date.getHours())}:${dblDigit(date.getMinutes())}, ` +
+		`${dblDigit(date.getDate())}.${dblDigit(date.getMonth() + 1)}.${date.getFullYear().toString().slice(-2)}`;
 
 	function calcTimestamp() {
 		const currentUnix = Math.floor(Date.now() / 1000);
