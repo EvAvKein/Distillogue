@@ -1,4 +1,4 @@
-FROM node:16-alpine as setup
+FROM node:21-alpine as setup
 
 # INSTALL
 COPY /shared/package*.json /shared/
@@ -17,5 +17,5 @@ WORKDIR /frontend
 RUN npm run build
 
 # CLEAN
-FROM node:16-alpine
+FROM node:21-alpine
 COPY --from=setup /frontend/dist /frontend/dist/

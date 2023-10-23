@@ -1,7 +1,7 @@
 version: "3"
 services:
   prettier:
-    image: "node:16"
+    image: "node:21-alpine"
     volumes:
       - ./:/distillogue
     command: bash -c "cd distillogue && npm install && npm run prettier"

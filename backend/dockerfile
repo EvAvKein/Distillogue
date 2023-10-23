@@ -1,4 +1,4 @@
-FROM node:16-alpine as setup
+FROM node:21-alpine as setup
 
 # INSTALL
 COPY /shared/package*.json /shared/
@@ -16,8 +16,8 @@ COPY /backend /backend/
 WORKDIR /backend
 RUN npm run build
 
-# CLEAN (using debian-bullseye for later administrating with bash)
-FROM node:16-bullseye-slim
+# CLEAN (using debian for later administrating with bash)
+FROM node:21-bookworm-slim
 
 COPY --from=setup /backend/package*.json /backend/
 COPY --from=setup /backend/dist /backend/dist/
