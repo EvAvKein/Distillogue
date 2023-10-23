@@ -6,14 +6,16 @@ import {node as nodeVals} from "../../../shared/objects/validationUnits.js";
 
 export const trueOrNone = z.literal(true).optional();
 
-export const UserId = z.string();
-export const userIdArray = z.array(UserId).refine((array) => {
-	const idSet = new Set<string>();
-	for (const id in array) {
-		idSet.add(id);
+function validateStringsUniqueness(strings: string[]) {
+	const set = new Set<string>();
+	for (const string of strings) {
+		set.add(string);
 	}
-	return array.length === idSet.size;
-}, "User entries contain duplicate IDs");
+	return strings.length === set.size;
+}
+
+export const UserId = z.string();
+export const userIdArray = z.array(UserId).refine(validateStringsUniqueness, "User entries contain duplicate IDs");
 
 function validateIdUniqueness(objects: {id: string}[]) {
 	const IDs = new Set<string>();
@@ -28,7 +30,11 @@ export const UserEntry = z.object({
 export const UserEntries = z.array(UserEntry).refine(validateIdUniqueness, "User entries contain duplicate IDs");
 
 export const PostUserEntry = UserEntry.and(
-	z.object({roles: z.array(z.union([z.literal("Moderator"), z.literal("Spectator")]))})
+	z.object({
+		roles: z
+			.array(z.union([z.literal("Moderator"), z.literal("Spectator")]))
+			.refine(validateStringsUniqueness, "User roles contain duplicates"),
+	})
 ) satisfies ZodSchema<userClasses.PostUserEntry>;
 
 export const PostUserEntries = z
