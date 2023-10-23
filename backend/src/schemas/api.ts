@@ -43,6 +43,10 @@ export const PostCreationRequest = z.object({
 	access: shared.PostAccess,
 }) satisfies ZodSchema<classes.PostCreationRequest>;
 
+export const PostPatchRequest = z.object({
+	access: shared.PostAccess,
+}) satisfies ZodSchema<classes.PostPatchRequest>;
+
 export const NodeInteractionRequest = z.intersection(
 	z.object({nodePath: nodePath}).required(),
 	z.discriminatedUnion("interactionType", [

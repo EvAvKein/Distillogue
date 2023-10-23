@@ -65,6 +65,15 @@ export class PostCreationRequest {
 	}
 }
 
+export class PostPatchRequest {
+	// may include config patching tin future (for very particular properties)
+	access: PostAccess;
+
+	constructor(access: PostCreationRequest["access"]) {
+		this.access = access;
+	}
+}
+
 export const arrOfInteractionTypes = ["reply", "vote"] as const;
 export type interactionType = (typeof arrOfInteractionTypes)[number];
 

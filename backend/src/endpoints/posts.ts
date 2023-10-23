@@ -119,4 +119,36 @@ export default function (app: Express, postsDb: Collection<Post>, usersDb: Colle
 
 		response.status(201).json(new FetchResponse(newPost));
 	});
+
+	app.patch("/api/posts/:id", async (request, response) => {
+		const validation = apiSchemas.PostPatchRequest.safeParse(request.body);
+		if (!validation.success) {
+			response.status(400).json(new FetchResponse(null, {message: fromZodError(validation.error).message}));
+			return;
+		}
+
+		const user = await authUser(request);
+		if (!user) {
+			response.status(401).json(new FetchResponse(null, {message: "User authentication failed"}));
+			return;
+		}
+
+		const postId = request.params.id as Node["id"];
+
+		const dbResponse = await postsDb.updateOne(
+			mongoFilterPostsByAccess(user.data, {"thread.id": postId}, "Moderator"),
+			{$set: validation.data}
+		);
+
+		if (!dbResponse.matchedCount) {
+			response.status(400).json(new FetchResponse(null, {message: "Post not found, or missing Moderator role"}));
+			return;
+		}
+		if (!dbResponse.modifiedCount) {
+			response.status(500).json(new FetchResponse(null, {message: "Post update failed"}));
+			return;
+		}
+
+		response.status(200).end();
+	});
 }

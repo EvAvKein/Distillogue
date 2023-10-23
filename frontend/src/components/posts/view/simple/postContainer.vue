@@ -15,6 +15,22 @@
 	<section id="nodesContainer">
 		<node :node="postObject.thread" :pathToNode="[]" />
 	</section>
+
+	<section id="postInfoWrapper" :class="postInfoVisiblity ? 'visible' : ''">
+		<div>
+			<button
+				id="postInfoWrapperButton"
+				class="core_contentButton"
+				aria-label="expand post info"
+				@click="postInfoVisiblity = !postInfoVisiblity"
+			>
+				<div>V</div>
+			</button>
+		</div>
+		<div aria-live="assertive" :aria-hidden="!postInfoVisiblity" :inert="!postInfoVisiblity">
+			<postInfo :post="postObject" :moderationInputs="true" />
+		</div>
+	</section>
 </template>
 
 <script setup lang="ts">
@@ -26,6 +42,7 @@
 	import modalWrapper from "../../../modalWrapper.vue";
 	import editNode from "../../edit/editNode.vue";
 	import notification from "../../../notification.vue";
+	import postInfo from "../postInfo.vue";
 	import {useRouter} from "vue-router";
 	const router = useRouter();
 
@@ -62,6 +79,8 @@
 
 		router.go(0);
 	}
+
+	const postInfoVisiblity = ref(false);
 </script>
 
 <style scoped>
@@ -81,5 +100,55 @@
 		padding: 0 0.5em 0;
 		width: max-content;
 		margin: auto;
+	}
+
+	#postInfoWrapper {
+		--buttonSize: 2em;
+		--transitionTime: 200ms;
+		z-index: 925;
+		overflow: hidden;
+		position: fixed;
+		height: 100vh;
+		width: 100vw;
+		overflow: auto;
+		bottom: calc(-100% + var(--buttonSize));
+		transition: bottom var(--transitionTime) ease-in-out;
+	}
+	#postInfoWrapper.visible {
+		bottom: 0;
+	}
+
+	#postInfoWrapperButton {
+		display: block;
+		margin-left: auto;
+		height: var(--buttonSize);
+		width: var(--buttonSize);
+		border-top-left-radius: 0.5em;
+		text-align: center;
+		background-color: var(--backgroundSubColor);
+	}
+
+	#postInfoWrapperButton div {
+		height: 0.9em;
+		transition: rotate var(--transitionTime) ease-in-out;
+	}
+	#postInfoWrapper:not(.visible) #postInfoWrapperButton div {
+		rotate: 180deg;
+	}
+
+	#postInfoWrapper.visible div:nth-child(1) {
+		backdrop-filter: blur(1rem);
+	}
+
+	#postInfoWrapper div:nth-child(2) {
+		opacity: 0; /* to avoid the element from being momentarily visible on page load */
+		height: calc(100vh - var(--buttonSize));
+		background-color: var(--backgroundSubColor);
+		transition: opacity 1ms var(--transitionTime);
+	}
+
+	#postInfoWrapper.visible div:nth-child(2) {
+		opacity: 1;
+		transition: opacity 1ms 1ms; /* 0 values caused the transition to not work, for whatever reason */
 	}
 </style>
