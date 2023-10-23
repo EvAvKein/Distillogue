@@ -427,7 +427,7 @@ test.describe("In-post", async () => {
 				await expect(page.locator(selector)).toHaveCount(0);
 			}
 
-			const modifiedAccess = structuredClone(post.access);
+			const modifiedAccess = {...post.access};
 			modifiedAccess.users = [
 				{id: user1.data.id, name: user1.data.name, roles: ["Moderator"]},
 				{id: userMod.data.id, name: userMod.data.name, roles: []},
