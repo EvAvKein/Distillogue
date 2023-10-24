@@ -304,7 +304,7 @@
 		font-size: 1em;
 	}
 
-	#postUsers > li + li {
+	#postUsers > ul > li + li {
 		margin-top: 0.25em;
 	}
 
