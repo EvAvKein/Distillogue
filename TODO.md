@@ -3,7 +3,6 @@
 ###### Some liable to be added post-release
 
 - Groups
-- Post specs (access & config) expandable in post-viewing page
 - More config options:
   - Node editing & history
   - Poll posts
