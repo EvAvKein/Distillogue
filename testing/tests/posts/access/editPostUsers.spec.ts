@@ -6,7 +6,12 @@ import {
 	randomNodeTitle,
 	randomUsername,
 } from "../../../helpers/randomAlphanumString.js";
-import {FetchResponse, NodeCreationRequest, PostCreationRequest} from "../../../../shared/objects/api.js";
+import {
+	FetchResponse,
+	NodeCreationRequest,
+	PostCreationRequest,
+	UserPatchRequest,
+} from "../../../../shared/objects/api.js";
 import {Post} from "../../../../shared/objects/post.js";
 import {setScreenSize} from "../../../helpers/setScreenSize.js";
 import {PostUserEntry, UserPayload} from "../../../../shared/objects/user.js";
@@ -370,6 +375,12 @@ async function postAndValidate(page: Page, validation: (post: Post) => Promise<v
 const uInfo = {
 	infoExpandButton: "#postInfoWrapperButton",
 	users: "#postUsers",
+	userAddition: {
+		nameInput: "#extraUserName",
+		idInput: "#extraUserId",
+		contactSelect: "#contactSelect",
+		submit: "#userAddition button",
+	},
 	userRoles: ".userRoles",
 	roleSelect: ".roleSelect",
 	roleRemoval: ".roleRemoval",
@@ -388,6 +399,91 @@ async function expandInfo(page: Page) {
 	await page.locator(uInfo.infoExpandButton).click();
 }
 test.describe("In-post", async () => {
+	test("Non-moderators not allowed to edit post", async ({request, page}) => {
+		const user1 = (await api.signUp(request, page))!;
+		const userMod = (await api.createUser(request)).data!;
+		const post = await createPostWithUsers(request, userMod.sessionKey, [
+			{id: user1.data.id, name: user1.data.name, roles: []},
+			{id: userMod.data.id, name: userMod.data.name, roles: ["Moderator"]},
+		]);
+		await page.goto("/post/" + post.thread.id);
+		await expandInfo(page);
+
+		for (const selector of [
+			uInfo.userAddition.nameInput,
+			uInfo.userAddition.idInput,
+			uInfo.userAddition.contactSelect,
+			uInfo.userAddition.submit,
+			uInfo.userRemoval,
+			uInfo.roleSelect,
+			uInfo.roleRemoval,
+		]) {
+			await expect(page.locator(selector)).toHaveCount(0);
+		}
+
+		const modifiedAccess = {...post.access};
+		modifiedAccess.users = [
+			{id: user1.data.id, name: user1.data.name, roles: ["Moderator"]},
+			{id: userMod.data.id, name: userMod.data.name, roles: []},
+		];
+		const modlessPatchAttempt = (await (
+			await request.patch("/api/posts/" + post.thread.id, {
+				data: {access: modifiedAccess},
+				headers: {authorization: "Bearer " + user1.sessionKey},
+			})
+		).json()) as FetchResponse<UserPayload>;
+		expect(modlessPatchAttempt.error?.message).toMatch(/moderator|moderation/i);
+		const postAfterModlessPatchAttempt = await api.getPost(request, user1.sessionKey, post.thread.id);
+		expect(postAfterModlessPatchAttempt.data!.access).toEqual(post.access);
+	});
+
+	test.describe("User addition", () => {
+		test("Add user", async ({request, page}) => {
+			const user = (await api.signUp(request, page))!;
+			const post = await createPostWithUsers(request, user.sessionKey, [
+				{id: user.data.id, name: user.data.name, roles: ["Moderator"]},
+			]);
+			await page.goto("/post/" + post.thread.id);
+			await expandInfo(page);
+
+			const user2 = {id: randomAlphanumString(), name: randomUsername()};
+			await page.locator(uInfo.userAddition.nameInput).fill(user2.name);
+			await page.locator(uInfo.userAddition.idInput).fill(user2.id);
+			const userAdditionResponse = page.waitForResponse(/api\/posts\/*/);
+			await page.locator(uInfo.userAddition.submit).click();
+			await userAdditionResponse;
+
+			const usersAfterAddition = (await api.getPost(request, user.sessionKey, post.thread.id)).data!.access.users;
+			expect(usersAfterAddition).toHaveLength(2);
+			expect(usersAfterAddition[0]).toEqual({name: user.data.name, id: user.data.id, roles: ["Moderator"]});
+			expect(usersAfterAddition[1]).toEqual({name: user2.name, id: user2.id, roles: []});
+		});
+
+		test("Add user by contact", async ({request, page}) => {
+			const user = (await api.signUp(request, page))!;
+			const user2 = {id: randomAlphanumString(), name: randomUsername()};
+			await request.patch("/api/users", {
+				headers: {authorization: "Bearer " + user.sessionKey},
+				data: [new UserPatchRequest("contacts", [user2])],
+			});
+			const post = await createPostWithUsers(request, user.sessionKey, [
+				{id: user.data.id, name: user.data.name, roles: ["Moderator"]},
+			]);
+			await page.goto("/post/" + post.thread.id);
+			await expandInfo(page);
+
+			await page.locator(uInfo.userAddition.contactSelect).selectOption(user2.name);
+			const userAdditionResponse = page.waitForResponse(/api\/posts\/*/);
+			await page.locator(uInfo.userAddition.submit).click();
+			await userAdditionResponse;
+
+			const usersAfterAddition = (await api.getPost(request, user.sessionKey, post.thread.id)).data!.access.users;
+			expect(usersAfterAddition).toHaveLength(2);
+			expect(usersAfterAddition[0]).toEqual({name: user.data.name, id: user.data.id, roles: ["Moderator"]});
+			expect(usersAfterAddition[1]).toEqual({name: user2.name, id: user2.id, roles: []});
+		});
+	});
+
 	test.describe("Roles", () => {
 		test("Initial roles & default absence thereof", async ({request, page}) => {
 			const user = (await api.signUp(request, page))!;
@@ -397,7 +493,7 @@ test.describe("In-post", async () => {
 				{id: user2.id, name: user2.name, roles: ["Moderator"]},
 			]);
 			await page.goto("/post/" + post.thread.id);
-			await page.locator(uInfo.infoExpandButton).click();
+			await expandInfo(page);
 
 			await expect(
 				page
@@ -411,36 +507,6 @@ test.describe("In-post", async () => {
 					.nth(1)
 					.locator(uInfo.userRoles)
 			).toHaveText("Moderator");
-		});
-
-		test("Non-moderators not allowed to edit users", async ({request, page}) => {
-			const user1 = (await api.signUp(request, page))!;
-			const userMod = (await api.createUser(request)).data!;
-			const post = await createPostWithUsers(request, userMod.sessionKey, [
-				{id: user1.data.id, name: user1.data.name, roles: []},
-				{id: userMod.data.id, name: userMod.data.name, roles: ["Moderator"]},
-			]);
-			await page.goto("/post/" + post.thread.id);
-			await expandInfo(page);
-
-			for (const selector of [uInfo.userRemoval, uInfo.roleSelect, uInfo.roleRemoval]) {
-				await expect(page.locator(selector)).toHaveCount(0);
-			}
-
-			const modifiedAccess = {...post.access};
-			modifiedAccess.users = [
-				{id: user1.data.id, name: user1.data.name, roles: ["Moderator"]},
-				{id: userMod.data.id, name: userMod.data.name, roles: []},
-			];
-			const modlessPatchAttempt = (await (
-				await request.patch("/api/posts/" + post.thread.id, {
-					data: {access: modifiedAccess},
-					headers: {authorization: "Bearer " + user1.sessionKey},
-				})
-			).json()) as FetchResponse<UserPayload>;
-			expect(modlessPatchAttempt.error?.message).toMatch(/moderator|moderation/i);
-			const postAfterModlessPatchAttempt = await api.getPost(request, user1.sessionKey, post.thread.id);
-			expect(postAfterModlessPatchAttempt.data!.access).toEqual(post.access);
 		});
 
 		test("Role addition & removal", async ({request, page}) => {
