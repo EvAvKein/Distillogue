@@ -1,6 +1,6 @@
 <template>
 	<main>
-		<postContainer v-if="post" :postObject="post" />
+		<postContainer v-if="post" v-model:postObject="post" />
 		<notification v-else v-model:text="notif.message" :desirablityStyle="notif.desirability" :customDuration="null" />
 	</main>
 </template>

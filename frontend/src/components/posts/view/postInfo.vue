@@ -144,20 +144,20 @@
 	import {PostUserRole, arrOfPostUserRoles} from "../../../../../shared/objects/user";
 	import {apiFetch} from "../../../helpers/apiFetch";
 	import {useUser} from "../../../stores/user";
-	import {useRouter} from "vue-router";
 	import {useNotifications} from "../../../stores/notifications";
 	import timestamp from "../../timestamp.vue";
 	import collapsible from "../../animatedCollapsible.vue";
 	import labelledInput from "../../labelledInput.vue";
 
 	const self = useUser();
-	const router = useRouter();
 	const notifs = useNotifications();
 
 	const props = defineProps<{
 		post: Post;
 		moderationInputs?: true;
 	}>();
+
+	const emit = defineEmits(["postUpdate"]);
 
 	const selfIsModerator = ref(
 		Boolean(
@@ -186,7 +186,7 @@
 			return;
 		}
 
-		router.go(0);
+		emit("postUpdate", response.data as Post);
 	}
 </script>
 

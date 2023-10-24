@@ -135,20 +135,17 @@ export default function (app: Express, postsDb: Collection<Post>, usersDb: Colle
 
 		const postId = request.params.id as Node["id"];
 
-		const dbResponse = await postsDb.updateOne(
+		const dbResponse = await postsDb.findOneAndUpdate(
 			mongoFilterPostsByAccess(user.data, {"thread.id": postId}, "Moderator"),
-			{$set: validation.data}
+			{$set: validation.data},
+			{returnDocument: "after"}
 		);
 
-		if (!dbResponse.matchedCount) {
-			response.status(400).json(new FetchResponse(null, {message: "Post not found, or missing Moderator role"}));
-			return;
-		}
-		if (!dbResponse.modifiedCount) {
-			response.status(500).json(new FetchResponse(null, {message: "Post update failed"}));
+		if (!dbResponse.ok || !dbResponse.value) {
+			response.status(400).json(new FetchResponse(null, {message: "Post update failed"}));
 			return;
 		}
 
-		response.status(200).end();
+		response.status(200).json(new FetchResponse(dbResponse.value));
 	});
 }

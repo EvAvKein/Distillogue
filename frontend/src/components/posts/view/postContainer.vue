@@ -28,7 +28,11 @@
 			</button>
 		</div>
 		<div aria-live="assertive" :aria-hidden="!postInfoVisiblity" :inert="!postInfoVisiblity">
-			<postInfo :post="postObject" :moderationInputs="true" />
+			<postInfo
+				:post="postObject"
+				:moderationInputs="true"
+				@postUpdate="(updatedPost:Post) => emit('update:postObject', updatedPost)"
+			/>
 		</div>
 	</section>
 </template>
@@ -49,6 +53,8 @@
 	const props = defineProps<{
 		postObject: Post;
 	}>();
+
+	const emit = defineEmits(["update:postObject"]);
 
 	const replyPath = ref<{nodePath: Node["id"][] | null}>({nodePath: null});
 	provide("replyPath", replyPath);

@@ -431,8 +431,9 @@ test.describe("In-post", async () => {
 				data: {access: modifiedAccess},
 				headers: {authorization: "Bearer " + user1.sessionKey},
 			})
-		).json()) as FetchResponse<UserPayload>;
-		expect(modlessPatchAttempt.error?.message).toMatch(/moderator|moderation/i);
+		).json()) as FetchResponse<Post>;
+
+		expect(modlessPatchAttempt.error).toBeTruthy();
 		const postAfterModlessPatchAttempt = await api.getPost(request, user1.sessionKey, post.thread.id);
 		expect(postAfterModlessPatchAttempt.data!.access).toEqual(post.access);
 	});
@@ -521,13 +522,11 @@ test.describe("In-post", async () => {
 			const roleAdditionRequest = page.waitForResponse(/api\/posts\/*/);
 			await page.locator(uInfo.roleSelect).nth(1).selectOption("Spectator");
 			await roleAdditionRequest;
-			await expandInfo(page);
 			await expect(page.locator(uInfo.userRoles + " li.pill span").nth(1)).toHaveText("Spectator");
 
 			const roleRemovalRequest = page.waitForResponse(/api\/posts\/*/);
 			await page.locator(uInfo.roleRemoval).nth(0).click();
 			await roleRemovalRequest;
-			await expandInfo(page);
 			await expect(page.locator(uInfo.userRoles + " li.pill span").nth(0)).not.toHaveText("Moderator");
 		});
 	});
@@ -550,7 +549,6 @@ test.describe("In-post", async () => {
 			.dispatchEvent("click");
 		await roleRemovalRequest;
 		await page.goto("/post/" + post.thread.id);
-		await expandInfo(page);
 		await expect(page.locator(uInfo.users)).not.toContainText(removedUser);
 	});
 });
