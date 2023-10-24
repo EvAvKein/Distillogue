@@ -61,7 +61,9 @@ test.describe("Drafts manipulation in dashboard", () => {
 	test("Edit draft title", async ({page}) => {
 		const title = randomNodeTitle();
 
+		const creationRequest = page.waitForResponse("api/users");
 		await page.locator(creationButton).click();
+		await creationRequest;
 		await page.locator(titleInput).fill(title);
 		const draftButton = page.locator(selectionButtons);
 		await expect(draftButton).toContainText(title);
@@ -75,7 +77,9 @@ test.describe("Drafts manipulation in dashboard", () => {
 	test("Edit draft body", async ({page}) => {
 		const body = randomNodeBody();
 
+		const creationRequest = page.waitForResponse("api/users");
 		await page.locator(creationButton).click();
+		await creationRequest;
 		const editRequest = page.waitForResponse("api/users");
 		await page.locator(bodyInput).fill(body);
 		await editRequest;
