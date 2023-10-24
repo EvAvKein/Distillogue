@@ -35,14 +35,14 @@
 
 <script setup lang="ts">
 	import {ref, provide} from "vue";
-	import {Post, Node} from "../../../../../../shared/objects/post";
-	import {NodeInteractionRequest, NodeCreationRequest} from "../../../../../../shared/objects/api";
-	import {apiFetch} from "../../../../helpers/apiFetch";
+	import {Post, Node} from "../../../../../shared/objects/post";
+	import {NodeInteractionRequest, NodeCreationRequest} from "../../../../../shared/objects/api";
+	import {apiFetch} from "../../../helpers/apiFetch";
 	import node from "./node.vue";
-	import modalWrapper from "../../../modalWrapper.vue";
-	import editNode from "../../edit/editNode.vue";
-	import notification from "../../../notification.vue";
-	import postInfo from "../postInfo.vue";
+	import modalWrapper from "../../modalWrapper.vue";
+	import editNode from "../edit/editNode.vue";
+	import notification from "../../notification.vue";
+	import postInfo from "./postInfo.vue";
 	import {useRouter} from "vue-router";
 	const router = useRouter();
 
