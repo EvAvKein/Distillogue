@@ -7,20 +7,13 @@
 			</div>
 		</section>
 		<div class="interactable">
-			<votes
-				v-if="node.stats.votes"
-				:interactionPath="nodePath"
-				:voters="node.stats.votes"
-				@interactionError="(errorText:string) => {interactionError = errorText}"
-			/>
+			<votes v-if="node.stats.votes" :interactionPath="nodePath" :voters="node.stats.votes" />
 			<reply :locked="node.locked" :interactionPath="nodePath" class="replyButton" />
 		</div>
-		<notification v-model:text="interactionError" :desirablity-style="false" />
 	</section>
 </template>
 
 <script setup lang="ts">
-	import {ref} from "vue";
 	import {Node} from "../../../../../../shared/objects/post";
 	import timestamp from "../../../timestamp.vue";
 	import votes from "./vote.vue";
@@ -32,7 +25,6 @@
 	}>();
 
 	const nodePath = [...props.pathToNode, props.node.id];
-	const interactionError = ref("");
 </script>
 
 <style scoped>

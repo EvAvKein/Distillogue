@@ -10,7 +10,6 @@
 				v-model="newContactId"
 			/>
 			<button id="newContactButton" class="core_backgroundButton" @click="createNewContact">New contact</button>
-			<notification :text="notif.text" :desirablityStyle="notif.desirability" />
 		</section>
 		<ul>
 			<transition-group name="collapse">
@@ -39,18 +38,14 @@
 	import {apiFetch} from "../../../helpers/apiFetch";
 	import {UserPatchRequest} from "../../../../../shared/objects/api";
 	import {useUser} from "../../../stores/user";
+	import {useNotifications} from "../../../stores/notifications";
 	import animatedCollapsible from "../../../components/animatedCollapsible.vue";
 	import labelledInput from "../../../components/labelledInput.vue";
-	import notification from "../../../components/notification.vue";
 	const user = useUser();
+	const notifs = useNotifications();
 
 	const newContactName = ref("");
 	const newContactId = ref("");
-
-	const notif = ref({
-		text: "",
-		desirability: null as boolean | null,
-	});
 
 	function createNewContact() {
 		const contactsWithNew = [{name: newContactName.value, id: newContactId.value}, ...user.data!.contacts];
@@ -63,13 +58,10 @@
 	}
 
 	async function updateContacts(newContactsState: NonNullable<typeof user.data>["contacts"]) {
-		notif.value.text = "";
-
 		const response = await apiFetch("PATCH", "/users", [new UserPatchRequest("contacts", newContactsState)]);
 
 		if (response.error) {
-			notif.value.text = response.error.message;
-			notif.value.desirability = false;
+			notifs.create(response.error.message, false);
 			return;
 		}
 		user.data!.contacts = newContactsState;

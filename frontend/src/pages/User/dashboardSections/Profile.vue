@@ -1,6 +1,5 @@
 <template>
 	<labelledInput :label="'Name'" :inputId="'editUserName'" :type="'text'" v-model="nameState" />
-	<notification v-model:text="nameNotif.text" :desirablityStyle="nameNotif.desirability" />
 	<div>
 		<h5>User ID</h5>
 		<span id="userId">{{ user.data?.id }}</span>
@@ -14,8 +13,9 @@
 	import {useUser} from "../../../stores/user";
 	import {UserPatchRequest} from "../../../../../shared/objects/api";
 	import labelledInput from "../../../components/labelledInput.vue";
-	import notification from "../../../components/notification.vue";
+	import {useNotifications} from "../../../stores/notifications";
 	const user = useUser();
+	const notifs = useNotifications();
 
 	const nameState = ref(toRaw(user.data!.name));
 	const nameNotif = ref({
@@ -30,8 +30,7 @@
 			const response = await apiFetch("PATCH", "/users", [new UserPatchRequest("name", newName)]);
 
 			if (response.error) {
-				nameNotif.value.text = response.error.message;
-				nameNotif.value.desirability = false;
+				notifs.create(response.error.message, false);
 				return;
 			}
 			user.data!.name = newName;

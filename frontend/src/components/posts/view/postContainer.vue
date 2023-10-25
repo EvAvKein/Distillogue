@@ -2,7 +2,6 @@
 	<modalWrapper :activeByTruthiness="replyPath.nodePath" @deactivate="() => (replyPath.nodePath = null)">
 		<form @submit.prevent>
 			<editNode v-model:data="replyData" />
-			<notification v-model:text="notifText" :desirablityStyle="false" />
 			<button id="submitButton" type="button" class="core_backgroundButton" @click="submitReply">
 				Reply
 				{{
@@ -45,10 +44,11 @@
 	import node from "./node.vue";
 	import modalWrapper from "../../modalWrapper.vue";
 	import editNode from "../edit/editNode.vue";
-	import notification from "../../notification.vue";
 	import postInfo from "./postInfo.vue";
 	import {useRouter} from "vue-router";
+	import {useNotifications} from "../../../stores/notifications";
 	const router = useRouter();
+	const notifs = useNotifications();
 
 	const props = defineProps<{
 		postObject: Post;
@@ -65,8 +65,6 @@
 		deletedDraftIndex: undefined,
 	});
 
-	const notifText = ref("");
-
 	async function submitReply() {
 		const response = await apiFetch(
 			"POST",
@@ -79,7 +77,7 @@
 		);
 
 		if (response.error) {
-			notifText.value = response.error.message;
+			notifs.create(response.error.message, false, true);
 			return;
 		}
 

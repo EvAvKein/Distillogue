@@ -1,6 +1,5 @@
 <template>
 	<section>
-		<notification :text="notif.text" :desirablityStyle="notif.desirability" />
 		<ul id="sessions">
 			<transition-group name="collapse">
 				<li v-for="(session, index) of sessions" :key="session.latestUsed">
@@ -39,9 +38,10 @@
 	import {UserSession} from "../../../../../shared/objects/user";
 	import {user as val} from "../../../../../shared/objects/validationUnits";
 	import timestamp from "../../../components/timestamp.vue";
-	import notification from "../../../components/notification.vue";
 	import editableText from "../../../components/editableText.vue";
 	import {deepCloneFromReactive} from "../../../helpers/deepCloneFromReactive";
+	import {useNotifications} from "../../../stores/notifications";
+	const notifs = useNotifications();
 
 	const sessions = ref<UserSession[] | undefined>();
 	const currentSessionKey = ref<string>(localStorage.getItem("sessionKey") ?? "");
@@ -50,19 +50,13 @@
 		sessions.value = (await apiFetch<UserSession[]>("GET", "/sessions")).data;
 	});
 
-	const notif = ref({
-		text: "",
-		desirability: null as boolean | null,
-	});
-
 	async function renameSession(newName: string, sessionIndex: number) {
 		const renamedSession = deepCloneFromReactive(sessions.value![sessionIndex]);
 		renamedSession.name = newName;
 
 		const response = await apiFetch<UserSession[]>("PATCH", "/sessions", renamedSession);
 		if (response.error) {
-			notif.value.text = response.error.message;
-			notif.value.desirability = false;
+			notifs.create(response.error.message, false);
 			return;
 		}
 
@@ -70,12 +64,9 @@
 	}
 
 	async function deleteSession(deletionIndex: number) {
-		notif.value.text = "";
-
 		const response = await apiFetch<UserSession[]>("DELETE", "/sessions", sessions.value![deletionIndex]);
 		if (response.error) {
-			notif.value.text = response.error.message;
-			notif.value.desirability = false;
+			notifs.create(response.error.message, false);
 			return;
 		}
 

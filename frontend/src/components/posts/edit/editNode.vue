@@ -55,14 +55,15 @@
 	import {unix} from "../../../../../shared/helpers/timestamps";
 	import {apiFetch} from "../../../helpers/apiFetch";
 	import {useUser} from "../../../stores/user";
+	import {useNotifications} from "../../../stores/notifications";
 	import labelledInput from "../../labelledInput.vue";
 	const user = useUser();
+	const notifs = useNotifications();
 
 	const props = defineProps<{
 		data: NodeCreationRequest;
 	}>();
 
-	const emit = defineEmits(["error"]);
 	const draftsAtCapacity = computed(() => user.data!.drafts.length >= userLimits.drafts.max);
 
 	function selectDraft(index: number | undefined) {
@@ -88,7 +89,7 @@
 		const response = await apiFetch("PATCH", "/users", [new UserPatchRequest("drafts", newDraftsState)]);
 
 		if (response.error) {
-			emit("error", response.error);
+			notifs.create(response.error.message, false);
 			return;
 		}
 

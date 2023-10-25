@@ -12,7 +12,7 @@
 					<div class="sectionTab">Access</div>
 				</template>
 				<template #content>
-					<editAccess v-model:access="postAccess" id="access" @error="displayError" />
+					<editAccess v-model:access="postAccess" id="access" />
 				</template>
 			</animatedCollapsible>
 
@@ -21,7 +21,7 @@
 					<div class="sectionTab">Text</div>
 				</template>
 				<template #content>
-					<editNode v-model:data="nodeData" id="texts" @error="displayError" />
+					<editNode v-model:data="nodeData" id="texts" />
 				</template>
 			</animatedCollapsible>
 
@@ -76,7 +76,6 @@
 						typeof nodeData.deletedDraftIndex === "number" ? ` (& delete draft ${nodeData.deletedDraftIndex + 1})` : ""
 					}}
 				</button>
-				<notification v-model:text="notifText" :desirablityStyle="false" />
 			</section>
 		</form>
 	</main>
@@ -96,13 +95,14 @@
 	import {user as userCaps} from "../../../../shared/objects/validationUnits";
 	import {useUser} from "../../stores/user";
 	import {useRouter} from "vue-router";
+	import {useNotifications} from "../../stores/notifications";
 	import animatedCollapsible from "../../components/animatedCollapsible.vue";
 	import editNode from "../../components/posts/edit/editNode.vue";
 	import editConfig from "../../components/posts/edit/editConfig.vue";
 	import editAccess from "../../components/posts/edit/editAccess.vue";
-	import notification from "../../components/notification.vue";
 	const user = useUser();
 	const router = useRouter();
+	const notifs = useNotifications();
 
 	const currentTab = ref<"access" | "text" | "config">("access");
 
@@ -116,11 +116,6 @@
 		users: [{name: user.data!.name, id: user.data!.id, roles: []}],
 	});
 
-	const notifText = ref<string>("");
-	function displayError(error: NonNullable<FetchResponse["error"]>) {
-		notifText.value = error.message;
-	}
-
 	const presetsAtCapacity = computed(() => user.data!.presets.length >= userCaps.presets.max);
 
 	async function savePreset() {
@@ -131,7 +126,7 @@
 		const response = await apiFetch("PATCH", "/users", [new UserPatchRequest("presets", newPresetsState)]);
 
 		if (response.error) {
-			notifText.value = response.error.message;
+			notifs.create(response.error.message, false);
 			return;
 		}
 
@@ -139,8 +134,6 @@
 	}
 
 	async function submitNode() {
-		notifText.value = "";
-
 		const response = await apiFetch<Post>(
 			"POST",
 			"/posts",
@@ -152,7 +145,7 @@
 		);
 
 		if (response.error) {
-			notifText.value = response.error.message;
+			notifs.create(response.error.message, false, true);
 			return;
 		}
 

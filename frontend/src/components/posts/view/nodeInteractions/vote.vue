@@ -30,13 +30,14 @@
 	import {Node, NodeStats} from "../../../../../../shared/objects/post";
 	import {apiFetch} from "../../../../helpers/apiFetch";
 	import {useUser} from "../../../../stores/user";
+	import {useNotifications} from "../../../../stores/notifications";
 	const user = useUser();
+	const notifs = useNotifications();
 
 	const props = defineProps<{
 		voters: NonNullable<NodeStats["votes"]>;
 		interactionPath: Node["id"][];
 	}>();
-	const emit = defineEmits(["interactionError"]);
 
 	const upvoters = ref(props.voters.up);
 	const downvoters = ref(props.voters.down);
@@ -70,7 +71,7 @@
 
 	async function vote(voteDirection: voteDirection) {
 		if (!user.data) {
-			emit("interactionError", "Must be logged in to vote");
+			notifs.create("Must be logged in to vote", false);
 			return;
 		}
 
@@ -84,7 +85,7 @@
 		);
 
 		if (response.error) {
-			emit("interactionError", response.error.message);
+			notifs.create(response.error.message, false);
 			return;
 		}
 

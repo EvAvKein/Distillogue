@@ -18,8 +18,6 @@
 			<notification v-else :text="'Drafts at capacity, consider triage'" :desirablityStyle="null" />
 		</transition>
 
-		<notification :text="notif.text" :desirablityStyle="notif.desirability" />
-
 		<transition name="collapse">
 			<section v-if="typeof currentDraft.index === 'number'">
 				<labelledInput
@@ -53,6 +51,7 @@
 	import {user as userValidation} from "../../../../../shared/objects/validationUnits";
 	import {apiFetch} from "../../../helpers/apiFetch";
 	import {useUser} from "../../../stores/user";
+	import {useNotifications} from "../../../stores/notifications";
 	import {UserPatchRequest} from "../../../../../shared/objects/api";
 	import {unix as unixStamp} from "../../../../../shared/helpers/timestamps";
 	import timestamp from "../../../components/timestamp.vue";
@@ -60,6 +59,7 @@
 	import labelledInput from "../../../components/labelledInput.vue";
 	import {debounce} from "../../../helpers/debounce";
 	const user = useUser();
+	const notifs = useNotifications();
 
 	const reassignToRerenderList = ref(0);
 
@@ -69,11 +69,6 @@
 		title: "",
 		body: "",
 		index: null as number | null,
-	});
-
-	const notif = ref({
-		text: "",
-		desirability: null as boolean | null,
 	});
 
 	function createDraft() {
@@ -106,13 +101,10 @@
 	}
 
 	async function requestDraftsUpdate(newDraftsState: NonNullable<typeof user.data>["drafts"]) {
-		notif.value.text = "";
-
 		const response = await apiFetch("PATCH", "/users", [new UserPatchRequest("drafts", newDraftsState)]);
 
 		if (response.error) {
-			notif.value.text = response.error.message;
-			notif.value.desirability = false;
+			notifs.create(response.error.message, false);
 			return;
 		}
 		user.data!.drafts = newDraftsState;

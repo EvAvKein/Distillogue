@@ -17,8 +17,6 @@
 			<notification v-else :text="'Presets at capacity, consider triage'" :desirablityStyle="null" />
 		</transition>
 
-		<notification :text="notif.text" :desirablityStyle="notif.desirability" />
-
 		<transition name="collapse">
 			<section v-if="typeof currentPreset.index === 'number'">
 				<labelledInput
@@ -49,6 +47,7 @@
 	import {user as userValidation} from "../../../../../shared/objects/validationUnits";
 	import {apiFetch} from "../../../helpers/apiFetch";
 	import {useUser} from "../../../stores/user";
+	import {useNotifications} from "../../../stores/notifications";
 	import {UserPatchRequest} from "../../../../../shared/objects/api";
 	import {UserData} from "../../../../../shared/objects/user";
 	import {debounce} from "../../../helpers/debounce";
@@ -56,6 +55,7 @@
 	import labelledInput from "../../../components/labelledInput.vue";
 	import editCurrentConfig from "../../../components/posts/edit/editConfig.vue";
 	const user = useUser();
+	const notifs = useNotifications();
 
 	const maxPresets = userValidation.presets.max;
 
@@ -63,11 +63,6 @@
 		name: "" as UserData["presets"][number]["name"],
 		config: {} as UserData["presets"][number]["config"],
 		index: null as number | null,
-	});
-
-	const notif = ref({
-		text: "",
-		desirability: null as boolean | null,
 	});
 
 	const reassignToRerenderList = ref(0);
@@ -104,13 +99,10 @@
 	}
 
 	async function requestPresetsUpdate(newPresetsState: NonNullable<typeof user.data>["presets"]) {
-		notif.value.text = "";
-
 		const response = await apiFetch("PATCH", "/users", [new UserPatchRequest("presets", newPresetsState)]);
 
 		if (response.error) {
-			notif.value.text = response.error.message;
-			notif.value.desirability = false;
+			notifs.create(response.error.message, false);
 			return false;
 		}
 		user.data!.presets = newPresetsState;
