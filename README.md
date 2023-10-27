@@ -1,15 +1,23 @@
 # Distillogue
 
-The configurable discussion platform; currently in very early development, with a demo hosted at https://distillogue.com
+The configurable discussion platform. Development currently shelved, demo hosted at https://distillogue.com
 
 ---
 
 ## Table of Contents
 
+- [Status](#status)
 - [Execution](#execution)
 - [Contributing](#contributing)
 - [Maintainers](#maintainers)
 - [License](#license)
+
+---
+
+## Status
+
+This project is no longer in development: Shelved indefinitely, due to various shifts in priorities.
+See [the Contributing section](#contributing) if you'd like to revive it!
 
 ---
 
@@ -18,12 +26,12 @@ The configurable discussion platform; currently in very early development, with 
 ### Software Requirements
 
 - Docker
-- Node.js (dependency intellisense, package.json script aliases for below docker commands)
+- Node.js - optional (dependency intellisense, live test runner, package.json script aliases for docker commands below)
 
 ### Prerequisites
 
 1. Clone this project via Git/download  
-   (If using intellisense, run `npm run installAll` in project's root)
+   (If browsing code, run `npm run installAll` in project's root for intellisense)
 2. Launch Docker
 
 ### Commands
@@ -33,24 +41,26 @@ The configurable discussion platform; currently in very early development, with 
 - Run automated tests: `docker-compose -f compose.test.yaml up`
 - Run code styler: `docker-compose -f compose.style.yaml up`
 
-(When switching between serve modes or rewriting tests, append ` --build --force-recreate` to the command)
+(When relaunching the basic serve mode or rewriting tests, append ` --build --force-recreate`)
+
+---
 
 ## Contributing
 
-Contributions are very welcome! See the [TODO.md](todo.md) file or GitHub issues.
+If you're interested in becoming an active contributer, fork the repository and let me know!
+I'm happy to handle merges and assign co-maintainers, and might return as an active contributor if there's interest in the project.
 
-For any questions, comment under a relevant issue or create a new issue.
+See [the to-do file](TODO.md) for tasks & ideas, see [the About page](frontend/src/pages/About.vue) (also hosted a [distillogue.com/about](https://distillogue.com/about)) for long-term concepts/priorities.
 
 ---
 
 ## Maintainers
 
 Eve Aviv Keinan  
-GitHub: [github.com/evavkein](https://github.com/EvAvKein)  
-Email: evavkein@gmail.com
+GitHub: [github.com/evavkein](https://github.com/EvAvKein)
 
 ---
 
 ## License
 
-This project is under the MIT License - see the LICENSE.md file for details.
+This project is under the MIT License - see the LICENSE.md file for details

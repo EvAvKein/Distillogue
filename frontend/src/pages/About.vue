@@ -1,9 +1,13 @@
 <template>
 	<main>
 		<h1>About</h1>
-		<p id="greeting">
-			Hello! I'm Eve Aviv Keinan, and Distillogue is the primary project in
-			<a href="https://evavkein.com/portfolio" class="core_contentButton">my programming portfolio</a>
+
+		<h2>Status</h2>
+
+		<p>
+			The project is currently not in active development, see
+			<a class="core_contentButton" src="https://github.com/EvAvKein/Distillogue#readme">the project's README file</a>
+			for further details
 		</p>
 
 		<hr />
@@ -25,18 +29,12 @@
 				<p>
 					<strong>Highly customizable</strong>: The project's main gimmick is the (planned) wide of variety of options
 					for post configurations: Allowing users to formulate their preferred social environment with just the features
-					they appreciate, with which they 'distill' the social dynamics/interactions/options to their preference (which
-					of course includes the ability to save custom presets)
-				</p>
-				<p>
-					I also plan on there being multiple layout options, but intergrating that with a variety of configurations
-					sounds like an inordinate amount of labor (at least currently as a solo dev), and I only conceived two layouts
-					I'm satisfied with thus far
+					they appreciate, with which they 'distill' the social dynamics/interactions/options to their preference
 				</p>
 				<p>
 					I'm open to the idea of allowing user-created plugins for various configurations/layouts (and/or maybe even
-					robust support for forking e.g. Mastodon), but that's far off in the future if/when the project matures and/or
-					gains a userbase
+					robust support for compatability with forks and/or federating e.g. ActivityPub), but that's far off in the
+					future if/when the project matures and/or gains a userbase
 				</p>
 			</li>
 			<li>
@@ -49,30 +47,6 @@
 					creator-approved moderators) and functionalities, alongside carefully-conceived optional and/or obligatory
 					countermeasures (likely just for the less-democratic ones) to mitigate abuse
 				</p>
-			</li>
-		</ul>
-
-		<hr />
-
-		<h2>Status & Prospects</h2>
-
-		<ul>
-			<li>
-				In this early stage of the project, core features are a much higher priority for me than interface appeal. What
-				currently exists is basic development styling, and I'm keenly aware of many of its thematic/design deficiencies
-			</li>
-			<li>
-				I'm currently the sole contributor to the project, and my attention is split between this, jobseeking, and
-				working on my personal site (to improve my chances when jobseeking). I'm also the sole designer for this (in
-				both UI/UX and systems/concept), which slows down development a bit
-			</li>
-			<li>
-				I dont know how much I'd wanna work on this project in my free time when I'm employed, but if it'll have any
-				interest/co-contributors I definitely wouldn't wanna abandon it
-			</li>
-			<li>
-				For this website's and API's informal terms for service,
-				<router-link class="core_contentButton" :to="{name: 'terms'}">click here</router-link>
 			</li>
 		</ul>
 

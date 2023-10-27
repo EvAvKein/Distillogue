@@ -5,9 +5,8 @@
 
 		<section>
 			<notification
-				:text="`DISCLAIMER: THIS SITE IS A DEMO
-          This project is in very early development, and any data you submit here is public and temporary`"
-				:desirablityStyle="false"
+				:text="`Disclaimer: This site is a demo for a project in very early development, data you submit here is potentially public and definitely temporary`"
+				:desirablityStyle="null"
 				:customDuration="null"
 			/>
 			<router-link class="core_backgroundButton" :to="{name: 'about'}">About the project</router-link>
