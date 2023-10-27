@@ -20,13 +20,13 @@
 ## Pre-release
 
 - ### Basic/core features:
-  - Post-browsing sorting & advanced filters
+  - Post-browsing: Sorting & advanced filters
   - Account data (export/delete) dashboard page
 - ### Security:
   - Proper user registration and authentication (likely only via third parties)
   - DDoS mitigation & maybe a CDN (consider Cloudflare)
 - ### Regulation:
-  - Platform moderation
+  - Platform moderation tools (admin)
   - Comprehensive legal compliance
   - Concise terms-of-service (and potentially code-of-conduct)
 - ### Design:
@@ -37,7 +37,7 @@
   - Proper front/introduction page
   - Proper About page
   - Footer
-  - Project values/philosophy page
+  - Project priorities/philosophy page
   - Contact page (e.g. feedback/contact form)
   - Versioned API
   - Display all aggregate data collected (e.g. monthly active users, configs by popularity)
