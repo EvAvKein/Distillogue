@@ -6,7 +6,7 @@
 
 		<p>
 			The project is currently not in active development, see
-			<a class="core_contentButton" src="https://github.com/EvAvKein/Distillogue#readme">the project's README file</a>
+			<a class="core_contentButton" href="https://github.com/EvAvKein/Distillogue#readme">the project's README file</a>
 			for further details
 		</p>
 
