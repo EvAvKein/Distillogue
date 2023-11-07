@@ -16,8 +16,9 @@ The configurable discussion platform. Development currently shelved, demo hosted
 
 ## Status
 
-This project is no longer in development: Shelved indefinitely, due to various shifts in priorities.
-See [the Contributing section](#contributing) if you'd like to revive it!
+This project is no longer in development: Shelved indefinitely, after coming up with a more worthwhile project (both for my portfolio and as a product), [Dialplan](https://github.com/EvAvKein/Dialplan).
+
+See the [Contributing](#contributing) section if you'd like to revive this project!
 
 ---
 
@@ -50,7 +51,7 @@ See [the Contributing section](#contributing) if you'd like to revive it!
 If you're interested in becoming an active contributer, fork the repository and let me know!
 I'm happy to handle merges and assign co-maintainers, and might return as an active contributor if there's interest in the project.
 
-See [the to-do file](TODO.md) for tasks & ideas, see [the About page](frontend/src/pages/About.vue) (also hosted a [distillogue.com/about](https://distillogue.com/about)) for long-term concepts/priorities.
+See [the to-do file](TODO.md) for tasks & ideas, see [the About page](frontend/src/pages/About.vue) (also hosted at [distillogue.com/about](https://distillogue.com/about)) for long-term concepts/priorities.
 
 ---
 
