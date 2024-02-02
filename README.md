@@ -1,6 +1,6 @@
 # Distillogue
 
-The configurable discussion platform. Development currently shelved, demo hosted at https://distillogue.com
+The configurable discussion platform. Development and hosting currently shelved.
 
 ---
 
@@ -27,7 +27,7 @@ See the [Contributing](#contributing) section if you'd like to revive this proje
 ### Software Requirements
 
 - Docker
-- Node.js - optional (dependency intellisense, live test runner, package.json script aliases for docker commands below)
+- Node.js - optional (dependency intellisense, live test runner, package.json script aliases for the docker commands below)
 
 ### Prerequisites
 
