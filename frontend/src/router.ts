@@ -6,7 +6,6 @@ import {UserData} from "../../shared/objects/user";
 import notFound from "./pages/NotFound.vue";
 import home from "./pages/Home.vue";
 import about from "./pages/About.vue";
-import terms from "./pages/Terms.vue";
 import join from "./pages/User/Join.vue";
 import browse from "./pages/Post/Browse.vue";
 import createPost from "./pages/Post/Create.vue";
@@ -36,11 +35,6 @@ const router = createRouter({
 			name: "about",
 			path: "/about",
 			component: about,
-		},
-		{
-			name: "terms",
-			path: "/terms",
-			component: terms,
 		},
 		{
 			name: "join",
